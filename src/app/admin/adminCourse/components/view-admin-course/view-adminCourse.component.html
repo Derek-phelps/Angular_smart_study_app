@@ -14,30 +14,6 @@
             <course-data [data]="CourseData" class="w-100" *ngIf="CourseData"></course-data>
         </div>
     </div>
-    <!-- <div class="widgets" class="chapterCls" [@headerAnimation]="showHeader ? 'show' : 'hide'">
-        <mat-card class="col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="CourseData!=undefined">
-            <mat-card-content class="card-body">
-                <div class="row HeaderCls col-md-12" style="margin-left: 0px;">
-                    <div class="col-sm-3 col-3">
-                        <img style="width: 100%;" (error)="courseImgError($event)"
-                            src="{{_globals.WebURL}}/{{CourseData.courseImg}}" />
-                    </div>
-                    <div class="col-sm-9 col-9">
-                        <div>{{'course.Course' | translate}}: {{CourseData.courseName}}</div>
-                        <div *ngIf="CourseData.EndTime!='' && CourseData.EndTime!=null">
-                            {{'course.Deadline' | translate}}:
-                            {{CourseData.EndTime | date:'dd-MM-yyyy'}}</div>
-                        <div *ngIf="CourseData.TName!='' && CourseData.TName!=null">
-                            {{'course.TrainerName' | translate}}:
-                            {{CourseData.TName}}</div>
-                        <div *ngIf="CourseData.classPlace!='' && CourseData.classPlace!=null">
-                            {{'course.Place' | translate}}: {{CourseData.classPlace}}</div>
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card> -->
-
-
 
     <div class="row" style="position: relative;"
         [@visibilityChanged]="!bCourseInfoLoaded || !bAssignmentsLoaded ? 'shown' : 'hidden'"
@@ -50,7 +26,6 @@
             <mat-tab label="{{'course.Overview' | translate}}">
                 <ng-template matTabContent>
                     <view-admin-course-overview [courseId]="chpId" (tabId)="openPartList()"></view-admin-course-overview>
-                    
                 </ng-template>
             </mat-tab>
             <mat-tab label="{{'course.partList' | translate}}" [disabled]="userStatusTable.data.length == 0">

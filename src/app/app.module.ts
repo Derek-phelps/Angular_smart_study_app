@@ -53,10 +53,11 @@ import { AppMaterialModule } from './app-material/app-material.module';
 // import { BottomSheetModifyCourse } from './admin/adminCourse/components/modify-admin-course/modify-adminCourse.component';
 
 import { ChartsModule } from 'ng2-charts';
+import { ParticipantListComponent } from './participant-list/participant-list.component';
 
 @NgModule({
   declarations: [
-    AppComponent, LoginComponent, //, ViewGroupComponent
+    AppComponent, LoginComponent, ParticipantListComponent, //, ViewGroupComponent
   ],
   imports: [ReadingModule, ReadingScormModule, DownloadModule, ChartsModule, AppMaterialModule,
     BrowserModule, BrowserAnimationsModule, HttpClientModule, RouterModule, MatCardModule,
