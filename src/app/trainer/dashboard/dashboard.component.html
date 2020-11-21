@@ -1,0 +1,51 @@
+<div class="row">
+    <!-- ./col -->
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <a  routerLink="../../trainer/course" [skipLocationChange]="false">
+        <div class="small-box bg-red">
+            <div class="inner">
+            <h3>{{Courses}}</h3>
+            <p>{{'dashboard.Courses' | translate}}</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-certificate" aria-hidden="true"></i>
+            </div>
+            <div class="small-box-footer">Mehr Informationen<i class="fa fa-arrow-circle-right"></i></div>
+        </div>
+        </a>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <a routerLink="../../trainer/content" [skipLocationChange]="false">
+        <div class="small-box bg-green">
+            <div class="inner">
+            <h3>{{Contents}}</h3>
+            <p>{{'dashboard.Content' | translate}}</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-envelope-open" aria-hidden="true"></i>
+            </div>
+            <div class="small-box-footer">Mehr Informationen<i class="fa fa-arrow-circle-right"></i></div>
+        </div>
+        </a>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <a  routerLink="../../trainer/certificater" [skipLocationChange]="false">
+        <div class="small-box bg-yellow">
+            <div class="inner">
+            <h3>{{Certificates}}</h3>
+            <p>{{'dashboard.Certificates' | translate}}</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-book" aria-hidden="true"></i>
+            </div>
+            <div class="small-box-footer">Mehr Informationen<i class="fa fa-arrow-circle-right"></i></div>
+        </div>
+        </a>
+
+    </div>
+</div>

@@ -1,0 +1,13 @@
+
+<input #fileUpload type="file" hidden  (change)="beforeUpload($event.target.files)" > 
+
+<div class="input-group" [ngClass]="{uploading: uploadInProgress}">
+    <input #inputText type="text" [value]="fileTitle" class="form-control" readonly style="color: black; margin-right: 10px;">
+    <span class="input-group-btn"> 
+      <button [disabled]="uploadInProgress" class="btn btn-success" type="button" (click)="bringFileSelector();">{{'selectFile' | translate}}</button>
+  </span>
+  <div *ngIf="uploadInProgress">
+    <div class="Percentage">{{uploadProgress}}%</div>
+    <div class="Progressbar"></div>
+  </div>
+</div>

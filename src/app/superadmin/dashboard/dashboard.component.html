@@ -1,0 +1,70 @@
+<div class="row">
+    <div  class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <a  routerLink="../../superadmin/company" [skipLocationChange]="false">
+        <div class="small-box bg-aqua">
+            <div class="inner">
+            <h3>{{Companies}}</h3>
+            <p>{{'companys' | translate}}</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-male" aria-hidden="true"></i>
+            </div>
+            <div class="small-box-footer">{{'MoreInformation' | translate}}
+                <i class="fa fa-arrow-circle-right"></i></div>
+        </div>
+        </a>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <a routerLink="../../superadmin/trainers" [skipLocationChange]="false">
+        <div class="small-box bg-green">
+            <div class="inner">
+            <h3>{{Trainers}}</h3>
+            <p>{{'trainers' | translate}}</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-envelope-open" aria-hidden="true"></i>
+            </div>
+            <div class="small-box-footer">{{'MoreInformation' | translate}}
+                <i class="fa fa-arrow-circle-right"></i></div>
+        </div>
+        </a>
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <a  routerLink="../../superadmin/employees" [skipLocationChange]="false">
+        <div class="small-box bg-yellow">
+            <div class="inner">
+            <h3>{{Employees}}</h3>
+            <p>{{'Employees' | translate}}</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-book" aria-hidden="true"></i>
+            </div>
+            <div class="small-box-footer">{{'MoreInformation' | translate}}
+                <i class="fa fa-arrow-circle-right"></i></div>
+        </div>
+        </a>
+
+    </div>
+    <!-- ./col -->
+    <div class="col-lg-3 col-xs-6">
+        <!-- small box -->
+        <a  routerLink="../../superadmin/course" [skipLocationChange]="false">
+        <div class="small-box bg-red">
+            <div class="inner">
+            <h3>{{Courses}}</h3>
+            <p>{{'Courses' | translate}}</p>
+            </div>
+            <div class="icon">
+                <i class="fa fa-certificate" aria-hidden="true"></i>
+            </div>
+            <div class="small-box-footer">{{'MoreInformation' | translate}}
+                <i class="fa fa-arrow-circle-right"></i></div>
+        </div>
+        </a>
+    </div>
+</div>

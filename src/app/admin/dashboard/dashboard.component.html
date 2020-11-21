@@ -1,0 +1,278 @@
+<div class="form-wrapper" style="max-width: 1000px;">
+  <div class="loader" [@visibilityChanged]="bLoading ? 'shown' : 'hidden'" *ngIf="bLoading"></div>
+  <div #groupcontainer class="content" [@visibilityChanged]="!bLoading ? 'shown' : 'hidden'">
+
+
+    <div class="row" style="margin-bottom: 20px;"
+      *ngIf="userSummary && departmentSummary && groupSummary && courseSummary">
+      <div class="col-lg-3 col-sm-6">
+        <a [routerLink]="getEmpLink()" [skipLocationChange]="false">
+          <div class="small-box" [ngClass]="getBoxClass(userSummary)">
+            <div class="inner">
+              <h3>{{userSummary.sum}}</h3>
+              <p>{{'menu.Employees' | translate}}</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-users" aria-hidden="true"></i>
+            </div>
+            <div class="small-box-footer">{{'dashboard.MoreInformations' | translate}}<i
+                class="fa fa-arrow-circle-right"></i></div>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <a [routerLink]="getDepLink()" [skipLocationChange]="false">
+          <div class="small-box" [ngClass]="getBoxClass(departmentSummary)">
+            <div class="inner">
+              <h3>{{departmentSummary.sum}}</h3>
+              <p>{{'menu.Departments' | translate}}</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-building" aria-hidden="true"></i>
+            </div>
+            <div class="small-box-footer">{{'dashboard.MoreInformations' | translate}}<i
+                class="fa fa-arrow-circle-right"></i></div>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <a [routerLink]="getGroupLink()" [skipLocationChange]="false">
+          <div class="small-box" [ngClass]="getBoxClass(groupSummary)">
+            <div class="inner">
+              <h3>{{groupSummary.sum}}</h3>
+              <p>{{'menu.Groups' | translate}}</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-users" aria-hidden="true"></i>
+            </div>
+            <div class="small-box-footer">{{'dashboard.MoreInformations' | translate}}<i
+                class="fa fa-arrow-circle-right"></i></div>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-3 col-sm-6">
+        <a [routerLink]="getCourseLink()" [skipLocationChange]="false">
+          <div class="small-box" [ngClass]="getBoxClass(courseSummary)">
+            <div class="inner">
+              <h3>{{courseSummary.sum}}</h3>
+              <p>{{'dashboard.Courses' | translate}}</p>
+            </div>
+            <div class="icon">
+              <i class="fa fa-book" aria-hidden="true"></i>
+            </div>
+            <div class="small-box-footer">{{'dashboard.MoreInformations' | translate}}<i
+                class="fa fa-arrow-circle-right"></i></div>
+          </div>
+        </a>
+      </div>
+    </div>
+    <!-- CHARTS -->
+    <div class="row">
+      <div class="col-lg-6 col-sm-12">
+        <div class="dashboard-chart-container" (click)="getEmpLink(true)">
+          <div class="chart-label">{{'menu.Employees' | translate}}</div>
+          <div class="chart-box">
+            <div style="display: block">
+              <canvas baseChart [data]="userChartData" [labels]="chartLabels" [chartType]="'doughnut'"
+                [colors]="chartColors">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-sm-12">
+        <div class="dashboard-chart-container" (click)="getDepLink(true)">
+          <div class="chart-label">{{'menu.Departments' | translate}}</div>
+          <div class="chart-box">
+            <div style="display: block">
+              <canvas baseChart [data]="departmentChartData" [labels]="chartLabels" [chartType]="'doughnut'"
+                [colors]="chartColors">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-sm-12">
+        <div class="dashboard-chart-container" (click)="getGroupLink(true)">
+          <div class="chart-label">{{'menu.Groups' | translate}}</div>
+          <div class="chart-box">
+            <div style="display: block">
+              <canvas baseChart [data]="groupChartData" [labels]="chartLabels" [chartType]="'doughnut'"
+                [colors]="chartColors">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 col-sm-12">
+        <div class="dashboard-chart-container" (click)="getCourseLink(true)">
+          <div class="chart-label">{{'Courses' | translate}}</div>
+          <div class="chart-box">
+            <div style="display: block">
+              <canvas baseChart [data]="courseChartData" [labels]="chartLabels" [chartType]="'doughnut'"
+                [colors]="chartColors">
+              </canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- <div class="row tile-row">
+      <div class="col-xl-4 col-lg-6 col-sm-12 col-tile-outer">
+        <div class="col-tile">
+          <div class="col-header">TEST
+          </div>
+          <div class="col-text">
+            <div>
+              <div>
+                <b>{{'course.State' | translate}}:</b>
+                <ul style="margin-top: 5px;">
+                  <li style="padding: 2px;">
+                    TEST</li>
+                  <li style="padding: 2px;">{{'course.ChartGlobal' | translate}}</li>
+                </ul>
+              </div>
+              <div class="chart-container">
+                <div>
+                  <div style="display: block">
+                    <canvas baseChart [data]="groupChartData" [labels]="groupChartLabels" [chartType]="'doughnut'"
+                      [colors]="groupChartColors">
+                    </canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <table class="info-table" *ngIf="!isDepartment">
+              <tr>
+                <td><b>TEST</b></td>
+                <td>TEST</td>
+              </tr>
+              <tr>
+                <td><b>TEST</b></td>
+                <td>
+                  <div>TEST</div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!- <div class="col-xl-6 col-lg-12 col-tile-outer">
+        <div class="col-tile">
+          <div class="col-header">{{activeMemberList.data.length}}
+            {{(isDepartment ? 'department.DepMember' : 'group.GroupMember') | translate}}</div>
+          <div *ngIf="bUpdatingGroupMember" [@visibilityChanged]="bUpdatingGroupMember ? 'shown' : 'hidden'"
+            class="loader member-loader"></div>
+          <div class="col-text" [style.opacity]="bUpdatingGroupMember ? '0' : '1'">
+          </div>
+        </div>
+      </div> ->
+  </div> -->
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="row">
+  <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+    <div class="row pie-charts">
+      <mat-card class="pie-chart-item-container col-xlg-4 col-lg-4 col-md-6 col-sm-12 col-12" baCardClass="with-scroll">
+        <mat-card-header>{{'dashboard.Deadlines' | translate}}</mat-card-header>
+        <mat-card-content>
+          <div class="pie-chart-item">
+
+            <ba-chartist-chart baChartistChartClass="ct-chart stacked-bar" baChartistChartType="Pie"
+              (onChartReady)="initPieChart($event)" [baChartistChartData]="data['simplePieData']"
+              [baChartistChartOptions]="data['simplePieOptions']">
+
+            </ba-chartist-chart>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="pie-chart-item-container col-xlg-8 col-lg-8 col-md-6 col-sm-12 col-12" baCardClass="with-scroll">
+        <mat-card-header>{{'dashboard.AverageScore' | translate}}</mat-card-header>
+        <mat-card-content>
+          <div class="pie-chart-item">
+
+            <ba-chartist-chart baChartistChartClass="ct-chart" baChartistChartType="Bar"
+              (onChartReady)="initBarChart($event)" [baChartistChartData]="data['simpleBarData']"
+              [baChartistChartOptions]="data['simpleBarOptions']">
+            </ba-chartist-chart>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-3 col-xs-6">
+    <a routerLink="../../admin/employees" [skipLocationChange]="false">
+      <div class="small-box bg-aqua">
+        <div class="inner">
+          <h3>{{dataValue.employeess}}</h3>
+          <p>{{'dashboard.Employees' | translate}}</p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-male" aria-hidden="true"></i>
+        </div>
+        <div class="small-box-footer">{{'dashboard.MoreInformations' | translate}}<i
+            class="fa fa-arrow-circle-right"></i></div>
+      </div>
+    </a>
+  </div>
+  <div class="col-lg-3 col-xs-6">
+    <a routerLink="../../admin/message" [skipLocationChange]="false">
+      <div class="small-box bg-green">
+        <div class="inner">
+          <h3>{{dataValue.message}}</h3>
+          <p>{{'dashboard.NewMessages' | translate}}</p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-envelope-open" aria-hidden="true"></i>
+        </div>
+        <div class="small-box-footer">{{'dashboard.MoreInformations' | translate}}<i
+            class="fa fa-arrow-circle-right"></i></div>
+      </div>
+    </a>
+  </div>
+  <div class="col-lg-3 col-xs-6">
+    <a routerLink="../../admin/course" [skipLocationChange]="false">
+      <div class="small-box bg-yellow">
+        <div class="inner">
+          <h3>{{dataValue.course}}</h3>
+          <p>{{'dashboard.Courses' | translate}}</p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-book" aria-hidden="true"></i>
+        </div>
+        <div class="small-box-footer">{{'dashboard.MoreInformations' | translate}}<i
+            class="fa fa-arrow-circle-right"></i></div>
+      </div>
+    </a>
+  </div>
+  <div class="col-lg-3 col-xs-6">
+    <a routerLink="../../admin/certificater" [skipLocationChange]="false">
+      <div class="small-box bg-red">
+        <div class="inner">
+          <h3>{{dataValue.certificate}}</h3>
+          <p>{{'dashboard.Certificates' | translate}}</p>
+        </div>
+        <div class="icon">
+          <i class="fa fa-certificate" aria-hidden="true"></i>
+        </div>
+        <div class="small-box-footer">{{'dashboard.MoreInformations' | translate}}<i
+            class="fa fa-arrow-circle-right"></i></div>
+      </div>
+    </a>
+  </div>
+</div> -->

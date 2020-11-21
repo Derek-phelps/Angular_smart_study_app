@@ -1,0 +1,58 @@
+<div class="addIcon" (click)="addCompany()">
+    <i class="fa fa-plus-circle iconSize"></i>
+</div>
+<mat-form-field [ngStyle]="{'visibility': formFieldVisibility}">
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{'filter' | translate}}">
+</mat-form-field>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="chapterId">
+        <th mat-header-cell *matHeaderCellDef>{{'chapter.chapterId' | translate}}</th>
+        <td mat-cell *matCellDef="let element"> {{element.chapterId}} </td>
+    </ng-container>
+    <!-- Position Column -->
+    <ng-container matColumnDef="chapterName">
+        <th mat-header-cell *matHeaderCellDef>{{'chapter.Name' | translate}}</th>
+        <td mat-cell *matCellDef="let element"> {{element.chapterName}} </td>
+    </ng-container>
+
+    <!-- Position Column -->
+    <ng-container matColumnDef="courseName">
+        <th mat-header-cell *matHeaderCellDef>{{'course.CourseName' | translate}}</th>
+        <td mat-cell *matCellDef="let element"> {{element.courseName}} </td>
+    </ng-container>
+
+    <!-- Weight Column -->
+    <ng-container matColumnDef="companyName">
+        <th mat-header-cell *matHeaderCellDef>{{'company.CompanyName' | translate}}</th>
+        <td mat-cell *matCellDef="let element"> {{element.companyName}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> </th>
+        <td mat-cell *matCellDef="let row">
+            <i *ngIf="row.is_offline!=2" class="fa fa-edit iconSize" (click)="editCompany(row)"></i>
+            <i *ngIf="row.is_offline!=2" class="fa fa-trash iconSize" (click)="deleteCompany(row)"></i>
+            <i *ngIf="row.is_offline==1" class="fa fa-qrcode iconSize" (click)="downloadCompany(row)"></i>
+        </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="50" showFirstLastButtons></mat-paginator>
+<div id="QRCodeId" *ngIf="selectCourse">
+    <div style="margin: 20px;">
+        <img style="width: 200px;" src="../../assets/img/logoakt.png">
+        <img style="width: 200px;float: right;" src="{{_globals.WebURL}}/{{_globals.companyInfo.companyLogo}}">
+    </div>
+    <div
+        style="text-align: right; font-size: 30px; padding-bottom: 20px;color: #00bbd7; border-bottom: 1px solid; margin-bottom: 30px;">
+        {{selectCourse.subChapterTitle}}
+    </div>
+    <div style="margin-left: 30%;">
+        <qrcode [qrdata]="selectCourse.subChapterId" [size]="256" [level]="'M'"></qrcode>
+    </div>
+
+</div>

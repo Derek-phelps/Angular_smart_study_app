@@ -1,0 +1,42 @@
+<ul class="menu-wrap animated fadeIn">
+  <hr class="separator" style="margin-top:-5px; margin-bottom: 10px;">
+  <ng-container *ngFor="let item of menuInfo;let i = index">
+    <li
+      *ngIf="(!item.checkDepartments && !item.checkGroups && !item.checkCourses) || (item.checkDepartments && appendDepartments) || (item.checkGroups && appendGroups) || (item.checkCourses && appendCourses)"
+      class="menu-item" [ngClass]="{'item-toggle-on':item.toggle === 'on'}">
+      <a [routerLink]="item.path" *ngIf="item.path && !item.disabled" routerLinkActive="active"
+        [skipLocationChange]="false" class="menu-link" (click)="_selectItem(item)">
+        <div class="placeholder">
+          <i class="fa fa-{{item.icon}} fa-fw"></i>
+        </div>
+        <span class="text">{{item.title | translate}}</span>
+      </a>
+      <a *ngIf="item.path && item.disabled" class="menu-link" (click)="_selectItem(item)">
+        <div class="placeholder">
+          <i class="fa fa-{{item.icon}} fa-fw"></i>
+        </div>
+        <span class="text">{{item.title | translate}}</span>
+      </a>
+      <div [routerLink]="item.path" *ngIf="item.path" routerLinkActive="active" [skipLocationChange]="false"
+        class="menu-link-invert" (click)="_selectItem(item, false)">
+        <div class="placeholder">
+          <i class="fa fa-{{item.icon}} fa-fw"></i>
+        </div>
+        <span class="text">{{item.title | translate}}</span>
+      </div>
+
+      <a class="menu-link" *ngIf="!item.path" (click)="isToggleOn(item)">
+        <div class="placeholder">
+          <i class="fa fa-{{item.icon}} fa-fw" *ngIf="item.icon"></i>
+        </div>
+        <span class="text">{{item.title | translate}}</span>
+        <span class="fa fa-angle-right fa-fw direction"></span>
+      </a>
+
+      <div class="item-children" [@collapse]="item.toggle" *ngIf="item.children">
+        <du-menu [menuInfo]="item.children"></du-menu>
+      </div>
+      <hr *ngIf="item.separateAfter && (appendDepartments || appendGroups || appendCourses)" class="separator">
+    </li>
+  </ng-container>
+</ul>

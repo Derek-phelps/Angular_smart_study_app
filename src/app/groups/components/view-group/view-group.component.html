@@ -1,0 +1,391 @@
+<div class="form-wrapper">
+    <div class="edit-delete-icon-div"
+        [@visibilityChanged]="!isDepartment && bCategoryListLoaded && bUserListLoaded && bGroupDataLoaded ? 'shown' : 'hidden'"
+        style="opacity: 0;">
+        <i *ngIf="_globals.userInfo.isAdmin" class="fa fa-trash iconSize edit-delete-delete-icon"
+            style="cursor: pointer;" (click)="deleteGroup()" matTooltip="{{'group.DeleteGroup' | translate}}"></i>
+        <i *ngIf="allowEdit" class="fa fa-edit iconSize edit-delete-edit-icon" style="cursor: pointer;"
+            (click)="openEditView()" matTooltip="{{'group.EditGroup' | translate}}"></i>
+    </div>
+    <div class="loader"
+        [@visibilityChanged]="!(bCategoryListLoaded && bUserListLoaded && bGroupDataLoaded) ? 'shown' : 'hidden'"
+        *ngIf="!(bCategoryListLoaded && bUserListLoaded && bGroupDataLoaded)"></div>
+    <div #groupcontainer class="content"
+        [@visibilityChanged]="bCategoryListLoaded && bUserListLoaded && bGroupDataLoaded ? 'shown' : 'hidden'">
+        <div class="row tile-row">
+            <div class="col-xl-6 col-lg-12 col-tile-outer">
+                <div class="col-tile">
+                    <div class="col-header">{{(isDepartment ? 'department.DepData' : 'group.GroupData') | translate}}
+                    </div>
+                    <div class="col-text">
+                        <div *ngIf="!bUpdatingGroupMember"
+                            [@openedChanged]="activeMemberList.data.length > 0 ? 'shown' : 'hidden'"
+                            style="margin-top: 20px;overflow: hidden;">
+                            <div>
+                                <b>{{'course.State' | translate}}:</b>
+                                <ul style="margin-top: 5px;">
+                                    <li style="padding: 2px;">
+                                        {{(isDepartment ? 'course.ChartDep' : 'course.ChartGroup') | translate}}</li>
+                                    <li style="padding: 2px;">{{'course.ChartGlobal' | translate}}</li>
+                                </ul>
+                            </div>
+                            <div class="chart-container">
+                                <div>
+                                    <div style="display: block">
+                                        <canvas baseChart [data]="groupChartData" [labels]="groupChartLabels"
+                                            [chartType]="'doughnut'" [colors]="groupChartColors">
+                                        </canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="info-table" *ngIf="!isDepartment">
+                            <tr>
+                                <td><b>{{'group.Name' | translate}}:</b></td>
+                                <td>{{groupInfo.name}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>{{'group.Color' | translate}}:</b></td>
+                                <td>
+                                    <div class="color-presenter" [style.background-color]="groupInfo.color"></div>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="info-table">
+                            <tr *ngIf="!isDepartment">
+                                <td colspan="2"><b>{{'group.Rights' | translate}}</b></td>
+                            </tr>
+                            <tr *ngIf="!isDepartment">
+                                <td valign="top">
+                                    <b>{{'group.View' | translate}}:</b>
+                                </td>
+                                <td>
+                                    <ng-container *ngFor="let viewUser of selectionView.selected; index as i;">
+                                        <!-- <a>{{viewUser.FIRSTNAME}}</a> -->
+                                        <a *ngIf="_globals.userInfo.isAdmin" href="javascript:void(0)"
+                                            (click)="openEmpView(viewUser.userId)">{{viewUser.FULLNAME}}</a>
+                                        <a *ngIf="!_globals.userInfo.isAdmin" href="javascript:void(0)"
+                                            style="cursor: initial;">{{viewUser.FULLNAME}}</a>
+                                        <ng-container *ngIf="selectionView.selected.length - 1 > i">, </ng-container>
+                                    </ng-container>
+                                    <ng-container *ngIf="selectionView.selected.length == 0">-</ng-container>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top">
+                                    <b>{{(isDepartment ? 'department.Leader' : 'group.Edit') | translate}}:</b>
+                                </td>
+                                <td>
+                                    <ng-container *ngFor="let adminUser of selectionAdmin.selected; index as i;">
+                                        <a *ngIf="_globals.userInfo.isAdmin" href="javascript:void(0)"
+                                            (click)="openEmpView(adminUser.userId)">{{adminUser.FULLNAME}}</a>
+                                        <a *ngIf="!_globals.userInfo.isAdmin" href="javascript:void(0)"
+                                            style="cursor: initial;">{{adminUser.FULLNAME}}</a>
+                                        <ng-container *ngIf="selectionAdmin.selected.length - 1 > i">, </ng-container>
+                                    </ng-container>
+                                    <ng-container *ngIf="selectionAdmin.selected.length == 0">-</ng-container>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 col-lg-12 col-tile-outer">
+                <div class="col-tile">
+                    <div class="col-header">{{activeMemberList.data.length}}
+                        {{(isDepartment ? 'department.DepMember' : 'group.GroupMember') | translate}}</div>
+                    <div *ngIf="bUpdatingGroupMember" [@visibilityChanged]="bUpdatingGroupMember ? 'shown' : 'hidden'"
+                        class="loader member-loader"></div>
+                    <div class="col-text" [style.opacity]="bUpdatingGroupMember ? '0' : '1'">
+                        <table style="margin-top: 20px;width: 100%;">
+                            <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <mat-accordion [multi]="true">
+                                    <mat-expansion-panel [expanded]="showMemberOpenState"
+                                        (opened)="showMemberOpenState = true" (closed)="showMemberOpenState = false">
+                                        <mat-expansion-panel-header [collapsedHeight]="'48px'"
+                                            [expandedHeight]="'48px'">
+                                            <mat-panel-title>
+                                                <ng-container *ngIf="!showMemberOpenState">
+                                                    {{'group.ViewList' | translate}}...
+                                                </ng-container>
+                                            </mat-panel-title>
+                                        </mat-expansion-panel-header>
+                                        <ng-container *ngIf="activeMemberList.data.length == 0">
+                                            {{(isDepartment ? 'department.NoMember' : 'group.NoMember') | translate}}
+                                        </ng-container>
+                                        <div [style.height]="activeMemberList.data.length > 0 ? 'auto' : '0'">
+                                            <mat-form-field class="user-filter">
+                                                <mat-label>{{'group.Search' | translate}}</mat-label>
+                                                <input matInput (keyup)="applyFilterActiveGroupMember($event)"
+                                                    placeholder="">
+                                            </mat-form-field>
+                                            <div class="member-list-container">
+                                                <table mat-table [dataSource]="activeMemberList" matSort
+                                                    matSortActive="LASTNAME" matSortDirection="asc"
+                                                    class="mat-elevation-z8" style="width: 100%;">
+                                                    <ng-container matColumnDef="status">
+                                                        <th mat-header-cell *matHeaderCellDef
+                                                            style="padding-left: 5px;">
+                                                            <div matTooltip="{{'employees.Status' | translate}}">
+                                                                {{'employees.St' | translate}}</div>
+                                                        </th>
+                                                        <td mat-cell *matCellDef="let user" class="cell-status-wrapper"
+                                                            [style.width]="!isAdmin ? '25px' : '51px'">
+                                                            <div class="status-div"
+                                                                [style.width]="!isAdmin ? '25px' : '51px'">
+                                                                <div class="status-div-inner-left"
+                                                                    [ngClass]="{'status-done': user.groupStatus==1, 'status-current': user.groupStatus==0, 'status-overdue': user.groupStatus==-1}">
+                                                                    <i class="fa fa-users fa-lg center-icon"
+                                                                        aria-hidden="true"
+                                                                        matTooltip="{{'group.GroupState' | translate}}"></i>
+                                                                </div>
+                                                                <div *ngIf="isAdmin" class="status-div-inner-right"
+                                                                    [ngClass]="{'status-done': user.globalStatus==1, 'status-current': user.globalStatus==0, 'status-overdue': user.globalStatus==-1}">
+                                                                    <i class="fa fa-user fa-lg center-icon"
+                                                                        matTooltip="{{'group.GlobalState' | translate}}"
+                                                                        aria-hidden="true"></i>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="LASTNAME">
+                                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                                            style="padding-left: 10px;">
+                                                            {{'employees.Surname' | translate}}</th>
+                                                        <td mat-cell *matCellDef="let user" style="padding-left: 10px;"
+                                                            matTooltip="{{user.FULLNAME}}">
+                                                            <a *ngIf="isAdmin" href="javascript:void(0)"
+                                                                (click)="openEmpView(user.userId)"
+                                                                [matTooltip]="'openVar' | translate: {var: user.FULLNAME}">{{user.LASTNAME}}</a>
+                                                            <a *ngIf="!isAdmin" href="javascript:void(0)"
+                                                                style="cursor: initial;">{{user.LASTNAME}}</a>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="FIRSTNAME">
+                                                        <th mat-header-cell *matHeaderCellDef mat-sort-header
+                                                            style="padding-left: 10px;">
+                                                            {{'employees.Name' | translate}}</th>
+                                                        <td mat-cell *matCellDef="let user" style="padding-left: 10px;"
+                                                            matTooltip="{{user.FULLNAME}}">
+                                                            <a *ngIf="isAdmin" href="javascript:void(0)"
+                                                                (click)="openEmpView(user.userId)"
+                                                                [matTooltip]="'openVar' | translate: {var: user.FULLNAME}">{{user.FIRSTNAME}}</a>
+                                                            <a *ngIf="!isAdmin" href="javascript:void(0)"
+                                                                style="cursor: initial;">{{user.FIRSTNAME}}</a>
+                                                        </td>
+                                                    </ng-container>
+                                                    <ng-container matColumnDef="delete">
+                                                        <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
+                                                        <td mat-cell *matCellDef="let user">
+                                                            <i *ngIf="user.isADAssignment!='1'"
+                                                                class="fa fa-trash fa-lg edit-delete-delete-icon"
+                                                                style="cursor: pointer;"
+                                                                matTooltip="{{'group.DeleteMember' | translate}}"
+                                                                (click)="deleteUserFromGroup(user)"></i>
+                                                        </td>
+                                                    </ng-container>
+                                                    <tr mat-header-row class="row-with-status"
+                                                        *matHeaderRowDef="displayedColumns; sticky: true">
+                                                    </tr>
+                                                    <tr mat-row class="row-with-status"
+                                                        *matRowDef="let row; columns: displayedColumns;"></tr>
+                                                </table>
+                                            </div>
+                                            <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="10"
+                                                showFirstLastButtons>
+                                            </mat-paginator>
+                                        </div>
+                                    </mat-expansion-panel>
+                                    <mat-expansion-panel *ngIf="bGroupDataLoaded && allowEdit"
+                                        [expanded]="addMemberOpenState" (opened)="addMemberOpenState = true"
+                                        (closed)="addMemberOpenState = false">
+                                        <mat-expansion-panel-header>
+                                            <mat-panel-title>
+                                                {{(isDepartment ? 'department.AddMember' : 'group.AddMember') | translate}}{{addMemberOpenState ? ':' : '...'}}
+                                            </mat-panel-title>
+                                        </mat-expansion-panel-header>
+                                        <ng-container *ngIf="selection.selected.length == memberList.data.length">
+                                            {{(isDepartment ? 'department.NoNotAssignedFound' : 'group.NoNotAssignedFound') | translate}}
+                                        </ng-container>
+                                        <ng-container *ngIf="selection.selected.length != memberList.data.length">
+                                            <mat-form-field style="width: 100%;">
+                                                <mat-label>{{'group.SelectMember' | translate}}</mat-label>
+                                                <mat-select [(ngModel)]="userToAdd" #singleSelect>
+                                                    <mat-option>
+                                                        <ngx-mat-select-search [formControl]="memberSingleFilterCtrl"
+                                                            placeholderLabel="{{'group.Search' | translate}}"
+                                                            noEntriesFoundLabel="{{'employees.searchNoFound' | translate}}">
+                                                            <mat-icon ngxMatSelectSearchClear>close</mat-icon>
+                                                        </ngx-mat-select-search>
+                                                    </mat-option>
+                                                    <mat-option *ngFor="let user of filteredMemberSingle | async"
+                                                        value="{{user.UserId}}">
+                                                        {{user.FULLNAME}}
+                                                    </mat-option>
+                                                    <!-- <ng-container *ngFor="let user of memberList.data">
+                                                        <mat-option *ngIf="!selection.isSelected(user.UserId)"
+                                                            [value]="user.UserId">
+                                                            {{user.FULLNAME}}
+                                                        </mat-option>
+                                                    </ng-container> -->
+                                                </mat-select>
+                                            </mat-form-field>
+                                            <div class="row ChapterList col-md-12 send-certificate">
+                                                <!-- <button (click)="addGroupMember()" [disabled]="!userToAdd"
+                                                    [ngClass]="userToAdd ? 'open-button-active' : ''"
+                                                    class="form-control open-button">{{'group.AddMemberShort' | translate}}</button> -->
+                                                <button mat-stroked-button [disabled]="!userToAdd" style="margin:auto;"
+                                                    (click)="addGroupMember()">{{'group.AddMemberShort' | translate}}</button>
+                                            </div>
+                                        </ng-container>
+                                    </mat-expansion-panel>
+                                </mat-accordion>
+                            </div>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row tile-row">
+            <div class="col-12 col-tile-outer">
+                <div class="col-tile">
+                    <div class="col-header">
+                        {{(isDepartment ? 'department.AssignedCourses' : 'group.AssignedCourses') | translate}}</div>
+                    <div *ngIf="bUpdatingCourseAssignments"
+                        [@visibilityChanged]="bUpdatingCourseAssignments ? 'shown' : 'hidden'"
+                        class="loader member-loader"></div>
+                    <div class="col-text" [style.opacity]="bUpdatingCourseAssignments ? '0' : '1'">
+                        <div *ngIf="courseAssignmentList.data.length == 0" style="padding-top: 20px;">
+                            {{(isDepartment ? 'department.NoCourse' : 'group.NoCourse') | translate}}
+                        </div>
+                        <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12"
+                            [style.height]="courseAssignmentList.data.length > 0 ? 'auto' : '0'"
+                            [style.overflow]="courseAssignmentList.data.length > 0 ? 'scroll' : 'hidden'">
+                            <table mat-table [dataSource]="courseAssignmentList" matSort matSortActive="nextEvent"
+                                matSortDirection="asc" class="mat-elevation-z8" style="width: 100%;margin-top: 20px;">
+                                <ng-container matColumnDef="courseName">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        {{'course.Course' | translate}}</th>
+                                    <td mat-cell *matCellDef="let course" (click)="viewCourse(course)"
+                                        [style.cursor]="!isAdmin ? 'initial' : 'pointer'"
+                                        matTooltip="{{'group.OpenCourse' | translate}}" [matTooltipDisabled]="!isAdmin">
+                                        <b>{{course.courseName}}</b></td>
+                                </ng-container>
+                                <ng-container matColumnDef="firstEvent">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        {{'course.FirstEvent' | translate}}</th>
+                                    <td mat-cell *matCellDef="let course">{{course.formatFirstEvent}}</td>
+                                </ng-container>
+                                <ng-container matColumnDef="nextEvent">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        {{'course.NextEvent' | translate}}</th>
+                                    <td mat-cell *matCellDef="let course"
+                                        [style.color]="course.currentlyActive && course.effective && '#8bd22f'">
+                                        {{course.nextEvent}}<ng-container *ngIf="!course.nextEvent">-</ng-container>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="recurrence">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        {{'assignment.Interval' | translate}}</th>
+                                    <td mat-cell *matCellDef="let course">
+                                        <ng-container *ngIf="course.isSeries=='1'">
+                                            {{course.repeatSpan}}
+                                            {{(course.repeatUnit=='year' ? 'assignment.Years' : 'assignment.Months') | translate}}
+                                        </ng-container>
+                                        <ng-container *ngIf="course.isSeries=='0'">-</ng-container>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="endDate">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                        {{'assignment.End' | translate}}
+                                    </th>
+                                    <td mat-cell *matCellDef="let course">{{course.formatEndDate}}<ng-container
+                                            *ngIf="!course.endDate">-</ng-container>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="status">
+                                    <th mat-header-cell *matHeaderCellDef>
+                                        {{'course.State' | translate}}</th>
+                                    <td mat-cell *matCellDef="let course">
+                                        <mat-menu #appMenu="matMenu" yPosition="above" style="padding: 10px;">
+                                            <div class="status-list">
+                                                <div class="status-list-head">
+                                                    <i *ngIf="currentListStatus == -1"
+                                                        class="fa fa-exclamation-triangle course-icon-overdue"></i>
+                                                    <i *ngIf="currentListStatus == 0"
+                                                        class="fa fa-clock-o course-icon-current"></i>
+                                                    <i *ngIf="currentListStatus == 1"
+                                                        class="fa fa-check-circle course-icon-done"></i>
+                                                </div>
+                                                <div>
+                                                    <ng-container *ngFor="let member of statusList">
+                                                        <a *ngIf="isAdmin" href="javascript:void(0)"
+                                                            (click)="openEmpView(member.userId)">{{member.FULLNAME}}</a>
+                                                        <ng-container *ngIf="!isAdmin">
+                                                            {{member.FULLNAME}}</ng-container>
+                                                        <br>
+                                                    </ng-container>
+                                                </div>
+                                            </div>
+                                            <!-- <button mat-menu-item>Settings</button>
+                                            <button mat-menu-item>Help</button> -->
+                                        </mat-menu>
+                                        <span *ngIf="course.hasStatus">
+                                            <b class="done-color" style="cursor: pointer;" [matMenuTriggerFor]="appMenu"
+                                                [ngClass]="{ 'menu-disabled': course.completed.length == 0, 'resize-hover': course.completed.length > 0 }"
+                                                (click)="setStatusList(course.completed, 1)">{{course.completed.length}}</b>/<b
+                                                class="open-color" style="cursor: pointer;"
+                                                [matMenuTriggerFor]="appMenu"
+                                                [ngClass]="{ 'menu-disabled': course.open.length == 0, 'resize-hover': course.open.length > 0 }"
+                                                (click)="setStatusList(course.open, 0)">{{course.open.length}}</b>/<b
+                                                class="overdue-color" style="cursor: pointer;"
+                                                [matMenuTriggerFor]="appMenu"
+                                                [ngClass]="{ 'menu-disabled': course.overdue.length == 0, 'resize-hover': course.overdue.length > 0 }"
+                                                (click)="setStatusList(course.overdue, -1)">{{course.overdue.length}}</b>
+                                        </span>
+                                        <ng-container *ngIf="!course.hasStatus">-</ng-container>
+                                    </td>
+                                </ng-container>
+                                <ng-container matColumnDef="editDelete">
+                                    <th mat-header-cell *matHeaderCellDef></th>
+                                    <td mat-cell *matCellDef="let course">
+                                        <ng-container
+                                            *ngIf="course.departmentId && course.departmentId != departmentId; else editDelBlock">
+                                            <i class="fa fa-info-circle iconSize float-right"
+                                                [matTooltip]="'assignment.ParentAss' | translate: {parent: course.departmentName}"></i>
+                                        </ng-container>
+                                        <ng-template #editDelBlock>
+                                            <i class="fa fa-trash iconSize float-right edit-delete-delete-icon"
+                                                style="cursor: pointer;" (click)="deleteAssignment(course)"
+                                                matTooltip="{{'assignment.Delete' | translate}}"></i>
+                                            <i class="fa fa-edit iconSize float-right edit-delete-edit-icon"
+                                                style="cursor: pointer;" (click)="editAssignment(course)"
+                                                matTooltip="{{'assignment.Edit' | translate}}"></i>
+                                        </ng-template>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumnsAssignments"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumnsAssignments;"
+                                    class="group-row"></tr>
+                                <tr mat-row
+                                    *matRowDef="let row; columns: displayedColumnsAssignments when isDarkenedRow"
+                                    class="darken"
+                                    matTooltip="{{(row.active == -1 ? 'assignment.NoFurtherDates' : 'assignment.NotEffective') | translate}}">
+                                </tr>
+                            </table>
+                            <mat-paginator [pageSizeOptions]="[3, 5, 10, 20, 50, 100]" [pageSize]="10"
+                                showFirstLastButtons>
+                            </mat-paginator>
+                        </div>
+                        <div *ngIf="bGroupDataLoaded && allowEdit" class="row ChapterList col-md-12 send-certificate">
+                            <!-- <button (click)="addCourse()"
+                                class="form-control open-button open-button-active">{{'course.AddAssignment' | translate}}...</button> -->
+                            <button mat-stroked-button style="margin:auto;"
+                                (click)="addCourse()">{{'course.AddAssignment' | translate}}...</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

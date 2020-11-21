@@ -1,0 +1,73 @@
+<!-- <div style="width: 100%;height: 100%;text-align: center;" *ngIf="bShowDiv">
+    <img class="smart-study-img" src="/assets/img/logoakt.png" [@visibilityChanged4]="fadeIn ? 'shown' : 'hidden'" />
+</div> -->
+
+<div class="Classlogin_box" *ngIf="globals.companyInfo.defaultLang != '' && bShowLogin">
+    <img class="bg-img" *ngIf="globals.companyInfo.companyId!=0" (load)="imgLoaded()"
+        [@visibilityChanged]="bgImgLoaded ? 'shown' : 'hidden'"
+        src="{{globals.WebURL}}/{{globals.companyInfo.BackgroundImage}}"
+        style="position: absolute;opacity: 0;z-index: -1;" />
+    <img class="logo-img" *ngIf="globals.companyInfo.companyId!=0" (load)="logoLoaded()"
+        src="{{globals.WebURL}}/{{globals.companyInfo.companyLogo}}" style="position: absolute;"
+        [@visibilityChanged3]="logoImgLoaded ? 'shown' : 'hidden'" />
+    <img class="smart-study-img" *ngIf="globals.companyInfo.companyId!=0" src="assets/img/logoakt.png"
+        style="position: absolute;" [@visibilityChanged3]="logoImgLoaded ? 'shown' : 'hidden'" />
+    <div class="alert alert-danger error" *ngIf="bShowError">
+        {{'certificate.ErrorLink' | translate}}
+    </div>
+    <div class="row" style="width: 100%;height: 100%;overflow: scroll;">
+        <div class="add-certi-div" [style.display]="bShowList ? 'block' : 'none'">
+            <button class="form-control all-certi-button" [style.background-color]="'lightgray'"
+                (click)="downloadAllCertificates()">
+                <i class="fa fa-cloud-download"></i> {{'certificate.DownloadAllCerti' | translate}} <i
+                    class="fa fa-cloud-download"></i>
+            </button>
+            <button *ngFor="let empCour of empList;index as i;" class="form-control add-certi-button"
+                [style.background-color]="empCour.certiDownloaded ? 'lightgreen' : 'lightgray'"
+                (click)="loadCertificateById(courseId, empCour.empId)">
+                <span *ngIf="empCour.workgroupName && empCour.workgroupName!=''">{{empCour.FIRSTNAME}}
+                    ({{empCour.workgroupName}})</span>
+                <span *ngIf="!empCour.workgroupName || empCour.workgroupName==''">{{empCour.FIRSTNAME}}</span>
+                <span *ngIf="empCour.certiDownloaded">&#10004;</span>
+            </button>
+        </div>
+    </div>
+    <div class="auth-main" *ngIf="bgImgLoaded && bShowLoginBox" style="opacity: 0;"
+        [@visibilityChanged2]="bgImgLoaded ? 'shown' : 'hidden'">
+        <div class="auth-block">
+            <div class="panel-heading header">
+                <h3 *ngIf="!bHasPw" style="text-align: center;" translate>{{'certificate.LoginSmartStudy'}}</h3>
+                <h3 *ngIf="bHasPw" style="text-align: center;" translate>{{'certificate.LoginPw'}}</h3>
+            </div>
+
+            <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-horizontal">
+                <div class="form-group row" *ngIf="!bHasPw"
+                    [ngClass]="{'has-error': (!email.valid && email.touched), 'has-success': (email.valid && email.touched)}"
+                    style="padding:7px">
+                    <div class="col-sm-12">
+                        <input [formControl]="email" type="email" class="form-control" id="inputEmail3"
+                            style="width: 100%;" placeholder="{{'login.email' | translate}}">
+                    </div>
+                </div>
+                <div class="form-group row"
+                    [ngClass]="{'has-error': (!password.valid && password.touched), 'has-success': (password.valid && password.touched)}"
+                    style="padding:7px">
+                    <div class="col-sm-12">
+                        <input *ngIf="!bHasPw" [formControl]="password" type="password" class="form-control"
+                            id="inputPassword3" style="width: 100%;" placeholder="{{'login.password' | translate}}">
+                        <input *ngIf="bHasPw" [formControl]="password" type="password" class="form-control"
+                            id="inputPassword3" style="width: 100%;"
+                            matTooltip="{{'certificate.LoginPwExp' | translate}}"
+                            placeholder="{{'login.password' | translate}}">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-12 submitbtn">
+                        <button [disabled]="!form.valid && !bHasPw" type="submit" class="btn-lg btn-primary btn-auth"
+                            style="width: 270px;" translate>{{'login.sign_in'}}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

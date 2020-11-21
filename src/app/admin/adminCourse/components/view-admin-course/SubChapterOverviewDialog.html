@@ -1,0 +1,15 @@
+<div style="position: relative;">
+    <span style="position: absolute;right: 10px;top: 10px;" (click)="onNoClick()"></span>
+    <div style="text-align: center;"> 
+        <h1 mat-dialog-title>{{data.name}}</h1>
+    </div>
+    <div mat-dialog-content>
+         <div *ngFor="let sub of data.items;" style="position: relative;
+         min-height: 35px;
+         border-bottom: .5px solid;">
+            <span style="padding: 10px 0px 0px;">
+                {{sub.subChapterTitle}}</span> 
+             <i style="position: absolute;right: 0px;top: 0px;" class="fa fa-download iconSize" (click)="downloadCompany(sub)"></i>
+         </div>
+    </div>
+</div>

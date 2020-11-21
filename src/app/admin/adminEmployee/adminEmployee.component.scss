@@ -1,0 +1,121 @@
+table {
+    width: 100%;
+}
+
+.top-icons {
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.4);
+  transition: all 0.2s ease;
+}
+.top-icons:hover {
+  color: black;
+}
+  
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.send-certificate {
+  text-align: center;
+  .open-button{
+    background-color: lightgray;
+    width: initial;
+    margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .open-button:hover{
+    transform: scale(1.1);
+  }
+}
+
+.group-row {
+  opacity: 0.7;
+}
+
+.group-row:hover {
+  opacity: 1;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+@import "../../theme/theme/conf";
+
+.bulb-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: -10px;
+    margin-left: -10px;
+    width: 30px;
+    max-height: calc(100% - 60px);
+    opacity: 0.9;
+    object-fit: contain;
+}
+
+.close-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: -10px;
+    margin-right: -10px;
+    color: rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.close-icon:hover {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.dialog-wrapper {
+    position: relative;
+    //padding-top: 25px;
+    max-width: 550px;
+}
+
+.my-dialog-header {
+    text-align: center;
+    margin-bottom: 25px;
+    margin-left: 30px;
+    margin-right: 30px;
+    h3 {
+        font-size: large;
+    }
+}
+
+.hover-zoom:hover {
+    transform: scale(1.1);
+}
+
+.warning-paragraph {
+    color: $warning;
+}
+
+.success-paragraph {
+  color: $success;
+}
+
+.danger-paragraph {
+  color: $danger;
+}
+
+.hover-pointer {
+  cursor: pointer;
+}
+
+.menu-disabled {
+  pointer-events: none;
+  cursor: initial;
+}
+
+.status-list {
+  width: fit-content;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+::ng-deep.mat-menu-panel {
+  max-width: 540px !important;
+  min-height: initial !important;
+}

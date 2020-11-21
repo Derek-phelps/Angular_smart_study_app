@@ -1,0 +1,13 @@
+<div class="pages-wrap">
+  <pages-top></pages-top>
+  <div class="pages-body">
+    <sidebar [menuInfo]="super_Item"></sidebar>
+    
+    <div class="pages-content">
+      <content-top></content-top>
+      <router-outlet></router-outlet>
+      <notification></notification>
+    </div>
+  </div>
+</div>
+<loading [loading]="false"></loading>

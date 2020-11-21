@@ -1,0 +1,98 @@
+@import "../../../theme/theme/conf";
+
+.send-certificate {
+  text-align: center;
+  .open-button{
+    background-color: lightgray;
+    width: initial;
+    margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .open-button-active:hover{
+    transform: scale(1.1);
+  }
+}
+
+.member-list-container {
+  max-height: 300px;
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+}
+
+.mat-column-select {
+  width: 70px !important;
+}
+
+.user-filter {
+  width: 100%;
+  padding: 0 20px 0 20px;
+}
+
+.form-wrapper {
+  max-width: 1000px;
+}
+
+.color-presenter {
+  width: 15px;
+  height: 15px;
+}
+
+.member-loader {
+  top: 50px;
+}
+
+.group-row {
+  opacity: 0.7;
+  .resize-hover {
+    transition: all 0.2s ease;
+  }
+}
+
+.group-row:hover {
+  opacity: 1;
+  .resize-hover {
+    font-size: larger;
+  }
+}
+
+.darken {
+  color: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.05);
+  width: 100%;
+  opacity: 0.6;
+  .resize-hover {
+    transition: all 0.2s ease;
+  }
+}
+.darken:hover {
+  .resize-hover {
+    font-size: larger;
+  }
+}
+
+.done-color {
+  color: $success;
+}
+
+.open-color {
+  color: $warning;
+}
+
+.overdue-color {
+  color: $danger;
+}
+
+.status-list {
+  .status-list-head {
+    text-align: center;
+  }
+  width: fit-content;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.menu-disabled {
+  pointer-events: none;
+  cursor: initial;
+}

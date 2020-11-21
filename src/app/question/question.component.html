@@ -1,0 +1,61 @@
+<div class="addIcon" (click)="addCompany()">
+  <i class="fa fa-plus-circle iconSize" ></i>
+</div>
+<a   style="top: -52px;right: 80px!important;position: absolute;" >
+    <i class="fa fa-file-image-o font16px cursorlink iconSize" aria-hidden="true" (click)="addImage();"></i>
+    <input type="file" #imageFileUpload style="display: none;" (change)="imageFileInput($event.target.files)" >
+
+</a> 
+<div class="Classaddempy" style="right: 100px;top: -51px;right: 38px!important;" (click)="uploadEmp()">
+    <i class="fa fa-cloud-upload iconSize" ></i>
+    <input type="file" #fileUpload style="display: none;" (change)="handleFileInput($event.target.files)" name="myFile">
+</div>
+<mat-form-field>
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{'filter' | translate}}">
+</mat-form-field>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+ 
+  <!-- Name Column -->
+  <ng-container matColumnDef="QuestionImg">
+      <th mat-header-cell *matHeaderCellDef>{{'question.Image' | translate}}</th>
+      <td mat-cell *matCellDef="let element"> 
+          <img onerror="this.src='assets/img/logoakt.png'" src="{{_globals.adminURL}}/{{element.QuestionImg}}" style="width: 100px;" /> 
+      </td>
+  </ng-container>
+  
+  <!-- Position Column -->
+  <ng-container matColumnDef="Question">
+      <th mat-header-cell *matHeaderCellDef>{{'question.Question' | translate}}</th>
+      <td mat-cell *matCellDef="let element"> {{element.Question}} </td>
+  </ng-container>
+
+  <!-- Position Column -->
+  <ng-container matColumnDef="courseName">
+      <th mat-header-cell *matHeaderCellDef>{{'course.CourseName' | translate}}</th>
+      <td mat-cell *matCellDef="let element"> {{element.courseName}} </td>
+  </ng-container>
+  
+  <!-- Weight Column -->
+  <ng-container matColumnDef="chapterName">
+      <th mat-header-cell *matHeaderCellDef>{{'chapter.Name' | translate}}</th>
+      <td mat-cell *matCellDef="let element"> {{element.chapterName}} </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="CorrectAnswerOptionNumber">
+      <th mat-header-cell *matHeaderCellDef>{{'question.CorrAnswerOptions' | translate}}</th>
+      <td mat-cell *matCellDef="let element"> {{element.CorrectAnswerOptionNumber}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let row"> 
+          <i class="fa fa-edit iconSize" (click)="editCompany(row)"></i>
+          <i class="fa fa-trash iconSize" (click)="deleteCompany(row)"></i>
+      </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+<mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="50" showFirstLastButtons></mat-paginator>

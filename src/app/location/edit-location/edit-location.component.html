@@ -1,0 +1,43 @@
+<div class="container" style="padding:10px 10px;">
+    <h2>{{'location.LocationTitle' | translate}}</h2>
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>{{'location.WorkingGroups' | translate}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let field of fieldArray; let i = index">
+                <td>
+                    <input [(ngModel)]="field.workgroupName" class="form-control" type="text" />
+                </td>
+                <td>
+                    <button class="btn btn-success" type="button"
+                        (click)="deleteFieldValue(i)">{{'location.Delete' | translate}}</button>
+                    <mat-checkbox *ngIf="field.isPrivate!=='0'" [(ngModel)]="field.isPrivate" style="margin-left: 10px" class="coloBlack">{{'location.Private' | translate}}
+                    </mat-checkbox>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input class="form-control" type="text" id="newAttributeName"
+                        [(ngModel)]="newAttribute.workgroupName" name="newAttributeName" />
+                </td>
+
+                <td>
+                    <button class="btn btn-success" type="button"
+                        (click)="addFieldValue()">{{'location.Add' | translate}}</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<form [formGroup]="EmpForm">
+    <div class="form-group">
+        <input type="text" class="form-control" formControlName="locationName"
+            placeholder="{{'location.LocationName' | translate}}">
+    </div>
+
+    <button [disabled]="!EmpForm.valid" (click)="saveLocData()" type="button"
+        class="btn btn-success">{{'confirm' | translate}}</button>
+</form>

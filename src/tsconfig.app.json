@@ -1,0 +1,62 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../out-tsc/app",
+    "types": [],
+    "paths": {
+      "jszip": [
+        "node_modules/jszip/dist/jszip.min.js"
+      ]
+    }
+  },
+  // "files": [
+  //   "src/main.ts",
+  //   "src/polyfills.ts"
+  // ],
+  // "include": [
+  //   "src/**/*.d.ts"
+  // ],
+  "exclude": [
+    "test.ts",
+    "**/*.spec.ts",
+    "app/department/components/edit-department/edit-department.component.ts",
+    "app/certificater/certificater.routing.ts",
+    "app/ActiveLogin/activeLogin.component.ts",
+    "app/ActiveLogin/activeLogin.routing.ts",
+    "app/ActiveLogin/activeLogin.service.ts",
+    "app/admin/adminCourse/components/add-admin-course/add-adminCourse.component.ts",
+    "app/admin/adminCourse/components/edit-admin-course/edit-adminCourse.component.ts",
+    "app/admin/adminTrainer/adminTrainer.service.ts",
+    "app/admin/adminTrainer/adminTrainer.component.ts",
+    "app/admin/adminTrainer/components/edit-adminTrainer/edit-adminTrainer.component.ts",
+    "app/admin/adminTrainer/components/add-adminTrainer/add-adminTrainer.component.ts",
+    "app/admin/adminTrainer/adminTrainer.routing.ts",
+    "app/admin/position/position.service.ts",
+    "app/admin/position/position.component.ts",
+    "app/admin/position/components/positionAdd.component.ts",
+    "app/admin/position/components/positionEdit.component.ts",
+    "app/admin/position/position.routing.ts",
+    "app/admin/position/position.module.ts",
+    "app/certificater/certificater.component.ts",
+    "app/ActiveLogin/activeLogin.module.ts",
+    "app/download/index.ts",
+    "app/employee/finelExam/index.ts",
+    "app/location/location.service.ts",
+    "app/location/location.component.ts",
+    "app/location/add-location/add-location.component.ts",
+    "app/location/edit-location/edit-location.component.ts",
+    "app/location/location.routing.ts",
+    "app/location/location.module.ts",
+    "app/theme/components/baFileUploader/index.ts",
+    "app/theme/components/baPictureUploader/index.ts",
+    "app/theme/roots/root.component.ts",
+    "app/trainer/superadmin.service.ts",
+    "environments/environment.prod.ts",
+    "app/employee/dashboard/dashboard.component.ts",
+    "app/admin/adminEmployee/components/chart-employees/employeesChart.component.ts",
+    "app/employee/progress/progress.component.ts",
+    "app/admin/adminTrainer/adminTrainer.routing.ts",
+    "app/admin/adminTrainer/adminTrainer.module.ts",
+    "app/theme/components/baChartistChart/baChartistChart.component.ts"
+  ]
+}

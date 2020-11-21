@@ -1,0 +1,65 @@
+<div class="pages-wrap" style="opacity: 0;overflow: hidden;" [@visibilityChanged]="fadeIn ? 'shown' : 'hidden'">
+    <pages-top></pages-top>
+    <div class="pages-body" style="display: table;">
+        <sidebar [menuInfo]="PAGES_Sub_MENU" [style.height]="Divheight" style="display: table-cell;"></sidebar>
+        <div class="pages-content" [style.width]="DivWidth">
+            <content-top></content-top>
+            <div style="background: #fff;color: #000;">
+                <div style="width: 100%;">
+                    <div class="al-content" *ngIf="selectIndex">
+                        <div class="QuestionBoxCls">
+                            <span>{{'question.Question' | translate}} {{indexNo+1}}/{{QustionList.length}}: </span>
+                            <div class="col-md-12">
+                                <p style="padding: 10px;font-size: large;">{{selectIndex.Question}}</p>
+                                <img onerror="this.src='assets/img/logoakt.png'"
+                                    *ngIf="selectIndex.QuestionImg && selectIndex.QuestionImg!='null' && selectIndex.QuestionImg !=''"
+                                    style="max-height: 300px;max-width: 100%;object-fit: contain;padding:10px;"
+                                    src="{{_globals.WebURL}}/{{selectIndex.QuestionImg}}" />
+                            </div>
+                        </div>
+                        <form [formGroup]="myForm">
+                            <ul *ngIf="selectIndex.AnsList" formArrayName="Ans" role="group"
+                                style="list-style-type: none;" class="AnsBoxCls">
+                                <li *ngFor="let item of selectIndex.AnsList;index as i;" [formGroupName]="i"
+                                    style="padding-top:5px;">
+                                    <div class="col-md-12" *ngIf="item.isAns == 0">
+                                        <label class="radio-inline nowrap">
+                                            <input type="checkbox" name="inlineRadioOptions"
+                                                formControlName="SelectIndex" value="{{item.QuestionOptionId}}">
+                                            <span> {{item.QuestionOptionName}}</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-12" *ngIf="item.isAns == 1" style="background:#71f442 ">
+                                        <label class="radio-inline nowrap">
+                                            <input type="checkbox" name="inlineRadioOptions"
+                                                formControlName="SelectIndex" value="{{item.QuestionOptionId}}">
+                                            <span> {{item.QuestionOptionName}}</span>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-12" *ngIf="item.isAns == 2" style="background: #f44141">
+                                        <label class="radio-inline nowrap">
+                                            <input type="checkbox" name="inlineRadioOptions"
+                                                formControlName="SelectIndex" value="{{item.QuestionOptionId}}">
+                                            <span> {{item.QuestionOptionName}}</span>
+                                        </label>
+                                    </div>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div style="height: 95px;">
+                    <button *ngIf="indexNo!=0" (click)="BackQus()"
+                        class="btn-lg btn-primary btn-auth">{{'question.Back' | translate}}</button>
+                    <button (click)="onCorrectAnswer()"
+                        class="btn-lg btn-primary btn-auth">{{'question.CorrectAnswers' | translate}}</button>
+                    <button *ngIf="indexNo!=QustionList.length-1" (click)="NextQus()"
+                        class="btn-lg btn-primary btn-auth">{{'question.Next' | translate}}</button>
+                    <button *ngIf="indexNo==QustionList.length-1" (click)="SubmitQus()"
+                        class="btn-lg btn-primary btn-auth">{{'question.Submit' | translate}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

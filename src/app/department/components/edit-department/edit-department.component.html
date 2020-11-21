@@ -1,0 +1,204 @@
+<!-- <form [formGroup]="EmpForm" >
+    <mat-card class="col-10" style="margin-left: 10%;"  baCardClass="with-scroll">
+        <mat-card-header> {{'department.Edit' | translate}}</mat-card-header>
+        <mat-card-content>
+            <div >
+                <ba-picture-uploader style="width: 250px;float: left;" #companyImg [imageTitle]="strDepartmentLogo" [FileuploadInput] = "uploaderOptions"  (onUploadCompleted)="imgUpload($event)" (onUpload)="disableButton()" [picture]="defaultLogoPicture" [defaultPicture]="defaultLogoPicture" ></ba-picture-uploader>
+                <ba-picture-uploader style="width: 250px;float: left;" #backgroundImg [imageTitle]="strDepartmentBackground" [FileuploadInput] = "uploaderBackgroundOptions" (onUploadCompleted)="BackgroundImgUpload($event)" (onUpload)="disableButton()" [picture]="defaultBGPicture" [defaultPicture]="defaultBGPicture" ></ba-picture-uploader>
+                <ba-picture-uploader style="width: 250px;float: left;" #bannerImg [imageTitle]="strDepartmentBanner" [FileuploadInput] = "uploaderBannerOptions" (onUploadCompleted)="BannerImgUpload($event)" (onUpload)="disableButton()" [picture]="defaultBannerPicture" [defaultPicture]="defaultBannerPicture" ></ba-picture-uploader>  
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" formControlName="departmentName" placeholder="{{'department.Department' | translate}}">
+            </div>
+            <select class="form-control"  formControlName="EName" >
+                <option value="0" disabled selected>{{'department.Leader' | translate}}</option>
+                <option *ngFor="let dep of DepList;index as i;"  value="{{dep.value}}" selected>{{dep.title}}</option>
+            </select>
+            <div class="form-group">
+                <input type="text" class="form-control" formControlName="depPassword" placeholder="{{'department.RegPWEdit' | translate}}">
+            </div>
+            <button [disabled]="!EmpForm.valid || DisableButton > 0"  (click)="saveEmpData()" type="button" class="btn btn-success">Bestästigen</button>
+        </mat-card-content>
+    </mat-card>
+</form> -->
+<div *ngIf="comapnyId==0">
+    <select class="form-control" (change)="loadEmp($event.target.value)" placeholder="Comapny">
+        <option value="" disabled selected>Company</option>
+        <option *ngFor="let Comp of CompanyList;" value="{{Comp.companyId}}">{{Comp.companyName}}</option>
+    </select>
+</div>
+<div *ngIf="comapnyId!=0">
+
+    <mat-card baCardClass="with-scroll">
+        <mat-card-header> {{'department.Add' | translate}}</mat-card-header>
+        <mat-card-content>
+            <form [formGroup]="EmpForm">
+                <div style="text-align: center">
+                    <div style="display: inline-block">
+                        <ba-picture-uploader style="width: 250px;float: left;" #companyImg
+                            [imageTitle]="strDepartmentLogo" [FileuploadInput]="uploaderOptions"
+                            (onUploadCompleted)="imgUpload($event)" (onUpload)="disableButton()" [picture]="profile"
+                            [defaultPicture]="defaultLogoPicture">
+                        </ba-picture-uploader>
+                        <ba-picture-uploader style="width: 250px;float: left;" #backgroundImg
+                            [imageTitle]="strDepartmentBackground" [FileuploadInput]="uploaderBackgroundOptions"
+                            (onUploadCompleted)="BackgroundImgUpload($event)" (onUpload)="disableButton()"
+                            [picture]="profile" [defaultPicture]="defaultBGPicture"></ba-picture-uploader>
+                        <ba-picture-uploader style="width: 250px;float: left;" #bannerImg
+                            [imageTitle]="strDepartmentBanner" [FileuploadInput]="uploaderBannerOptions"
+                            (onUploadCompleted)="BannerImgUpload($event)" (onUpload)="disableButton()"
+                            [picture]="profile" [defaultPicture]="defaultBannerPicture">
+                        </ba-picture-uploader>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" formControlName="departmentName"
+                        placeholder="{{'department.DepartmentName' | translate}}">
+                </div>
+                <div class="form-group">
+                    <select class="form-control" formControlName="EName">
+                        <option disabled selected value="0">{{'department.SelectLeader' | translate}}:</option>
+                        <option value="0">{{'department.NoLeader' | translate}}</option>
+                        <option *ngFor="let dep of DepList;index as i;" value="{{dep.value}}" selected>{{dep.title}}
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" formControlName="depPassword"
+                        placeholder="{{'department.RegPW' | translate}}">
+                </div>
+            </form>
+            <div class="form-group shadow" *ngIf="EmpForm.value.departmentName != ''">
+                <!-- <mat-tab-group [selectedIndex]="tabSel.value" (selectedTabChange)="tabChanged($event)"> -->
+                <mat-tab-group [selectedIndex]="tabSel.value" (selectedIndexChange)="indexChanged($event)">
+                    <mat-tab label="{{'department.TotalOverview' | translate}}">
+                        <mui-org-chart style="padding: 20px" [topEmployee]="overviewDep" direction="horizontal"
+                            (itemClick)="itemClicked($event)"></mui-org-chart>
+                    </mat-tab>
+                    <mat-tab [label]="EmpForm.value.departmentName">
+                        <mat-card *ngFor="let subDep of EmpForm.value.subDepartments; index as i">
+                            <mat-card-header style="border-radius: 5px">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="row" style="margin-bottom: 5px;">
+                                                <input [(ngModel)]="subDep.departmentName" class="form-control"
+                                                    type="text"
+                                                    placeholder="{{'department.SubDepartmentName' | translate}}" />
+                                            </div>
+                                            <div class="row">
+                                                <select class="form-control" [(ngModel)]="subDep.EName">
+                                                    <option disabled selected value="0">
+                                                        {{'department.SelectLeader' | translate}}:
+                                                    </option>
+                                                    <option value="0">{{'department.NoLeader' | translate}}</option>
+                                                    <option *ngFor="let dep of DepList;index as i;"
+                                                        value="{{dep.value}}" selected>
+                                                        {{dep.title}}
+                                                    </option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <div class="col-md-6" *ngIf="subDep.departmentName != ''">
+                                                    <button *ngIf="subDep.subDepartments.length == 0"
+                                                        (click)="addSubDep(subDep)" class="btn btnIcon">
+                                                        <i class="fa fa-plus-circle iconSize"
+                                                            matTooltip="{{'department.AddSubDep' | translate}} ({{subDep.departmentName}})"></i>
+                                                    </button>
+                                                    <button *ngIf="subDep.subDepartments.length > 0"
+                                                        (click)="editSubDep(subDep)" class="btn btnIcon">
+                                                        <i class="fa fa-edit iconSize"
+                                                            matTooltip="{{'department.EditSubDep' | translate}} ({{subDep.departmentName}})"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <button (click)="deleteSubDep(i)" class="btn btnIcon"><i
+                                                            class="fa fa-trash iconSize"
+                                                            matTooltip="{{'department.DelDep' | translate}}"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-card-header>
+                        </mat-card>
+                        <div class="container" style="padding: 20px 20px;">
+                            <button (click)="addSubDep()"
+                                class="btn subDepButton">{{'department.AddSubDep' | translate}}</button>
+                        </div>
+                    </mat-tab>
+                    <mat-tab *ngFor="let tab of tabs; let index = index" [label]="tab.departmentName">
+                        <mat-card *ngFor="let subDep of tab.subDepartments; index as i">
+                            <mat-card-header style="border-radius: 5px">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="row" style="margin-bottom: 5px;">
+                                                <input [(ngModel)]="subDep.departmentName" class="form-control"
+                                                    type="text"
+                                                    placeholder="{{'department.SubDepartmentName' | translate}}" />
+                                            </div>
+                                            <div class="row">
+                                                <select class="form-control" [(ngModel)]="subDep.EName">
+                                                    <option disabled selected value="0">
+                                                        {{'department.SelectLeader' | translate}}:
+                                                    </option>
+                                                    <option value="0">{{'department.NoLeader' | translate}}</option>
+                                                    <option *ngFor="let dep of DepList;index as i;"
+                                                        value="{{dep.value}}" selected>
+                                                        {{dep.title}}
+                                                    </option>
+                                                </select>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="row">
+                                                <div class="col-md-6" *ngIf="subDep.departmentName != ''">
+                                                    <button *ngIf="subDep.subDepartments.length == 0"
+                                                        (click)="addSubDep(subDep)" class="btn btnIcon">
+                                                        <i class="fa fa-plus-circle iconSize"
+                                                            matTooltip="{{'department.AddSubDep' | translate}} ({{subDep.departmentName}})"></i>
+                                                    </button>
+                                                    <button *ngIf="subDep.subDepartments.length > 0"
+                                                        (click)="editSubDep(subDep)" class="btn btnIcon">
+                                                        <i class="fa fa-edit iconSize"
+                                                            matTooltip="{{'department.EditSubDep' | translate}} ({{subDep.departmentName}})"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <button (click)="deleteSubDep(i)" class="btn btnIcon"><i
+                                                            class="fa fa-trash iconSize"
+                                                            matTooltip="{{'department.DelDep' | translate}}"></i></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </mat-card-header>
+                            <!-- <mat-card-content>
+                                            <select class="form-control" formControlName="EName">
+                                                <option disabled selected value="0">{{'department.SelectLeader' | translate}}:
+                                                </option>
+                                                <option value="0">{{'department.NoLeader' | translate}}</option>
+                                                <option *ngFor="let dep of DepList;index as i;" value="{{dep.value}}" selected>
+                                                    {{dep.title}}
+                                                </option>
+                                            </select>
+                                        </mat-card-content> -->
+                        </mat-card>
+                        <div class="container" style="padding: 20px 20px;">
+                            <button (click)="addSubDep(tab)"
+                                class="btn subDepButton">{{'department.AddSubDep' | translate}}</button>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+            <button [disabled]="!EmpForm.valid || DisableButton > 0" (click)="saveEmpData()" type="button"
+                class="btn btn-success">{{'confirm' | translate}}</button>
+        </mat-card-content>
+    </mat-card>
+</div>

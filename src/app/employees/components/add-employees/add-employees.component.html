@@ -1,0 +1,57 @@
+<div>
+    <select class="form-control" *ngIf="companyId==0"  (change)="loadDepartment($event.target.value)" placeholder="Comapny" >
+        <option value="" disabled selected>Company</option>
+        <option *ngFor="let Comp of CompanyList;" value="{{Comp.companyId}}" >{{Comp.companyName}}</option>
+    </select>
+</div>
+<div *ngIf="companyId!=0" >
+    <form [formGroup]="EmpForm" class="row" >
+        <mat-card class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12" cardTitle="Personal" baCardClass="with-scroll">
+            <mat-card-header> {{'employees.Add' | translate}}</mat-card-header>
+            <mat-card-content>
+                <ba-picture-uploader style="width: 250px;float: left;" #companyImg [imageTitle]="'Profilbild'" [FileuploadInput] = "uploaderOptions"  (onUploadCompleted)="imgUpload($event)" (onUpload)="disableButton()" [picture]="profile" [defaultPicture]="defaultPicture" ></ba-picture-uploader>
+                
+                <div class="form-group">
+                    <input type="text" class="form-control" formControlName="FIRSTNAME" placeholder="Vorname">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" formControlName="LASTNAME"  placeholder="Nachname">
+                </div>
+                <div class="form-group">
+                    <input type="tel" class="form-control" formControlName="MOBILEPHONE" placeholder="Telefonnummer">
+                </div> 
+            </mat-card-content>
+        </mat-card>
+        <mat-card class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12" cardTitle="Business" baCardClass="with-scroll">
+            <mat-card-header> {{'employees.Add' | translate}}</mat-card-header>
+            <mat-card-content>
+                <select class="form-control"  formControlName="departmentId" >
+                    <option value="" disabled selected>Abteilung</option>
+                    <option *ngFor="let post of departmentList;" value="{{post.departmentId}}" >{{post.departmentName}}</option>
+                </select>
+                <select class="form-control" placeholder="Position" formControlName="postOfDepartment" >
+                    <option value="" disabled selected>Position</option>
+                    <option *ngFor="let post of postList;" value="{{post.positionId}}" >{{post.positionName}}</option>
+                </select>
+                <select class="form-control" placeholder="Geschlecht" formControlName="GENDER" >
+                    <option value="" disabled selected>Auswahl</option>
+                    <option  value="Male" >Männlich</option>
+                    <option  value="Female" >Weiblich</option>
+                </select>
+                
+                <div class="form-group">
+                    <input type="text" class="form-control" formControlName="empEdu" placeholder="Titel">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" formControlName="EMAIL"  placeholder="Email" >
+                </div>
+                <div class="form-group">
+                    <textarea class="form-control" formControlName="CURRENTADDRESS"  placeholder="Addresse"></textarea>
+                </div>
+                
+                <button [disabled]="!EmpForm.valid || DisableButton"  (click)="saveEmpData()" type="button" class="btn btn-success">Bestätigen</button>
+        
+            </mat-card-content>
+        </mat-card>
+    </form>
+</div>

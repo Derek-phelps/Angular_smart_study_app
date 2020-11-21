@@ -1,0 +1,84 @@
+<div class="Classlogin_box">
+    <img *ngIf="_globals.companyInfo.companyId!=0" src="{{_globals.WebURL}}/{{_globals.companyInfo.BackgroundImage}}" style="position: absolute;width: 100%;height: 100%;" />
+  <div class="auth-main" >
+    <form [formGroup]="EmpForm" class="row" style="margin-right: 50px;margin-left: 50px;">
+      <mat-card class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12" cardTitle="Personal" baCardClass="with-scroll">
+          <mat-card-header> {{'employees.registration' | translate}}</mat-card-header>
+          <mat-card-content>
+            <mat-grid-list cols="2" rowHeight="250px">
+                <mat-grid-tile
+                    [colspan]="1"
+                    [rowspan]="1">
+                    <ba-picture-uploader [picture]="profile"  [imageTitle]="'Photo'" [FileuploadInput] = "uploaderOptions"  (onUploadCompleted)="imgUpload($event)" (onUpload)="disableButton()"  [defaultPicture]="defaultPicture" ></ba-picture-uploader>
+                </mat-grid-tile>
+                <mat-grid-tile
+                    [colspan]="1"
+                    [rowspan]="1">
+                    <ba-picture-uploader [picture]="profile"  [imageTitle]="'Signature'" [FileuploadInput] = "uploaderSignatureOptions"  (onUploadCompleted)="imgSignatureUpload($event)" (onUpload)="disableButton()"  [defaultPicture]="defaultPicture" ></ba-picture-uploader>
+                </mat-grid-tile>
+            </mat-grid-list>
+              <div class="form-group">
+                <input type="text" class="form-control" formControlName="userName" placeholder="{{'employees.UserName' | translate}}">
+              </div>
+              <div class="form-group">
+                  <input type="text" class="form-control" formControlName="FIRSTNAME" placeholder="{{'employees.Name' | translate}}">
+              </div>
+              <div class="form-group">
+                  <input type="text" class="form-control" formControlName="LASTNAME"  placeholder="{{'employees.Surname' | translate}}">
+              </div>
+              <div class="form-group">
+                  <input type="tel" class="form-control" formControlName="MOBILEPHONE" placeholder="{{'employees.Phone' | translate}}">
+              </div> 
+              <select class="form-control" placeholder="Geschlecht" formControlName="GENDER" >
+                  <option value="" disabled selected>{{'employees.Select' | translate}}</option>
+                  <option  value="Male" >{{'employees.Male' | translate}}</option>
+                  <option  value="Female" >{{'employees.Female' | translate}}</option>
+              </select>
+              
+              <div class="form-group">
+                  <input type="text" class="form-control" formControlName="empEdu" placeholder="{{'employees.Title' | translate}}">
+              </div>
+              <div class="form-group">
+                  <input type="text" class="form-control" formControlName="EMAIL"  placeholder="{{'employees.Email' | translate}}" >
+              </div>
+              <div class="form-group">
+                  <textarea class="form-control" formControlName="CURRENTADDRESS"  placeholder="{{'employees.Address' | translate}}"></textarea>
+              </div>
+              <div class="form-group">
+                <input type="text" class="form-control" formControlName="Trainertitle" placeholder="{{'employees.Trainertitle' | translate}}">
+              </div>
+              <div class="form-group">
+                 <input type="text" class="form-control" formControlName="TrainerPostion" placeholder="{{'employees.TrainerPostion' | translate}}">
+              </div>
+          </mat-card-content>
+      </mat-card>
+      <div class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12">
+          <mat-card class="col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" baCardClass="with-scroll">
+              <mat-card-header> {{'login.password' | translate}}</mat-card-header>
+              <mat-card-content>
+                  <div class="form-group">
+                      <input type="password" class="form-control" formControlName="NewPassword" placeholder="{{'login.password' | translate}}">
+                  </div>
+                  <div class="form-group">
+                      <input type="password" class="form-control" formControlName="ConfirmPassword"  placeholder="{{'login.confirmpassword' | translate}}">
+                  </div>
+              </mat-card-content>
+          </mat-card>
+          <mat-card class="col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" baCardClass="with-scroll">
+              <mat-card-header> {{'login.TeamCondition' | translate}}</mat-card-header>
+              <mat-card-content>
+                  <div class="form-group">
+                      <mat-checkbox formControlName="teamCon1"> Test Test Test TestTest TestTest TestTest TestTest Test</mat-checkbox>
+                  </div>
+                  <div class="form-group">
+                      <mat-checkbox formControlName="teamCon2">Test Test Test Test Test Test Test Test Test TestTest Test</mat-checkbox>
+                  </div>
+                  <button [disabled]="!EmpForm.valid || DisableButton > 0"  (click)="saveEmpData()" type="button" class="btn btn-success">{{'confirm' | translate}}</button>
+          
+              </mat-card-content>
+          </mat-card>
+      </div>
+      
+  </form>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+.send-certificate {
+    text-align: center;
+    .open-button{
+      background-color: lightgray;
+      width: initial;
+      margin: 5px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .open-button-active:hover{
+      transform: scale(1.1);
+    }
+  }
+
+.example-radio-group {
+    display: flex;
+    flex-direction: column;
+    mat-radio-label {
+        color: black;
+    }
+}
+

@@ -1,0 +1,77 @@
+<div class="row">
+  <div class="col-sm-2">
+    <button type="button" class="ComposeCls" (click)="newMessage()">{{'Message.NeueNachricht' | translate}}</button>
+  </div>
+  <div class="col-sm-4 MessageCls">
+    <select style="cursor: pointer;" class="form-control" [(ngModel)]="filterMes" (change)='loadMes()'>
+      <option value="0">{{'Message.All' | translate}}</option>
+      <option value="1">{{'Message.Unread' | translate}}</option>
+      <option value="2">{{'Message.Read' | translate}}</option>
+    </select>
+  </div>
+</div>
+<div class="row" style="margin-top:10px">
+  <mat-card class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12 ">
+    <mat-card-header> {{'Message.Nachricht' | translate}}</mat-card-header>
+    <mat-card-content>
+      <div *ngFor="let item of Message;index as i;" class="col-lg-12">
+        <div class="Message_container" (click)="SelectMsg(i)">
+          <div class="Message_box userImg" class="col-lg-3">
+            <span>
+              <i class="fa fa-user-circle-o" aria-hidden="true" style="font-size:35px;"></i>
+            </span>
+          </div>
+          <div class="col-lg-9">
+            <div class="Message_box senderName">
+              <span class="name"> {{item.senderName}}</span> <br /><br />
+              <span class="msg"> {{item.messageSub}} </span>
+            </div>
+            <div class="Message_box datetime">
+              <span> {{item.Time| date: 'dd/MM/yyyy'}}</span>
+            </div>
+          </div>
+        </div>
+        <span class="fa fa-trash deleteEmp" style="position: absolute;top: 0px!important;right: -10px!important;"
+          (click)="deleteMess(item.messageId)"></span>
+        <br />
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card *ngIf="isSelect" class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12">
+    <mat-card-header> {{SelectSub}}</mat-card-header>
+    <mat-card-content>
+      {{SelectMessage}}
+    </mat-card-content>
+  </mat-card>
+  <mat-card *ngIf="isNewMessage" class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12 new-messagebox">
+    <mat-card-header> {{'Message.NeueNachricht' | translate}}</mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="MessageCom">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Email Addresse</label>
+          <select style="cursor: pointer;" class="form-control" placeholder="Email" formControlName="email">
+            <option value="" disabled selected>{{'Message.SelectRecipient' | translate}}</option>
+            <option value="0">{{'Message.AllEmp' | translate}}</option>
+            <option *ngFor="let user of UsereList;" value="{{user.UserId}}">{{user.FIRSTNAME}} {{user.LASTNAME}}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Betreff</label>
+          <input type="text" placeholder="{{'Message.Subject' | translate}}" class="form-control"
+            formControlName="subject">
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Nachricht</label>
+          <textarea rows="4" cols="50" placeholder="{{'Message.Nachricht' | translate}}" class="form-control"
+            formControlName="mess">
+
+            </textarea>
+        </div>
+        <button type="submit" (click)="sendNewMes()" class="btn btn-danger">{{'confirm' | translate}}</button>
+      </form>
+    </mat-card-content>
+
+  </mat-card>
+
+</div>

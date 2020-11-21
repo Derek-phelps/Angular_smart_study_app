@@ -1,0 +1,26 @@
+<main (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end')">
+  <router-outlet *ngIf="globals.companyInfo.isSet"></router-outlet>
+  <!-- <div *ngIf="bIsOffline" class="offline-div">
+    
+  </div> -->
+  <div class="offline-div" [@visibilityChanged]="globals.bIsAppOffline ? 'shown' : 'hidden'">
+    <div class="error-message">
+      <span class="error-text">
+        <h4>&#9888;</h4><br>{{'offline' | translate}}
+      </span>
+    </div>
+    <!-- <div class="offline-div-inner"> -->
+    <!-- <img class="offline-img" src="../assets/img/logoakt.png" style="opacity: 1.0;" /> -->
+
+    <!-- </div> -->
+  </div>
+  <!-- <ngx-spinner>
+    <div class="loading-div">
+      <img class="loading-img" src="/assets/img/logoakt.png" />
+      <div style="text-align: center;" [innerHTML]="globals.spinnerText"></div>
+    </div>
+  </ngx-spinner> -->
+  <ngx-spinner>
+    <div style="text-align: center;color: white;" [innerHTML]="globals.spinnerText"></div>
+  </ngx-spinner>
+</main>

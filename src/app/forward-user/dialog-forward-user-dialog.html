@@ -1,0 +1,23 @@
+<div class="dialog-wrapper">
+    <div mat-dialog-title class="my-dialog-header">
+        <h3>{{'course.PassEmpQ' | translate}}</h3>
+    </div>
+    <div mat-dialog-content style="text-align: center;">
+        <p [innerHTML]="'course.PassEmpSure' | translate: {course: data.course, name: data.name}"></p>
+        <p class="warning-paragraph">{{'course.WarningPass' | translate}}</p>
+        <!-- <mat-form-field>
+            <mat-label>Favorite Animal</mat-label>
+            <input matInput [(ngModel)]="data.course">
+        </mat-form-field> -->
+    </div>
+    <div mat-dialog-actions align="end">
+        <button mat-button (click)="onNoClick()">{{'cancel' | translate}}</button>
+        <button mat-button [mat-dialog-close]="1">{{'course.PassNoCerti' | translate}}</button>
+        <div matTooltip="{{'course.NoCerti' | translate}}" [matTooltipDisabled]="data.hasCertificate">
+            <button mat-button [disabled]="!data.hasCertificate"
+                [mat-dialog-close]="2">{{'course.PassCerti' | translate}}</button>
+        </div>
+    </div>
+    <img class="bulb-img" src="assets/img/bulb_small.png" />
+    <i class="fa fa-times fa-lg close-icon" style="cursor: pointer;" [mat-dialog-close]="false"></i>
+</div>

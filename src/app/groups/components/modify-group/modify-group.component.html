@@ -1,0 +1,140 @@
+<div class="form-wrapper">
+    <div class="loader"
+        [@visibilityChanged]="!(bCategoryListLoaded && bUserListLoaded && bGroupDataLoaded) ? 'shown' : 'hidden'"
+        *ngIf="!(bCategoryListLoaded && bUserListLoaded && bGroupDataLoaded)"></div>
+    <div class="content"
+        [@visibilityChanged]="bCategoryListLoaded && bUserListLoaded && bGroupDataLoaded ? 'shown' : 'hidden'">
+        <form [formGroup]="groupForm">
+            <!-- Group name input -->
+            <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <mat-form-field style="width: 100%;">
+                    <input matInput type="text" formControlName="name" placeholder="{{'group.Name' | translate}}">
+                </mat-form-field>
+            </div>
+            <!-- Group color selection -->
+            <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" style="float: left;z-index: 1;">
+                <label for="colorPicker"
+                    style="color: black; font-size: 16px; padding-right: 20px; cursor: pointer;">{{'group.Color' | translate}}</label>
+                <input id="colorPicker" style="cursor: pointer;" [(colorPicker)]="groupForm.value.color"
+                    [style.background]="groupForm.value.color" [cpAlphaChannel]="'disabled'"
+                    [cpSaveClickOutside]="false" [cpOKButton]="true" [cpOKButtonText]="'confirm' | translate"
+                    [cpOKButtonClass]="'btn btn-success btn-sm'" [cpCancelButton]="true"
+                    [cpCancelButtonText]="'cancel' | translate" [cpCancelButtonClass]="'btn btn-danger btn-sm'" />
+            </div>
+            <div *ngIf="bShowCategories" class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <mat-form-field style="width: 100%">
+                    <mat-select placeholder="{{'group.SelectCategory' | translate}}" multiple
+                        formControlName="categories">
+                        <mat-option *ngFor="let category of categoryList" [value]="category.categoryId"
+                            style="width: auto;"
+                            [ngStyle]="{'background-image':'-webkit-gradient(linear, right top, left top, color-stop(0%,'+category.color+'), color-stop(100%,rgba(255,255,255,0)))'}">
+                            {{category.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+        </form>
+        <!-- Group member selection -->
+        <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <label for="addUserTable" style="color: black; font-size: 16px;">{{'group.AddUser' | translate}}</label>
+            <mat-form-field class="user-filter">
+                <mat-label>{{'group.Search' | translate}}</mat-label>
+                <input matInput (keyup)="applyFilterGroupMember($event)" placeholder="">
+            </mat-form-field>
+            <table id="addUserTable" mat-table [dataSource]="memberList" matSort matSortActive="LASTNAME"
+                matSortDirection="asc" class="mat-elevation-z8" style="width: 100%;">
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox (change)="$event ? masterToggle() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                        <mat-checkbox (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row.UserId) : null"
+                            [checked]="selection.isSelected(row.UserId)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="LASTNAME">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'employees.Surname' | translate}}</th>
+                    <td mat-cell *matCellDef="let user">{{user.LASTNAME}}</td>
+                </ng-container>
+                <ng-container matColumnDef="FIRSTNAME">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'employees.Name' | translate}}</th>
+                    <td mat-cell *matCellDef="let user">{{user.FIRSTNAME}}</td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" matTooltip="{{row.FULLNAME}}"></tr>
+            </table>
+            <mat-paginator #memberPaginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="10"
+                showFirstLastButtons>
+            </mat-paginator>
+        </div>
+        <!-- Group user rights -->
+        <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="_globals.userInfo.isAdmin">
+            <label for="addUserTable"
+                style="color: black; font-size: 16px;">{{'group.DefinePermissions' | translate}}</label>
+            <mat-form-field class="user-filter">
+                <mat-label>{{'group.Search' | translate}}</mat-label>
+                <input matInput (keyup)="applyFilterPermissions($event)" placeholder="">
+            </mat-form-field>
+            <table id="addUserTable" mat-table [dataSource]="permissionList" matSort matSortActive="LASTNAME"
+                matSortDirection="asc" class="mat-elevation-z8" style="width: 100%;">
+                <ng-container matColumnDef="LASTNAME">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'employees.Surname' | translate}}</th>
+                    <td mat-cell *matCellDef="let user">{{user.LASTNAME}}</td>
+                </ng-container>
+                <ng-container matColumnDef="FIRSTNAME">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'employees.Name' | translate}}</th>
+                    <td mat-cell *matCellDef="let user">{{user.FIRSTNAME}}</td>
+                </ng-container>
+                <ng-container matColumnDef="view">
+                    <th mat-header-cell *matHeaderCellDef style="text-align: center;">{{'group.View' | translate}}<br>
+                        <mat-checkbox id="viewSelect" (change)="$event ? masterToggleView() : null"
+                            [checked]="selectionView.hasValue() && isAllSelectedView()"
+                            [indeterminate]="selectionView.hasValue() && !isAllSelectedView()"
+                            [matTooltip]="isAllSelectedView() ? translate.instant('group.DeselectAll') : translate.instant('group.SelectAll')">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row" style="text-align: center;">
+                        <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleView($event, row.UserId)"
+                            [checked]="selectionView.isSelected(row.UserId)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="admin">
+                    <th mat-header-cell *matHeaderCellDef style="text-align: center;">{{'group.Edit' | translate}}<br>
+                        <mat-checkbox id="adminSelect" (change)="$event ? masterToggleAdmin() : null"
+                            [checked]="selectionAdmin.hasValue() && isAllSelectedAdmin()"
+                            [indeterminate]="selectionAdmin.hasValue() && !isAllSelectedAdmin()"
+                            [matTooltip]="isAllSelectedAdmin() ? translate.instant('group.DeselectAll') : translate.instant('group.SelectAll')">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row" style="text-align: center;">
+                        <mat-checkbox (click)="$event.stopPropagation()" (change)="toggleAdmin($event, row.UserId)"
+                            [checked]="selectionAdmin.isSelected(row.UserId)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumnsPermissions"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsPermissions;" matTooltip="{{row.FULLNAME}}">
+                </tr>
+            </table>
+            <mat-paginator #permissionPaginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="5"
+                showFirstLastButtons>
+            </mat-paginator>
+        </div>
+        <!-- <button [disabled]="!groupForm.valid" (click)="saveGroup()" type="button"
+            class="btn btn-success">{{'confirm'|translate}}</button> -->
+        <!-- <button [disabled]="!groupForm.valid" style="float: right;margin-right: 20px" (click)="saveGroup()"
+            type="button" class="btn btn-success">{{'confirm' | translate}}</button>
+        <button style="float: right;margin-right: 10px" (click)="cancel()" type="button"
+            class="btn btn-success">{{'cancel' | translate}}</button> -->
+        <button mat-stroked-button [disabled]="!groupForm.valid" style="float: right;margin-right: 20px;"
+            (click)="saveGroup()">{{'save'|translate}}</button>
+        <button mat-stroked-button color="warn" style="float: right;margin-right: 10px;"
+            (click)="cancel()">{{'cancel'|translate}}</button>
+    </div>
+</div>

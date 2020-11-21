@@ -1,0 +1,78 @@
+<form [formGroup]="EmpForm" class="row">
+  <mat-card class="col-10" style="margin-left: 10%;"  baCardClass="with-scroll">
+    <mat-card-header> {{'company.Add' | translate}}</mat-card-header>
+    <mat-card-content>
+        <mat-grid-list *ngIf="isNext"  cols="3" rowHeight="250px">
+            <mat-grid-tile
+                [colspan]="1"
+                [rowspan]="1"
+                >
+                <ba-picture-uploader  #companyImg [imageTitle]="'Company Logo'" [FileuploadInput] = "uploaderOptions"  (onUploadCompleted)="imgUpload($event)"  [picture]="profile" [defaultPicture]="defaultPicture" ></ba-picture-uploader>
+            </mat-grid-tile>
+            <mat-grid-tile
+                [colspan]="1"
+                [rowspan]="1"
+                >
+                <ba-picture-uploader  #backgroundImg [imageTitle]="'Company background'" [FileuploadInput] = "uploaderBackgroundOptions" (onUploadCompleted)="BackgroundImgUpload($event)"  [picture]="profile" [defaultPicture]="defaultPicture" ></ba-picture-uploader>
+            </mat-grid-tile>
+            <mat-grid-tile
+                [colspan]="1"
+                [rowspan]="1"
+                >
+                <ba-picture-uploader  #bannerImg [imageTitle]="'Company banner'" [FileuploadInput] = "uploaderBannerOptions" (onUploadCompleted)="BannerImgUpload($event)"  [picture]="profile" [defaultPicture]="defaultPicture" ></ba-picture-uploader>  
+            </mat-grid-tile>
+        </mat-grid-list>
+        
+        <div class="clearfix"></div>
+        <div *ngIf="!isNext" >
+            <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" >
+                <input type="text" class="form-control" formControlName="companyName" placeholder="{{'company.CompanyName' | translate}}">
+            </div>
+            <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" >
+                <input type="text" class="form-control" formControlName="companyRegNo"  placeholder="{{'company.CompanyRegNo' | translate}}">
+            </div>
+            <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" >
+                <input type="tel" class="form-control" formControlName="NumOfEmp" placeholder="{{'company.NoOfEmployees' | translate}}">
+            </div> 
+            <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" >
+                <input type="text" class="form-control" formControlName="compUrl" placeholder="{{'company.CompanyURL' | translate}}">
+            </div>  
+            <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <input type="text" style="width: calc(100% - 200px);" class="form-control" formControlName="webUrl" placeholder="{{'company.WebURL' | translate}}">
+                <span style="float: right;margin-top: -30px;width: 200px;">
+                        (.smart-study.at)
+                </span>
+            </div>            
+            <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <input type="text" class="form-control" (blur)="onBlurMethod()" formControlName="adminEmail" placeholder="{{'company.AdminEmail' | translate}}">
+            </div>  
+            <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" >
+                <input type="password" class="form-control" formControlName="adminPassword" placeholder="{{'company.AdminPasword' | translate}}">
+            </div> 
+        </div>
+        
+        <div *ngIf="!isNext" formArrayName="CourseList">
+            <div>
+                <a href="javascript:void(0)" class="hyberLinkCls">
+                    <span (click)="addCourse()" >{{'course.AddCourse' | translate}}</span>
+                </a>
+            </div>
+            <div *ngFor="let add of EmpForm.controls['CourseList']['controls']; let i=index" [formGroupName]="i" >
+                <div class="form-group col-md-12">
+                    <select style="width: calc(100% - 50px);" class="form-control" placeholder="course" formControlName="courseId" >
+                        <option value="" disabled selected>{{'select' | translate}}</option>
+                        <option *ngFor="let Cour of Courses;" value="{{Cour.courseId}}" >{{Cour.courseName}}</option>
+                    </select>
+                    <a style="width: 50px;padding-left: 20px;float: right;margin-top: -30px;font-size: 25px;" (click)="removeChapter(i)"  href="javascript:void(0)">
+                        <i class="fa fa-trash"></i>
+                    </a> 
+                </div>           
+            </div>
+        </div> 
+        <div>
+            <button *ngIf="!isNext"   (click)="nextBut()" type="button" class="btn btn-success">Next</button>
+            <button *ngIf="isNext" [disabled]="!EmpForm.valid"  (click)="saveEmpData()" type="button" class="btn btn-success">{{'save' | translate}}</button>
+        </div>
+    </mat-card-content>
+  </mat-card>
+</form>

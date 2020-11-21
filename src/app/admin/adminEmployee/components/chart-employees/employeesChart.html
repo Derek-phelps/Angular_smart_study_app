@@ -1,0 +1,46 @@
+<!-- <div>
+    <div course="course" search-log="searchLog" tracking="tracking" options="options" quick-view="quickViews[course.id]">
+        <div data-reactroot="" class="badge-hover search-course-card-container--card--search--19SW_" data-purpose="search-course-cards" data-cs="6763.8763015209515" data-rs="2148.7258">
+            <div data-purpose="search-course-card-inner" class="search-course-card--card__inner--1tkPf">
+                <noscript></noscript>
+                <div class="search-course-card--card--left-col--3kKip">
+                    <a href="javascript:void(0)" >
+                        <img src="{{_globals.WebURL}}/{{EmpData.epath}}" onerror="this.src='../../assets/img/profile.png'" alt="course image" style="max-width: 150px;padding: 10px;"  height="135" class="search-course-card--card__image--yIhWY">
+                    </a>
+                </div>
+                <div class="fx">
+                            <div class="search-course-card--card__head--2X4bl">
+                                <h1 style="font-size: 15px;color: #000;">{{EmpData.FIRSTNAME}} {{EmpData.LASTNAME}}</h1>
+                                <div class="bestseller-info " data-purpose="bestseller-badge">
+                                    <span class="badge badge-accented yellow" >{{EmpData.positionName}}</span>
+                                </div>
+                                
+                        <div class="employedetail_TXT" style="margin-top: 15px;">
+                            <p class="search-course-card--card__instructor--jB8_v" data-purpose="search-course-card-instructor">
+                                <a href="javascript:void(0)" class="search-course-card--card__instructor-inner--OJuO8">
+                                    <span style="color: #4dc4ff ;">{{EmpData.empEdu}}</span>
+                                </a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <noscript></noscript>
+            </div>
+        </div>
+        <span style="font-size: 0px;"></span><noscript></noscript>
+    </div>
+    <select class="form-control" (change)="onChange($event.target.value)" placeholder="Position" [(ngModel)]="courseId" >
+            <option  value="0" selected>{{'course.Select' | translate}}</option>
+            <option *ngFor="let post of Courses;" value="{{post.courseId}}" >{{post.courseName}}</option>
+    </select>
+    <mat-card class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12" *ngIf="courseId != 0">
+        <mat-card-header>{{'course.ProgressChart' | translate}} </mat-card-header>
+        <mat-card-content>
+            <ba-chartist-chart (onChartReady)="initChart($event)" baChartistChartClass="ct-chart"
+                            baChartistChartType="Line"
+                            [baChartistChartData]="data['simpleLineData']"
+                            [baChartistChartOptions]="data['simpleLineOptions']">
+            </ba-chartist-chart>
+      </mat-card-content>
+    </mat-card>
+</div> -->

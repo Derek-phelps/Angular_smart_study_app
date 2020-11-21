@@ -1,0 +1,8 @@
+<div class="certificate-dialog">
+    <h1 mat-dialog-title style="text-align: center;" [innerHTML]="'employees.CertiFrom' | translate: {name: data.name}">
+    </h1>
+    <div mat-dialog-content style="overflow: hidden;" *ngIf="bViewInit">
+        <app-certificate-list [empId]="data.empId" style="overflow: scroll;"></app-certificate-list>
+    </div>
+    <i class="fa fa-times fa-lg close-icon" style="cursor: pointer;" [mat-dialog-close]="false"></i>
+</div>

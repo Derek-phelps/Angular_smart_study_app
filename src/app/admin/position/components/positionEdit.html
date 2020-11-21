@@ -1,0 +1,6 @@
+<form [formGroup]="EmpForm">
+    <div class="form-group">
+        <input type="text" class="form-control" formControlName="PositionName" placeholder="Position">
+    </div>
+    <button [disabled]="!EmpForm.valid"  (click)="saveEmpData()" type="button" class="btn btn-success">{{'confirm' | translate}}</button>
+</form>

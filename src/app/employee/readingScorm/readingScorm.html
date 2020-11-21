@@ -1,0 +1,26 @@
+<div class="pages-wrap" style="overflow: hidden;opacity: 0;" [@visibilityChanged]="fadeIn ? 'shown' : 'hidden'">
+  <pages-top *ngIf="!fullScreen" [pagInfo]=true [chapterId]="courseId" [showMenuIcon]="CourseList.length > 1">
+  </pages-top>
+  <div class="pages-body" style="display: table;">
+    <sidebar *ngIf="!fullScreen && CourseList.length > 1" [menuInfo]="PAGES_Sub_MENU" [style.height]="DivHeight"
+      style="display: table-cell;">
+    </sidebar>
+    <div class="pages-content" style="padding: 0;" [style.width]="DivWidth" [style.height]="InnerDivHeight">
+      <content-top *ngIf="!fullScreen"></content-top>
+      <iframe #iframe class="frame" id="content" width="100%" [height]="iframeHeight" [src]="courseUrl | safe"
+        style="overflow: hidden;background-color: white;" allowfullscreen></iframe>
+      <div class="buttons">
+        <button *ngIf="backSubChapId!=0" (click)="BackSubChap()"
+          class="btn-lg btn-primary btn-auth">{{'question.Back' | translate}}</button>
+        <button *ngIf="nextSubChapId!=0" (click)="NextSubChap()" style="float: right;"
+          class="btn-lg btn-primary btn-auth">{{'question.Next' | translate}}</button>
+        <button (click)="toCourseOverview()" style="margin-right: 5px;" class="btn-lg btn-primary btn-auth"
+          matTooltip="{{'backToCourseOverview' | translate}}"><i class="fa fa-home" aria-hidden="true"></i></button>
+        <button *ngIf="!fullScreen" (click)="toggleFullScreen()" style="cursor: zoom-in;"
+          class="btn-lg btn-primary btn-auth"><i class="fa fa-arrows-alt" aria-hidden="true"></i></button>
+        <button *ngIf="fullScreen" (click)="toggleFullScreen()" style="cursor: zoom-out;"
+          class="btn-lg btn-primary btn-auth"><i class="fa fa-arrows-alt" aria-hidden="true"></i></button>
+      </div>
+    </div>
+  </div>
+</div>

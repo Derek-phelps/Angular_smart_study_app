@@ -1,0 +1,40 @@
+<ng-container>
+    <ng-container *ngIf="data.bDepartmentChanged && !data.bPositionChanged">
+        <b style="font-size: 16px;">{{'employees.DepChangeDetected1' | translate}}</b><br>
+        {{'employees.DepChangeDetected2' | translate}}<br>
+    </ng-container>
+    <ng-container *ngIf="data.bPositionChanged && !data.bDepartmentChanged">
+        <b style="font-size: 16px;">{{'employees.PosChangeDetected1' | translate}}</b><br>
+        {{'employees.PosChangeDetected2' | translate}}<br>
+    </ng-container>
+    <ng-container *ngIf="data.bDepartmentChanged && data.bPositionChanged">
+        <b style="font-size: 16px;">{{'employees.DepPosChangeDetected1' | translate}}</b><br>
+        {{'employees.DepPosChangeDetected2' | translate}}<br>
+    </ng-container>
+    {{'employees.CompletedNotDel' | translate}}
+    <mat-nav-list>
+        <a mat-list-item (click)="setPreviousAssTreatmentAndCommit(0)" style="text-align: center;">
+            <span mat-line><b>{{'employees.KeepAss' | translate}}</b></span>
+            <span *ngIf="data.bDepartmentChanged && !data.bPositionChanged" mat-line>{{'employees.KeepAssTextDep' | translate}}</span>
+            <span *ngIf="!data.bDepartmentChanged && data.bPositionChanged" mat-line>{{'employees.KeepAssTextPos' | translate}}</span>
+            <span *ngIf="data.bDepartmentChanged && data.bPositionChanged" mat-line>{{'employees.KeepAssTextDepPos' | translate}}</span>
+        </a>
+
+        <!-- <a mat-list-item (click)="setPreviousAssTreatmentAndCommit(1)" style="text-align: center;">
+            <span mat-line><b>{{'employees.KeepMand' | translate}}</b></span>
+            <span mat-line>{{'employees.KeepMandText' | translate}}</span>
+        </a>
+
+        <a mat-list-item (click)="setPreviousAssTreatmentAndCommit(2)" style="text-align: center;">
+            <span mat-line><b>{{'employees.KeepVol' | translate}}</b></span>
+            <span mat-line>{{'employees.KeepVolText' | translate}}</span>
+        </a> -->
+
+        <a mat-list-item (click)="setPreviousAssTreatmentAndCommit(3)" style="text-align: center;">
+            <span mat-line><b>{{'employees.DelAss' | translate}}</b></span>
+            <span *ngIf="data.bDepartmentChanged && !data.bPositionChanged" mat-line>{{'employees.DelAssTextDep' | translate}}</span>
+            <span *ngIf="!data.bDepartmentChanged && data.bPositionChanged" mat-line>{{'employees.DelAssTextPos' | translate}}</span>
+            <span *ngIf="data.bDepartmentChanged && data.bPositionChanged" mat-line>{{'employees.DelAssTextDepPos' | translate}}</span>
+        </a>
+    </mat-nav-list>
+</ng-container>

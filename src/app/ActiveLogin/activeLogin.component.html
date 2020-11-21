@@ -1,0 +1,31 @@
+<!-- <div class="Classlogin_box">
+  <img *ngIf="globals.companyInfo.companyId!=0" src="{{globals.IMAGEURL}}Company/background/{{globals.companyInfo.BackgroundImage}}" style="position: absolute;width: 100%;height: 100%;" />
+  <div class="auth-main"  >
+    <div class="auth-block">
+        <div class="panel-heading">
+            <h3 class="panel-title" translate>{{'login.title'}}</h3>
+         </div>
+   
+      <div style="background-color:#f5f5f5;height: 215px;">
+      <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class="form-horizontal">
+        <div class="form-group row" [ngClass]="{'has-error': (!email.valid && email.touched), 'has-success': (email.valid && email.touched)}" style="padding:7px">
+          <div class="col-sm-12">
+            <input [formControl]="email" type="email" class="form-control" id="inputEmail3" placeholder="{{'login.email' | translate}}">
+          </div>
+        </div>
+        <div class="form-group row" [ngClass]="{'has-error': (!password.valid && password.touched), 'has-success': (password.valid && password.touched)}" style="padding:7px">
+          <div class="col-sm-12">
+            <input [formControl]="password" type="password" class="form-control" id="inputPassword3" placeholder="{{'login.password' | translate}}">
+          </div>
+        </div>
+        <div class="form-group row">
+          
+          <div class="col-sm-12 submitbtn">
+            <button [disabled]="!form.valid" type="submit" class="btn-lg btn-primary btn-auth" translate>{{'login.sign_in'}}</button>
+          </div>
+        </div>
+      </form>
+    </div>
+    </div>
+  </div>
+  </div> -->

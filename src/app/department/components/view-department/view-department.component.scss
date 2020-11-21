@@ -1,0 +1,17 @@
+@import "../../../theme/theme/conf";
+
+.form-wrapper {
+    max-width: 1000px;
+}
+
+.dep-chart {
+    padding-left: 20px;
+    padding-right: 20px;
+    overflow-x: scroll;
+}
+
+::ng-deep.mat-menu-panel {
+    //max-width: none !important;
+    min-height: initial !important;
+  }
+

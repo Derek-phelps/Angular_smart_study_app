@@ -1,0 +1,175 @@
+<div class="form-wrapper" style="position: relative;max-width: 98%;">
+    <div class="loader" *ngIf="bLoading" [@visibilityChanged]="bLoading ? 'shown' : 'hidden'"></div>
+    <div class="everything-done" *ngIf="!bLoading && numberOverdue == 0 && numberCurrent == 0"
+        [@visibilityChanged]="(!bLoading && numberOverdue == 0 && numberCurrent == 0) ? 'shown' : 'hidden'"
+        style="opacity: 0;">
+        <div class="everything-done-inner">
+            <i class="fa fa-smile-o" aria-hidden="true"></i><br>
+            {{'employees.EverythingDone' | translate}}
+        </div>
+    </div>
+    <div class="content" *ngIf="!bLoading" [@visibilityChanged]="!bLoading ? 'shown' : 'hidden'">
+        <!-- Warning and error labels -->
+        <div class="warning-error-label error-label" *ngIf="numberOverdue>0">
+            <div>
+                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
+                <ng-container *ngIf="numberOverdue==1">
+                    {{numberOverdue}} {{'course.SingleOverdue' | translate}}
+                </ng-container>
+                <ng-container *ngIf="numberOverdue>1">
+                    {{numberOverdue}} {{'course.MultipleOverdue' | translate}}
+                </ng-container>
+            </div>
+        </div>
+        <div class="warning-error-label warning-label" *ngIf="numberCurrent>0">
+            <div>
+                <i class="fa fa-clock-o" aria-hidden="true"></i>
+                <ng-container *ngIf="numberCurrent==1">
+                    {{numberCurrent}} {{'course.SingleCurrent' | translate}}
+                </ng-container>
+                <ng-container *ngIf="numberCurrent>1">
+                    {{numberCurrent}} {{'course.MultipleCurrent' | translate}}
+                </ng-container>
+            </div>
+        </div>
+        <!-- <hr style="margin-bottom: 5px;" *ngIf="numberCurrent > 0 || numberOverdue > 0"> -->
+        <div class="row course-content" *ngIf="courseInfos.length > 0">
+            <ng-container *ngFor="let courseInfo of courseInfos;index as i;">
+                <ng-template
+                    *ngTemplateOutlet="coursecardtemplate; context: {$implicit: courseInfo, actionNeeded: true}">
+                </ng-template>
+            </ng-container>
+        </div>
+        <hr *ngIf="numberCurrent > 0 || numberOverdue > 0">
+        <div class="row course-content" *ngIf="courseInfos.length > 0">
+            <ng-container *ngFor="let courseInfo of courseInfos;index as i;">
+                <ng-template
+                    *ngTemplateOutlet="coursecardtemplate; context: {$implicit: courseInfo, actionNeeded: false}">
+                </ng-template>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<ng-template #coursecardtemplate let-courseInfo let-actionNeeded="actionNeeded">
+    <mat-card
+        *ngIf="(actionNeeded && courseInfo.overallStatus != 1) || (!actionNeeded && courseInfo.overallStatus == 1 && courseInfo.active >= 0)"
+        class="course-card"
+        [ngClass]="{'overdue-course-card': courseInfo.overallStatus == -1, 'current-course-card': courseInfo.overallStatus == 0, 'done-course-card': (courseInfo.overallStatus == 1 && courseInfo.active != 1), 'future-course-card': (courseInfo.overallStatus == 1 && courseInfo.active == 1)}"
+        (click)="openCourse(courseInfo, actionNeeded)" matTooltip="{{'course.FutureCourse' | translate}}"
+        matTooltipShowDelay="500" [matTooltipDisabled]="courseInfo.active != 1">
+        <div class="img-wrapper" *ngIf="courseInfo.courseImg!=''">
+            <img (error)="courseImgError($event)" src="{{globals.WebURL}}/{{courseInfo.courseImg}}" alt="Course image">
+        </div>
+        <mat-card-content>
+            <div style="font-size: large;text-align: center;" matTooltip="{{courseInfo.courseDes}}">
+                <i *ngIf="courseInfo.overallStatus == -1" class="fa fa-exclamation-triangle course-icon-overdue"></i>
+                <i *ngIf="courseInfo.overallStatus == 0" class="fa fa-clock-o course-icon-current"></i>
+                <i *ngIf="courseInfo.overallStatus == 1" class="fa fa-check-circle course-icon-done"></i>
+                {{courseInfo.courseName}}
+            </div>
+            <div class="event-dates">
+                <ng-container *ngFor="let fixedEvent of courseInfo.fixedDates">
+                    <div *ngIf="fixedEvent.completed == -1">
+                        <span class="overdue-date"><b>{{fixedEvent.missedEvent}}</b></span>
+                        <span>
+                            <ng-container *ngIf="fixedEvent.departmentId || fixedEvent.groupId">
+                                ({{fixedEvent.depGroupName}})
+                            </ng-container>
+                            <ng-container *ngIf="fixedEvent.userId">
+                                ({{'assignment.DirectAss' | translate}})
+                            </ng-container>
+                            <ng-container *ngIf="!fixedEvent.userId && !fixedEvent.groupId && !fixedEvent.departmentId">
+                                ({{'assignment.GlobalAss' | translate}})
+                            </ng-container>
+                        </span>
+                    </div>
+                </ng-container>
+                <ng-container *ngFor="let series of courseInfo.effectiveSeries">
+                    <div *ngIf="series.completed == -1">
+                        <span class="overdue-date"><b>{{series.missedEvent}}</b></span>
+                        <span>
+                            <ng-container *ngIf="series.departmentId || series.groupId">
+                                ({{series.depGroupName}})
+                            </ng-container>
+                            <ng-container *ngIf="series.userId">
+                                ({{'assignment.DirectAss' | translate}})
+                            </ng-container>
+                            <ng-container *ngIf="!series.userId && !series.groupId && !series.departmentId">
+                                ({{'assignment.GlobalAss' | translate}})
+                            </ng-container>
+                        </span>
+                    </div>
+                </ng-container>
+                <ng-container *ngFor="let fixedEvent of courseInfo.fixedDates">
+                    <div *ngIf="fixedEvent.currentlyActive == true && fixedEvent.completed == 0">
+                        <span class="current-date">{{fixedEvent.nextEvent}}</span>
+                        <span>
+                            <ng-container *ngIf="fixedEvent.departmentId || fixedEvent.groupId">
+                                ({{fixedEvent.depGroupName}})
+                            </ng-container>
+                            <ng-container *ngIf="fixedEvent.userId">
+                                ({{'assignment.DirectAss' | translate}})
+                            </ng-container>
+                            <ng-container *ngIf="!fixedEvent.userId && !fixedEvent.groupId && !fixedEvent.departmentId">
+                                ({{'assignment.GlobalAss' | translate}})
+                            </ng-container>
+                        </span>
+                    </div>
+                </ng-container>
+                <ng-container *ngFor="let series of courseInfo.effectiveSeries">
+                    <div *ngIf="series.currentlyActive == true && series.completed == 0">
+                        <span class="current-date">{{series.nextEvent}}</span>
+                        <span>
+                            <ng-container *ngIf="series.departmentId || series.groupId">
+                                ({{series.depGroupName}})
+                            </ng-container>
+                            <ng-container *ngIf="series.userId">
+                                ({{'assignment.DirectAss' | translate}})
+                            </ng-container>
+                            <ng-container *ngIf="!series.userId && !series.groupId && !series.departmentId">
+                                ({{'assignment.GlobalAss' | translate}})
+                            </ng-container>
+                        </span>
+                    </div>
+                </ng-container>
+                <ng-container *ngFor="let fixedEvent of courseInfo.fixedDates">
+                    <div *ngIf="fixedEvent.completed == 1 && fixedEvent.nextEvent">
+                        <span class="done-date">{{fixedEvent.nextEvent}}</span>
+                        <span>
+                            <ng-container *ngIf="fixedEvent.departmentId || fixedEvent.groupId">
+                                ({{fixedEvent.depGroupName}})
+                            </ng-container>
+                            <ng-container *ngIf="fixedEvent.userId">
+                                ({{'assignment.DirectAss' | translate}})
+                            </ng-container>
+                            <ng-container *ngIf="!fixedEvent.userId && !fixedEvent.groupId && !fixedEvent.departmentId">
+                                ({{'assignment.GlobalAss' | translate}})
+                            </ng-container>
+                        </span>
+                    </div>
+                </ng-container>
+                <ng-container *ngFor="let series of courseInfo.effectiveSeries">
+                    <div *ngIf="series.completed == 1 && series.nextEvent">
+                        <span class="done-date">{{series.nextEvent}}</span>
+                        <span>
+                            <ng-container *ngIf="series.departmentId || series.groupId">
+                                ({{series.depGroupName}})
+                            </ng-container>
+                            <ng-container *ngIf="series.userId">
+                                ({{'assignment.DirectAss' | translate}})
+                            </ng-container>
+                            <ng-container *ngIf="!series.userId && !series.groupId && !series.departmentId">
+                                ({{'assignment.GlobalAss' | translate}})
+                            </ng-container>
+                        </span>
+                    </div>
+                </ng-container>
+                <div style="padding-top: 10px;">
+                    {{'course.LastFinished' | translate}}:
+                    {{(courseInfo.lastFinished ? courseInfo.lastFinished : '-')}}
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</ng-template>

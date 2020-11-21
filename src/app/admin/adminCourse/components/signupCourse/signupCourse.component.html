@@ -1,0 +1,142 @@
+<mat-card>
+    <mat-card-header>
+        <div class="panel panel-default" style="text-align:left">
+            <div class="panel-body">{{'course.SignUpForCourse' | translate}}: {{strCourseName}}</div>
+            <div class="panel-body">{{'course.StartDate' | translate}}: {{oCourseStartDate | date:'medium'}}</div>
+            <!-- <div class="panel-body">{{'course.Place' | translate}}: {{oCourse.courseName}}</div> -->
+        </div>
+    </mat-card-header>
+    <mat-card-header>{{'course.WithSmartStudyAcc' | translate}}:</mat-card-header>
+    <mat-card-content>
+        <!-- <form [formGroup]="oSignUpForm" (ngSubmit)="onSubmit(oSignUpForm.value)" class="form-horizontal"> -->
+        <form [formGroup]="oSignUpForm" class="form-horizontal">
+            <div class="form-group row"
+                [ngClass]="{'has-error': (!email.valid && email.touched), 'has-success': (email.valid && email.touched)}"
+                style="padding:7px">
+                <div class="col-sm-12">
+                    <input [formControl]="email" type="email" class="form-control" id="inputEmail3"
+                        placeholder="{{'login.email' | translate}}">
+                </div>
+            </div>
+            <div class="form-group row"
+                [ngClass]="{'has-error': (!password.valid && password.touched), 'has-success': (password.valid && password.touched)}"
+                style="padding:7px">
+                <div class="col-sm-12">
+                    <input [formControl]="password" type="password" class="form-control" id="inputPassword3"
+                        placeholder="{{'login.password' | translate}}">
+                </div>
+            </div>
+            <div class="form-group row" style="padding:7px">
+                <button [disabled]="!oSignUpForm.valid" (click)="signUpUserForCourse()" type="button"
+                    class="btn btn-success">{{'course.SignUp'
+                    | translate}}</button>
+                <!-- <div class="submitbtn">
+                    <button [disabled]="!oSignUpForm.valid" type="submit" class="btn-lg btn-primary btn-auth" translate>{{'course.SignUp'}}</button>
+                </div> -->
+            </div>
+            <div>
+                [QR-Code]
+            </div>
+        </form>
+    </mat-card-content>
+    <mat-card-header>{{'course.OrRegNew' | translate}}:</mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="oRadioForm" style="padding: 20px">
+            <div>
+                <input type="radio" id="online" formControlName="isSmartStudyAccount" value="1" checked>
+                <label for="online">{{'course.CreateSmartStudyAcc' | translate}}</label>
+            </div>
+
+            <div>
+                <input type="radio" id="offline" formControlName="isSmartStudyAccount" value="0">
+                <label for="offline">{{'course.NoSmartStudyAcc' | translate}}</label>
+            </div>
+        </form>
+    </mat-card-content>
+    <mat-card-content>
+        <form [formGroup]="oRegisterForm" class="form-horizontal">
+            <ba-picture-uploader *ngIf="isSmartStudyAccount.value=='1'" style="width: 250px;float: left;"
+                [imageTitle]="strProfilePicture" [FileuploadInput]="uploaderOptions"
+                (onUploadCompleted)="imgUpload($event)" (onUpload)="disableButton()" [picture]="profile"
+                [defaultPicture]="defaultPicture"></ba-picture-uploader>
+            <div class="form-group" *ngIf="isSmartStudyAccount.value=='1'">
+                <input type="text" class="form-control" formControlName="userName"
+                    placeholder="{{'employees.UserName' | translate}}">
+            </div>
+            <div class="form-group">
+                <select class="form-control" placeholder="Geschlecht" formControlName="GENDER">
+                    <option value="" disabled selected>{{'employees.Select' | translate}}</option>
+                    <option value="Male">{{'employees.Male' | translate}}</option>
+                    <option value="Female">{{'employees.Female' | translate}}</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" formControlName="FIRSTNAME"
+                    placeholder="{{'employees.Name' | translate}}">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" formControlName="LASTNAME"
+                    placeholder="{{'employees.Surname' | translate}}">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" formControlName="TITLE"
+                    placeholder="{{'employees.Title' | translate}}">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" formControlName="AFTERTITLE"
+                    placeholder="{{'employees.AfterTitle' | translate}}">
+            </div>
+            <div *ngIf="this._globals.companyInfo.webUrl == 'fagus' || this._globals.companyInfo.webUrl == 'fagus-consult'" class="form-group">
+                <select class="form-control" placeholder="WorkGroups" formControlName="workgroupId">
+                    <option value="" disabled selected>{{'course.SelectWorkGroup' | translate}}</option>
+                    <ng-container *ngFor="let wg of wgList;index as i;">
+                        <option value="{{wg.workgroupId}}" *ngIf="wg.isPrivate=='0'" selected>{{wg.workgroupName}}
+                        </option>
+                    </ng-container>
+                    <option value="" selected *ngIf="isLocReq==0">{{'course.NoWorkGroup' | translate}}</option>
+                    <option value="-1" selected>{{'course.NewWorkGroup' | translate}}</option>
+                </select>
+                <input type="text" class="form-control" formControlName="NewWorkGroupName"
+                    placeholder="{{'course.NewWorkGroupName' | translate}}"
+                    *ngIf="oRegisterForm.value.workgroupId=='-1'">
+            </div>
+            <div class="form-group">
+                <input type="tel" class="form-control" formControlName="MOBILEPHONE"
+                    placeholder="{{'employees.Phone' | translate}}">
+            </div>
+            <div class="form-group" *ngIf="isSmartStudyAccount.value=='1'">
+                <input type="text" class="form-control" formControlName="EMAIL"
+                    placeholder="{{'employees.Email' | translate}}">
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" formControlName="CURRENTADDRESS"
+                    placeholder="{{'employees.Address' | translate}}"></textarea>
+            </div>
+            <div class="form-group" *ngIf="isSmartStudyAccount.value=='1'">
+                <input type="password" class="form-control" formControlName="NewPassword"
+                    placeholder="{{'login.password' | translate}}">
+            </div>
+            <div class="form-group" *ngIf="isSmartStudyAccount.value=='1'">
+                <input type="password" class="form-control" formControlName="ConfirmPassword"
+                    placeholder="{{'login.confirmpassword' | translate}}">
+            </div>
+            <div class="form-group">
+                <mat-checkbox formControlName="teamCon1" class="coloBlack">
+                    Die TeilnehmerInnen bestätigen durch das Anklicken der Checkbox,
+                    die nachgenannten Inhalte gehört und verstanden zu haben. Weiters erklären<br />
+                    sich die Teilnehmer damit einverstanden, dass Ihre, bei der Anmeldung
+                    eingetragenen Daten zur Weiterverarbeitung im Kursmodul verwendet werden <br />
+                    dürfen – im speziellen zur elektronischen Erstellung der Teilnehmerliste und der
+                    Kurszertifikate.
+                </mat-checkbox>
+            </div>
+            <div class="form-group" style="display: none;">
+                <mat-checkbox formControlName="teamCon2">Test Test Test Test Test Test Test Test Test TestTest Test
+                </mat-checkbox>
+            </div>
+            <button [disabled]="!oRegisterForm.valid || DisableButton"
+                (click)="addPrivateWGRegisterAndSignupUserForCourse()" type="button" class="btn btn-success">{{'course.SignUp'
+                | translate}}</button>
+        </form>
+    </mat-card-content>
+</mat-card>

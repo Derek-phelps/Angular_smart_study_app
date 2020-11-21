@@ -1,0 +1,113 @@
+<div>
+    <div class="toggle-view" (click)="toggleView()" *ngIf="false">
+        <i *ngIf="bTileView" matTooltip="{{'course.ListView' | translate}}" class="fa fa-list iconSize toggle-view"></i>
+        <i *ngIf="!bTileView" matTooltip="{{'course.TileView' | translate}}"
+            class="fa fa-table iconSize toggle-view"></i>
+    </div>
+    <div class="form-wrapper" style="position: relative;">
+        <div class="loader" [@visibilityChanged]="bLoading ? 'shown' : 'hidden'" *ngIf="bLoading"></div>
+        <div class="content" [@visibilityChanged]="!bTileView && !bLoading ? 'shown' : 'hidden'">
+            <!-- <ng-container *ngIf="groupList.data.length > 0"> -->
+            <mat-form-field style="width: 40%;float: right;" *ngIf="courseList.data.length > 0">
+                <mat-label>{{'course.FilterBy' | translate}}</mat-label>
+                <input matInput (keyup)="applyCourseFilter($event)" placeholder="">
+            </mat-form-field>
+            <table mat-table [dataSource]="courseList" matSort matSortActive="courseName" matSortDirection="asc"
+                class="mat-elevation-z8" style="width: 100%;">
+                <!-- <ng-container matColumnDef="color">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let group"
+                        [ngStyle]="{'background-image':'-webkit-gradient(linear, left top, right top, color-stop(0%,'+group.color+'), color-stop(100%,rgba(255,255,255,0)))', 'background-color': group.color+'22'}">
+                    </td>
+                </ng-container> -->
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 5px;">
+                        <div matTooltip="{{'course.StateCourse' | translate}}">{{'employees.St' | translate}}</div>
+                    </th>
+                    <td mat-cell *matCellDef="let course" class="cell-status-wrapper" style="width: 25px;">
+                        <div class="status-div" style="width: 25px;">
+                            <div class="status-div-inner-left"
+                                [ngClass]="{'status-done': course.status==1, 'status-current': course.status==0, 'status-overdue': course.status==-1}">
+                                <i class="fa fa-book fa-lg center-icon" aria-hidden="true"
+                                    matTooltip="{{'course.StateCourse' | translate}}"></i>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="image">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let course" (click)="viewCourse(course.courseId)"
+                        style="cursor: pointer;">
+                        <img *ngIf="course.courseImg!='' && course.courseImg!=null"
+                            src="{{_globals.WebURL}}/{{course.courseImg}}" style="width: 100px;max-height: 100px;" />
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="courseName">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'course.Course' | translate}}</th>
+                    <td (click)="viewCourse(course.courseId)" style="cursor: pointer;" mat-cell *matCellDef="let course"
+                        [attr.colspan]="bCoursesFound ? 1 : 6">
+                        <b>{{course.courseName}}</b></td>
+                </ng-container>
+                <ng-container matColumnDef="sumAss">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'course.SumAss' | translate}}</th>
+                    <td mat-cell *matCellDef="let course">
+                        {{course.sumAss}} {{'course.Assignments' | translate}} </td>
+                </ng-container>
+                <ng-container matColumnDef="sumEmp">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'course.SumEmp' | translate}}</th>
+                    <td mat-cell *matCellDef="let course">
+                        {{course.sumEmp}} {{'Employees' | translate}}</td>
+                </ng-container>
+                <ng-container matColumnDef="editDelete">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let course" style="padding: 0;">
+                        <i *ngIf="_globals.userInfo.isAdmin"
+                            class="fa fa-trash iconSize float-right edit-delete-delete-icon" style="cursor: pointer;"
+                            (click)="deleteCourse(course.courseId)" matTooltip="{{'course.delCourse' | translate}}"></i>
+                        <i *ngIf="_globals.userInfo.isAdmin || course.permission==2"
+                            class="fa fa-edit iconSize float-right edit-delete-edit-icon" style="cursor: pointer;"
+                            (click)="editCourse(course.courseId)" matTooltip="{{'course.editCourse' | translate}}"></i>
+                    </td>
+                </ng-container>
+                <!-- <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef> aaa</th>
+                        <td mat-cell *matCellDef="let row">test
+                            !-- <i class="fa fa-edit iconSize" (click)="editCompany(row)" style="cursor: pointer;"></i>
+                        <i class="fa fa-trash iconSize" (click)="deleteCompany(row)" style="cursor: pointer;"></i> --
+                        </td>
+                    </ng-container> -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="group-row">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: ['courseName'] when isExtendedRow" class="darken"></tr>
+            </table>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons>
+            </mat-paginator>
+            <!-- </ng-container> -->
+            <div class="row ChapterList col-md-12 send-certificate" style="margin-top: 10px;"
+                *ngIf="_globals.userInfo.isAdmin || _globals.canCreateCourses">
+                <!-- <button (click)="addCourse()"
+                    class="form-control open-button">{{'course.CreateNew' | translate}}</button> -->
+                <button mat-stroked-button style="margin:auto;"
+                    (click)="addCourse()">{{'course.CreateNew' | translate}}</button>
+            </div>
+        </div>
+        <!-- <div class="content" [@visibilityChanged]="(!bCategoryView && groupList.data.length > 0) ? 'shown' : 'hidden'">
+
+        </div> -->
+        <!-- <div class="content" [@visibilityChanged]="bCategoryView && !bLoading ? 'shown' : 'hidden'">
+            <mat-grid-list [cols]="breakTiles" (window:resize)="onResizeTiles($event)" rowHeight="150px"
+                style="margin: 20px;">
+                <mat-grid-tile *ngFor="let category of categoryList; let i = index" [colspan]="1" [rowspan]="1"
+                    class="grid-tile"
+                    [ngStyle]="hovered===i ? {'background-color':''+category.color+'33', 'color':''+category.color+''} : {'background-color':''+category.color+'', 'color':'white'}"
+                    (mouseover)="hovered = i" (mouseout)="hovered = -1" (click)="openCategory(category)">
+                    <h3>{{category.name}}</h3>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </div> -->
+    </div>
+</div>
+<!-- <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+</mat-form-field> -->

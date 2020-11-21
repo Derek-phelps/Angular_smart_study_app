@@ -1,0 +1,59 @@
+@import "../theme/theme/conf";
+
+.toggle-view {
+    position: absolute;
+    right: 0;
+    top: 45px;
+    cursor: pointer;
+}
+
+.send-certificate {
+  text-align: center;
+  .open-button{
+    background-color: lightgray;
+    width: initial;
+    margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .open-button:hover{
+    transform: scale(1.1);
+  }
+}
+
+.darken {
+  color: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.05);
+  width: 100%;
+}
+
+.mat-column-color {
+  width: 20px !important;
+}
+
+.grid-tile {
+  h3 {
+    font-size: calc(2.5vw * 100vw / 350px);
+    font-weight: 400;
+    //line-height: 37px;
+    text-align: center;
+    text-transform: uppercase;
+    text-shadow: rgba(0,0,0,0.5) 0px 0px 15px;
+  }
+}
+
+.grid-tile:hover {
+  cursor: pointer;
+}
+
+.group-row {
+  opacity: 0.7;
+}
+
+.group-row:hover {
+  opacity: 1;
+}
+
+.float-right {
+  float: right;
+}

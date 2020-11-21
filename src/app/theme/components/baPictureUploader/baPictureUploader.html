@@ -1,0 +1,17 @@
+<div class="picture-group" [ngClass]="{uploading: uploadInProgress}">
+  <div class="picture-wrapper" (click)="bringFileSelector();">
+    <img [src]="picture" *ngIf="picture && picture != ''">
+    <img [src]="defaultPicture" *ngIf="(!picture || picture == '') && (defaultPicture && defaultPicture != '')">
+
+    <div class="loading" *ngIf="uploadInProgress">
+      <div class="spinner">
+        <div class="double-bounce1"></div>
+        <div class="double-bounce2"></div>
+      </div>
+    </div>
+  </div>
+  <i class="fa fa-trash" (click)="removePicture();" *ngIf="picture != '' && canDelete"></i>
+  <a href class="change-picture" (click)="bringFileSelector();">{{imageTitle}}</a>
+  <input #fileUpload type="file" accept="image/*" hidden  (change)="beforeUpload($event.target.files)" > 
+
+</div>

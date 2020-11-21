@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  web:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    container_name: php74
+    depends_on:
+      - db
+    volumes:
+      - ../../smart_study_pro_api:/var/www/html/API
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+      - ./app/cron/log:/var/log/cron
+      - ./app/db_backups/:/var/backups/database/
+    ports:
+      - 8080:80
+      - 443:443
+  db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: mysql57
+    image: mysql:5.7.30
+    command: --default-authentication-plugin=mysql_native_password --sql-mode=""
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rcmwTnbdC47EvrgBRaE8cBEjLtYKQASm
+      MYSQL_DATABASE: db_jr_smart_study
+      MYSQL_USER: smart-study
+      MYSQL_PASSWORD: LMardxheaZZAbbVJRzMGwAKA9xJg9H4P
+    volumes:
+      - ./db/mysql_data:/var/lib/mysql
+    ports:
+      - 3306:3306
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: phpmyadmin
+    ports:
+      - 8000:80
+    environment:
+      MYSQL_USER: smart-study
+      MYSQL_PASSWORD: LMardxheaZZAbbVJRzMGwAKA9xJg9H4P
+      MYSQL_ROOT_PASSWORD: rcmwTnbdC47EvrgBRaE8cBEjLtYKQASm

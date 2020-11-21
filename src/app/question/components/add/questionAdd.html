@@ -1,0 +1,82 @@
+<form [formGroup]="QusForm">
+    <div class="panel-body row">
+        <!-- <div class="col-md-6">
+            <select class="form-control"  (change)="getChangeProduct()" placeholder="Kurs" formControlName="CourceId" >
+                <option value="" disabled selected>{{'question.SelCourse' | translate}}</option>
+                <option *ngFor="let Cou of CourseOpt;" value="{{Cou.courseId}}" >{{Cou.courseName}}</option>
+            </select>  
+        </div> -->
+        <div class="col-md-12" style="margin-bottom: 10px;">
+            <select style="cursor: pointer;" class="form-control" placeholder="Kapitel" formControlName="ChapterId">
+                <option value="" disabled selected>{{'question.SelChapter' | translate}}</option>
+                <option value="0">{{'question.FinalExam' | translate}}</option>
+                <option *ngFor="let Chap of ChapterOpt;" value="{{Chap.chapterId}}">{{Chap.chapterName}}</option>
+            </select>
+        </div>
+        <div class="col-md-12 row" style="display: none;">
+            <div class="col-md-3">
+                <label class="radio-inline container nowrap" style="color: #000;margin-bottom: 6px;margin-top: 6px;">
+                    <input type="radio" formControlName="IsTraning" value="0">
+                    <span class="checkmark"></span>
+                    <span translate>{{'question.TrainingMode' | translate}}</span>
+                </label>
+            </div>
+            <div class="col-md-3">
+                <label class="radio-inline container nowrap" style="color: #000;margin-bottom: 6px;margin-top: 6px;">
+                    <input type="radio" formControlName="IsTraning" value="1">
+                    <span class="checkmark"></span>
+                    <span translate>{{'question.FinalExam' | translate}}</span>
+                </label>
+            </div>
+        </div>
+        <div class="col-md-12 row" style="margin-bottom: 10px;">
+            <div class="col-md-6">
+                <textarea rows="17" cols="45" formControlName="qustionText"
+                    placeholder="{{'question.Question' | translate}}"></textarea>
+            </div>
+            <div class="col-md-6">
+                <mat-card baCardClass="with-scroll">
+                    <mat-card-header>{{'question.AddImage' | translate}}</mat-card-header>
+                    <mat-card-content style="height: 200px;">
+                        <ba-picture-uploader #questionImg [imageTitle]="strQuestionImage"
+                            [FileuploadInput]="uploaderOptions" (onUploadCompleted)="imgUpload($event)"
+                            (onUpload)="disableButton()" [picture]="profile" [defaultPicture]="defaultPicture">
+                        </ba-picture-uploader>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+        <div class="col-md-12 row" style="margin-bottom: 10px;">
+            <div class="col-md-12">
+                <a href="javascript:void(0)" (click)="addNewAns()"
+                    style="color:#4dc4ff"><span>{{'question.AddOption' | translate}}</span></a>
+                <div formArrayName="answers" style="margin-top: 10px;">
+                    <div *ngFor="let aws of QusForm.controls['answers']['controls']; let j=index" [formGroupName]="j">
+                        <textarea formControlName="ans" placeholder="{{'question.AnswerOption' | translate}}"
+                            style="margin-right: 10px;"></textarea>
+                        <label
+                            [ngClass]="{'correct-answer': QusForm.value.answers[j].CurAns==true, 'answer-label': true}"><input
+                                type="checkbox" formControlName="CurAns" />
+                            {{'question.AnswerCorrect' | translate}}</label>
+                        <a class="ng2-smart-action ng2-smart-action-delete-delete" (click)="removeOption(j)"
+                            style="margin-left: 15px;padding: 5px;" href="javascript:void(0)">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12 row">
+            <div class="col-md-12">
+                <textarea rows="10" cols="45" formControlName="Explanation"
+                    placeholder="{{'question.Explanation' | translate}}"></textarea>
+            </div>
+            <div class="mdl-dialog__actions col-md-12">
+                <button [disabled]="!QusForm.valid || DisableButton" style="float: right;margin-right: 20px"
+                    type="button" (click)="submitForm()" class="btn btn-success">{{'confirm' | translate}}</button>
+                <button style="float: right;margin-right: 10px" type="button" (click)="cancel()"
+                    class="btn btn-success">{{'cancel' | translate}}</button>
+            </div>
+        </div>
+    </div>
+</form>

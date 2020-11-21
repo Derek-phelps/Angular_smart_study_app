@@ -1,0 +1,64 @@
+<form [formGroup]="EmpForm" class="row">
+  <mat-card class="col-10" style="margin-left: 10%;"  baCardClass="with-scroll">
+    <mat-card-header> {{'company.Add' | translate}}</mat-card-header>
+    <mat-card-content>
+        <div >
+            <ba-picture-uploader style="width: 250px;float: left;" #companyImg [imageTitle]="'Profilbild'" [FileuploadInput] = "uploaderOptions"  (onUploadCompleted)="imgUpload($event)"  [picture]="profile" [defaultPicture]="defaultPicture" ></ba-picture-uploader>
+            <ba-picture-uploader style="width: 250px;float: left;" #backgroundImg [imageTitle]="'Background'" [FileuploadInput] = "uploaderBackgroundOptions" (onUploadCompleted)="BackgroundImgUpload($event)"  [picture]="profile" [defaultPicture]="BackgroundDefaultPicture" ></ba-picture-uploader>
+            <ba-picture-uploader style="width: 250px;float: left;" #bannerImg [imageTitle]="'Banner'" [FileuploadInput] = "uploaderBannerOptions" (onUploadCompleted)="BannerImgUpload($event)"  [picture]="profile" [defaultPicture]="BannerDefaultPicture" ></ba-picture-uploader>  
+        </div>
+        <div class="clearfix"></div>
+        <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" >
+            <input type="text" class="form-control" formControlName="companyName" placeholder="Company Name">
+        </div>
+        <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" >
+            <input type="text" class="form-control" formControlName="companyRegNo"  placeholder="Company RegNo">
+        </div>
+        <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" >
+            <input type="tel" class="form-control" formControlName="NumOfEmp" placeholder="Number of employees">
+        </div> 
+        <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" >
+            <input type="text" class="form-control" formControlName="compUrl" placeholder="Company URL">
+        </div>  
+        <div class="clearfix"></div>
+        <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12">
+            <input type="text" readonly style="width: calc(100% - 200px);" class="form-control" formControlName="webUrl" placeholder="Web URL">
+            <span style="float: right;margin-top: -30px;width: 200px;">
+                    (.smart-study.at)
+            </span>
+        </div>
+
+        <div formArrayName="CourseList">
+                <div>
+                    <a href="javascript:void(0)" class="hyberLinkCls">
+                        <span (click)="addCourse()" >Add Course</span>
+                    </a>
+                </div>
+                <div *ngFor="let add of EmpForm.controls['CourseList']['controls']; let i=index" [formGroupName]="i" >
+                    <div class="form-group col-md-12">
+                            <select *ngIf="add.value.isReadOnly=='0'"   style="display: inline;" class="form-control col-md-4" placeholder="course" formControlName="courseId" >
+                                <option value="" disabled >Kursauswahl</option>
+                                <option *ngFor="let Cour of Courses;" value="{{Cour.courseId}}" >{{Cour.courseName}}</option>
+                            </select>
+                            <select *ngIf="add.value.isReadOnly=='1'"  disabled style="display: inline;color: #000;" class="form-control col-md-4" placeholder="course" formControlName="courseId" >
+                                    <option *ngFor="let Cour of Courses;" value="{{Cour.courseId}}" >{{Cour.courseName}}</option>
+                            </select>
+                            <select *ngIf="add.value.isReadOnly=='0'"  style="display: inline;" class="form-control col-md-4" placeholder="course" formControlName="departmentId" >
+                                <option value="" disabled >Kursauswahl</option>
+                                <option *ngFor="let dep of Department;" value="{{dep.departmentId}}" >{{dep.departmentName}}</option>
+                            </select>
+                            <select *ngIf="add.value.isReadOnly=='1'"  disabled style="display: inline;color: #000;" class="form-control col-md-4" placeholder="course" formControlName="departmentId" >
+                                    <option *ngFor="let dep of Department;" value="{{dep.departmentId}}" >{{dep.departmentName}}</option>
+                            </select>
+                        <a style="width: 50px;padding-left: 20px;float: right;margin-top: 5px;font-size: 25px;" (click)="removeChapter(i,add)"  href="javascript:void(0)">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </div>           
+                </div>
+        </div> 
+        <div>
+            <button [disabled]="!EmpForm.valid"  (click)="saveEmpData()" type="button" class="btn btn-success">Bestätigen</button>
+        </div>
+    </mat-card-content>
+  </mat-card>
+</form>

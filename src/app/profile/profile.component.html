@@ -1,0 +1,154 @@
+<form [formGroup]="EmpForm" class="row">
+    <div class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12" style="padding: 5px;">
+        <mat-card baCardClass="with-scroll">
+            <mat-card-header>{{'profilePage.Personal' | translate}}</mat-card-header>
+            <mat-card-content>
+                <div style="margin-top: 10px;margin-bottom: 10px;">
+                    <ba-picture-uploader [imageTitle]="strProfilePicture" [FileuploadInput]="uploaderOptions"
+                        (onUploadCompleted)="imgUpload($event)" (onUpload)="disableButton()" [picture]="profile"
+                        [defaultPicture]="defaultPicture"></ba-picture-uploader>
+                </div>
+                <!-- <mat-grid-list [cols]="2" style="margin-bottom: 10px;">
+                    <mat-grid-tile style="min-width: 205px;min-height: 205px;">
+                        <ba-picture-uploader [imageTitle]="strProfilePicture" [FileuploadInput]="uploaderOptions"
+                            (onUploadCompleted)="imgUpload($event)" (onUpload)="disableButton()" [picture]="profile"
+                            [defaultPicture]="defaultPicture"></ba-picture-uploader>
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                        <ba-picture-uploader *ngIf="_globals.getUserType()=='3'" [imageTitle]="strSignature"
+                            [FileuploadInput]="uploaderSignatureOptions"
+                            (onUploadCompleted)="SignatureImgUpload($event)" (onUpload)="disableButton()"
+                            [picture]="defaultBGPicture" [defaultPicture]="defaultBGPicture">
+                        </ba-picture-uploader>
+                    </mat-grid-tile>
+                </mat-grid-list> -->
+                <!-- <div class="form-group"> -->
+                <mat-form-field style="width: 50%;padding-right: 5px;">
+                    <input matInput type="text" formControlName="FIRSTNAME"
+                        placeholder="{{'employees.Name' | translate}}"
+                        [disableControl]="!_globals.userInfo.isAdmin || bIsAdUser">
+                </mat-form-field>
+                <mat-form-field style="width: 50%;padding-left: 5px;">
+                    <input matInput type="text" formControlName="LASTNAME"
+                        placeholder="{{'employees.Surname' | translate}}"
+                        [disableControl]="!_globals.userInfo.isAdmin || bIsAdUser">
+                </mat-form-field>
+                <mat-form-field style="width: 100%;">
+                    <input matInput type="text" formControlName="FULLNAME"
+                        placeholder="{{'employees.FullNameTitle' | translate}}">
+                </mat-form-field>
+                <mat-form-field style="width: 100%;">
+                    <mat-select placeholder="{{'employees.GlobalRights' | translate}}" formControlName="userType"
+                        [disableControl]="true">
+                        <mat-option [value]="2">{{'employees.Admin' | translate}}</mat-option>
+                        <mat-option [value]="3" disabled>{{'employees.CreateCourse' | translate}}</mat-option>
+                        <mat-option [value]="4">{{'employees.Employee' | translate}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field style="width: 100%;">
+                    <input matInput type="text" formControlName="staffNumber"
+                        [disableControl]="!_globals.userInfo.isAdmin || bIsAdUser"
+                        placeholder="{{'employees.StaffNumber' | translate}}">
+                </mat-form-field>
+                <mat-form-field style="width: 100%;">
+                    <input matInput type="tel" formControlName="MOBILEPHONE"
+                        placeholder="{{'employees.Phone' | translate}}" [disableControl]="bIsAdUser">
+                </mat-form-field>
+                <mat-form-field style="width: 100%;">
+                    <input matInput type="text" style="color: gray !important;" formControlName="EMAIL"
+                        placeholder="{{'employees.Email' | translate}}"
+                        [disableControl]="!_globals.userInfo.isAdmin || bIsAdUser">
+                </mat-form-field>
+                <mat-form-field style="width: 100%;">
+                    <textarea matInput formControlName="CURRENTADDRESS"
+                        placeholder="{{'employees.Address' | translate}}" [disableControl]="bIsAdUser"></textarea>
+                </mat-form-field>
+                <mat-form-field style="width: 100%;" *ngIf="_globals.getUserType()=='3'">
+                    <input matInput type="text" formControlName="Trainertitle"
+                        placeholder="{{'employees.Trainertitle' | translate}}">
+                </mat-form-field>
+                <mat-form-field style="width: 100%;" *ngIf="_globals.getUserType()=='3'">
+                    <input matInput type="text" formControlName="TrainerPostion"
+                        placeholder="{{'employees.TrainerPostion' | translate}}">
+                </mat-form-field>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12" style="padding: 5px;">
+        <mat-card baCardClass="with-scroll">
+            <mat-card-header>{{'company.DepAndGroup' | translate}}</mat-card-header>
+            <mat-card-content style="padding-top: 20px;">
+                <div style="padding-left: 10px;padding-right: 10px;">
+                    <p style="margin-bottom: 10px;"><b>{{'menu.Departments' | translate}}:</b></p>
+                    <ul *ngIf="EmpForm && EmpForm.value.departmentIds.length > 0">
+                        <li *ngFor="let dep of EmpForm.value.departmentIds">{{dep.departmentName}}</li>
+                    </ul>
+                    <p *ngIf="EmpForm && EmpForm.value.departmentIds.length == 0">
+                        {{'employees.PersNoDepAss' | translate}}</p>
+                    <ng-container *ngIf="EmpForm.value.departmentRights.length > 0">
+                        <p style="margin-bottom: 10px;"><b>{{'department.DepAdminOf' | translate}}:</b></p>
+                        <ul>
+                            <li *ngFor="let dep of EmpForm.value.departmentRights">{{dep.departmentName}}</li>
+                        </ul>
+                    </ng-container>
+                </div>
+                <hr>
+                <div style="padding-left: 10px;padding-right: 10px;">
+                    <p style="margin-bottom: 10px;"><b>{{'menu.Groups' | translate}}:</b></p>
+                    <ul *ngIf="EmpForm && EmpForm.value.groupIds.length > 0">
+                        <li *ngFor="let group of EmpForm.value.groupIds">{{group.name}}</li>
+                    </ul>
+                    <p *ngIf="EmpForm && EmpForm.value.groupIds.length == 0">{{'employees.PersNoGroupAss' | translate}}
+                    </p>
+                    <ng-container *ngIf="EmpForm.value.groupRights.length > 0">
+                        <p style="margin-bottom: 10px;"><b>{{'employees.GroupRights' | translate}}:</b></p>
+                        <ul>
+                            <li *ngFor="let group of EmpForm.value.groupRights">{{group.name}}
+                                ({{(group.permission == '1' ? 'group.View' : 'group.Edit') | translate}})</li>
+                        </ul>
+                    </ng-container>
+                </div>
+                <!-- <div style="padding-left: 10px;padding-right: 10px;" *ngIf="(EmpForm.value.groupRights.length + EmpForm.value.departmentRights.length) > 0">
+                    <p style="margin-bottom: 10px;"><b>{{'menu.Groups' | translate}}:</b></p>
+                    <ul *ngIf="EmpForm && EmpForm.value.groupIds.length > 0">
+                        <li *ngFor="let group of EmpForm.value.groupIds">{{group.name}}</li>
+                    </ul>
+                    <p *ngIf="EmpForm && EmpForm.value.groupIds.length == 0">{{'employees.PersNoGroupAss' | translate}}
+                    </p>
+                </div> -->
+                <div class="row" style="justify-content: flex-end;">
+                    <button [disabled]="!EmpForm.valid" (click)="saveEmpData()" type="button" class="btn btn-success"
+                        style="margin-right: 20px;">{{'save' | translate}}</button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</form>
+<ng-container *ngIf="!bIsAdUser">
+    <hr>
+    <form [formGroup]="EmpPasswordForm" class="row">
+        <div class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12" style="padding: 5px;">
+            <mat-card baCardClass="with-scroll">
+                <mat-card-header>{{'profilePage.ChangePW' | translate}}</mat-card-header>
+                <mat-card-content style="padding-top: 20px;">
+                    <mat-form-field style="width: 100%;">
+                        <input matInput type="password" formControlName="oldPassword"
+                            placeholder="{{'profilePage.OldPW' | translate}}">
+                    </mat-form-field>
+                    <mat-form-field style="width: 100%;">
+                        <input matInput type="password" formControlName="newPassword"
+                            placeholder="{{'profilePage.NewPW' | translate}}">
+                    </mat-form-field>
+                    <mat-form-field style="width: 100%;">
+                        <input matInput type="password" formControlName="ConfirmPassword"
+                            placeholder="{{'profilePage.ConfirmNewPW' | translate}}">
+                    </mat-form-field>
+                    <div class="row" style="justify-content: flex-end;">
+                        <button (click)="changedPassword()" [disabled]="!EmpPasswordForm.valid" type="button"
+                            style="margin-right: 20px;" class="btn btn-success">{{'confirm' | translate}}</button>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </form>
+</ng-container>

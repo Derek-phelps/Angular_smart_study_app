@@ -1,0 +1,140 @@
+.hide-tab {
+  display: none;
+}
+
+.certificate-frame {
+  background-color: white;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  height: calc(100vh - 200px);
+}
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+}
+  
+.example-container > * {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+}
+  
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.edit-icon {
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.edit-icon:hover {
+  color: gray !important;
+  background-color: black;
+  transform: scale(1.5);
+}
+
+.add-certi-div {
+  text-align: center;
+  width: 100%;
+  .add-certi-button{
+    width: initial;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.send-certificate {
+  text-align: center;
+  .open-button{
+    background-color: lightgray;
+    width: initial;
+    margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .open-button:hover{
+    transform: scale(1.1);
+  }
+  form {
+    .send-button{
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 20px;
+      width: 45%;
+    }
+    .send-button:hover {
+      transform: scale(1.1);
+    }
+    margin: 0 auto;
+    text-align: center;
+    border-width: 1px;
+    border-color: lightgray;
+    border-radius: 16px;
+    padding: 20px;
+    input {
+      margin-bottom: 10px;
+    }
+    select {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    mat-checkbox {
+      margin-top: 10px;
+    }
+  }
+  .no-pw-warning{
+    text-align: center;
+    background-color: #ffcc00;
+    margin-top: 10px;
+    margin-left: 20px;
+  }
+}
+
+.group-row {
+  opacity: 0.7;
+}
+
+.group-row:hover {
+  opacity: 1;
+}
+
+.darken {
+  color: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.05);
+  width: 100%;
+  opacity: 0.6;
+}
+
+.send-certificate {
+  text-align: center;
+  .open-button{
+    background-color: lightgray;
+    width: initial;
+    margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .open-button-active:hover{
+    transform: scale(1.1);
+  }
+}
+
+.course-overview-wrapper {
+  padding: 20px;
+  flex-grow: 1;
+}
+
+.tab-group {
+  //opacity: 0;
+//  min-height: calc(100% - 40px);
+  min-height: 100%;
+  min-height: -moz-available;          /* WebKit-based browsers will ignore this. */
+  min-height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+  min-height: stretch;
+}

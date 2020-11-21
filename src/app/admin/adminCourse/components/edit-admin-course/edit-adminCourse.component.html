@@ -1,0 +1,59 @@
+<form [formGroup]="EmpForm">
+    <div class="form-group">
+        <input type="text" class="form-control" formControlName="courseName" placeholder="{{'course.CourseName' | translate}}">
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" formControlName="companyId" style="display: none;" placeholder="Prüfungsdauer(Sekunden)">
+    </div>
+    <select multiple class="form-control" placeholder="course Rate" formControlName="departmentId">
+        <option value="" disabled selected>{{'course.SelectDepartment' | translate}}</option>
+        <option *ngFor="let dep of department;index as i;" value="{{dep.departmentId}}" selected>{{dep.departmentName}}</option>
+    </select>
+    <mat-form-field style="margin-right: 30px;">
+        <input matInput [matDatepicker]="picker" formControlName="StartTime" placeholder="{{'course.StartDate' | translate}}">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput [matDatepicker]="picker1" formControlName="EndTime" placeholder="{{'course.EndDate' | translate}}">
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+    </mat-form-field>
+    <div class="form-group">
+        <textarea class="form-control" formControlName="courseDes" placeholder="{{'course.Description' | translate}}"></textarea>
+    </div>
+    <div class="form-group">
+        <mat-checkbox formControlName="isOffline" class="coloBlack">{{'course.OfflineCourse' | translate}}</mat-checkbox>
+    </div>
+    <div class="form-group">
+        <a>{{'course.MinRes' | translate}}</a>
+        <input type="number" class="form-control" formControlName="minResult" placeholder="{{'course.MinResPlaceholder' | translate}}"
+            min="0" max="100">
+    </div>
+    <div class="form-group">
+        <input type="number" class="form-control" formControlName="duration" placeholder="{{'course.Duration' | translate}}" numbersOnly>
+    </div>
+    <select class="form-control" placeholder="Trainer Name" formControlName="trainerId">
+        <option value="" disabled selected>{{'course.SelectTrainer' | translate}}</option>
+        <option *ngFor="let dep of trainerList;index as i;" value="{{dep.trainerId}}" selected>{{dep.FIRSTNAME}}
+            {{dep.LASTNAME}}</option>
+    </select>
+    <br>
+        <select class="form-control" placeholder="Location" formControlName="locationId">
+            <option value="" disabled selected>{{'course.SelectLocation' | translate}}</option>
+            <option *ngFor="let loc of locationList;index as i;" value="{{loc.locationId}}" selected>{{loc.locationName}}</option>
+        </select>
+    <div class="form-group">
+    <mat-checkbox formControlName="isLocReq" class="coloBlack">ist verpflichtend.</mat-checkbox>
+    </div>
+    <mat-card class="col-10" style="margin-left: 10%;" baCardClass="with-scroll">
+        <mat-card-header>{{'course.Image' | translate}}</mat-card-header>
+        <mat-card-content style="height: 200px;">
+            <ba-picture-uploader style="width: 250px;float: left;" #companyImg [imageTitle]="strCourseImg"
+                [FileuploadInput]="uploaderOptions" (onUploadCompleted)="imgUpload($event)" (onUpload)="disableButton()"
+                [picture]="profile" [defaultPicture]="defaultPicture"></ba-picture-uploader>
+        </mat-card-content>
+    </mat-card>
+    <button [disabled]="!EmpForm.valid || DisableButton" (click)="saveEmpData()" type="button" class="btn btn-success">{{'confirm' |
+        translate}}</button>
+</form>

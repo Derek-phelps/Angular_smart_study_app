@@ -1,0 +1,15 @@
+<div class="dialog-wrapper">
+  <div mat-dialog-title class="my-dialog-header">
+    <h3 *ngIf="!data.Head">{{'confirmation' | translate}}</h3>
+    <h3 *ngIf="data.Head">{{data.Head}}</h3>
+  </div>
+  <div mat-dialog-content style="text-align: center;">
+    <p [innerHTML]="data.Mes"></p>
+  </div>
+  <div mat-dialog-actions align="end">
+    <button mat-button [mat-dialog-close]="false">{{'cancel' | translate}}</button>
+    <button mat-button [mat-dialog-close]="true">{{'confirm' | translate}}</button>
+  </div>
+  <img class="bulb-img" src="assets/img/bulb_small.png" />
+  <i class="fa fa-times fa-lg close-icon" style="cursor: pointer;" [mat-dialog-close]="false"></i>
+</div>

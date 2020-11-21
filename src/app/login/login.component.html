@@ -1,0 +1,117 @@
+<div class="Classlogin_box" *ngIf="globals.companyInfo.defaultLang != ''">
+  <img id="bg-img-alt" class="bg-img" src="{{globals.WebURL}}/{{globals.companyInfo.BackgroundImage}}"
+    *ngIf="globals.companyInfo.isSet" (load)="imgLoaded($event)"
+    onerror="this.src='assets/img/Background_img_login.jpg'" [@visibilityChanged]="bgImgLoaded ? 'shown' : 'hidden'"
+    style="position: absolute;opacity: 0;" />
+  <!-- <img id="bg-img" class="bg-img" *ngIf="globals.companyInfo.companyId!=0 && globals.companyInfo.BackgroundImage!=''"
+    (load)="imgLoaded($event, true)" [@visibilityChanged]="bgImgLoaded ? 'shown' : 'hidden'"
+    src="{{globals.WebURL}}/{{globals.companyInfo.BackgroundImage}}" style="opacity: 0;" /> -->
+  <img class="logo-img" *ngIf="globals.companyInfo.companyId!=0 && !logoImgError" (load)="logoLoaded()"
+    (error)="logoLoaded(true)" src="{{globals.WebURL}}/{{globals.companyInfo.companyLogo}}" style="position: absolute;"
+    [@visibilityChanged3]="logoImgLoaded ? 'shown' : 'hidden'" />
+  <img class="smart-study-img" *ngIf="globals.companyInfo.companyId!=0" src="assets/img/logoakt.png"
+    style="position: absolute;" [@visibilityChanged3]="logoImgLoaded ? 'shown' : 'hidden'" />
+  <div class="auto-logout"
+    [@visibilityChanged]="(bViewInit && globals.companyInfo.isSet && bAutoLogout) ? 'shown' : 'hidden'"
+    style="opacity: 0;">
+    <span class="auto-logout-inner">
+      <i class="fa fa-info-circle" style="margin-right: 5px;"></i>
+      {{'login.AutoLogout' | translate}}
+    </span>
+  </div>
+  <!-- *ngIf="bViewInit && globals.companyInfo.isSet" -->
+  <div class="auth-main">
+    <div class="auth-block"
+      [@visibilityChanged2]="(bViewInit && globals.companyInfo.isSet && !bShowPwUpdateBox && !bAutoLogin && !globals.bInitialDbCommunicationError) ? 'shown' : 'hidden'"
+      style="opacity: 0;">
+      <!-- <div class="panel-heading">
+        <h3 class="panel-title" style="text-align: center;" translate>{{'login.title'}}</h3>
+      </div> -->
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class="form-horizontal">
+        <div class="form-group row"
+          [ngClass]="{'has-error': (!email.valid && email.touched), 'has-success': (email.valid && email.touched)}"
+          style="padding:7px">
+          <div class="col-sm-12">
+            <input id="username" name="username" [formControl]="email" type="email" class="form-control"
+              style="width: 100%;" placeholder="{{'login.email' | translate}}"
+              [ngClass]="{'bg-dark': bBackgroundIsDark, 'bg-bright': (!bBackgroundIsDark)}">
+          </div>
+        </div>
+        <div class="form-group row"
+          [ngClass]="{'has-error': (!password.valid && password.touched), 'has-success': (password.valid && password.touched)}"
+          style="padding:7px">
+          <div class="col-sm-12">
+            <input id="password" name="password" [formControl]="password" type="password" class="form-control"
+              style="width: 100%;" placeholder="{{'login.password' | translate}}"
+              [ngClass]="{'bg-dark': bBackgroundIsDark, 'bg-bright': (!bBackgroundIsDark)}">
+          </div>
+        </div>
+        <div class="form-group row">
+
+          <div class="col-sm-12 submitbtn">
+            <button [disabled]="!form.valid" type="submit" class="btn-lg login-button"
+              [ngClass]="{'login-valid': form.valid}" translate>{{'login.sign_in'}}</button>
+          </div>
+          <div class="col-sm-12 classforgot_link" style="padding: 5px 10px;"
+            *ngIf="!activationLink && !globals.bConnectAd">
+            <a class="forgot-pass reg-pass" style="float: left;margin-left: 0px;" (click)="registration()"
+              translate>{{'login.registration'}}</a>
+            <a class="forgot-pass reg-pass" style="float: right;margin-right: 0px;" (click)="forgetPassword()"
+              translate>{{'login.forgot_password'}}</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="auth-main auth-main-pw-update" *ngIf="bShowPwUpdateBox" style="opacity: 0;"
+    [@visibilityChanged2]="bShowPwUpdateBox ? 'shown' : 'hidden'">
+    <div class="auth-block">
+      <div class="panel-heading header">
+        <h3 translate>{{'login.UpdatePw'}}</h3>
+      </div>
+
+      <form [formGroup]="newPwForm" (ngSubmit)="updatePw(true)" class="form-horizontal" autocomplete="off">
+        <!-- <input type="email" style="display:none">
+              <input type="password" style="display:none"> -->
+        <div class="form-group row"
+          [ngClass]="{'has-error': ((oldPw.value != form.value.password) && oldPw.touched), 'has-success': ((oldPw.value == form.value.password) && oldPw.touched)}"
+          style="padding:7px">
+          <div class="col-sm-12">
+            <input [formControl]="oldPw" type="password" class="form-control" style="width: 100%;"
+              placeholder="{{'profilePage.OldPW' | translate}}"
+              [ngClass]="{'bg-dark': bBackgroundIsDark, 'bg-bright': (!bBackgroundIsDark)}" autocomplete="off">
+          </div>
+        </div>
+        <div class="form-group row"
+          [ngClass]="{'has-error': (!newPw.valid && newPw.touched), 'has-success': (newPw.valid && newPw.touched)}"
+          style="padding:7px">
+          <div class="col-sm-12">
+            <input [formControl]="newPw" type="password" class="form-control" style="width: 100%;"
+              placeholder="{{'profilePage.NewPW' | translate}}"
+              [ngClass]="{'bg-dark': bBackgroundIsDark, 'bg-bright': (!bBackgroundIsDark)}" autocomplete="off">
+          </div>
+        </div>
+        <div class="form-group row"
+          [ngClass]="{'has-error': ((newPwConf.value != newPw.value) && newPwConf.touched), 'has-success': ((newPwConf.value == newPw.value) && newPwConf.touched)}"
+          style="padding:7px">
+          <div class="col-sm-12">
+            <input [formControl]="newPwConf" type="password" class="form-control" style="width: 100%;"
+              placeholder="{{'profilePage.ConfirmNewPW' | translate}}"
+              [ngClass]="{'bg-dark': bBackgroundIsDark, 'bg-bright': (!bBackgroundIsDark)}" autocomplete="off">
+          </div>
+        </div>
+        <div class="form-group row">
+          <div class="col-sm-12 submitbtn" [matTooltip]="getCurrentError()" [matTooltipPosition]="'after'"
+            [matTooltipDisabled]="newPwForm.valid" matTooltipClass="tooltip-error">
+            <button [disabled]="!newPwForm.valid" [ngClass]="{'login-valid': newPwForm.valid}" type="submit"
+              class="btn-lg login-button" style="width: 270px;" translate>{{'confirm'}}</button>
+          </div>
+          <div class="col-sm-12" *ngIf="bUpdateLater">
+            <a class="forgot-pass reg-pass" (click)="updatePw(false)" translate>{{'login.NotNow'}}</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

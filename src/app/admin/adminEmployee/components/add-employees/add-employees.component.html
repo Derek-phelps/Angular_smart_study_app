@@ -1,0 +1,65 @@
+<form [formGroup]="EmpForm" class="row">
+    <mat-card class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12" cardTitle="Personal" baCardClass="with-scroll">
+        <mat-card-header> {{'employees.Add' | translate}}</mat-card-header>
+        <mat-card-content>
+            <ba-picture-uploader style="width: 250px;float: left;" #companyImg [imageTitle]="strProfilePicture"
+                [FileuploadInput]="uploaderOptions" (onUploadCompleted)="imgUpload($event)" (onUpload)="disableButton()"
+                [picture]="profile" [defaultPicture]="defaultPicture"></ba-picture-uploader>
+
+            <div class="form-group">
+                <input type="text" class="form-control" formControlName="FIRSTNAME"
+                    placeholder="{{'employees.FullNameTitle' | translate}}">
+            </div>
+            <!-- <div class="form-group">
+                <input type="text" class="form-control" formControlName="LASTNAME"  placeholder="{{'employees.Surname' | translate}}">
+            </div> -->
+            <div class="form-group">
+                <input type="tel" class="form-control" formControlName="MOBILEPHONE"
+                    placeholder="{{'employees.Phone' | translate}}">
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-card class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12" cardTitle="Business" baCardClass="with-scroll">
+        <mat-card-header> {{'employees.Add' | translate}}</mat-card-header>
+        <mat-card-content>
+
+            <select style="cursor: pointer;" class="form-control"
+                *ngIf="_globals.companyInfo.companyId && _globals.companyInfo.companyId==0"
+                (change)="loadDepartment($event.target.value)" placeholder="Comapny" formControlName="comapnyId">
+                <option value="" disabled selected>Company</option>
+                <option *ngFor="let Comp of CompanyList;" value="{{Comp.companyId}}">{{Comp.companyName}}</option>
+            </select>
+            <select style="cursor: pointer;" class="form-control" formControlName="departmentId">
+                <option value="" disabled selected>{{'employees.Department' | translate}}</option>
+                <option *ngFor="let post of departmentList;" value="{{post.departmentId}}">{{post.departmentName}}
+                </option>
+            </select>
+            <select style="cursor: pointer;" class="form-control" placeholder="Position"
+                formControlName="postOfDepartment">
+                <option value="" disabled selected>{{'employees.Position' | translate}}</option>
+                <option *ngFor="let post of postList;" value="{{post.positionId}}">{{post.positionName}}</option>
+            </select>
+            <select style="cursor: pointer;" class="form-control" placeholder="Geschlecht" formControlName="GENDER">
+                <option value="" disabled selected>{{'employees.Select' | translate}}</option>
+                <option value="Male">{{'employees.Male' | translate}}</option>
+                <option value="Female">{{'employees.Female' | translate}}</option>
+            </select>
+
+            <!-- <div class="form-group">
+                <input type="text" class="form-control" formControlName="empEdu" placeholder="{{'employees.Cooperative' | translate}}">
+            </div> -->
+            <div class="form-group">
+                <input type="text" class="form-control" formControlName="EMAIL"
+                    placeholder="{{'employees.Email' | translate}}">
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" formControlName="CURRENTADDRESS"
+                    placeholder="{{'employees.Address' | translate}}"></textarea>
+            </div>
+
+            <button [disabled]="!EmpForm.valid || DisableButton" (click)="saveEmpData()" type="button"
+                class="btn btn-success">{{'save' | translate}}</button>
+
+        </mat-card-content>
+    </mat-card>
+</form>

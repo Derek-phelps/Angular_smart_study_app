@@ -1,0 +1,49 @@
+.certificate-dialog {
+    height: calc(100vh - 150px);
+    position: relative;
+}
+
+.mat-dialog-content {
+    max-height: initial;
+    height: calc(100% - 50px);
+    overflow: hidden;
+}
+
+.close-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: -10px;
+    margin-right: -10px;
+    color: rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.close-icon:hover {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+// .mat-dialog-container {
+//     display: flex !important;
+//     flex-direction: column;
+// }
+
+// .mat-dialog-container > * {
+//     display: flex;
+//     flex-direction: column;
+// }
+
+// .mat-dialog-content {
+//     max-height: inherit !important;
+// }
+
+// .mat-dialog-actions {
+//     display: block !important;
+//     flex-grow: inherit;
+//     flex-shrink: inherit;
+//     padding: 12px 0 0 !important;
+
+//     &:last-child {
+//         margin-bottom: 0 !important;
+//     }
+// }

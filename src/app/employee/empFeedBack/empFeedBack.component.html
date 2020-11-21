@@ -1,0 +1,25 @@
+<div class="row" style="margin-top:10px">
+  <mat-card class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12 new-messagebox">
+    <mat-card-header>{{'Message.FeedbackText' | translate}}</mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="MessageCom">
+        <div class="form-group">
+          <label for="exampleInputEmail1">{{'Message.Subject' | translate}}</label>
+          <select style="cursor: pointer;" class="form-control" placeholder="Email" formControlName="subject">
+            <option value="" disabled selected>{{'Message.SelSubject' | translate}}</option>
+            <option value="Functionality Issue">{{'Message.Functions' | translate}}</option>
+            <option value="Issue">{{'Message.Bugs' | translate}}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="exampleInputPassword1">Nachricht</label>
+          <textarea rows="4" cols="50" placeholder="{{'Message.Nachricht' | translate}}" class="form-control"
+            formControlName="mess">
+
+          </textarea>
+        </div>
+        <button type="submit" (click)="sendNewMes()" class="btn btn-danger">{{'confirm' | translate}}</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

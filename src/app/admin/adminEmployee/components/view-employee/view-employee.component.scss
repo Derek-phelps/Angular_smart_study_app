@@ -1,0 +1,76 @@
+@import "../../../../theme/theme/conf";
+
+.send-certificate {
+  text-align: center;
+  .open-button{
+    background-color: lightgray;
+    width: initial;
+    margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .open-button-active:hover{
+    transform: scale(1.1);
+  }
+}
+
+.member-list-container {
+  max-height: 300px;
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+}
+
+.mat-column-select {
+  width: 70px !important;
+}
+
+.user-filter {
+  width: 100%;
+  padding: 0 20px 0 20px;
+}
+
+.form-wrapper {
+  max-width: 1100px;
+}
+
+.color-presenter {
+  width: 15px;
+  height: 15px;
+}
+
+.link-color {
+  color: #007bff;
+  cursor: pointer;
+}
+
+.member-loader {
+  top: 50px;
+}
+
+.group-row {
+  opacity: 0.7;
+}
+
+.group-row:hover {
+  opacity: 1;
+}
+
+.darken {
+  color: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.05);
+  width: 100%;
+  opacity: 0.6;
+}
+
+.open-certificate-button {
+  margin: auto;
+}
+
+// .certificate-dialog {
+//   height: calc(100vh - 150px);
+// }
+
+// .mat-dialog-content {
+//   max-height: initial;
+//   height: calc(100% - 50px);
+// }

@@ -1,0 +1,60 @@
+<ng-container *ngIf="data.mode == 0 || data.mode == 2">
+    <span><b>{{'course.InformEmp' | translate}}</b></span>
+    <mat-nav-list>
+        <!-- <a *ngIf="data.EmpForm.value.departmentIds.length != data.EmpForm.value.mandatoryDepartmentIds.length && data.EmpForm.value.mandatoryDepartmentIds.length != 0" -->
+        <a mat-list-item (click)="setEmpInformationAndSend(0)" style="text-align: center;">
+            <span mat-line><b>{{'course.AllEmp' | translate}}</b></span>
+            <span mat-line>{{'course.AllEmpText' | translate}}</span>
+        </a>
+
+        <!-- <a *ngIf="data.EmpForm.value.mandatoryDepartmentIds.length > 0" mat-list-item -->
+        <a mat-list-item
+            (click)="setEmpInformationAndSend(1)" style="text-align: center;">
+            <span mat-line><b>{{'course.MandEmp' | translate}}</b></span>
+            <span mat-line>{{'course.MandEmpText' | translate}}</span>
+        </a>
+
+        <!-- <a *ngIf="data.EmpForm.value.mandatoryDepartmentIds.length < data.EmpForm.value.departmentIds.length" -->
+        <a
+            mat-list-item (click)="setEmpInformationAndSend(2)" style="text-align: center;">
+            <span mat-line><b>{{'course.VolEmp' | translate}}</b></span>
+            <span mat-line>{{'course.VolEmpText' | translate}}</span>
+        </a>
+
+        <a mat-list-item (click)="setEmpInformationAndSend(3)" style="text-align: center;">
+            <span mat-line><b>{{'course.NoEmp' | translate}}</b></span>
+            <span mat-line>{{'course.NoEmpText' | translate}}</span>
+        </a>
+        <!-- Neues Bottom Sheet -->
+        <!-- Obige 4 Auswahlmöglichkeiten + "Mitarbeiter über Zuweisungsänderungen (freiwillig auf verpflichtend und vize versa) informieren"-Checkbox -->
+    </mat-nav-list>
+</ng-container>
+<ng-container *ngIf="data.mode == 1">
+    <span><b>{{'course.InformEmpEdit' | translate}}</b></span>
+    <div>
+        <mat-radio-group [(ngModel)]="data.informEmp" class="example-radio-group">
+            <mat-radio-button [value]="0">
+                <b>{{'course.AllEmp' | translate}}</b><br>{{'course.AllEmpText' | translate}}
+            </mat-radio-button>
+            <!-- <mat-radio-button [value]="1">
+                <b>{{'course.MandEmp' | translate}}</b><br>{{'course.MandEmpText' | translate}}<br>
+            </mat-radio-button>
+            <mat-radio-button [value]="2">
+                <b>{{'course.VolEmp' | translate}}</b><br>{{'course.VolEmpText' | translate}}<br>
+            </mat-radio-button> -->
+            <mat-radio-button [value]="3">
+                <b>{{'course.NoEmp' | translate}}</b><br>{{'course.NoEmpText' | translate}}
+            </mat-radio-button>
+        </mat-radio-group>
+    </div>
+    <!-- <button (click)="null" type="button" class="btn btn-success">{{'send'|translate}}</button> -->
+    <mat-nav-list>
+        <a mat-list-item (click)="setEmpInformationAndSend()" style="text-align: center;">
+            <span *ngIf="data.informEmp==3" mat-line><b>{{'course.Save' | translate}}</b></span>
+            <span *ngIf="data.informEmp!=3" mat-line><b>{{'course.SaveSend' | translate}}</b></span>
+        </a>
+        <a mat-list-item (click)="cancel()" style="text-align: center;">
+            <span mat-line><b>{{'cancel' | translate}}</b></span>
+        </a>
+    </mat-nav-list>
+</ng-container>

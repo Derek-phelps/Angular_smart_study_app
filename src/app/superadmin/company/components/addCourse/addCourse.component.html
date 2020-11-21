@@ -1,0 +1,39 @@
+<div mat-dialog-content>
+    <form [formGroup]="EmpForm" class="row">
+        <div formArrayName="CourseList" class="form-group col-md-12">
+            <div style="text-align: center;">
+                <a href="javascript:void(0)" class="hyberLinkCls">
+                    <button [disabled]="!EmpForm.valid" (click)="addCourse()" >
+                        <i class="fa fa-plus-circle" aria-hidden="true"></i>
+                        Add More Course
+                    </button>
+                </a>
+            </div>
+            <div *ngFor="let add of EmpForm.controls['CourseList']['controls']; let i=index" [formGroupName]="i" class="row" >
+                <div class="form-group col-md-12"> 
+                    <select *ngIf="add.value.isReadOnly=='0'"   style="display: inline;" class="form-control col-md-4" placeholder="course" formControlName="courseId" >
+                        <option value="" disabled >Kursauswahl</option>
+                        <option *ngFor="let Cour of Courses;" value="{{Cour.courseId}}" >{{Cour.courseName}}</option>
+                    </select>
+                    <select *ngIf="add.value.isReadOnly=='1'"  disabled style="display: inline;color: #000;" class="form-control col-md-4" placeholder="course" formControlName="courseId" >
+                            <option *ngFor="let Cour of Courses;" value="{{Cour.courseId}}" >{{Cour.courseName}}</option>
+                    </select>
+                    <select *ngIf="add.value.isReadOnly=='0'"  style="display: inline;" class="form-control col-md-4" placeholder="course" formControlName="departmentId" >
+                        <option value="" disabled >Kursauswahl</option>
+                        <option *ngFor="let dep of Department;" value="{{dep.departmentId}}" >{{dep.departmentName}}</option>
+                    </select>
+                    <select *ngIf="add.value.isReadOnly=='1'"  disabled style="display: inline;color: #000;" class="form-control col-md-4" placeholder="course" formControlName="departmentId" >
+                            <option *ngFor="let dep of Department;" value="{{dep.departmentId}}" >{{dep.departmentName}}</option>
+                    </select>
+                    <a class="col-md-4" style="padding-left: 20px;float: right;font-size: 25px;" (click)="removeChapter(i,add)"  href="javascript:void(0)">
+                        <i class="fa fa-trash"></i>
+                    </a> 
+                </div>           
+            </div>
+        </div> 
+    </form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button style="width: 45%;" (click)="closeAddCourseBox()">Close</button>
+  <button mat-button [disabled]="!EmpForm.valid" style="width: 45%;margin-left: 10%;" (click)="SaveAddCourseBox()" cdkFocusInitial>Save</button>
+</div>

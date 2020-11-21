@@ -1,0 +1,171 @@
+<ng-template #container></ng-template>
+<div class="containe" style="margin-bottom: 30px;">
+    <mat-tab-group #tabGroup [selectedIndex]="selected" (touchstart)="swipe($event, 'start')"
+        (touchend)="swipe($event, 'end')">
+        <mat-tab label="{{'employees.OpenCourses' | translate}}">
+            <div class="row" style="width: 100%; padding-left: 10px;">
+                <mat-card class="col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <mat-card-header>{{'employees.OpenCourses' | translate}}</mat-card-header>
+                    <mat-card-content>
+                        <div class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12" style="padding-top: 1em"
+                            *ngIf="OpenList.length == 0">
+                            {{'course.NoOpenCourse' | translate}}</div>
+                        <div class="row">
+                            <div style="min-width: 20em" class="col-sm-3 hoverClass"
+                                *ngFor="let OpenCou of OpenList;index as i;">
+                                <div class="course my_courses">
+                                    <a href="javascript:void(0)" routerLink="../mycourses/{{OpenCou.courseId}}"
+                                        [skipLocationChange]="false" class="course_img">
+                                        <img class="custom-course-img" (error)="courseImgError($event)"
+                                            src="{{_globals.WebURL}}/{{OpenCou.courseImg}}">
+                                    </a>
+                                    <a href="javascript:void(0)" routerLink="../mycourses/{{OpenCou.courseId}}"
+                                        [skipLocationChange]="false">
+                                        <div class="course__details">
+                                            <span class="heading">
+                                                <strong>{{OpenCou.courseName}}</strong>
+                                            </span>
+                                            <div class="detail_txt" *ngIf="OpenCou.EndTime && OpenCou.EndTime != ''">
+                                                {{'course.Deadline' | translate}}:{{OpenCou.EndTime | date}}
+                                            </div>
+                                            <div class="detail_txt">{{OpenCou.courseDes | slice:0:300}} </div>
+                                        </div>
+                                    </a>
+                                    <div class="clearfix" style="min-height: 1em"></div>
+                                    <div style="height: 30px;">
+                                        <!-- <a routerLink="../progress/{{OpenCou.courseId}}" [skipLocationChange]="false"
+                                                    href="javascript:void(0)" class="leftIcon">
+                                                    <i class="fa fa-bar-chart" style="font-size: 25px;"></i></a> -->
+
+                                        <a routerLink="../mycourses/{{OpenCou.courseId}}" [skipLocationChange]="false"
+                                            href="javascript:void(0)" class="rightIcon">
+                                            <i class="fa fa-graduation-cap" style="font-size: 25px;"></i></a>
+
+                                    </div>
+                                    <div class="deregisterDiv" *ngIf="OpenCou.maxAss < 3">
+                                        <button type="submit" (click)="DeregisterThisCourse(OpenCou)"
+                                            class="btn btn-danger">{{'course.Deregister' | translate}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </mat-tab>
+        <mat-tab label="{{'employees.VolCourses' | translate}}" [disabled]="voluntaryList.length==0">
+            <div class="row" style="width: 100%; padding-left: 10px;">
+                <mat-card class="col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
+                    <mat-card-header>{{'employees.VolCourses' | translate}}</mat-card-header>
+                    <mat-card-content>
+                        <div class="row">
+                            <div style="min-width: 20em" class="col-sm-3 hoverClass"
+                                *ngFor="let OpenCou of voluntaryList;index as i;">
+                                <div class="course my_courses ">
+                                    <a href="javascript:void(0)" class="course_img" style="cursor: default;">
+                                        <img (error)="courseImgError($event)" class="custom-course-img"
+                                            src="{{_globals.WebURL}}/{{OpenCou.courseImg}}">
+                                    </a>
+                                    <a href="javascript:void(0)" style="cursor: default;">
+                                        <div class="course__details">
+                                            <span class="heading">
+                                                <strong>{{OpenCou.courseName}}</strong>
+                                            </span>
+                                            <div class="detail_txt" *ngIf="OpenCou.EndTime && OpenCou.EndTime != ''">
+                                                {{'course.Deadline' | translate}}:{{OpenCou.EndTime | date}}
+                                            </div>
+                                            <div class="detail_txt">{{OpenCou.courseDes | slice:0:300}} </div>
+                                        </div>
+                                    </a>
+                                    <div style="width: 100%; text-align: center;">
+                                        <button type="submit" (click)="SignupThisChouse(OpenCou)"
+                                            class="btn btn-danger">{{'course.SignUp' | translate}}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </mat-tab>
+        <mat-tab label="{{'employees.PassedCourses' | translate}}" [disabled]="CompletedList.length==0">
+            <div class="row" style="width: 100%; padding-left: 10px;">
+                <mat-card class="col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
+                    <mat-card-header>{{'employees.PassedCourses' | translate}}</mat-card-header>
+                    <mat-card-content>
+                        <div class="row">
+                            <div style="min-width: 20em" class="col-sm-3 hoverClass"
+                                *ngFor="let CmpCou of CompletedList;index as i;">
+                                <div class="course my_courses ">
+                                    <a routerLink="../mycourses/{{CmpCou.courseId}}" [skipLocationChange]="false"
+                                        class="course_img">
+                                        <img class="custom-course-img" (error)="courseImgError($event)"
+                                            src="{{_globals.WebURL}}/{{CmpCou.courseImg}}">
+                                    </a>
+                                    <a routerLink="../mycourses/{{CmpCou.courseId}}" [skipLocationChange]="false">
+                                        <div class="course__details">
+                                            <span class="heading">
+                                                <strong>{{CmpCou.courseName}}</strong>
+                                            </span>
+                                            <div class="detail_txt" *ngIf="CmpCou.EndTime && CmpCou.EndTime != ''">
+                                                {{'course.Deadline' | translate}}:{{CmpCou.EndTime | date}}
+                                            </div>
+                                            <div class="detail_txt">{{CmpCou.courseDes | slice:0:300}} </div>
+                                        </div>
+                                    </a>
+                                    <div class="clearfix" style="min-height: 1em"></div>
+                                    <div style="height: 30px;">
+                                        <!-- <a routerLink="../progress/{{CmpCou.courseId}}" [skipLocationChange]="false"
+                                                    href="javascript:void(0)" class="leftIcon">
+                                                    <i class="fa fa-bar-chart" style="font-size: 25px;"></i>
+                                                </a> -->
+                                        <a routerLink="../mycourses/{{CmpCou.courseId}}" [skipLocationChange]="false"
+                                            href="javascript:void(0)" class="centerIcon">
+                                            <i class="fa fa-graduation-cap" style="font-size: 25px;"></i>
+                                        </a>
+                                        <a href="javascript:void(0)" (click)="OpenCertificateView(CmpCou)"
+                                            class="rightIcon"
+                                            *ngIf="CmpCou.certificaterId != undefined && CmpCou.certificaterId != null && CmpCou.certificaterId != 0 && CmpCou.certificaterId != '0'">
+                                            <i class="fa fa-file-pdf-o" style="font-size: 25px;"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </mat-tab>
+        <mat-tab label="{{'employees.MissedCourses' | translate}}" [disabled]="extensionList.length==0">
+            <div class="row" style="width: 100%; padding-left: 10px;">
+                <mat-card class="col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
+                    <mat-card-header>{{'employees.MissedCourses' | translate}}</mat-card-header>
+                    <mat-card-content>
+                        <div class="row">
+                            <div style="min-width: 20em" class="col-sm-3 hoverClass"
+                                *ngFor="let extCou of extensionList;index as i;">
+                                <div class="course my_courses ">
+                                    <a href="javascript:void(0)" class="course_img">
+                                        <img class="custom-course-img" (error)="courseImgError($event)"
+                                            src="{{_globals.WebURL}}/{{extCou.courseImg}}">
+                                    </a>
+                                    <a href="javascript:void(0)">
+                                        <div class="course__details">
+                                            <span class="heading">
+                                                <strong>{{extCou.courseName}}</strong>
+                                            </span>
+                                            <div class="detail_txt" *ngIf="extCou.EndTime && extCou.EndTime != ''">
+                                                {{'course.Deadline' | translate}}:{{extCou.EndTime | date}}
+                                            </div>
+                                            <div class="detail_txt">{{extCou.courseDes | slice:0:300}} </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

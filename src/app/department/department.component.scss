@@ -1,0 +1,40 @@
+table {
+    width: 100%;
+}
+  
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.group-row {
+  opacity: 0.7;
+}
+
+.group-row:hover {
+  opacity: 1;
+}
+
+.float-right {
+  float: right;
+}
+
+.send-certificate {
+  text-align: center;
+  .open-button{
+    background-color: lightgray;
+    width: initial;
+    margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .open-button:hover{
+    transform: scale(1.1);
+  }
+}
+
+.darken {
+  color: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.05);
+  width: 100%;
+}

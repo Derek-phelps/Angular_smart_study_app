@@ -1,0 +1,110 @@
+<form [formGroup]="EmpForm" class="row">
+    <mat-card class="col-10" style="margin-left: 10%;" baCardClass="with-scroll">
+        <mat-card-header>{{'company.SettingsGeneral' | translate}}</mat-card-header>
+        <mat-card-content>
+            <div style="text-align: center">
+                <div style="display: inline-block;padding: 12px;">
+                    <ba-picture-uploader style="width: 250px;float: left;" #companyImg [imageTitle]="strCompanyLogo"
+                        [FileuploadInput]="uploaderOptions" (onUploadCompleted)="imgUpload($event)"
+                        [picture]="logoImage" [defaultPicture]="defaultPicture"></ba-picture-uploader>
+                    <ba-picture-uploader style="width: 250px;float: left;" #backgroundImg [imageTitle]="strBackground"
+                        [FileuploadInput]="uploaderBackgroundOptions" (onUploadCompleted)="BackgroundImgUpload($event)"
+                        [picture]="backgroundImage" [defaultPicture]="BackgroundDefaultPicture"></ba-picture-uploader>
+                    <ba-picture-uploader style="width: 250px;float: left;" #bannerImg [imageTitle]="strBanner"
+                        [FileuploadInput]="uploaderBannerOptions" (onUploadCompleted)="BannerImgUpload($event)"
+                        [picture]="bannerImage" [defaultPicture]="BannerDefaultPicture"></ba-picture-uploader>
+                </div>
+            </div>
+            <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12"
+                style="float: left;padding-top: 12px;">
+                <label matTooltip="{{'company.CpyBannerColorText' | translate}}" for="colorPicker"
+                    style="color: black; font-size: 16px; padding-right: 20px; cursor: pointer;">{{'company.CpyBannerColor' | translate}}</label>
+                <input id="colorPicker" style="cursor: pointer;" [(colorPicker)]="bannerColor"
+                    [style.background]="bannerColor" [cpAlphaChannel]="'disabled'" [cpSaveClickOutside]="false"
+                    [cpOKButton]="true" [cpOKButtonText]="'confirm' | translate"
+                    [cpOKButtonClass]="'btn btn-success btn-sm'" [cpCancelButton]="true"
+                    [cpCancelButtonText]="'cancel' | translate" [cpCancelButtonClass]="'btn btn-danger btn-sm'" />
+            </div>
+            <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" style="float: left;">
+                <mat-form-field style="width: 100%;">
+                    <input matInput type="text" formControlName="companyName"
+                        placeholder="{{'company.CompanyName' | translate}}">
+                </mat-form-field>
+                <mat-form-field style="width: 100%;">
+                    <input matInput type="text" formControlName="companyRegNo"
+                        placeholder="{{'company.CompanyRegNo' | translate}}">
+                </mat-form-field>
+                <mat-form-field style="width: 100%;">
+                    <input matInput type="text" formControlName="compUrl"
+                        placeholder="{{'company.WebURL' | translate}}">
+                </mat-form-field>
+                <mat-form-field style="width: 100%">
+                    <mat-select placeholder="{{'company.SelDefLang' | translate}}:" formControlName="defaultLang">
+                        <!-- <optgroup label="{{'company.SelDefLang' | translate}}:"> -->
+                        <mat-option value="de">DEUTSCH</mat-option>
+                        <mat-option value="en">ENGLISH</mat-option>
+                        <!-- </optgroup> -->
+                    </mat-select>
+                </mat-form-field>
+                <hr>
+                <mat-card-header style="margin-bottom: 15px;">{{'company.SettingsCourse' | translate}}</mat-card-header>
+                <mat-checkbox formControlName="bSendMailReminder" (change)="onSendMailChange($event)">
+                    {{'company.SendMailReminder' | translate}}</mat-checkbox>
+                <div [@openedChanged]="EmpForm.value.bSendMailReminder ? 'shown' : 'hidden'"
+                    style="overflow: hidden;height: 0; margin: 0 10%;">
+                    <mat-form-field style="width: 100px;margin-right: 5px;">
+                        <!-- <mat-select formControlName="reminderInterval"> -->
+                        <mat-select formControlName="reminderInterval" (selectionChange)="onIntervalChange($event)">
+                            <mat-option value="1">{{'company.Daily' | translate}}</mat-option>
+                            <mat-option value="7">{{'company.Weekly' | translate}}</mat-option>
+                            <mat-option value="31">{{'company.Monthly' | translate}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <ng-container *ngIf="EmpForm.value.reminderInterval != 1">{{'company.On' | translate}}
+                    </ng-container>
+                    <mat-form-field style="width: 100px;margin-left: 5px;" *ngIf="EmpForm.value.reminderInterval == 7">
+                        <mat-select formControlName="reminderDay">
+                            <mat-option value="0">{{'Monday' | translate}}</mat-option>
+                            <mat-option value="1">{{'Tuesday' | translate}}</mat-option>
+                            <mat-option value="2">{{'Wednesday' | translate}}</mat-option>
+                            <mat-option value="3">{{'Thursday' | translate}}</mat-option>
+                            <mat-option value="4">{{'Friday' | translate}}</mat-option>
+                            <mat-option value="5">{{'Saturday' | translate}}</mat-option>
+                            <mat-option value="6">{{'Sunday' | translate}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field style="width: 50px;margin-left: 5px;" *ngIf="EmpForm.value.reminderInterval == 31">
+                        <mat-select formControlName="reminderDay">
+                            <mat-option *ngFor="let item of [].constructor(31); let i = index;"
+                                [value]="(i+1).toString()">
+                                {{i+1}}.
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <mat-form-field style="width: 100%; margin-top: 10px;">
+                    <mat-select placeholder="{{'company.SelAssFilterBehaviour' | translate}}:"
+                        formControlName="assFilterBehaviour">
+                        <mat-option value="no-filter">{{'company.AssFiBehNoFilter' | translate}}</mat-option>
+                        <mat-option value="shortest">{{'company.AssFiBehIntelligentShortest' | translate}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div style="margin-top: 10px;">
+                    {{'company.LeaderCourse' | translate}}...
+                    <mat-radio-group formControlName="showAllCourses" class="example-radio-group">
+                        <mat-radio-button [value]="'1'">...{{'company.LeaderAllCourse' | translate}}</mat-radio-button>
+                        <mat-radio-button [value]="'0'">...{{'company.LeaderAssignedCourse' | translate}}
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="row" style="margin-bottom: 38px;position: relative;">
+                    <!-- <button [disabled]="!EmpForm.valid || DisableButton > 0" (click)="saveEmpData()" type="button"
+                        class="btn btn-success" style="position: absolute;right: 0;">{{'save' | translate}}</button> -->
+                    <button mat-stroked-button [disabled]="!EmpForm.valid || DisableButton > 0"
+                        style="position: absolute;right: 0;" (click)="saveEmpData()">{{'save'|translate}}</button>
+                </div>
+            </div>
+
+        </mat-card-content>
+    </mat-card>
+</form>

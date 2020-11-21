@@ -1,0 +1,170 @@
+<ng-template #container></ng-template>
+<div class="Classaddempy" (click)="addCompany()">
+    <i class="fa fa-user-plus iconSize" style="cursor: pointer;"></i>
+</div>
+<mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{'filter' | translate}}">
+</mat-form-field>
+<!-- <div class="Classaddempy" style="right: 100px;" (click)="uploadEmp()">
+    <i class="fa fa-cloud-upload iconSize"></i>
+    <input type="file" #fileUpload style="display: none;" (change)="handleFileInput($event.target.files)" name="myFile">
+</div> -->
+<div class="row" data-purpose="course-list-wrapper">
+    <div class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12" *ngIf="employes.length == 0">
+        {{'employees.NoEmpFound' | translate}}</div>
+    <ng-container *ngFor="let emp of employes;index as i;" ng-repeat="course in courses">
+        <div *ngIf="emp.dispEmp==1" class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12" style="position: relative;">
+            <div course="course" search-log="searchLog" tracking="tracking" options="options"
+                quick-view="quickViews[course.id]">
+                <div data-reactroot="" class="badge-hover search-course-card-container--card--search--19SW_"
+                    data-purpose="search-course-cards" data-cs="6763.8763015209515" data-rs="2148.7258">
+                    <div data-purpose="search-course-card-inner" class="search-course-card--card__inner--1tkPf">
+                        <noscript></noscript>
+                        <div class="search-course-card--card--left-col--3kKip">
+                            <a routerLink="./edit/{{emp.empId}}" [skipLocationChange]="false">
+                                <img *ngIf="emp.createdByCompany == 0" src="{{_globals.APIURL}}/{{emp.epath}}"
+                                    onerror="this.src='../../assets/img/profile.png'" alt="course image"
+                                    style="max-width: 120px;" class="search-course-card--card__image--yIhWY" />
+                                <img *ngIf="emp.createdByCompany != 0" src="{{_globals.WebURL}}/{{emp.epath}}"
+                                    onerror="this.src='../../assets/img/profile.png'" alt="course image"
+                                    style="max-width: 120px;" class="search-course-card--card__image--yIhWY">
+                            </a>
+                        </div>
+                        <div class="fx" style="position: relative;">
+                            <span style="position: absolute;right: 0px;top: 15px;cursor: pointer;"
+                                class="fa fa-trash deleteEmp" *ngIf="emp.UserType==4 && emp.self==false"
+                                (click)="deleteEmp(emp.empId)"></span>
+
+                            <div class="search-course-card--card__head--2X4bl">
+                                <a data-purpose="search-course-card-title" routerLink="./edit/{{emp.empId}}"
+                                    [skipLocationChange]="false" class="search-course-card--card__title--1moSD">
+                                    <h1>{{emp.FIRSTNAME}} {{emp.LASTNAME}}</h1>
+                                </a>
+                                <div class="bestseller-info " data-purpose="bestseller-badge">
+                                    <span class="badge badge-accented yellow">{{emp.positionName}}</span>
+                                </div>
+                                <div class="employedetail_TXT">
+                                    <!-- <p class="search-course-card--card__instructor--jB8_v" data-purpose="search-course-card-instructor">
+                                    <a href="javascript:void(0)" class="search-course-card--card__instructor-inner--OJuO8">
+                                        <span>{{emp.empEdu}}</span>
+                                    </a>
+                                </p> -->
+                                    <div class="search-course-card--card__metadata--3_7dq"
+                                        data-purpose="search-course-card-metadata">
+                                        <div>
+                                            <span data-purpose="search-course-card-lecture-info-meta"
+                                                style="display: inline-block;">
+                                                <a href="javascript:void(0)" (click)="addCourse(emp.empId)"
+                                                    class="hyberLinkCls">
+                                                    <span
+                                                        class="search-course-card--card__icon--U36-j udi udi-play-circle">
+                                                        <i class="fa fa-plus-square" aria-hidden="true"></i></span>
+                                                    <span
+                                                        [ngStyle]="{'text-decoration': (emp.AddCourse==0)?'underline':''}"
+                                                        style="font-weight: bold;position: relative;left: 5px;">{{'course.AddCourse' | translate}}</span>
+                                                </a>
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <a href="javascript:void(0)" (click)="displayCurrentCourse(emp.empId)"
+                                                class="hyberLinkCls">
+                                                <span class="search-course-card--card__icon--U36-j udi udi-clock"><i
+                                                        class="fa fa-clipboard" aria-hidden="true"></i></span>
+                                                <span
+                                                    [ngStyle]="{'text-decoration': (emp.CurrentCourse==0)?'underline':''}"
+                                                    style="font-weight: bold;display: inline-block;position: absolute;margin-left: 5px !important;">{{'course.CurrentCourse' | translate}}</span>
+                                            </a>
+                                        </div>
+                                        <!-- <div>
+                                            <a routerLink="./progressChart/{{emp.empId}}" [skipLocationChange]="false"
+                                                class="hyberLinkCls">
+                                                <span class="search-course-card--card__icon--U36-j udi udi-clock"><i
+                                                        class="fa fa-clipboard" aria-hidden="true"></i></span>
+                                                <span
+                                                    style="font-weight: bold;display: inline-block;position: absolute;margin-left: 5px !important;">{{'course.ProgressChart' | translate}}</span>
+                                            </a>
+                                        </div> -->
+                                        <div>
+                                            <span data-purpose="search-course-card-lecture-info-meta"
+                                                style="display: inline-block;">
+
+                                                <a href="javascript:void(0)" (click)="displayCertificate(emp.empId)"
+                                                    class="hyberLinkCls">
+                                                    <span
+                                                        class="search-course-card--card__icon--U36-j udi udi-play-circle"><i
+                                                            class="fa fa-address-card-o" aria-hidden="true"></i></span>
+                                                    <span
+                                                        [ngStyle]="{'text-decoration': (emp.Certificate==0)?'underline':''}"
+                                                        style="font-weight: bold;display: inline-block;margin-left: 5px !important">
+                                                        {{'employees.PassedCourses' | translate}} /
+                                                        {{'course.Certificate' | translate}}
+                                                    </span>
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="emp.AddCourse==0">
+                                    <div class="form-group">
+                                        <select class="form-control" style="cursor: pointer;"
+                                            placeholder="Kurs Auswählen" [(ngModel)]="selectedCourse">
+                                            <option value="" disabled selected>{{'chapter.SelCourse' | translate}}
+                                            </option>
+                                            <option *ngFor="let post of courseList;" value="{{post.courseId}}">
+                                                {{post.courseName}}</option>
+                                        </select>
+                                    </div>
+                                    <button (click)="saveCourse(emp.empId,emp)" [disabled]="selectedCourse == ''"
+                                        type="button" class="btn btn-success">{{'save' | translate}}</button>
+                                    <button (click)="emp.AddCourse=1; selectedCourse = '';" type="button"
+                                        class="btn btn-success">{{'close' | translate}}</button>
+                                </div>
+                                <div *ngIf="emp.CurrentCourse==0">
+                                    <div *ngIf="emp.CurrentCourseList.length == 0">
+                                        {{'course.EmpNoCourseAss' | translate}}
+                                    </div>
+                                    <div *ngFor="let CourseList of emp.CurrentCourseList;index as i;">
+                                        <span class="Current_Course "> {{CourseList.courseName}}
+                                            <ng-container *ngIf="CourseList.startDate!=''">
+                                                ({{CourseList.startDate| date}})</ng-container>
+                                            <!-- <span (click)="EditAssEmp(CourseList,emp)">
+                                                <span class="fa fa-edit" style="font-size: 20px;"></span>
+                                            </span> -->
+                                            <span (click)="deleteAssEmp(CourseList.emp_courseId,emp.empId,emp)">
+                                                <span class="fa fa-trash"
+                                                    style="font-size: 20px;cursor: pointer;"></span>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div *ngIf="emp.Certificate==0">
+                                    <div *ngIf="emp.CertificateList.length == 0">
+                                        {{'course.EmpNoCert' | translate}}
+                                    </div>
+                                    <div *ngFor="let Certificate of emp.CertificateList;index as i;">
+                                        <a *ngIf="Certificate.certificaterId!=null" href="javascript:void(0)"
+                                            (click)="preViewCerti(Certificate.courseId,emp.empId)"
+                                            matTooltip="{{'certificate.ShowEmpCert' | translate}}">
+                                            {{Certificate.courseName}} ({{Certificate.dateFinished| date}})
+                                        </a>
+                                        <a *ngIf="Certificate.certificaterId==null" href="javascript:void(0)"
+                                            style="cursor: not-allowed;"
+                                            matTooltip="{{'certificate.NoSmartStudyCert' | translate}}">
+                                            {{Certificate.courseName}} ({{Certificate.dateFinished| date}})
+                                        </a>
+                                        <!-- <span style="color:#000">{{Certificate.courseName}} ({{Certificate.dateFinished| date}})</span> -->
+                                        <!-- <a href="javascript:void(0)" style="font-size: 20px;"
+                                                        (click)="preViewCerti(Certificate)">
+                                                        <i class="fa fa-eye" aria-hidden="true"></i></a> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <noscript></noscript>
+                    </div>
+                </div>
+                <span style="font-size: 0px;"></span><noscript></noscript>
+            </div>
+        </div>
+    </ng-container>
+</div>

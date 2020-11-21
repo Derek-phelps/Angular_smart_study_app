@@ -1,0 +1,267 @@
+<ng-template #container></ng-template>
+<div class="widgets" class="chapterCls" *ngIf="playScorm==false">
+    <mat-card class="col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12 ">
+        <mat-card-content class="card-body" style="overflow: hidden;">
+            <div class="row HeaderCls col-md-12" style="margin-left: 0px; border-radius: 10px;">
+                <div class="pyro" *ngIf="playFireworks">
+                    <div class="before"></div>
+                    <div class="after"></div>
+                </div>
+                <div class="col-sm-3 col-3">
+                    <img style="width: 100%;" (error)="courseImgError($event)"
+                        src="{{_globals.WebURL}}/{{courseInfo.courseImg}}" />
+                </div>
+                <div class="col-sm-9 col-9">
+                    <div><b>{{courseInfo.courseName}}</b></div>
+                    <div>{{courseInfo.courseDes}}</div>
+                    <div *ngIf="courseInfo && courseInfo.EndTime != ''">{{'course.Deadline' | translate}}:
+                        {{courseInfo.EndTime | date:'dd-MM-yyyy'}}</div>
+                    <div *ngIf="courseInfo.isScormCourse==0" style="padding-top: 20px;">
+                        {{'course.CourseProgress' | translate}}:
+                        {{sumTodoComp}}/{{sumTodoTotal}}
+                        <button *ngIf="courseInfo.countChapter &gt; 0 && courseInfo.isCompleted!=1"
+                            (click)="OpenLastView()" class="btn-lg btn-primary btn-auth"
+                            style="float: right;">{{'course.Proceed' | translate}}</button>
+                    </div>
+                    <div *ngIf="courseInfo.isScormCourse==1">
+                        <!-- {{'course.CourseProgress' | translate}}: {{'scorm.ScormNotInit' | translate}} -->
+                        <!-- {{'course.CourseProgress' | translate}}: <ng-container *ngIf="courseInfo.countComp==0">0%
+                        </ng-container>
+                        <ng-container *ngIf="courseInfo.countComp&gt;0">
+                            {{(courseInfo.countComp/courseInfo.countChapter*100).toFixed(0)}}%</ng-container> -->
+                        <button *ngIf="CourseList.length == 1" (click)="ProceedCourse()"
+                            class="btn-lg btn-primary btn-auth"
+                            style="float: right;">{{'scorm.StartCourse' | translate}}</button>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center;" *ngIf="courseInfo.isCompleted==1">
+                <div class="is-completed">
+                    <h4><i class="fa fa-check-circle"></i> {{'course.Complete' | translate}}</h4>
+                </div>
+                <a href="javascript:void(0)" *ngIf="courseInfo.certificaterId && courseInfo.justPass != '1'"
+                    (click)="openCertificate()">
+                    <h5>{{'certificate.Download' | translate}}</h5>
+                </a>
+            </div>
+            <div class="row ChapterList col-md-12" style="margin-left: 0px;" *ngIf="courseInfo.isScormCourse==0">
+                <div *ngFor="let cour of CourseList;index as i;" class="col-md-12 chapGrop">
+                    <a href="javascript:void(0)" (click)="OpenSubChap(cour)">
+                        <div class="fx-jsb curriculum-navigation__section__status">
+                            <span class="cur-status">
+                                <span class="text-secondary bold">{{cour.sumCompTotal}} </span>
+                                <span>/ {{cour.sumTotal}}</span>
+                            </span>
+                        </div>
+                        <div class="curriculum-navigation__section__title">
+                            <span> {{cour.chapterName}}
+                                <span *ngIf="cour.is_offline=='true'">(Offline)</span>
+                            </span>
+                        </div>
+                    </a>
+                    <div *ngIf="cour.isActive==1" class="col-md-12">
+                        <div *ngFor="let SubCour of cour.subChap" style="position: relative;cursor: pointer;"
+                            class="subChapCls" (click)="OpenSubChapView(SubCour)">
+                            <div class="course-taking">
+                                <i *ngIf="SubCour.IsVideo=='0' && SubCour.trainerId==0" class="fa fa-sticky-note"></i>
+                                <i *ngIf="SubCour.IsVideo=='1'" class="fa fa-video"></i>
+                                <i *ngIf="SubCour.IsVideo=='2'" class="fa fa-file-audio"></i>
+                                <i *ngIf="SubCour.IsVideo=='3'" class="fa fa-text-height" style="left: 0px;"></i>
+                                <i *ngIf="SubCour.trainerId!=0" class="fa fa-address-card"></i>
+                            </div>
+                            {{SubCour.subChapterTitle}}
+                            <span *ngIf="SubCour.trainerId!=0">
+                                (Time : {{SubCour.trainingDate | date:'dd-MM-yyy'}}
+                                {{SubCour.trainingConfirmdStartTime}} - {{SubCour.trainingConfirmdEndTime}})
+                            </span>
+                            <span *ngIf="SubCour.IsVideo=='0' && SubCour.markAttendance!='1' && SubCour.isConfirmed"
+                                style="position: absolute;right: 0px;top: 6px;">
+                                <button (click)="saveEmpChapData(SubCour,cour)" type="button"
+                                    class="btn btn-success">{{'confirm' | translate}}</button>
+                            </span>
+                            <i *ngIf="SubCour.empSubChapId &gt; 0 && SubCour.markAttendance=='1'" style="float: right;"
+                                class="fa fa-check-circle"></i>
+                        </div>
+                        <div *ngIf="cour.conQus>0" class="subChapCls" style="cursor: pointer;"
+                            (click)="OpenTextExam(cour)">
+                            <i class="fa fa-clock"></i> {{'course.MockTest' | translate}}
+                            <i *ngIf="cour.TestResult != null" class="fa fa-check-circle" style="float:right;"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12" *ngIf="courseInfo.isOffine=='0' && QustionCount>0">
+                    <!-- <button [disabled]="courseInfo.countChapter &gt; courseInfo.countComp"
+                        class="btn-lg btn-primary btn-auth col-md-12" (click)="OpenExam()">
+                        <i class="fa fa-newspaper-o"></i> {{'course.FinalExam' | translate}}
+                        <i *ngIf="courseInfo.finalResult &gt; 0" class="fa fa-check-circle"></i>
+                    </button> -->
+                    <button *ngIf="sumTodoTotal == sumTodoComp" class="btn-lg btn-primary btn-auth col-md-12"
+                        (click)="OpenExam()">
+                        <i class="fa fa-newspaper-o"></i> {{'course.FinalExam' | translate}}
+                        <i *ngIf="courseInfo.finalResult &gt; 0" class="fa fa-check-circle"></i>
+                    </button>
+                    <button *ngIf="sumTodoTotal &gt; sumTodoComp" disabled class="btn-lg btn-primary btn-auth col-md-12"
+                        style="background-color: gray; border-color: gray;" (click)="OpenExam()">
+                        <i class="fa fa-newspaper-o"></i> {{'course.FinalExam' | translate}}
+                        <i *ngIf="courseInfo.finalResult &gt; 0" class="fa fa-check-circle"></i>
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- SCORM -->
+
+            <div class="row ChapterList col-md-12" style="margin-left: 0px;" *ngIf="courseInfo.isScormCourse==1">
+                <ng-template #recursiveChapters let-params>
+                    <!-- <div class="col-md-12" [style.paddingLeft.px]="params.indent*30" [style.paddingRight.px]="0"> -->
+                    <div class="col-md-12" style="padding-right: 0px; border-radius: 10px;"
+                        [style.background-color]="'rgb(' + params.color + ',' + params.color + ',' + params.color + ')'">
+                        <ng-container *ngFor="let subChap of CourseList">
+                            <a href="javascript:void(0)"
+                                *ngIf="subChap.parentChapterId==params.parent && subChap.scormPath!='404'"
+                                (click)="OpenScormChapter(subChap)">
+                                <div class="fx-jsb curriculum-navigation__section__status">
+                                    <span class="cur-status">
+                                        <!-- <span class="text-secondary bold" *ngIf="subChap.sumSubChap==0">0%</span> -->
+                                        <!-- <span class="text-secondary bold"
+                                            *ngIf="subChap.sumSubChap!=0">{{(subChap.sumCompChap/subChap.sumSubChap*100).toFixed(0)}}%</span> -->
+                                        <span class="text-secondary bold"
+                                            *ngIf="subChap.hasProgress">{{subChap.progress}}%</span>
+                                    </span>
+                                </div>
+                                <div class="curriculum-navigation__section__title">
+                                    <span style="color: blue;">{{subChap.chapterName}}
+                                        <span *ngIf="subChap.is_offline=='true'">(Offline)</span>
+                                    </span>
+                                </div>
+                            </a>
+                            <a *ngIf="subChap.parentChapterId==params.parent && subChap.scormPath=='404'">
+                                <div class="fx-jsb curriculum-navigation__section__status">
+                                    <span class="cur-status">
+                                        <!-- <span class="text-secondary bold" *ngIf="subChap.sumSubChap==0">0%</span> -->
+                                        <!-- <span class="text-secondary bold"
+                                            *ngIf="subChap.sumSubChap!=0">{{(subChap.sumCompChap/subChap.sumSubChap*100).toFixed(0)}}%</span> -->
+                                        <span class="text-secondary bold"
+                                            *ngIf="subChap.hasProgress">{{subChap.progress}}%</span>
+                                    </span>
+                                </div>
+                                <div class="curriculum-navigation__section__title">
+                                    <span style="color: blue;">{{subChap.chapterName}}
+                                        <span *ngIf="subChap.is_offline=='true'">(Offline)</span>
+                                    </span>
+                                </div>
+                            </a>
+                            <ng-container *ngIf="subChap.parentChapterId==params.parent">
+                                <ng-container
+                                    *ngTemplateOutlet="recursiveChapters; context: {$implicit: {parent:subChap.chapterId, color:params.color-20}}">
+                                </ng-container>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+                </ng-template>
+                <ng-container *ngFor="let chapter of CourseList">
+                    <div class="col-md-12 chapGrop" style="border-radius: 10px" *ngIf="chapter.parentChapterId==NULL">
+                        <a href="javascript:void(0)" (click)="OpenScormChapter(chapter)"
+                            *ngIf="chapter.scormPath!='404'">
+                            <div class="fx-jsb curriculum-navigation__section__status">
+                                <span class="cur-status">
+                                    <!-- <span class="text-secondary bold" *ngIf="chapter.sumSubChap==0">0%</span> -->
+                                    <!-- <span class="text-secondary bold"
+                                        *ngIf="chapter.sumSubChap!=0">{{(chapter.sumCompChap/chapter.sumSubChap*100).toFixed(0)}}%</span> -->
+                                    <span class="text-secondary bold"
+                                        *ngIf="chapter.hasProgress">{{chapter.progress}}%</span>
+                                </span>
+                            </div>
+                            <div class="curriculum-navigation__section__title">
+                                <span style="color: blue; font-size: 110%;">{{chapter.chapterName}}
+                                    <span *ngIf="chapter.is_offline=='true'">(Offline)</span>
+                                </span>
+                            </div>
+                        </a>
+                        <a *ngIf="chapter.scormPath=='404'">
+                            <div class="fx-jsb curriculum-navigation__section__status">
+                                <span class="cur-status">
+                                    <!-- <span class="text-secondary bold" *ngIf="chapter.sumSubChap==0">0%</span> -->
+                                    <!-- <span class="text-secondary bold"
+                                        *ngIf="chapter.sumSubChap!=0">{{(chapter.sumCompChap/chapter.sumSubChap*100).toFixed(0)}}%</span> -->
+                                    <span class="text-secondary bold"
+                                        *ngIf="chapter.hasProgress">{{chapter.progress}}%</span>
+                                </span>
+                            </div>
+                            <div class="curriculum-navigation__section__title">
+                                <span style="color: blue; font-size: 110%;">{{chapter.chapterName}}
+                                    <span *ngIf="chapter.is_offline=='true'">(Offline)</span>
+                                </span>
+                            </div>
+                        </a>
+                        <ng-container
+                            *ngTemplateOutlet="recursiveChapters; context: {$implicit: {parent:chapter.chapterId, color:235}}">
+                        </ng-container>
+                    </div>
+                </ng-container>
+
+                <!-- <div class="col-md-12" *ngIf="courseInfo.isOffine=='0' && QustionCount>0">
+                    <button [disabled]="courseInfo.countChapter &gt; courseInfo.countComp"
+                        class="btn-lg btn-primary btn-auth col-md-12" (click)="OpenExam()">
+                        <i class="fa fa-newspaper-o"></i> {{'course.FinalExam' | translate}}
+                        <i *ngIf="courseInfo.finalResult &gt; 0" class="fa fa-check-circle"></i>
+                    </button>
+                </div> -->
+            </div>
+
+            <!-- SCORM END -->
+
+
+        </mat-card-content>
+        <div class="row" style="justify-content: center;align-items: center;" *ngIf="trainer!=null">
+            <mat-card style="width: 70%;">
+                <mat-card-header style="margin-bottom: 5px;">
+                    <img mat-card-avatar src="{{_globals.WebURL}}/{{trainer.epath}}"
+                        onerror="this.src='../../assets/img/profile.png'">
+                    <!-- <img src="{{_globals.IMAGEURL}}Employee/{{EmpData.epath}}" onerror="this.src='../../assets/img/profile.png'" alt="course image"> -->
+                    <mat-card-title style="text-align: left;">{{'course.Trainer' | translate}}</mat-card-title>
+                    <mat-card-subtitle style="text-align: left; color: white;">{{trainer.trainerTitle}}
+                    </mat-card-subtitle>
+                </mat-card-header>
+                <mat-card-content *ngIf="trainer.EmailID != '' || trainer.MOBILEPHONE != ''">
+                    <div class="row" *ngIf="trainer.EmailID != ''">
+                        <div class="col-sm-9 col-9">
+                            <button mat-button style="width: 100%" (click)="contactTrainer('mail')">
+                                <mat-icon style="margin-right: 5px;">email</mat-icon>{{trainer.EmailID}}
+                            </button>
+                        </div>
+                        <div class="col-sm-3 col-3">
+                            <mat-icon class="copy-icon"
+                                (click)="copyToClipboard(trainer.EmailID, 'copiedMailToClipboard')"
+                                matTooltip="{{'trainer.CopyTrainerMailToClip' | translate}}">file_copy</mat-icon>
+                        </div>
+                    </div>
+                    <div class="row" *ngIf="trainer.MOBILEPHONE != ''">
+                        <div class="col-sm-9 col-9">
+                            <button mat-button style="width: 100%" (click)="contactTrainer('phone')">
+                                <mat-icon style="margin-right: 5px;">phone</mat-icon>{{trainer.MOBILEPHONE}}
+                            </button>
+                        </div>
+                        <div class="col-sm-3 col-3">
+                            <mat-icon class="copy-icon"
+                                (click)="copyToClipboard(trainer.MOBILEPHONE, 'copiedPhoneToClipboard')"
+                                matTooltip="{{'trainer.CopyTrainerPhoneToClip' | translate}}">file_copy</mat-icon>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </mat-card>
+</div>
+
+<!-- <div *ngIf="playScorm==true" style="height: 90px;"> -->
+<!-- <button (click)="BackSubChap()" class="btn-lg btn-primary btn-auth">{{'question.Back' | translate}}</button> -->
+<!-- <button (click)="NextSubChap()" style="float: right;"
+            class="btn-lg btn-primary btn-auth">{{'question.Next' | translate}}</button> -->
+<!-- <button (click)="home()" style="float: right;" class="btn-lg btn-primary btn-auth"><i class="fa fa-home"
+            aria-hidden="true"></i></button> -->
+<!-- </div> -->
+<!-- <iframe *ngIf="playScorm==true" id="content" width="100%" height="85%" [src]="courseUrl | safe"></iframe> -->
+
+<!-- <div id="logDisplay"></div> -->

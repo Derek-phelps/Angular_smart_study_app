@@ -1,0 +1,186 @@
+<div class="form-wrapper" style="position: relative;">
+    <div class="loader"
+        [@visibilityChanged]="(bLoadingEmpData || bLoadingGroupList || bLoadingDepartments) ? 'shown' : 'hidden'"
+        *ngIf="(bLoadingEmpData || bLoadingGroupList || bLoadingDepartments)"></div>
+    <div class="content"
+        [@visibilityChanged]="!(bLoadingEmpData || bLoadingGroupList || bLoadingDepartments) ? 'shown' : 'hidden'">
+        <form [formGroup]="EmpForm" class="row modify-employee">
+            <mat-card class="col-12" cardTitle="Personal" baCardClass="with-scroll">
+                <mat-card-header *ngIf="!empId"> {{'employees.Add' | translate}}</mat-card-header>
+                <mat-card-header *ngIf="empId"> {{'employees.Edit' | translate}}</mat-card-header>
+                <mat-card-content style="padding-left: 20px;padding-right:20px;">
+                    <div class="form-group" style="margin-top: 10px;">
+                        <ba-picture-uploader style="width: 250px;" #companyImg [imageTitle]="strProfilePicture"
+                            [FileuploadInput]="uploaderOptions" (onUploadCompleted)="imgUpload($event)"
+                            (onUpload)="disableButton()" [picture]="profile" [defaultPicture]="defaultPicture">
+                        </ba-picture-uploader>
+                    </div>
+                    <mat-form-field style="width: 50%;padding-right: 5px;">
+                        <input matInput type="text" formControlName="FIRSTNAME"
+                            placeholder="{{'employees.Name' | translate}}" [disableControl]="bIsAdUser">
+                    </mat-form-field>
+                    <mat-form-field style="width: 50%;padding-left: 5px;">
+                        <input matInput type="text" formControlName="LASTNAME"
+                            placeholder="{{'employees.Surname' | translate}}" [disableControl]="bIsAdUser">
+                    </mat-form-field>
+                    <mat-form-field style="width: 100%;">
+                        <input matInput type="text" formControlName="FULLNAME"
+                            placeholder="{{'employees.FullNameTitle' | translate}}">
+                    </mat-form-field>
+                    <mat-form-field style="width: 100%;">
+                        <mat-select placeholder="{{'employees.GlobalRights' | translate}}" formControlName="userType">
+                            <mat-option [value]="2">{{'employees.Admin' | translate}}</mat-option>
+                            <mat-option [value]="3">{{'employees.CreateCourse' | translate}}</mat-option>
+                            <mat-option [value]="4">{{'employees.Employee' | translate}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <!-- <mat-menu #appMenu="matMenu">
+                    </mat-menu>
+                    <mat-icon aria-hidden="true" class="info-icon" matTooltip="{{'help' | translate}}"
+                        [matMenuTriggerFor]="appMenu">help_outline</mat-icon> -->
+
+                    <!-- <button mat-icon-button [matMenuTriggerFor]="appMenu">
+                        <mat-icon aria-hidden="true" class="info-icon" matTooltip="{{'help' | translate}}">help_outline
+                        </mat-icon>
+                    </button> -->
+                    <mat-form-field style="width: 100%;">
+                        <input matInput type="text" formControlName="staffNumber"
+                            placeholder="{{'employees.StaffNumber' | translate}}" [disableControl]="bIsAdUser">
+                    </mat-form-field>
+                    <!-- <div class="form-group">
+                        <input type="text" class="form-control" formControlName="LASTNAME"  placeholder="{{'employees.Surname' | translate}}">
+                    </div> -->
+                    <mat-form-field style="width: 100%;">
+                        <input matInput type="tel" formControlName="MOBILEPHONE"
+                            placeholder="{{'employees.Phone' | translate}}" [disableControl]="bIsAdUser">
+                    </mat-form-field>
+                    <div class="form-group" *ngIf="_globals.companyInfo.companyId && _globals.companyInfo.companyId==0">
+                        <select style="cursor: pointer;" class="form-control"
+                            (change)="loadDepartment($event.target.value)" placeholder="Comapny"
+                            formControlName="comapnyId">
+                            <option value="" disabled selected>Company</option>
+                            <option *ngFor="let Comp of CompanyList;" value="{{Comp.companyId}}">{{Comp.companyName}}
+                            </option>
+                        </select>
+                    </div>
+                    <!-- <div class="form-group">
+                        <select style="cursor: pointer;" class="form-control" formControlName="departmentId">
+                            <option value="" disabled selected>{{'employees.Department' | translate}}</option>
+                            <option *ngFor="let post of departmentList;" value="{{post.departmentId}}">{{post.departmentName}}
+                            </option>
+                        </select>
+                    </div> -->
+                    <!-- <div class="form-group"> -->
+                    <!-- <div class="form-group">
+                        <select style="cursor: pointer;" class="form-control" placeholder="Geschlecht" formControlName="GENDER">
+                            <option value="" disabled selected>{{'employees.Select' | translate}}</option>
+                            <option value="Male">{{'employees.Male' | translate}}</option>
+                            <option value="Female">{{'employees.Female' | translate}}</option>
+                        </select>
+                    </div> -->
+                    <!-- <div class="form-group">
+                        <input type="text" class="form-control" formControlName="empEdu" placeholder="{{'employees.Cooperative' | translate}}">
+                    </div> -->
+                    <mat-form-field style="width: 100%;">
+                        <input matInput type="email" formControlName="EMAIL"
+                            placeholder="{{'employees.Email' | translate}}" [disableControl]="bIsAdUser">
+                    </mat-form-field>
+                    <mat-form-field style="width: 100%;">
+                        <textarea matInput formControlName="CURRENTADDRESS"
+                            placeholder="{{'employees.Address' | translate}}" [disableControl]="bIsAdUser"></textarea>
+                    </mat-form-field>
+                    <!-- <div class="form-group">
+                        <textarea class="form-control" formControlName="CURRENTADDRESS"
+                            placeholder="{{'employees.Address' | translate}}"></textarea>
+                    </div> -->
+                    <mat-form-field style="width: 100%;">
+                        <mat-select placeholder="{{'employees.AssignDep' | translate}}" multiple
+                            formControlName="departmentIds">
+                            <mat-option *ngFor="let dep of departmentList" [value]="dep.departmentId"
+                                [ngStyle]="{'padding-left': dep.padding}"
+                                [disabled]="adDepartments.includes(dep.departmentId)">
+                                {{dep.departmentName}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field style="width: 100%;">
+                        <mat-select placeholder="{{'employees.AssignGroup' | translate}}" multiple
+                            formControlName="groupIds">
+                            <mat-option *ngFor="let group of groupListTable.data" [value]="group.groupId">
+                                {{group.name}}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <label for="addGroupTable"
+                            style="color: black; font-size: large;padding-top: 10px;padding-bottom: 10px;">{{'employees.GroupRights' | translate}}</label>
+                        <table id="addGroupTable" mat-table [dataSource]="groupListTable" matSort matSortActive="name"
+                            matSortDirection="asc" class="mat-elevation-z8" style="width: 100%;">
+                            <ng-container matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'group.Group' | translate}}</th>
+                                <td mat-cell *matCellDef="let group">{{group.name}}</td>
+                            </ng-container>
+                            <ng-container matColumnDef="view">
+                                <th mat-header-cell *matHeaderCellDef style="text-align: center;">
+                                    {{'group.View' | translate}}<br>
+                                    <mat-checkbox id="viewSelect" (change)="$event ? masterToggleView() : null"
+                                        [checked]="selectionView.hasValue() && isAllSelectedView()"
+                                        [indeterminate]="selectionView.hasValue() && !isAllSelectedView()"
+                                        [matTooltip]="isAllSelectedView() ? translate.instant('group.DeselectAll') : translate.instant('group.SelectAll')">
+                                    </mat-checkbox>
+                                </th>
+                                <td mat-cell *matCellDef="let row" style="text-align: center;">
+                                    <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="toggleView($event, row.groupId)"
+                                        [checked]="selectionView.isSelected(row.groupId)">
+                                    </mat-checkbox>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="admin">
+                                <th mat-header-cell *matHeaderCellDef style="text-align: center;">
+                                    {{'group.Edit' | translate}}<br>
+                                    <mat-checkbox id="adminSelect" (change)="$event ? masterToggleAdmin() : null"
+                                        [checked]="selectionAdmin.hasValue() && isAllSelectedAdmin()"
+                                        [indeterminate]="selectionAdmin.hasValue() && !isAllSelectedAdmin()"
+                                        [matTooltip]="isAllSelectedAdmin() ? translate.instant('group.DeselectAll') : translate.instant('group.SelectAll')">
+                                    </mat-checkbox>
+                                </th>
+                                <td mat-cell *matCellDef="let row" style="text-align: center;">
+                                    <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="toggleAdmin($event, row.groupId)"
+                                        [checked]="selectionAdmin.isSelected(row.groupId)">
+                                    </mat-checkbox>
+                                </td>
+                            </ng-container>
+                            <!-- <ng-container matColumnDef="explanation">
+                                <th mat-header-cell *matHeaderCellDef></th>
+                            </ng-container>
+                            <ng-container matColumnDef="explanationView">
+                                <th mat-header-cell *matHeaderCellDef>View</th>
+                            </ng-container>
+                            <ng-container matColumnDef="explanationAdmin">
+                                <th mat-header-cell *matHeaderCellDef>Admin</th>
+                            </ng-container>
+                    
+                            <tr mat-header-row *matHeaderRowDef="['explanation', 'explanationView', 'explanationAdmin']"></tr> -->
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsPermissions"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsPermissions;"></tr>
+                        </table>
+                        <mat-paginator #permissionPaginator [pageSizeOptions]="[3, 5, 10, 20, 50, 100]" [pageSize]="3"
+                            showFirstLastButtons>
+                        </mat-paginator>
+                    </div>
+
+                    <!-- <button [disabled]="!EmpForm.valid || DisableButton" (click)="saveEmpData()" type="button"
+                        class="btn btn-success" style="float: right;margin-right: 20px;">{{'save' | translate}}</button>
+                    <button style="float: right;margin-right: 20px" (click)="cancel()" type="button"
+                        class="btn btn-success">{{'cancel' | translate}}</button> -->
+                    <button mat-stroked-button [disabled]="!EmpForm.valid || DisableButton" style="float: right;"
+                        (click)="saveEmpData()">{{'save'|translate}}</button>
+                    <button mat-stroked-button color="warn" style="float: right;margin-right: 10px;"
+                        (click)="cancel()">{{'cancel'|translate}}</button>
+                </mat-card-content>
+            </mat-card>
+        </form>
+    </div>
+</div>

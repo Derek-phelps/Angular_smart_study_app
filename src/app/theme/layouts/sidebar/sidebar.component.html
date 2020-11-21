@@ -1,0 +1,11 @@
+<div class="pages-sider" [ngClass]="{'side-collapsed':!sidebarToggle, 'side-open':sidebarToggle}">
+  <div style="margin-bottom: 110px;">
+    <span class="sidebar-top-line"></span>
+    <du-menu [menuInfo]="menuInfo"></du-menu>
+  </div>
+  <div class="logo-div" *ngIf="_globals.companyInfo.companyId!=0"
+    [@visibilityChanged]="sidebarToggle ? 'shown' : 'hidden'">
+    <img class="smart-study-img" src="assets/img/logoakt.png" />
+  </div>
+</div>
+<div class="component-overlay" [@visibilityChanged2]="sidebarToggle ? 'shown' : 'hidden'" (click)="close()"></div>

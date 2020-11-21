@@ -1,0 +1,80 @@
+<div class="form-wrapper" style="position: relative;">
+    <div class="loader" [@visibilityChanged]="bLoading ? 'shown' : 'hidden'" *ngIf="bLoading"></div>
+    <div class="content" [@visibilityChanged]="!bLoading ? 'shown' : 'hidden'">
+        <mat-form-field style="width: 40%;float: right;" *ngIf="bDepartmentEntriesFound">
+            <mat-label>{{'group.Search' | translate}}</mat-label>
+            <input matInput (keyup)="applyDepartmentFilter($event)" placeholder="">
+        </mat-form-field>
+        <table mat-table [dataSource]="dataSource" matSort matSortActive="departmentName" matSortDirection="asc"
+            class="mat-elevation-z8" style="width: 100%;">
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 5px;">
+                    <div matTooltip="{{'course.StateDep' | translate}}">{{'employees.St' | translate}}</div>
+                </th>
+                <td mat-cell *matCellDef="let department" class="cell-status-wrapper" style="width: 25px;">
+                    <div class="status-div" style="width: 25px;">
+                        <div class="status-div-inner-left"
+                            [ngClass]="{'status-done': department.status==1, 'status-current': department.status==0, 'status-overdue': department.status==-1}">
+                            <i class="fa fa-users fa-lg center-icon" aria-hidden="true"
+                                matTooltip="{{'course.StateDep' | translate}}"></i>
+                        </div>
+                    </div>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="logo">
+                <th mat-header-cell *matHeaderCellDef style="padding-left: 10px;">{{'department.Logo' | translate}}</th>
+                <td (click)="viewDepartment(department)"
+                    [style.cursor]="department.departmentId ? 'pointer' : 'initial'" mat-cell
+                    *matCellDef="let department">
+                    <img *ngIf="department.logo!='' && department.logo!=null"
+                        src="{{_globals.WebURL}}/{{department.logo}}"
+                        style="width: 100px;max-height: 100px;padding-left: 10px;" />
+                    <img *ngIf="(department.logo=='' || department.logo==null) && (_globals.companyInfo.companyLogo!=null && _globals.companyInfo.companyLogo!='')"
+                        src="{{_globals.WebURL}}/{{_globals.companyInfo.companyLogo}}"
+                        style="width: 100px;max-height: 100px;" />
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="departmentName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'department.Department' | translate}}</th>
+                <td (click)="viewDepartment(department)"
+                    [style.cursor]="department.departmentId ? 'pointer' : 'initial'" mat-cell
+                    *matCellDef="let department" [attr.colspan]="bDepartmentEntriesFound ? 1 : 6">
+                    <b>{{department.departmentName}}</b></td>
+            </ng-container>
+            <ng-container matColumnDef="sumMember">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'group.SumMember' | translate}}</th>
+                <td mat-cell *matCellDef="let department">
+                    {{department.sumMember}} {{'Employees' | translate}} </td>
+            </ng-container>
+            <ng-container matColumnDef="sumCourses">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'group.SumCourses' | translate}}</th>
+                <td mat-cell *matCellDef="let department">
+                    {{department.sumCourses}} {{'Courses' | translate}}</td>
+            </ng-container>
+            <ng-container matColumnDef="editDelete">
+                <th mat-header-cell *matHeaderCellDef></th>
+                <td mat-cell *matCellDef="let department" style="padding: 0;">
+                    <i *ngIf="_globals.userInfo.isAdmin"
+                        class="fa fa-trash iconSize float-right edit-delete-delete-icon" style="cursor: pointer;"
+                        (click)="deleteDepartment(department)" matTooltip="{{'department.DelDep' | translate}}"></i>
+                    <i class="fa fa-edit iconSize float-right edit-delete-edit-icon" style="cursor: pointer;"
+                        (click)="editDepartment(department)" matTooltip="{{'department.Edit' | translate}}"></i>
+                </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="group-row">
+            </tr>
+            <tr mat-row *matRowDef="let row; columns: ['departmentName'] when isExtendedRow" class="darken"></tr>
+        </table>
+        <mat-paginator [@visibilityChanged]="bDepartmentEntriesFound ? 'shown' : 'hidden'"
+            [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons>
+        </mat-paginator>
+        <div *ngIf="_globals.userInfo.isAdmin" class="row ChapterList col-md-12 send-certificate"
+            style="margin-top: 10px;">
+            <!-- <button (click)="addDepartment()"
+                class="form-control open-button">{{'department.AddNewDep' | translate}}</button> -->
+            <button mat-stroked-button style="margin:auto;"
+                (click)="addDepartment()">{{'department.AddNewDep' | translate}}</button>
+        </div>
+    </div>
+</div>

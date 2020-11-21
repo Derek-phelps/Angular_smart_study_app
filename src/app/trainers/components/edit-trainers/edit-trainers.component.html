@@ -1,0 +1,63 @@
+<form [formGroup]="EmpForm" class="row">
+    <mat-card class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12" cardTitle="Personal" baCardClass="with-scroll">
+        <mat-card-header> Add Trainer</mat-card-header>
+        <mat-card-content>
+            <mat-grid-list cols="2" rowHeight="250px">
+                <mat-grid-tile
+                    [colspan]="1"
+                    [rowspan]="1">
+                    <ba-picture-uploader style="width: 250px;" [imageTitle]="'Photo'" [FileuploadInput] = "uploaderOptions"  (onUploadCompleted)="imgUpload($event)" (onUpload)="disableButton()"  [defaultPicture]="defaultPicture" ></ba-picture-uploader>
+                </mat-grid-tile>
+                <mat-grid-tile
+                    [colspan]="1"
+                    [rowspan]="1">
+                    <ba-picture-uploader style="width: 250px;"  [imageTitle]="'Signature'" [FileuploadInput] = "uploaderSignatureOptions"  (onUploadCompleted)="imgSignatureUpload($event)" (onUpload)="disableButton()"  [defaultPicture]="defaultSignaturePicture" ></ba-picture-uploader>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <div class="form-group">
+                <input type="text" class="form-control" formControlName="Trainertitle" placeholder="{{'employees.Trainertitle' | translate}}">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" formControlName="FIRSTNAME" placeholder="Vorname">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" formControlName="LASTNAME"  placeholder="Nachname">
+            </div>
+            <div class="form-group">
+                <input type="tel" class="form-control" formControlName="MOBILEPHONE" placeholder="Telefonnummer">
+            </div> 
+            <div class="form-group">
+                <input type="text" class="form-control" formControlName="TrainerPostion" placeholder="{{'employees.TrainerPostion' | translate}}">
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-card class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12" cardTitle="Business" baCardClass="with-scroll">
+        <mat-card-header> Add Trainer</mat-card-header>
+        <mat-card-content>
+            
+           <!-- <select class="form-control" *ngIf="_globals.companyInfo.companyId && _globals.companyInfo.companyId==0"  (change)="loadDepartment($event.target.value)" placeholder="Comapny" formControlName="comapnyId" >
+                <option value="" disabled selected>Company</option>
+                <option *ngFor="let Comp of CompanyList;" value="{{Comp.companyId}}" >{{Comp.companyName}}</option>
+            </select>-->
+
+            <select class="form-control" placeholder="Geschlecht" formControlName="GENDER" >
+                <option value="" disabled selected>Auswahl</option>
+                <option  value="Male" >Männlich</option>
+                <option  value="Female" >Weiblich</option>
+            </select>
+            
+            <div class="form-group">
+                <input type="text" class="form-control" formControlName="empEdu" placeholder="Titel">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control" formControlName="EMAIL"  placeholder="Email" >
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" formControlName="CURRENTADDRESS"  placeholder="Addresse"></textarea>
+            </div>
+            
+            <button [disabled]="!EmpForm.valid || DisableButton > 0"  (click)="saveEmpData()" type="button" class="btn btn-success">Bestätigen</button>
+    
+        </mat-card-content>
+    </mat-card>
+</form>

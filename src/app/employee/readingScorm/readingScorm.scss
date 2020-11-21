@@ -1,0 +1,29 @@
+@import '../../theme/sass/treeView';
+
+@media only screen and (max-width: 800px) and (orientation:landscape) {
+    .frame {
+        // transform: rotate(-90deg);
+        // transform-origin: left top;
+        //width: -webkit-fill-available;
+        //height: -webkit-fill-available;
+        width: 100%;
+        width: -moz-available;          /* WebKit-based browsers will ignore this. */
+        width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+        width: stretch;
+        height: 100%;
+        height: -moz-available;          /* WebKit-based browsers will ignore this. */
+        height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+        height: stretch;
+        // overflow-x: hidden;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+    .buttons {
+        visibility: hidden;
+    }
+}
+
+.buttons {
+    text-align: center;
+}

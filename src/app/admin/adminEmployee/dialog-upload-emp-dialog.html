@@ -1,0 +1,59 @@
+<div class="dialog-wrapper">
+    <div mat-dialog-title class="my-dialog-header">
+        <h3>{{'employees.UploadEmpQ' | translate}}</h3>
+    </div>
+    <div mat-dialog-content style="text-align: center;">
+        <!-- <p [innerHTML]="'course.PassEmpSure' | translate: {course: data.course, name: data.name}"></p> -->
+        <mat-menu #appMenu="matMenu">
+            <div class="status-list"
+                [ngClass]="{'success-paragraph': currentColor == 1, 'warning-paragraph': currentColor == 2, 'danger-paragraph': currentColor == 3}">
+                <ng-container *ngIf="currentItemList && currentItemList.length > 0 && currentItemList[0].name">
+                    <ng-container *ngFor="let item of currentItemList">{{item.name}}<ng-container *ngIf="item.email"> -
+                            {{item.email}}</ng-container><br></ng-container>
+                </ng-container>
+                <ng-container *ngIf="currentItemList && currentItemList.length > 0 && !currentItemList[0].name">
+                    <ng-container *ngFor="let item of currentItemList">{{item.empInfo}}
+                        ({{'employees.LineNumber' | translate}}{{item['line-number']}})<br></ng-container>
+                </ng-container>
+            </div>
+        </mat-menu>
+
+        <p><b>{{'employees.UploadExp' | translate}}</b></p>
+        <p [ngClass]="{'success-paragraph hover-pointer': data.sumNew > 0, 'menu-disabled': data.sumNew == 0}"
+            [matMenuTriggerFor]="appMenu" (click)="setEmpMenuList(true)">
+            {{data.sumNew}}{{'employees.WillAddNew' | translate}}</p>
+        <p *ngIf="data.sumUpdate > 0" class="warning-paragraph hover-pointer" [matMenuTriggerFor]="appMenu"
+            (click)="setEmpMenuList(false)">
+            <i class="fa fa-info-circle" aria-hidden="true"></i><br>
+            {{data.sumUpdate}}{{'employees.WillUpdate' | translate}}
+        </p>
+        <p *ngIf="data.errorEmpList.length > 0" class="danger-paragraph hover-pointer" [matMenuTriggerFor]="appMenu"
+            (click)="setErrorEmpMenuList()">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i><br>
+            {{data.errorEmpList.length}}{{'employees.WillNotUpdate' | translate}}</p>
+        <hr *ngIf="(data.notExistingOrAmbiguousDepartments.length + data.notExistingOrAmbiguousGroups.length) > 0">
+        <p *ngIf="notExistingGroups.length > 0" class="warning-paragraph hover-pointer" [matMenuTriggerFor]="appMenu"
+            (click)="setGroupList(true)">
+            <i class="fa fa-info-circle" aria-hidden="true"></i><br>
+            {{notExistingGroups.length}}{{'employees.GroupCreate' | translate}}</p>
+        <p *ngIf="ambiguousGroups.length > 0" class="danger-paragraph hover-pointer" [matMenuTriggerFor]="appMenu"
+            (click)="setGroupList(false)">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i><br>
+            {{ambiguousGroups.length}}{{'employees.AmbGroup' | translate}}</p>
+        <p *ngIf="data.notExistingOrAmbiguousDepartments.length > 0" class="danger-paragraph hover-pointer"
+            [matMenuTriggerFor]="appMenu" (click)="setDepartmentList()">
+            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i><br>
+            {{data.notExistingOrAmbiguousDepartments.length}}{{'employees.AmbDep' | translate}}</p>
+        <hr *ngIf="data.sumNew > 0">
+        <mat-checkbox *ngIf="data.sumNew > 0" [(ngModel)]="bSendWelcomeMail">
+            {{'employees.SendWelcome' | translate}}
+        </mat-checkbox>
+    </div>
+    <div mat-dialog-actions align="end">
+        <button mat-button (click)="onNoClick()">{{'cancel' | translate}}</button>
+        <button mat-button
+            [mat-dialog-close]="{'upload': true, 'sendMail': bSendWelcomeMail}">{{'employees.AddMore' | translate}}</button>
+    </div>
+    <img class="bulb-img" src="assets/img/bulb_small.png" />
+    <i class="fa fa-times fa-lg close-icon" style="cursor: pointer;" [mat-dialog-close]="false"></i>
+</div>

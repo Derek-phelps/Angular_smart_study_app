@@ -1,0 +1,27 @@
+<form [formGroup]="EmpForm">
+  <div class="form-group">
+    <input type="text" class="form-control" formControlName="FIRSTNAME"
+      placeholder="{{'employees.FullNameTitle' | translate}}"> <!-- {{'location.Location' | translate}} -->
+  </div>
+  <div class="form-group">
+    <select *ngIf="this._globals.companyInfo.webUrl == 'fagus' || this._globals.companyInfo.webUrl == 'fagus-consult'"
+      class="form-control" placeholder="WorkGroups" formControlName="workgroupId">
+      <option value="" disabled selected>{{'course.SelectWorkGroup' | translate}}</option>
+      <ng-container *ngFor="let wg of wgList;index as i;">
+        <option value="{{wg.workgroupId}}" *ngIf="wg.isPrivate=='0' || wg.workgroupId==currentWorkgroupId" selected>
+          {{wg.workgroupName}}
+        </option>
+      </ng-container>
+      <option value="0" selected *ngIf="isLocReq=='0'">{{'course.NoWorkGroup' | translate}}</option>
+      <option value="-1" selected>{{'course.NewWorkGroup' | translate}}</option>
+    </select>
+    <input type="text" class="form-control" formControlName="NewWorkGroupName"
+      placeholder="{{'course.NewWorkGroupName' | translate}}" *ngIf="EmpForm.value.workgroupId=='-1'">
+    <input type="text" class="form-control" formControlName="NewWorkGroupName"
+      placeholder="{{'course.EditWorkGroupName' | translate}}"
+      *ngIf="EmpForm.value.workgroupId==currentWorkgroupId && currentWorkgroupIsEditable">
+  </div>
+  <button [disabled]="!EmpForm.valid" (click)="saveWorkingGroupAndEmpName()" type="button"
+    class="btn btn-success">{{'confirm' | translate}}</button>
+  <!--{{'confirm' | translate}} -->
+</form>

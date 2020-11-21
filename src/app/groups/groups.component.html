@@ -1,0 +1,107 @@
+<div>
+    <div class="toggle-view" (click)="toggleView()" *ngIf="bShowCategories">
+        <i *ngIf="bCategoryView" matTooltip="{{'group.List' | translate}}" class="fa fa-list iconSize toggle-view"></i>
+        <i *ngIf="!bCategoryView" matTooltip="{{'group.Categories' | translate}}"
+            class="fa fa-table iconSize toggle-view"></i>
+    </div>
+    <div class="form-wrapper" style="position: relative;">
+        <div class="loader" [@visibilityChanged]="bLoading ? 'shown' : 'hidden'" *ngIf="bLoading"></div>
+        <div class="content" [@visibilityChanged]="!bCategoryView && !bLoading ? 'shown' : 'hidden'">
+            <!-- <ng-container *ngIf="groupList.data.length > 0"> -->
+            <mat-form-field style="width: 40%;float: right;" *ngIf="bGroupEntriesFound">
+                <mat-label>{{'group.Search' | translate}}</mat-label>
+                <input matInput (keyup)="applyGroupFilter($event)" placeholder="">
+            </mat-form-field>
+            <table mat-table [dataSource]="groupList" matSort matSortActive="name" matSortDirection="asc"
+                class="mat-elevation-z8" style="width: 100%;">
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 5px;">
+                        <div matTooltip="{{'course.StateGroup' | translate}}">{{'employees.St' | translate}}</div>
+                    </th>
+                    <td mat-cell *matCellDef="let group" class="cell-status-wrapper" style="width: 25px;">
+                        <div class="status-div" style="width: 25px;">
+                            <div class="status-div-inner-left"
+                                [ngClass]="{'status-done': group.status==1, 'status-current': group.status==0, 'status-overdue': group.status==-1}">
+                                <i class="fa fa-users fa-lg center-icon" aria-hidden="true"
+                                    matTooltip="{{'course.StateGroup' | translate}}"></i>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="color">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let group"
+                        [ngStyle]="{'background-image':'-webkit-gradient(linear, left top, right top, color-stop(0%,'+group.color+'), color-stop(100%,rgba(255,255,255,0)))', 'background-color': group.color+'22'}">
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'group.Name' | translate}}</th>
+                    <td (click)="viewGroup(group)" [style.cursor]="group.groupId ? 'pointer' : 'initial'" mat-cell
+                        *matCellDef="let group" [ngStyle]="{'background-color': group.color+'22'}"
+                        [attr.colspan]="bGroupEntriesFound ? 1 : 6">
+                        <b>{{group.name}}</b></td>
+                </ng-container>
+                <ng-container matColumnDef="sumMember">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'group.SumMember' | translate}}</th>
+                    <td mat-cell *matCellDef="let group" [ngStyle]="{'background-color': group.color+'22'}">
+                        {{group.sumMember}} {{'Employees' | translate}} </td>
+                </ng-container>
+                <ng-container matColumnDef="sumCourses">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'group.SumCourses' | translate}}</th>
+                    <td mat-cell *matCellDef="let group" [ngStyle]="{'background-color': group.color+'22'}">
+                        {{group.sumCourses}} {{'Courses' | translate}}</td>
+                </ng-container>
+                <ng-container matColumnDef="editDelete">
+                    <th mat-header-cell *matHeaderCellDef></th>
+                    <td mat-cell *matCellDef="let group" [ngStyle]="{'background-color': group.color+'22'}"
+                        style="padding: 0;">
+                        <i *ngIf="globals.userInfo.isAdmin"
+                            class="fa fa-trash iconSize float-right edit-delete-delete-icon" style="cursor: pointer;"
+                            (click)="deleteGroup(group)" matTooltip="{{'group.DeleteGroup' | translate}}"></i>
+                        <i *ngIf="group.permission==2" class="fa fa-edit iconSize float-right edit-delete-edit-icon"
+                            style="cursor: pointer;" (click)="editGroup(group)"
+                            matTooltip="{{'group.EditGroup' | translate}}"></i>
+                    </td>
+                </ng-container>
+                <!-- <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef> aaa</th>
+                        <td mat-cell *matCellDef="let row">test
+                            !-- <i class="fa fa-edit iconSize" (click)="editCompany(row)" style="cursor: pointer;"></i>
+                        <i class="fa fa-trash iconSize" (click)="deleteCompany(row)" style="cursor: pointer;"></i> --
+                        </td>
+                    </ng-container> -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="group-row">
+                </tr>
+                <tr mat-row *matRowDef="let row; columns: ['name'] when isExtendedRow" class="darken"></tr>
+            </table>
+            <mat-paginator [@visibilityChanged]="bGroupEntriesFound ? 'shown' : 'hidden'"
+                [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons>
+            </mat-paginator>
+            <!-- </ng-container> -->
+            <div *ngIf="globals.userInfo.isAdmin" class="row ChapterList col-md-12 send-certificate"
+                style="margin-top: 10px;">
+                <!-- <button (click)="addGroup()" class="form-control open-button">{{'group.AddNew' | translate}}</button> -->
+                <button mat-stroked-button style="margin:auto;"
+                    (click)="addGroup()">{{'group.AddNew' | translate}}</button>
+            </div>
+        </div>
+        <!-- <div class="content" [@visibilityChanged]="(!bCategoryView && groupList.data.length > 0) ? 'shown' : 'hidden'">
+
+        </div> -->
+        <div class="content" [@visibilityChanged]="bCategoryView && !bLoading ? 'shown' : 'hidden'">
+            <mat-grid-list [cols]="breakTiles" (window:resize)="onResizeTiles($event)" rowHeight="150px"
+                style="margin: 20px;">
+                <mat-grid-tile *ngFor="let category of categoryList; let i = index" [colspan]="1" [rowspan]="1"
+                    class="grid-tile"
+                    [ngStyle]="hovered===i ? {'background-color':''+category.color+'33', 'color':''+category.color+''} : {'background-color':''+category.color+'', 'color':'white'}"
+                    (mouseover)="hovered = i" (mouseout)="hovered = -1" (click)="openCategory(category)">
+                    <h3>{{category.name}}</h3>
+                </mat-grid-tile>
+            </mat-grid-list>
+        </div>
+    </div>
+</div>
+<!-- <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+</mat-form-field> -->

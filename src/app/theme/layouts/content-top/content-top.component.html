@@ -1,0 +1,5 @@
+<div class="content-wrap">
+  <!-- <a routerLink="{{dashboardRouterLink}}" *ngIf="!_globals.isEmpReading" [skipLocationChange]="false" (click)="returnHome()">{{'menu.Dashboard' | translate}}</a> -->
+  <!-- <i *ngIf="!_globals.isEmpReading && routeTitle != undefined && routeTitle != homeRouteTitle">/</i> -->
+  <span *ngIf="routeTitle != homeRouteTitle">{{routeTitle | translate}}</span>
+</div>

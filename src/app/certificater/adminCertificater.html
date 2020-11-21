@@ -1,0 +1,26 @@
+<div class="addIcon" (click)="addCompany()" style="top: 90px;">
+    <i class="fa fa-plus-circle iconSize" ></i>
+</div>
+<div class="list_certificate">
+    <div class="col-xlg-6 col-lg-6 col-md-6 col-sm-12 col-12" *ngIf="certificater.length == 0">{{'certificate.NoCertFound' | translate}}</div>
+    <div class="item_list_certificate row"> 
+
+        <div class="col-xlg-3 col-lg-3 col-md-3 col-sm-6 col-6" *ngFor="let certi of certificater;index as i;">
+            <div style="background: #fff;padding: 5px;">
+                <div class="img"> 
+                    <img onerror="this.src='assets/img/logoakt.png'" width="100%" src="{{_globals.WebURL}}/{{certi.SignatureimgPath}}"> 
+                </div>
+                <div>
+                    <a routerLink="./edit/{{certi.certificaterId}}" (click)="startSpinner()" [skipLocationChange]="false" class="name">{{certi.CertificateName}}</a> <br />
+                    <a routerLink="./edit/{{certi.certificaterId}}" (click)="startSpinner()" [skipLocationChange]="false" class="name">
+                        <span class="title" style="color: #000;"> {{certi.CertificateTitle}} </span>
+                    </a>
+                <a  href="javascript:void(0)" class="righteyeIcon" (click)="preViewCerti(certi)"> 
+                    <i class="fa fa-eye" aria-hidden="true"></i></a>
+                <a  href="javascript:void(0)" style="position: absolute;top: 0px;left: 15px;" (click)="deleteCertificate(certi)"> 
+                    <i class="fa fa-trash" style="font-size: 25px;" aria-hidden="true"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<form [formGroup]="EmpForm">
+    <mat-card class="col-10" style="margin-left: 10%;padding-bottom: 50px;" baCardClass="with-scroll">
+        <mat-card-header>{{'certificate.Edit' | translate}}</mat-card-header>
+        <mat-card-content>
+            <div style="display: inline-block;padding: 12px;">
+                <ba-picture-uploader style="width: 250px;float: left;" #companyImg [imageTitle]="strSignature"
+                    [FileuploadInput]="uploaderOptions" (onUploadCompleted)="imgUpload($event)"
+                    (onUpload)="disableButton()" [picture]="Picture" [defaultPicture]="profile"></ba-picture-uploader>
+                <ba-picture-uploader style="width: 250px;float: left;" #backgroundImg [imageTitle]="strBackground"
+                    [FileuploadInput]="uploaderBackgroundOptions" (onUploadCompleted)="BackgroundImgUpload($event)"
+                    (onUpload)="disableButton()" [picture]="BgPicture" [defaultPicture]="profile"></ba-picture-uploader>
+                <ba-picture-uploader style="width: 250px;float: left;" #bannerImg [imageTitle]="strLogo"
+                    [FileuploadInput]="uploaderBannerOptions" (onUploadCompleted)="BannerImgUpload($event)"
+                    (onUpload)="disableButton()" [picture]="BannerPicture" [defaultPicture]="profile">
+                </ba-picture-uploader>
+            </div>
+            <mat-form-field style="width: 100%;">
+                <input matInput type="text" formControlName="CertificateName"
+                    placeholder="{{'certificate.Name' | translate}} *">
+            </mat-form-field>
+            <mat-form-field style="width: 100%;">
+                <input matInput type="text" formControlName="CertificateTitle"
+                    placeholder="{{'certificate.Description' | translate}} *">
+            </mat-form-field>
+            <!-- <select class="form-control" placeholder="Select Course" formControlName="Course" >
+                <option value="" disabled selected>{{'course.SelectCourse' | translate}}</option>
+                <option *ngFor="let dep of CourseList;index as i;"  value="{{dep.courseId}}" selected>{{dep.courseName}}</option>
+            </select>   -->
+            <mat-form-field style="width: 100%;">
+                <input matInput type="text" formControlName="courseplease"
+                    placeholder="{{'certificate.Place' | translate}} *">
+            </mat-form-field>
+            <mat-form-field style="width: 100%;">
+                <input matInput type="text" formControlName="heldBy" placeholder="{{'certificate.HeldBy' | translate}}">
+            </mat-form-field>
+            <mat-form-field style="width: 100%;">
+                <input matInput type="text" formControlName="bossTitleName"
+                    placeholder="{{'certificate.TitleName' | translate}} *">
+            </mat-form-field>
+            <mat-form-field style="width: 100%;">
+                <input matInput type="text" formControlName="bossPosition"
+                    placeholder="{{'certificate.Position' | translate}} *">
+            </mat-form-field>
+            <button mat-stroked-button [disabled]="!EmpForm.valid || DisableButton > 0" style="float: right;"
+                (click)="saveEmpData()">{{'confirm' | translate}}</button>
+            <button mat-stroked-button color="warn" style="float: right;margin-right: 10px;"
+                (click)="cancel()">{{'cancel'|translate}}</button>
+        </mat-card-content>
+    </mat-card>
+</form>
