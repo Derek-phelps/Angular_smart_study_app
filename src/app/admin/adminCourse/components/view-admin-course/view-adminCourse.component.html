@@ -30,6 +30,7 @@
             </mat-tab>
             <mat-tab label="{{'course.partList' | translate}}" [disabled]="userStatusTable.data.length == 0">
                 <ng-template matTabContent>
+                    <participant-list></participant-list>
                     <div class="course-overview-wrapper">
                         <div class="warning-error-label error-label" *ngIf="courseUserOverdue>0">
                             <div>
