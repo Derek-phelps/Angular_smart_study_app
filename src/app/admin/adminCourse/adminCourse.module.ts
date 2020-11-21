@@ -46,7 +46,7 @@ import { SafePipe } from './components/view-admin-course/view-adminCourse.compon
 
 import { AppMaterialModule } from '../../app-material/app-material.module';
 import { ChartsModule } from 'ng2-charts';
-import { ViewAdminCourseOverviewComponent } from './components/view-admin-course/view-admin-course-overview/view-admin-course-overview.component';
+import { CourseOverviewComponent } from './components/view-admin-course/course-overview/course-overview.component';
 import { CourseDataComponent } from './components/view-admin-course/course-data/course-data.component';
 
 @NgModule({
@@ -70,8 +70,9 @@ import { CourseDataComponent } from './components/view-admin-course/course-data/
     SubChapterOverviewDialog,
     ModifyAdminCourseDatepickerYearComponent,
     SafePipe, 
-    ViewAdminCourseOverviewComponent,
+    CourseOverviewComponent,
     CourseDataComponent,
+    EditParticipantComponent
     ],
   providers: [
     AdminCourseService

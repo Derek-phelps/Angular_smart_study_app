@@ -25,7 +25,7 @@
             (touchend)="swipe($event, 'end')" (selectedTabChange)="tabChanged($event)" class="tab-group">
             <mat-tab label="{{'course.Overview' | translate}}">
                 <ng-template matTabContent>
-                    <view-admin-course-overview [courseId]="chpId" (tabId)="openPartList()"></view-admin-course-overview>
+                    <course-overview [courseId]="chpId" (tabId)="openPartList()"></course-overview>
                 </ng-template>
             </mat-tab>
             <mat-tab label="{{'course.partList' | translate}}" [disabled]="userStatusTable.data.length == 0">

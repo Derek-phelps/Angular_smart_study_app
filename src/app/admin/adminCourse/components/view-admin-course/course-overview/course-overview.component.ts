@@ -9,9 +9,9 @@ import { Globals } from 'src/app/common/auth-guard.service';
 import { AdminCourseService } from '../../../adminCourse.service';
 
 @Component({
-  selector: 'view-admin-course-overview',
-  templateUrl: './view-admin-course-overview.component.html',
-  styleUrls: ['./view-admin-course-overview.component.scss'],
+  selector: 'course-overview',
+  templateUrl: './course-overview.component.html',
+  styleUrls: ['./course-overview.component.scss'],
   animations: [
     trigger('headerAnimation', [
       state('shown', style({ opacity: 1, height: '*' })),
@@ -30,7 +30,7 @@ import { AdminCourseService } from '../../../adminCourse.service';
     ])
   ]
 })
-export class ViewAdminCourseOverviewComponent implements OnInit {
+export class CourseOverviewComponent implements OnInit {
 
   @Input() courseId : number = -1;
   @Output() tabId : EventEmitter<number> = new EventEmitter<number>();
