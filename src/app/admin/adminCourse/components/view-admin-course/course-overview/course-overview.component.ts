@@ -3,9 +3,12 @@ import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angu
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { TranslateService } from '@ngx-translate/core';
+import { Label, MultiDataSet } from 'ng2-charts';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
+import { hexToRgbaString } from 'src/app/helper-functions';
 import { AdminCourseService } from '../../../adminCourse.service';
 
 @Component({
@@ -39,6 +42,10 @@ export class CourseOverviewComponent implements OnInit {
   private _userStatusTable = new MatTableDataSource();
   private _groupStatusTable = new MatTableDataSource();
   private _departmentStatusTable = new MatTableDataSource();
+  
+  private _courseChartData : MultiDataSet = [];
+  private _courseChartLabels : Label[] = [];
+  private _courseChartColors = [];
 
   @ViewChild('userPaginator') set userPaginator(paginator: MatPaginator) {
     this._userStatusTable.paginator = paginator;
@@ -62,31 +69,20 @@ export class CourseOverviewComponent implements OnInit {
 
   constructor(
     private service: AdminCourseService,
-    private globals : Globals
+    private globals : Globals,
+    private translate: TranslateService,
   ) { }
 
   ngOnInit(): void {
-    this._initStatusTables();
     this._courseData$ = this.service.getCourseData(this.courseId).pipe(
       tap((data : any) => {
-        this._userStatusTable.data = data.userStatus;
-        this._departmentStatusTable.data = data.departmentStatus;
-        this._groupStatusTable.data = data.groupStatus;
-
-        // this._userStatusTable.data.forEach((stat: any) => {
-        //   if (userStat.courseStatus == -1) {
-        //     this.courseUserOverdue = this.courseUserOverdue + 1;
-        //   } else if (userStat.courseStatus == 0) {
-        //     this.courseUserOpen = this.courseUserOpen + 1;
-        //   } else {
-        //     this.courseUserDone = this.courseUserDone + 1;
-        //   }
-        // });
+        this._setupTables(data);
+        this._setupChart(data);
       })
     );
   }
 
-  private _initStatusTables() : void {
+  private _setupTables(data : any) : void {
     this._userStatusTable.filterPredicate = function (data: any, filter: string): boolean {
       return this.filterFunction(
         data.FIRSTNAME + ' ' + data.LASTNAME + ' ' + data.FULLNAME, filter) || 
@@ -121,18 +117,53 @@ export class CourseOverviewComponent implements OnInit {
         default: { return item[property]; }
       }
     };
+
+    this._userStatusTable.data = data.userStatus;
+      this._departmentStatusTable.data = data.departmentStatus;
+      this._groupStatusTable.data = data.groupStatus;
   }
 
   openPartList() {
     this.tabId.emit(1);
   }
 
+  private _setupChart(data) : void {
+    let courseUserOverdue : number = 0;
+    let courseUserOpen : number = 0;
+    let courseUserDone : number = 0;
+        
+    data.userStatus.forEach((userStat: any) => {
+      if (userStat.courseStatus == -1) { courseUserOverdue += 1; } 
+      else if (userStat.courseStatus == 0) { courseUserOpen += 1; }
+      else { courseUserDone += 1; }
+    });
+
+    this._courseChartData = [[courseUserDone, courseUserOpen, courseUserOverdue]];
+
+    this._courseChartLabels = [this.translate.instant('course.Done'), 
+                               this.translate.instant('course.Open'), 
+                               this.translate.instant('course.Overdue')];
+
+    let opacity : number = 0.8;
+    let style : CSSStyleDeclaration = getComputedStyle(document.body);
+    let strDanger : string = hexToRgbaString(style.getPropertyValue('--myDanger'), opacity);
+    let strWarning : string = hexToRgbaString(style.getPropertyValue('--myWarning'), opacity);
+    let strSuccess : string = hexToRgbaString(style.getPropertyValue('--mySuccess'), opacity);
+    this._courseChartColors = [{ backgroundColor: [strSuccess, strWarning, strDanger] }];
+
+  }
+
   get userInfo() { return this.globals.userInfo; };
   get courseData$() { return this._courseData$; };
+  
   get userStatusTable() { return this._userStatusTable; };
   get groupStatusTable() { return this._groupStatusTable; };
   get departmentStatusTable() { return this._departmentStatusTable; };
 
   get departmentDisplayedColumns() : string[] { return ['status', 'name'] };
+
+  get courseChartData() : MultiDataSet { return this._courseChartData; }
+  get courseChartLabels() : Label[] { return this._courseChartLabels; }
+  get courseChartColors() { return this._courseChartColors };
 
 }
