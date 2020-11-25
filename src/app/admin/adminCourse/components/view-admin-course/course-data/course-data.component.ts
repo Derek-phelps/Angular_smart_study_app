@@ -20,5 +20,6 @@ export class CourseDataComponent implements OnInit {
   }
 
   get userInfo() { return this.globals.userInfo; };
+  get webURL() { return this.globals.WebURL; }
 
 }

@@ -4,7 +4,7 @@
         <div class="col-text">
             <div class="row profile-image-container"
                 *ngIf="data.courseImg && data.courseImg != ''">
-                <img src="{{_globals.WebURL}}/{{data.courseImg.courseImg}}"
+                <img src="{{ webURL }}/{{data.courseImg.courseImg}}"
                     onerror="this.src='assets/img/logoakt.png'" alt="course image"
                     class="profile-image">
             </div>
