@@ -12,7 +12,7 @@ export class Globals {
         UserType: '',
         // empId: 0,
         EmpName: '',
-        userLang: '',
+        userLang: 'en',
         isAdmin: false
     };
     public errorScormSave = false;
@@ -41,7 +41,7 @@ export class Globals {
         DBackGround: null,
         DBanner: null,
         bannerColor: '#ffffff',
-        defaultLang: '',
+        defaultLang: 'en',
         isSet: false
     };
     public sidebarToggle = true;
@@ -149,7 +149,7 @@ export class Globals {
             UserType: '',
             // empId: 0,
             EmpName: '',
-            userLang: '',
+            userLang: 'en',
             isAdmin: false
         };
     }
@@ -168,7 +168,7 @@ export class Globals {
             DBackGround: null,
             DBanner: null,
             bannerColor: '#ffffff',
-            defaultLang: '',
+            defaultLang: 'en',
             isSet: false
         };
     }
