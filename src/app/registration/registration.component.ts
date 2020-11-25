@@ -29,8 +29,8 @@ export class RegistrationComponent implements OnInit {
     data: {}
   };
   constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, public router: Router, private _loginService: RegistrationService, private translate: TranslateService, public _globals: Globals) {
-    if (this.translate.currentLang != this._globals.companyInfo.defaultLang) {
-      this.translate.use(this._globals.companyInfo.defaultLang);
+    if (localStorage.getItem('defaultLang')) {
+      this.translate.use(localStorage.getItem('defaultLang'))
     }
 
     this.EmpForm = this.formBuilder.group({

@@ -27,8 +27,10 @@ export class AppTranslationModule {
   constructor(translate: TranslateService, public globals: Globals) {
     translate.addLangs(["de", "en"]);
     translate.setDefaultLang('en');
+    translate.use('en');
     if (this.globals.companyInfo.defaultLang && this.globals.companyInfo.defaultLang != '') {
       translate.setDefaultLang(this.globals.companyInfo.defaultLang);
+      translate.use(this.globals.companyInfo.defaultLang)
     }
     if (this.globals.userInfo.userLang && this.globals.userInfo.userLang != '') {
       translate.use(this.globals.userInfo.userLang);
