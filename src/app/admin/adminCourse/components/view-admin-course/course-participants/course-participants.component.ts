@@ -9,12 +9,12 @@ import { Globals } from 'src/app/common/auth-guard.service';
 import { VACUtils } from '../view-admin-course-utils';
 
 @Component({
-  selector: 'participant-list',
-  templateUrl: './participant-list.component.html',
-  styleUrls: ['./participant-list.component.scss'],
+  selector: 'course-participants',
+  templateUrl: './course-participants.component.html',
+  styleUrls: ['./course-participants.component.scss'],
   animations: VACUtils.componentAnimations
 })
-export class ParticipantListComponent implements OnInit {
+export class CourseParticipantsComponent implements OnInit {
 
   @Input() courseData : any;
 

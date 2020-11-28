@@ -48,7 +48,7 @@ import { AppMaterialModule } from '../../app-material/app-material.module';
 import { ChartsModule } from 'ng2-charts';
 import { CourseOverviewComponent } from './components/view-admin-course/course-overview/course-overview.component';
 import { CourseDataComponent } from './components/view-admin-course/course-data/course-data.component';
-import { ParticipantListComponent } from './components/view-admin-course/participant-list/participant-list.component';
+import { CourseParticipantsComponent } from './components/view-admin-course/course-participants/course-participants.component';
 
 @NgModule({
   imports: [
@@ -73,7 +73,7 @@ import { ParticipantListComponent } from './components/view-admin-course/partici
     SafePipe, 
     CourseOverviewComponent,
     CourseDataComponent,
-    ParticipantListComponent
+    CourseParticipantsComponent
     ],
   providers: [
     AdminCourseService

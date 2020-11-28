@@ -33,7 +33,7 @@
                 </mat-tab>
                 <mat-tab label="{{'course.partList' | translate}}" [disabled]="userStatusTable.data.length == 0">
                     <ng-template matTabContent>
-                        <participant-list [courseData]="data" *ngIf="CourseData"></participant-list>
+                        <course-participants [courseData]="data" *ngIf="CourseData"></course-participants>
                     </ng-template>
                 </mat-tab>
                 <mat-tab [disabled]="!CourseData || CourseData.isScormCourse!=0 || CourseData.permission!=2"
