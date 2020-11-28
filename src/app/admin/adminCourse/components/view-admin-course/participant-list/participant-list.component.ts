@@ -1,3 +1,4 @@
+import { state, style, trigger } from '@angular/animations';
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -10,7 +11,8 @@ import { VACUtils } from '../view-admin-course-utils';
 @Component({
   selector: 'participant-list',
   templateUrl: './participant-list.component.html',
-  styleUrls: ['./participant-list.component.scss']
+  styleUrls: ['./participant-list.component.scss'],
+  animations: VACUtils.componentAnimations
 })
 export class ParticipantListComponent implements OnInit {
 

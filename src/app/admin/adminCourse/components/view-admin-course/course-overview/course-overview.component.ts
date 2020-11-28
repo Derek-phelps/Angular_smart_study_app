@@ -16,23 +16,7 @@ import { VACUtils } from '../view-admin-course-utils';
   selector: 'course-overview',
   templateUrl: './course-overview.component.html',
   styleUrls: ['./course-overview.component.scss'],
-  animations: [
-    trigger('headerAnimation', [
-      state('shown', style({ opacity: 1, height: '*' })),
-      state('hidden', style({ opacity: 0, height: 0 })),
-      transition('* => *', animate(200))
-    ]),
-    trigger('visibilityChanged', [
-      state('shown', style({ opacity: 1 })),
-      state('hidden', style({ opacity: 0 })),
-      transition('* => *', animate(500))
-    ]),
-    trigger('openedChanged', [
-      state('shown', style({ opacity: 1 })),
-      state('hidden', style({ opacity: 0 })),
-      transition('* => *', animate(1000))
-    ])
-  ]
+  animations: VACUtils.componentAnimations
 })
 export class CourseOverviewComponent implements OnInit {
 
@@ -66,15 +50,11 @@ export class CourseOverviewComponent implements OnInit {
   }
 
   constructor(
-    //private service: AdminCourseService,
     private globals : Globals,
     private translate: TranslateService,
   ) { }
 
   ngOnInit(): void {
-
-    let sub = new Subject<any>();
-    sub.next()
   }
 
   ngOnChanges(changes) {
@@ -128,7 +108,6 @@ export class CourseOverviewComponent implements OnInit {
     let strWarning : string = hexToRgbaString(style.getPropertyValue('--myWarning'), opacity);
     let strSuccess : string = hexToRgbaString(style.getPropertyValue('--mySuccess'), opacity);
     this._courseChartColors = [{ backgroundColor: [strSuccess, strWarning, strDanger] }];
-
   }
 
   openPartList() {
@@ -136,7 +115,6 @@ export class CourseOverviewComponent implements OnInit {
   }
 
   get userInfo() { return this.globals.userInfo; };
-  //get courseData$() { return this._courseData$; };
   
   get groupStatusTable() { return this._groupStatusTable; };
   get departmentStatusTable() { return this._departmentStatusTable; };
