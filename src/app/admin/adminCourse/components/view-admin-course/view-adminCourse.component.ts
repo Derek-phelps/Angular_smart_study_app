@@ -35,6 +35,7 @@ import { ChartType } from 'chart.js';
 import { MultiDataSet, Label } from 'ng2-charts';
 
 import { hexToRgbaString } from '../../../../helper-functions';
+import { Observable, Subject } from 'rxjs';
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 
@@ -90,10 +91,14 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
 
   certificateLoaded = true;
 
+  //new by philipp:
+  private _courseData$ : Subject<any> = null;
+
   // departmentStatus = undefined;
   // groupStatus = undefined;
   // userStatus = undefined;
 
+  // DELETE
   userDisplayedColumns: string[] = ['status', 'LASTNAME', 'FIRSTNAME', 'email', 'editDelete'];
   groupDisplayedColumns: string[] = ['status', 'name'];
   departmentDisplayedColumns: string[] = ['status', 'name'];
@@ -105,6 +110,7 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
   courseUserOpen = 0;
   courseUserOverdue = 0;
   courseUserDone = 0;
+  
 
   // @ViewChildren(MatPaginator) paginator = new QueryList<MatPaginator>();
   // @ViewChildren(MatSort) sort = new QueryList<MatSort>();
@@ -128,7 +134,7 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
   @ViewChild('depSort') set depSort(sort: MatSort) {
     this.departmentStatusTable.sort = sort;
   }
-
+  // DELETE END
   //////////////////////////////////
   bCourseInfoLoaded = false;
   bAssignmentsLoaded = true; // TODO Important: set to false
@@ -267,6 +273,7 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
     // this.departmentStatusTable.sort = this.depSort;// this.sort.toArray()[0];
     // this.groupStatusTable.sort = this.groupSort;// this.sort.toArray()[1];
 
+    // DELETE
     this.userStatusTable.sortingDataAccessor = (item: any, property) => {
       switch (property) {
         case 'email': {
@@ -316,6 +323,8 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
     this.groupStatusTable.filterPredicate = function (data: any, filter: string): boolean {
       return obj.filterFunction(data.name, filter);
     }
+
+    // DELETE
   }
   filterFunction(name: string, filter: string) {
     var bMatch = true;
@@ -328,6 +337,8 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
     });
     return bMatch;
   }
+  
+  // DELETE
   applyFilterMember(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.userStatusTable.filter = filterValue;
@@ -628,13 +639,17 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
   // END participant confirmation stuff
 
   // START participant list stuff
+  public data : any;
   loadCourseData(CourseId) {
-    console.log('parent: ' + CourseId);
     this.bCourseInfoLoaded = false;
+
+    //new philipp
+    this._courseData$ = this._service.getCourseData(CourseId);
+
     this._service.getCourseData(CourseId).subscribe(data => {
       if (data.success) {
         this.CourseData = data.courseInfo;
-
+        this.data = data;
 
         if (this.CourseData.hasCertificate) {
           this.certificateUrl = this._globals.WebURL + '/API/index.php/createpdf/view/' + this.CourseData.courseId + '/preview';
@@ -642,10 +657,11 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
           this.certificateUrl = '';
         }
 
+        // DELETE
         this.userStatusTable.data = data.userStatus;
         this.departmentStatusTable.data = data.departmentStatus;
         this.groupStatusTable.data = data.groupStatus;
-
+        
         this.courseUserOverdue = 0;
         this.courseUserOpen = 0;
         this.courseUserDone = 0;
@@ -658,6 +674,7 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
             this.courseUserDone = this.courseUserDone + 1;
           }
         });
+        //
 
         this.bCourseInfoLoaded = true;
 
@@ -1209,6 +1226,8 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
       });
     });
   }
+
+  get courseData$() : Observable<any> { return this._courseData$; }
 }
 
 

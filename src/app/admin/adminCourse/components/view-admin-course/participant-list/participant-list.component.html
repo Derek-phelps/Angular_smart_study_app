@@ -1,22 +1,23 @@
+
 <div class="course-overview-wrapper">
-    <div class="warning-error-label error-label" *ngIf="courseUserOverdue>0">
+    <div class="warning-error-label error-label" *ngIf="courseUsersOverdue > 0">
         <div>
             <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-            <ng-container *ngIf="courseUserOverdue==1">
-                {{courseUserOverdue}} {{'course.OverdueSingle' | translate}}
+            <ng-container *ngIf="courseUsersOverdue == 1">
+                {{courseUsersOverdue}} {{'course.OverdueSingle' | translate}}
             </ng-container>
-            <ng-container *ngIf="courseUserOverdue>1">
-                {{courseUserOverdue}} {{'course.OverdueMultiple' | translate}}
+            <ng-container *ngIf="courseUsersOverdue > 1">
+                {{courseUsersOverdue}} {{'course.OverdueMultiple' | translate}}
             </ng-container>
         </div>
     </div>
-    <div class="warning-error-label warning-label" *ngIf="courseUserOpen>0">
+    <div class="warning-error-label warning-label" *ngIf="courseUsersOpen > 0">
         <div>
             <i class="fa fa-clock-o" aria-hidden="true"></i>
-            <ng-container *ngIf="courseUserOpen==1">
-                {{courseUserOpen}} {{'course.CurrentSingle' | translate}}
+            <ng-container *ngIf="courseUsersOpen == 1">
+                {{courseUsersOpen}} {{'course.CurrentSingle' | translate}}
             </ng-container>
-            <ng-container *ngIf="courseUserOpen>1">
+            <ng-container *ngIf="courseUsersOpen > 1">
                 {{courseUserOpen}} {{'course.CurrentMultiple' | translate}}
             </ng-container>
         </div>
@@ -28,7 +29,7 @@
                 <!-- <div class="col-header">{{'course.Data' | translate}}</div> -->
                 <mat-form-field class="user-filter">
                     <mat-label>{{'group.Search' | translate}}</mat-label>
-                    <input matInput (keyup)="applyFilterMember($event)" placeholder="">
+                    <input matInput (keyup)="applyMemberFilter($event)" placeholder="">
                 </mat-form-field>
                 <div class="col-text">
                     <div style="width: 100%;overflow: auto;">
@@ -42,16 +43,16 @@
                                         {{'employees.St' | translate}}</div>
                                 </th>
                                 <td mat-cell *matCellDef="let emp" class="cell-status-wrapper"
-                                    [style.width]="_globals.userInfo.UserType > 2 ? '25px' : '51px'">
+                                    [style.width]="userInfo.UserType > 2 ? '25px' : '51px'">
                                     <div class="status-div"
-                                        [style.width]="_globals.userInfo.UserType > 2 ? '25px' : '51px'">
+                                        [style.width]="userInfo.UserType > 2 ? '25px' : '51px'">
                                         <div class="status-div-inner-left"
                                             [ngClass]="{'status-done': emp.courseStatus==1, 'status-current': emp.courseStatus==0, 'status-overdue': emp.courseStatus==-1}">
                                             <i class="fa fa-book fa-lg center-icon"
                                                 aria-hidden="true"
                                                 matTooltip="{{'group.CourseState' | translate}}"></i>
                                         </div>
-                                        <div *ngIf="2 >= _globals.userInfo.UserType"
+                                        <div *ngIf="2 >= userInfo.UserType"
                                             class="status-div-inner-right"
                                             [ngClass]="{'status-done': emp.globalStatus==1, 'status-current': emp.globalStatus==0, 'status-overdue': emp.globalStatus==-1}">
                                             <i class="fa fa-user fa-lg center-icon"
@@ -67,13 +68,13 @@
                                     {{'employees.Surname' | translate}}
                                 </th>
                                 <td style="padding-left: 10px;" mat-cell *matCellDef="let emp">
-                                    <div *ngIf="_globals.userInfo.isAdmin" style="cursor: pointer;"
+                                    <div *ngIf="userInfo.isAdmin" style="cursor: pointer;"
                                         routerLink="../../../../employees/{{emp.empId}}"
                                         [skipLocationChange]="false"
                                         [matTooltip]="'openVar' | translate: {var: emp.FULLNAME}">
                                         <b>{{emp.LASTNAME}}</b>
                                     </div>
-                                    <div *ngIf="!_globals.userInfo.isAdmin">
+                                    <div *ngIf="!userInfo.isAdmin">
                                         <b>{{emp.LASTNAME}}</b>
                                     </div>
                                 </td>
@@ -83,13 +84,13 @@
                                     {{'employees.Name' | translate}}
                                 </th>
                                 <td mat-cell *matCellDef="let emp">
-                                    <div *ngIf="_globals.userInfo.isAdmin" style="cursor: pointer;"
+                                    <div *ngIf="userInfo.isAdmin" style="cursor: pointer;"
                                         routerLink="../../../../employees/{{emp.empId}}"
                                         [skipLocationChange]="false"
                                         [matTooltip]="'openVar' | translate: {var: emp.FULLNAME}">
                                         <b>{{emp.FIRSTNAME}}</b>
                                     </div>
-                                    <div *ngIf="!_globals.userInfo.isAdmin">
+                                    <div *ngIf="!userInfo.isAdmin">
                                         <b>{{emp.FIRSTNAME}}</b>
                                     </div>
                                 </td>
@@ -109,10 +110,10 @@
                                 <th mat-header-cell *matHeaderCellDef></th>
                                 <td mat-cell *matCellDef="let emp" style="overflow: hidden;">
                                     <!-- style="min-width: 90px;padding: 0px;"> -->
-                                    <i *ngIf="emp.courseStatus != 1 && (_globals.userInfo.isAdmin || CourseData.permission==2)"
+                                    <i *ngIf="emp.courseStatus != 1 && (userInfo.isAdmin || courseInfo.permission==2)"
                                         class="fa fa-angle-double-right iconSize float-right forward-user-icon"
                                         (click)="passUser(emp)"
-                                        [matTooltip]="'course.PassEmp' | translate: {course: CourseData.courseName, name: emp.FULLNAME}"></i>
+                                        [matTooltip]="'course.PassEmp' | translate: {course: courseInfo.courseName, name: emp.FULLNAME}"></i>
                                     <!-- <i class="fa fa-edit iconSize float-right edit-delete-edit-icon"
                                 style="cursor: pointer;" (click)="editEmp(emp)"
                                 matTooltip="{{'employees.Edit' | translate}}"></i> -->

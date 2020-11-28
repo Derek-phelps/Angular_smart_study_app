@@ -1,435 +1,303 @@
-<!-- <ng-template #container></ng-template> -->
-<div class="form-wrapper" style="max-width: 1000px;">
-    <div class="edit-delete-icon-div"
-        [@visibilityChanged]="bCourseInfoLoaded && bAssignmentsLoaded ? 'shown' : 'hidden'" style="opacity: 0;">
-        <i *ngIf="_globals.userInfo.isAdmin" class="fa fa-trash iconSize edit-delete-delete-icon"
-            style="cursor: pointer;" (click)="deleteCourse()" matTooltip="{{'course.delCourse' | translate}}"></i>
-        <i *ngIf="CourseData && CourseData.permission==2" class="fa fa-edit iconSize edit-delete-edit-icon"
-            style="cursor: pointer;" (click)="editCourse()" matTooltip="{{'course.editCourse' | translate}}"></i>
-    </div>
-    <div class="course-overview-wrapper" [@headerAnimation]="showHeader ? 'shown' : 'hidden'"
-        style="overflow: hidden;padding: 0;opacity: 0;">
-        <!-- Display course info -->
-        <div class="row tile-row">
-            <div class="col-12 col-tile-outer">
-                <course-data [data]="CourseData" class="w-100" *ngIf="CourseData"></course-data>
+<!-- <div *ngIf="courseData$ | async as courseData"> -->
+    <!-- <ng-template #container></ng-template> -->
+    <div class="form-wrapper" style="max-width: 1000px;">
+        <div class="edit-delete-icon-div"
+            [@visibilityChanged]="bCourseInfoLoaded && bAssignmentsLoaded ? 'shown' : 'hidden'" style="opacity: 0;">
+            <i *ngIf="_globals.userInfo.isAdmin" class="fa fa-trash iconSize edit-delete-delete-icon"
+                style="cursor: pointer;" (click)="deleteCourse()" matTooltip="{{'course.delCourse' | translate}}"></i>
+            <i *ngIf="CourseData && CourseData.permission==2" class="fa fa-edit iconSize edit-delete-edit-icon"
+                style="cursor: pointer;" (click)="editCourse()" matTooltip="{{'course.editCourse' | translate}}"></i>
+        </div>
+        <div class="course-overview-wrapper" [@headerAnimation]="showHeader ? 'shown' : 'hidden'"
+            style="overflow: hidden;padding: 0;opacity: 0;">
+            <!-- Display course info -->
+            <div class="row tile-row">
+                <div class="col-12 col-tile-outer">
+                    <course-data [data]="CourseData" class="w-100" *ngIf="CourseData"></course-data>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="row" style="position: relative;"
-        [@visibilityChanged]="!bCourseInfoLoaded || !bAssignmentsLoaded ? 'shown' : 'hidden'"
-        *ngIf="!bCourseInfoLoaded || !bAssignmentsLoaded">
-        <div class="loader" style="opacity: 1;"></div>
-    </div>
-    <div [@visibilityChanged]="bCourseInfoLoaded && bAssignmentsLoaded ? 'shown' : 'hidden'" style="opacity: 0;">
-        <mat-tab-group #tabGroup ([selectedIndex])="selected" (touchstart)="swipe($event, 'start')"
-            (touchend)="swipe($event, 'end')" (selectedTabChange)="tabChanged($event)" class="tab-group">
-            <mat-tab label="{{'course.Overview' | translate}}">
-                <ng-template matTabContent>
-                    <course-overview [courseId]="chpId" (tabId)="openPartList()"></course-overview>
-                </ng-template>
-            </mat-tab>
-            <mat-tab label="{{'course.partList' | translate}}" [disabled]="userStatusTable.data.length == 0">
-                <ng-template matTabContent>
-                    <!-- <participant-list></participant-list> -->
-                    <div class="course-overview-wrapper">
-                        <div class="warning-error-label error-label" *ngIf="courseUserOverdue>0">
-                            <div>
-                                <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
-                                <ng-container *ngIf="courseUserOverdue==1">
-                                    {{courseUserOverdue}} {{'course.OverdueSingle' | translate}}
-                                </ng-container>
-                                <ng-container *ngIf="courseUserOverdue>1">
-                                    {{courseUserOverdue}} {{'course.OverdueMultiple' | translate}}
-                                </ng-container>
-                            </div>
+        <div class="row" style="position: relative;"
+            [@visibilityChanged]="!bCourseInfoLoaded || !bAssignmentsLoaded ? 'shown' : 'hidden'"
+            *ngIf="!bCourseInfoLoaded || !bAssignmentsLoaded">
+            <div class="loader" style="opacity: 1;"></div>
+        </div>
+        <div [@visibilityChanged]="bCourseInfoLoaded && bAssignmentsLoaded ? 'shown' : 'hidden'" style="opacity: 0;">
+            <mat-tab-group #tabGroup ([selectedIndex])="selected" (touchstart)="swipe($event, 'start')"
+                (touchend)="swipe($event, 'end')" (selectedTabChange)="tabChanged($event)" class="tab-group">
+                <mat-tab label="{{'course.Overview' | translate}}">
+                    <ng-template matTabContent>
+                        <course-overview [courseData]="data" *ngIf="CourseData" (tabId)="openPartList()"></course-overview>
+                    </ng-template>
+                </mat-tab>
+                <mat-tab label="{{'course.partList' | translate}}" [disabled]="userStatusTable.data.length == 0">
+                    <ng-template matTabContent>
+                        <participant-list [courseData]="data" *ngIf="CourseData"></participant-list>
+                    </ng-template>
+                </mat-tab>
+                <mat-tab [disabled]="!CourseData || CourseData.isScormCourse!=0 || CourseData.permission!=2"
+                    label="{{'menu.Content' | translate}}">
+                    <div [ngClass]="{'hide-tab': !CourseData || CourseData.isScormCourse!=0 || CourseData.permission!=2}">
+                        <!-- <div class="addIcon" (click)="addCompany()"> -->
+                        <div style="float: right;" (click)="addContent()"
+                            matTooltip="{{'chapter.AddNewChapter' | translate}}" [matTooltipPosition]="'left'">
+                            <i class="fa fa-plus-circle iconSize" style="cursor: pointer;"></i>
                         </div>
-                        <div class="warning-error-label warning-label" *ngIf="courseUserOpen>0">
-                            <div>
-                                <i class="fa fa-clock-o" aria-hidden="true"></i>
-                                <ng-container *ngIf="courseUserOpen==1">
-                                    {{courseUserOpen}} {{'course.CurrentSingle' | translate}}
+                        <!-- <mat-form-field [ngStyle]="{'visibility': formFieldVisibility}">
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{'filter' | translate}}">
+            </mat-form-field> -->
+
+                        <div *ngIf="dataSourceChapter == undefined || dataSourceChapter.data.length == 0"
+                            style="padding: 1em;">
+                            {{'chapter.NoChapterFound' | translate}}
+                        </div>
+                        <div *ngIf="dataSourceChapter != undefined && dataSourceChapter.data.length > 0">
+                            <table mat-table [dataSource]="dataSourceChapter" class="mat-elevation-z8">
+
+                                <!-- Position Column -->
+                                <ng-container matColumnDef="chapterId">
+                                    <th mat-header-cell *matHeaderCellDef>{{'chapter.chapterId' | translate}}</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.chapterId}} </td>
                                 </ng-container>
-                                <ng-container *ngIf="courseUserOpen>1">
-                                    {{courseUserOpen}} {{'course.CurrentMultiple' | translate}}
+                                <!-- Position Column -->
+                                <ng-container matColumnDef="chapterName">
+                                    <th mat-header-cell *matHeaderCellDef>{{'chapter.Name' | translate}}</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.chapterName}} </td>
                                 </ng-container>
-                            </div>
-                        </div>
-                        <!-- Display employee info -->
-                        <div class="row tile-row" style="margin-top: 20px;">
-                            <div class="col-12 col-tile-outer">
-                                <div class="col-tile">
-                                    <!-- <div class="col-header">{{'course.Data' | translate}}</div> -->
-                                    <mat-form-field class="user-filter">
-                                        <mat-label>{{'group.Search' | translate}}</mat-label>
-                                        <input matInput (keyup)="applyFilterMember($event)" placeholder="">
-                                    </mat-form-field>
-                                    <div class="col-text">
-                                        <div style="width: 100%;overflow: auto;">
-                                            <table mat-table [dataSource]="userStatusTable" class="mat-elevation-z8"
-                                                #userSort="matSort" matSort matSortActive="LASTNAME"
-                                                matSortDirection="asc">
-                                                <ng-container matColumnDef="status">
-                                                    <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                                        style="padding-left: 5px;">
-                                                        <div matTooltip="{{'employees.Status' | translate}}">
-                                                            {{'employees.St' | translate}}</div>
-                                                    </th>
-                                                    <td mat-cell *matCellDef="let emp" class="cell-status-wrapper"
-                                                        [style.width]="_globals.userInfo.UserType > 2 ? '25px' : '51px'">
-                                                        <div class="status-div"
-                                                            [style.width]="_globals.userInfo.UserType > 2 ? '25px' : '51px'">
-                                                            <div class="status-div-inner-left"
-                                                                [ngClass]="{'status-done': emp.courseStatus==1, 'status-current': emp.courseStatus==0, 'status-overdue': emp.courseStatus==-1}">
-                                                                <i class="fa fa-book fa-lg center-icon"
-                                                                    aria-hidden="true"
-                                                                    matTooltip="{{'group.CourseState' | translate}}"></i>
-                                                            </div>
-                                                            <div *ngIf="2 >= _globals.userInfo.UserType"
-                                                                class="status-div-inner-right"
-                                                                [ngClass]="{'status-done': emp.globalStatus==1, 'status-current': emp.globalStatus==0, 'status-overdue': emp.globalStatus==-1}">
-                                                                <i class="fa fa-user fa-lg center-icon"
-                                                                    matTooltip="{{'group.GlobalState' | translate}}"
-                                                                    aria-hidden="true"></i>
-                                                            </div>
-                                                        </div>
-                                                    </td>
-                                                </ng-container>
-                                                <ng-container matColumnDef="LASTNAME">
-                                                    <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                                        style="padding-left: 10px;">
-                                                        {{'employees.Surname' | translate}}
-                                                    </th>
-                                                    <td style="padding-left: 10px;" mat-cell *matCellDef="let emp">
-                                                        <div *ngIf="_globals.userInfo.isAdmin" style="cursor: pointer;"
-                                                            routerLink="../../../../employees/{{emp.empId}}"
-                                                            [skipLocationChange]="false"
-                                                            [matTooltip]="'openVar' | translate: {var: emp.FULLNAME}">
-                                                            <b>{{emp.LASTNAME}}</b>
-                                                        </div>
-                                                        <div *ngIf="!_globals.userInfo.isAdmin">
-                                                            <b>{{emp.LASTNAME}}</b>
-                                                        </div>
-                                                    </td>
-                                                </ng-container>
-                                                <ng-container matColumnDef="FIRSTNAME">
-                                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                                        {{'employees.Name' | translate}}
-                                                    </th>
-                                                    <td mat-cell *matCellDef="let emp">
-                                                        <div *ngIf="_globals.userInfo.isAdmin" style="cursor: pointer;"
-                                                            routerLink="../../../../employees/{{emp.empId}}"
-                                                            [skipLocationChange]="false"
-                                                            [matTooltip]="'openVar' | translate: {var: emp.FULLNAME}">
-                                                            <b>{{emp.FIRSTNAME}}</b>
-                                                        </div>
-                                                        <div *ngIf="!_globals.userInfo.isAdmin">
-                                                            <b>{{emp.FIRSTNAME}}</b>
-                                                        </div>
-                                                    </td>
-                                                </ng-container>
-                                                <ng-container matColumnDef="email">
-                                                    <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                                        {{'employees.Email' | translate}}</th>
-                                                    <td mat-cell *matCellDef="let emp">
-                                                        <a *ngIf="emp && emp.EmailID && emp.EmailID != ''"
-                                                            [href]="'mailto:' + emp.EmailID" target="_blank"
-                                                            [matTooltip]="'sendMailTo' | translate: {recipient: emp.FULLNAME}">{{emp.EmailID}}</a>
-                                                        <ng-container *ngIf="emp && emp.EmailID && emp.EmailID == ''">-
-                                                        </ng-container>
-                                                    </td>
-                                                </ng-container>
-                                                <ng-container matColumnDef="editDelete">
-                                                    <th mat-header-cell *matHeaderCellDef></th>
-                                                    <td mat-cell *matCellDef="let emp" style="overflow: hidden;">
-                                                        <!-- style="min-width: 90px;padding: 0px;"> -->
-                                                        <i *ngIf="emp.courseStatus != 1 && (_globals.userInfo.isAdmin || CourseData.permission==2)"
-                                                            class="fa fa-angle-double-right iconSize float-right forward-user-icon"
-                                                            (click)="passUser(emp)"
-                                                            [matTooltip]="'course.PassEmp' | translate: {course: CourseData.courseName, name: emp.FULLNAME}"></i>
-                                                        <!-- <i class="fa fa-edit iconSize float-right edit-delete-edit-icon"
-                                                    style="cursor: pointer;" (click)="editEmp(emp)"
-                                                    matTooltip="{{'employees.Edit' | translate}}"></i> -->
-                                                    </td>
-                                                </ng-container>
-                                                <tr mat-header-row *matHeaderRowDef="userDisplayedColumns"></tr>
-                                                <tr mat-row *matRowDef="let row; columns: userDisplayedColumns;"
-                                                    class="group-row">
-                                                </tr>
-                                            </table>
-                                        </div>
-                                        <mat-paginator #userPaginator [pageSizeOptions]="[5, 10, 20, 50, 100]"
-                                            [pageSize]="10" showFirstLastButtons>
-                                        </mat-paginator>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </ng-template>
-            </mat-tab>
-            <mat-tab [disabled]="!CourseData || CourseData.isScormCourse!=0 || CourseData.permission!=2"
-                label="{{'menu.Content' | translate}}">
-                <div [ngClass]="{'hide-tab': !CourseData || CourseData.isScormCourse!=0 || CourseData.permission!=2}">
-                    <!-- <div class="addIcon" (click)="addCompany()"> -->
-                    <div style="float: right;" (click)="addContent()"
-                        matTooltip="{{'chapter.AddNewChapter' | translate}}" [matTooltipPosition]="'left'">
-                        <i class="fa fa-plus-circle iconSize" style="cursor: pointer;"></i>
-                    </div>
-                    <!-- <mat-form-field [ngStyle]="{'visibility': formFieldVisibility}">
-            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="{{'filter' | translate}}">
-        </mat-form-field> -->
 
-                    <div *ngIf="dataSourceChapter == undefined || dataSourceChapter.data.length == 0"
-                        style="padding: 1em;">
-                        {{'chapter.NoChapterFound' | translate}}
-                    </div>
-                    <div *ngIf="dataSourceChapter != undefined && dataSourceChapter.data.length > 0">
-                        <table mat-table [dataSource]="dataSourceChapter" class="mat-elevation-z8">
-
-                            <!-- Position Column -->
-                            <ng-container matColumnDef="chapterId">
-                                <th mat-header-cell *matHeaderCellDef>{{'chapter.chapterId' | translate}}</th>
-                                <td mat-cell *matCellDef="let element"> {{element.chapterId}} </td>
-                            </ng-container>
-                            <!-- Position Column -->
-                            <ng-container matColumnDef="chapterName">
-                                <th mat-header-cell *matHeaderCellDef>{{'chapter.Name' | translate}}</th>
-                                <td mat-cell *matCellDef="let element"> {{element.chapterName}} </td>
-                            </ng-container>
-
-                            <!-- Position Column -->
-                            <!-- <ng-container matColumnDef="courseName">
-                            <th mat-header-cell *matHeaderCellDef>{{'course.CourseName' | translate}}</th>
-                            <td mat-cell *matCellDef="let element"> {{element.courseName}} </td>
-                        </ng-container> -->
-
-                            <!-- Weight Column -->
-                            <!-- <ng-container matColumnDef="companyName">
-                            <th mat-header-cell *matHeaderCellDef>{{'company.CompanyName' | translate}}</th>
-                            <td mat-cell *matCellDef="let element"> {{element.companyName}} </td>
-                        </ng-container> -->
-
-                            <ng-container matColumnDef="actions">
-                                <th mat-header-cell *matHeaderCellDef> </th>
-                                <td mat-cell *matCellDef="let row">
-                                    <i *ngIf="row.is_offline!=2" class="fa fa-edit iconSize" (click)="editContent(row)"
-                                        style="cursor: pointer;"></i>
-                                    <i *ngIf="row.is_offline!=2" class="fa fa-trash iconSize"
-                                        (click)="deleteContent(row)" style="cursor: pointer;"></i>
-                                    <i *ngIf="row.is_offline==1" class="fa fa-qrcode iconSize"
-                                        (click)="downloadCompany(row)" style="cursor: pointer;"></i>
-                                </td>
-                            </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnsChapter"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumnsChapter;"></tr>
-                        </table>
-                        <mat-paginator #ContentPaginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="50"
-                            showFirstLastButtons>
-                        </mat-paginator>
-                        <div style="padding-top: 10000px;" *ngIf="selectCourse">
-                            <!-- <div style="position: absolute; left: -10000; top: -10000;"> -->
-                            <div id="QRCodeId">
-                                <div style="margin: 20px;">
-                                    <img style="width: 200px;" src="../../assets/img/logoakt.png">
-                                    <img style="width: 200px;float: right;"
-                                        src="{{_globals.WebURL}}/{{_globals.companyInfo.companyLogo}}">
-                                </div>
-                                <div
-                                    style="text-align: right; font-size: 30px; padding-bottom: 20px;color: #00bbd7; border-bottom: 1px solid; margin-bottom: 30px;">
-                                    {{selectCourse.subChapterTitle}}
-                                </div>
-                                <div style="margin-left: 30%;">
-                                    <qrcode [qrdata]="selectCourse.subChapterId" [size]="256" [level]="'M'"></qrcode>
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </mat-tab>
-            <mat-tab [disabled]="!CourseData || CourseData.isScormCourse!=0 || CourseData.permission!=2"
-                label="{{'menu.Test' | translate}}">
-                <div [ngClass]="{'hide-tab': !CourseData || CourseData.isScormCourse!=0 || CourseData.permission!=2}">
-                    <!-- <div class="addIcon" (click)="addTest()"> -->
-                    <div style="float: right;" (click)="addTest()" matTooltip="{{'question.NewQuestion' | translate}}"
-                        [matTooltipPosition]="'left'">
-                        <i class="fa fa-plus-circle iconSize" style="cursor: pointer;"></i>
-                    </div>
-                    <!-- <a style="float: right;" matTooltip="{{'question.UploadQuestionExcel' | translate}}" [matTooltipPosition]="'left'">
-            <i class="fa fa-file-image-o font16px cursorlink iconSize" aria-hidden="true" (click)="addImage();"></i>
-            <input type="file" #imageFileUpload style="display: none;" (change)="imageFileInput($event.target.files)">
-        </a> -->
-                    <!-- <div style="float: right;" matTooltip="{{'question.UploadQuestion' | translate}}"
-                    [matTooltipPosition]="'left'">
-                    <i class="fa fa-cloud-upload iconSize" [matMenuTriggerFor]="menuUpload"
-                        style="cursor: pointer;"></i>
-                    <mat-menu #menuUpload="matMenu">
-                        <button style="outline: none;" mat-menu-item (click)="uploadEmp('zip')">
-                            <i class="fa fa-archive"></i>
-                            <span
-                                matTooltip="{{'question.UploadQuestionZip' | translate}}">{{'question.UploadQuestionZip' | translate}}</span>
-                        </button>
-                        <button style="outline: none;" mat-menu-item (click)="uploadEmp('excel')" disabled>
-                            <i class="fa fa-table-chart"></i>
-                            <span
-                                matTooltip="{{'question.UploadQuestionExcel' | translate}}">{{'question.UploadQuestionExcel' | translate}}</span>
-                        </button>
-                    </mat-menu>
-                    <input type="file" #fileUpload style="display: none;"
-                        (change)="handleFileInput($event.target.files)" name="myFile">
-                </div> -->
-                    <!-- <div style="float: right;" (click)="downloadExampleZip()" matTooltip="{{'question.DownloadExampleZip' | translate}}" [matTooltipPosition]="'left'"> -->
-                    <!-- <div style="float: right;" matTooltip="{{'question.DownloadExampleTemplate' | translate}}"
-                    [matTooltipPosition]="'left'">
-                    <i class="fa fa-cloud-download iconSize" [matMenuTriggerFor]="menuDownload"
-                        style="cursor: pointer;"></i>
-                    <mat-menu #menuDownload="matMenu">
-                        <button style="outline: none;" mat-menu-item (click)="downloadExampleZip('zip')">
-                            <i class="fa fa-archive"></i>
-                            <span
-                                matTooltip="{{'question.DownloadTemplateZip' | translate}}">{{'question.DownloadTemplateZip' | translate}}</span>
-                        </button>
-                        <button style="outline: none;" mat-menu-item (click)="downloadExampleZip('excel')">
-                            <i class="fa fa-table-chart"></i>
-                            <span
-                                matTooltip="{{'question.DownloadTemplateExcel' | translate}}">{{'question.DownloadTemplateExcel' | translate}}</span>
-                        </button>
-                    </mat-menu>
-                </div> -->
-                    <!-- <mat-form-field>
-            <input matInput (keyup)="applyFilterQuestion($event.target.value)" placeholder="{{'filter' | translate}}">
-        </mat-form-field> -->
-
-                    <div *ngIf="dataSourceQuestion == undefined || dataSourceQuestion.filteredData.length == 0"
-                        style="padding: 1em;">
-                        {{'question.NoQuestionFound' | translate}}
-                    </div>
-                    <div *ngIf="dataSourceQuestion != undefined && dataSourceQuestion.filteredData.length > 0"
-                        style="padding: 1em;">
-                        <table mat-table [dataSource]="dataSourceQuestion" class="mat-elevation-z8">
-
-                            <!-- Name Column -->
-                            <ng-container matColumnDef="QuestionImg">
-                                <th mat-header-cell *matHeaderCellDef>{{'question.Image' | translate}}</th>
-                                <td mat-cell *matCellDef="let element">
-                                    <img (error)="courseImgError($event)" *ngIf="element.QuestionImg != ''"
-                                        src="{{_globals.WebURL}}/{{element.QuestionImg}}" style="width: 100px;" />
-                                    <ng-container *ngIf="element.QuestionImg == ''">-</ng-container>
-                                </td>
-                            </ng-container>
-
-                            <!-- Position Column -->
-                            <ng-container matColumnDef="Question">
-                                <th mat-header-cell *matHeaderCellDef>{{'question.Question' | translate}}</th>
-                                <td mat-cell *matCellDef="let element"> {{element.Question}} </td>
-                            </ng-container>
-
-                            <!-- Position Column -->
-                            <!-- <ng-container matColumnDef="courseName">
+                                <!-- Position Column -->
+                                <!-- <ng-container matColumnDef="courseName">
                                 <th mat-header-cell *matHeaderCellDef>{{'course.CourseName' | translate}}</th>
                                 <td mat-cell *matCellDef="let element"> {{element.courseName}} </td>
                             </ng-container> -->
 
-                            <!-- Weight Column -->
-                            <ng-container matColumnDef="chapterName">
-                                <th mat-header-cell *matHeaderCellDef>{{'chapter.Name' | translate}}</th>
-                                <td mat-cell *matCellDef="let element"> {{element.chapterName}} </td>
-                            </ng-container>
+                                <!-- Weight Column -->
+                                <!-- <ng-container matColumnDef="companyName">
+                                <th mat-header-cell *matHeaderCellDef>{{'company.CompanyName' | translate}}</th>
+                                <td mat-cell *matCellDef="let element"> {{element.companyName}} </td>
+                            </ng-container> -->
 
-                            <!-- Symbol Column -->
-                            <ng-container matColumnDef="CorrectAnswerOptionNumber">
-                                <th mat-header-cell *matHeaderCellDef>{{'question.CorrAnswerOptions' | translate}}</th>
-                                <td mat-cell *matCellDef="let element"> {{element.CorrectAnswerOptionNumber}} </td>
-                            </ng-container>
+                                <ng-container matColumnDef="actions">
+                                    <th mat-header-cell *matHeaderCellDef> </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <i *ngIf="row.is_offline!=2" class="fa fa-edit iconSize" (click)="editContent(row)"
+                                            style="cursor: pointer;"></i>
+                                        <i *ngIf="row.is_offline!=2" class="fa fa-trash iconSize"
+                                            (click)="deleteContent(row)" style="cursor: pointer;"></i>
+                                        <i *ngIf="row.is_offline==1" class="fa fa-qrcode iconSize"
+                                            (click)="downloadCompany(row)" style="cursor: pointer;"></i>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumnsChapter"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumnsChapter;"></tr>
+                            </table>
+                            <mat-paginator #ContentPaginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="50"
+                                showFirstLastButtons>
+                            </mat-paginator>
+                            <div style="padding-top: 10000px;" *ngIf="selectCourse">
+                                <!-- <div style="position: absolute; left: -10000; top: -10000;"> -->
+                                <div id="QRCodeId">
+                                    <div style="margin: 20px;">
+                                        <img style="width: 200px;" src="../../assets/img/logoakt.png">
+                                        <img style="width: 200px;float: right;"
+                                            src="{{_globals.WebURL}}/{{_globals.companyInfo.companyLogo}}">
+                                    </div>
+                                    <div
+                                        style="text-align: right; font-size: 30px; padding-bottom: 20px;color: #00bbd7; border-bottom: 1px solid; margin-bottom: 30px;">
+                                        {{selectCourse.subChapterTitle}}
+                                    </div>
+                                    <div style="margin-left: 30%;">
+                                        <qrcode [qrdata]="selectCourse.subChapterId" [size]="256" [level]="'M'"></qrcode>
+                                    </div>
 
-                            <ng-container matColumnDef="actions">
-                                <th mat-header-cell *matHeaderCellDef> </th>
-                                <td mat-cell *matCellDef="let row">
-                                    <i class="fa fa-edit iconSize" (click)="editTest(row)" style="cursor: pointer;"></i>
-                                    <i class="fa fa-trash iconSize" (click)="deleteTest(row)"
-                                        style="cursor: pointer;"></i>
-                                </td>
-                            </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="displayedColumnsQuestion"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumnsQuestion;"></tr>
-                        </table>
-                        <mat-paginator #QuestionPaginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="50"
-                            showFirstLastButtons>
-                        </mat-paginator>
-                    </div>
-                </div>
-            </mat-tab>
-            <mat-tab label="{{'certificate.Certificate' | translate}}">
-                <!-- *ngIf="CourseData && CourseData.hasCertificate" -->
-                <mat-card-content>
-                    <div style="padding: 20px;overflow: hidden;">
-                        <div class="row ChapterList col-md-12 send-certificate"
-                            *ngIf="CourseData && !CourseData.hasCertificate && CourseData.permission==2">
-                            <!-- <button (click)="addCertificate()"
-                                class="form-control open-button">{{'certificate.New' | translate}}</button> -->
-                            <button mat-stroked-button style="margin:auto;"
-                                (click)="addCertificate()">{{'certificate.New' | translate}}</button>
-                        </div>
-                        <div class="row" style="margin-top: 20px;text-align: center;font-size: large;"
-                            *ngIf="CourseData && !CourseData.hasCertificate && CourseData.permission!=2">
-                            <div style="width: 100%;">{{'certificate.NoCertificate' | translate}}</div>
-                        </div>
-                        <div class="loader" style="margin-top: 20px;"
-                            [@openedChanged]="(CourseData && CourseData.hasCertificate && !certificateLoaded) ? 'shown' : 'hidden'"
-                            *ngIf="CourseData && CourseData.hasCertificate && !certificateLoaded"></div>
-                        <iframe *ngIf="bLoadCertificate && CourseData && CourseData.hasCertificate"
-                            [@openedChanged]="(CourseData && CourseData.hasCertificate && certificateLoaded) ? 'shown' : 'hidden'"
-                            class="certificate-frame" [src]="certificateUrl | safe" (load)="certificateLoadedCallback()"
-                            style="opacity: 0;"></iframe>
-                        <!-- <div class="row ChapterList col-md-12 send-certificate"
-                            *ngIf="CourseData && CourseData.hasCertificate">
-                            <button (click)="editCertificate()"
-                                class="form-control open-button">{{'certificate.Edit' | translate}}</button>
-                        </div> -->
-                        <div class="row ChapterList col-md-12 send-certificate"
-                            *ngIf="CourseData && CourseData.hasCertificate && CourseData.permission==2">
-                            <!-- <button (click)="editCertificate()"
-                                class="form-control open-button">{{'certificate.Edit' | translate}}</button>
-                            <button (click)="deleteCertificate()"
-                                class="form-control open-button">{{'certificate.Delete' | translate}}</button> -->
-                            <button mat-stroked-button color="warn" style="margin:auto;"
-                                (click)="deleteCertificate()">{{'certificate.Delete' | translate}}</button>
-                            <button mat-stroked-button style="margin:auto;"
-                                (click)="editCertificate()">{{'certificate.Edit' | translate}}</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </mat-card-content>
-            </mat-tab>
-            <!-- <mat-tab [disabled]="CourseData == undefined || CourseData.isScormCourse!=0"
-        label="{{'menu.Certificater' | translate}}">
-        => Here comes the new certificate stuff <= </mat-tab> -->
-            <!-- <mat-tab label="{{'course.Exams' | translate}}">
+                </mat-tab>
+                <mat-tab [disabled]="!CourseData || CourseData.isScormCourse!=0 || CourseData.permission!=2"
+                    label="{{'menu.Test' | translate}}">
+                    <div [ngClass]="{'hide-tab': !CourseData || CourseData.isScormCourse!=0 || CourseData.permission!=2}">
+                        <!-- <div class="addIcon" (click)="addTest()"> -->
+                        <div style="float: right;" (click)="addTest()" matTooltip="{{'question.NewQuestion' | translate}}"
+                            [matTooltipPosition]="'left'">
+                            <i class="fa fa-plus-circle iconSize" style="cursor: pointer;"></i>
+                        </div>
+                        <!-- <a style="float: right;" matTooltip="{{'question.UploadQuestionExcel' | translate}}" [matTooltipPosition]="'left'">
+                <i class="fa fa-file-image-o font16px cursorlink iconSize" aria-hidden="true" (click)="addImage();"></i>
+                <input type="file" #imageFileUpload style="display: none;" (change)="imageFileInput($event.target.files)">
+            </a> -->
+                        <!-- <div style="float: right;" matTooltip="{{'question.UploadQuestion' | translate}}"
+                        [matTooltipPosition]="'left'">
+                        <i class="fa fa-cloud-upload iconSize" [matMenuTriggerFor]="menuUpload"
+                            style="cursor: pointer;"></i>
+                        <mat-menu #menuUpload="matMenu">
+                            <button style="outline: none;" mat-menu-item (click)="uploadEmp('zip')">
+                                <i class="fa fa-archive"></i>
+                                <span
+                                    matTooltip="{{'question.UploadQuestionZip' | translate}}">{{'question.UploadQuestionZip' | translate}}</span>
+                            </button>
+                            <button style="outline: none;" mat-menu-item (click)="uploadEmp('excel')" disabled>
+                                <i class="fa fa-table-chart"></i>
+                                <span
+                                    matTooltip="{{'question.UploadQuestionExcel' | translate}}">{{'question.UploadQuestionExcel' | translate}}</span>
+                            </button>
+                        </mat-menu>
+                        <input type="file" #fileUpload style="display: none;"
+                            (change)="handleFileInput($event.target.files)" name="myFile">
+                    </div> -->
+                        <!-- <div style="float: right;" (click)="downloadExampleZip()" matTooltip="{{'question.DownloadExampleZip' | translate}}" [matTooltipPosition]="'left'"> -->
+                        <!-- <div style="float: right;" matTooltip="{{'question.DownloadExampleTemplate' | translate}}"
+                        [matTooltipPosition]="'left'">
+                        <i class="fa fa-cloud-download iconSize" [matMenuTriggerFor]="menuDownload"
+                            style="cursor: pointer;"></i>
+                        <mat-menu #menuDownload="matMenu">
+                            <button style="outline: none;" mat-menu-item (click)="downloadExampleZip('zip')">
+                                <i class="fa fa-archive"></i>
+                                <span
+                                    matTooltip="{{'question.DownloadTemplateZip' | translate}}">{{'question.DownloadTemplateZip' | translate}}</span>
+                            </button>
+                            <button style="outline: none;" mat-menu-item (click)="downloadExampleZip('excel')">
+                                <i class="fa fa-table-chart"></i>
+                                <span
+                                    matTooltip="{{'question.DownloadTemplateExcel' | translate}}">{{'question.DownloadTemplateExcel' | translate}}</span>
+                            </button>
+                        </mat-menu>
+                    </div> -->
+                        <!-- <mat-form-field>
+                <input matInput (keyup)="applyFilterQuestion($event.target.value)" placeholder="{{'filter' | translate}}">
+            </mat-form-field> -->
+
+                        <div *ngIf="dataSourceQuestion == undefined || dataSourceQuestion.filteredData.length == 0"
+                            style="padding: 1em;">
+                            {{'question.NoQuestionFound' | translate}}
+                        </div>
+                        <div *ngIf="dataSourceQuestion != undefined && dataSourceQuestion.filteredData.length > 0"
+                            style="padding: 1em;">
+                            <table mat-table [dataSource]="dataSourceQuestion" class="mat-elevation-z8">
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="QuestionImg">
+                                    <th mat-header-cell *matHeaderCellDef>{{'question.Image' | translate}}</th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <img (error)="courseImgError($event)" *ngIf="element.QuestionImg != ''"
+                                            src="{{_globals.WebURL}}/{{element.QuestionImg}}" style="width: 100px;" />
+                                        <ng-container *ngIf="element.QuestionImg == ''">-</ng-container>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Position Column -->
+                                <ng-container matColumnDef="Question">
+                                    <th mat-header-cell *matHeaderCellDef>{{'question.Question' | translate}}</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.Question}} </td>
+                                </ng-container>
+
+                                <!-- Position Column -->
+                                <!-- <ng-container matColumnDef="courseName">
+                                    <th mat-header-cell *matHeaderCellDef>{{'course.CourseName' | translate}}</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.courseName}} </td>
+                                </ng-container> -->
+
+                                <!-- Weight Column -->
+                                <ng-container matColumnDef="chapterName">
+                                    <th mat-header-cell *matHeaderCellDef>{{'chapter.Name' | translate}}</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.chapterName}} </td>
+                                </ng-container>
+
+                                <!-- Symbol Column -->
+                                <ng-container matColumnDef="CorrectAnswerOptionNumber">
+                                    <th mat-header-cell *matHeaderCellDef>{{'question.CorrAnswerOptions' | translate}}</th>
+                                    <td mat-cell *matCellDef="let element"> {{element.CorrectAnswerOptionNumber}} </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="actions">
+                                    <th mat-header-cell *matHeaderCellDef> </th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <i class="fa fa-edit iconSize" (click)="editTest(row)" style="cursor: pointer;"></i>
+                                        <i class="fa fa-trash iconSize" (click)="deleteTest(row)"
+                                            style="cursor: pointer;"></i>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumnsQuestion"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumnsQuestion;"></tr>
+                            </table>
+                            <mat-paginator #QuestionPaginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="50"
+                                showFirstLastButtons>
+                            </mat-paginator>
+                        </div>
+                    </div>
+                </mat-tab>
+                <mat-tab label="{{'certificate.Certificate' | translate}}">
+                    <!-- *ngIf="CourseData && CourseData.hasCertificate" -->
+                    <mat-card-content>
+                        <div style="padding: 20px;overflow: hidden;">
+                            <div class="row ChapterList col-md-12 send-certificate"
+                                *ngIf="CourseData && !CourseData.hasCertificate && CourseData.permission==2">
+                                <!-- <button (click)="addCertificate()"
+                                    class="form-control open-button">{{'certificate.New' | translate}}</button> -->
+                                <button mat-stroked-button style="margin:auto;"
+                                    (click)="addCertificate()">{{'certificate.New' | translate}}</button>
+                            </div>
+                            <div class="row" style="margin-top: 20px;text-align: center;font-size: large;"
+                                *ngIf="CourseData && !CourseData.hasCertificate && CourseData.permission!=2">
+                                <div style="width: 100%;">{{'certificate.NoCertificate' | translate}}</div>
+                            </div>
+                            <div class="loader" style="margin-top: 20px;"
+                                [@openedChanged]="(CourseData && CourseData.hasCertificate && !certificateLoaded) ? 'shown' : 'hidden'"
+                                *ngIf="CourseData && CourseData.hasCertificate && !certificateLoaded"></div>
+                            <iframe *ngIf="bLoadCertificate && CourseData && CourseData.hasCertificate"
+                                [@openedChanged]="(CourseData && CourseData.hasCertificate && certificateLoaded) ? 'shown' : 'hidden'"
+                                class="certificate-frame" [src]="certificateUrl | safe" (load)="certificateLoadedCallback()"
+                                style="opacity: 0;"></iframe>
+                            <!-- <div class="row ChapterList col-md-12 send-certificate"
+                                *ngIf="CourseData && CourseData.hasCertificate">
+                                <button (click)="editCertificate()"
+                                    class="form-control open-button">{{'certificate.Edit' | translate}}</button>
+                            </div> -->
+                            <div class="row ChapterList col-md-12 send-certificate"
+                                *ngIf="CourseData && CourseData.hasCertificate && CourseData.permission==2">
+                                <!-- <button (click)="editCertificate()"
+                                    class="form-control open-button">{{'certificate.Edit' | translate}}</button>
+                                <button (click)="deleteCertificate()"
+                                    class="form-control open-button">{{'certificate.Delete' | translate}}</button> -->
+                                <button mat-stroked-button color="warn" style="margin:auto;"
+                                    (click)="deleteCertificate()">{{'certificate.Delete' | translate}}</button>
+                                <button mat-stroked-button style="margin:auto;"
+                                    (click)="editCertificate()">{{'certificate.Edit' | translate}}</button>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-tab>
+                <!-- <mat-tab [disabled]="CourseData == undefined || CourseData.isScormCourse!=0"
+            label="{{'menu.Certificater' | translate}}">
+            => Here comes the new certificate stuff <= </mat-tab> -->
+                <!-- <mat-tab label="{{'course.Exams' | translate}}">
+                Prüfungen
+        </mat-tab>
+        <mat-tab label="{{'dashboard.Certificates' | translate}}">
             Prüfungen
-    </mat-tab>
-    <mat-tab label="{{'dashboard.Certificates' | translate}}">
-        Prüfungen
-    </mat-tab>
-    <mat-tab label="Feedback/Feed">
-        Feedback und Feed Tab
-    </mat-tab> -->
-            <!-- <mat-tab label="{{'course.OwnCourses' | translate}}"></mat-tab>
-    <mat-tab label="{{'course.ScormCourses' | translate}}"></mat-tab> -->
-        </mat-tab-group>
+        </mat-tab>
+        <mat-tab label="Feedback/Feed">
+            Feedback und Feed Tab
+        </mat-tab> -->
+                <!-- <mat-tab label="{{'course.OwnCourses' | translate}}"></mat-tab>
+        <mat-tab label="{{'course.ScormCourses' | translate}}"></mat-tab> -->
+            </mat-tab-group>
+        </div>
     </div>
-</div>
-<!-- Generell:
-- Kursname ganz oben einfügen
+    <!-- Generell:
+    - Kursname ganz oben einfügen
 
-Übersicht:
-- Kursbeschreibung
-- Anzahl Teilnehmer (abgeschlossen/offen)
-- Durchschnittliches Prüfungsergebnis (der bisher abgeschlossenen TN)
-- Bild?
+    Übersicht:
+    - Kursbeschreibung
+    - Anzahl Teilnehmer (abgeschlossen/offen)
+    - Durchschnittliches Prüfungsergebnis (der bisher abgeschlossenen TN)
+    - Bild?
 
-Newsfeed für Kurs:
-- Ala Facebook
+    Newsfeed für Kurs:
+    - Ala Facebook
 
-Teilnehmerliste:
-- Option zum Anzeigen der Fortschrittdetails für jeden Mitarbeiter einfügen -->
+    Teilnehmerliste:
+    - Option zum Anzeigen der Fortschrittdetails für jeden Mitarbeiter einfügen -->
+<!-- </div> -->

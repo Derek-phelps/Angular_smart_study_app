@@ -5,11 +5,12 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { Label, MultiDataSet } from 'ng2-charts';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
 import { hexToRgbaString } from 'src/app/helper-functions';
 import { AdminCourseService } from '../../../adminCourse.service';
+import { VACUtils } from '../view-admin-course-utils';
 
 @Component({
   selector: 'course-overview',
@@ -36,11 +37,10 @@ import { AdminCourseService } from '../../../adminCourse.service';
 export class CourseOverviewComponent implements OnInit {
 
   @Input() courseId : number = -1;
-  @Output() tabId : EventEmitter<number> = new EventEmitter<number>();
-
-  private _courseData$ : Observable<any>;
+  @Input() courseData : any;
   
-  //private _userStatusTable = new MatTableDataSource();
+  @Output() tabId : EventEmitter<number> = new EventEmitter<number>();
+  
   private _groupStatusTable = new MatTableDataSource();
   private _departmentStatusTable = new MatTableDataSource();
   
@@ -48,9 +48,7 @@ export class CourseOverviewComponent implements OnInit {
   private _courseChartLabels : Label[] = [];
   private _courseChartColors = [];
 
-  // @ViewChild('userPaginator') set userPaginator(paginator: MatPaginator) {
-  //   this._userStatusTable.paginator = paginator;
-  // }
+  
   @ViewChild('groupPaginator') set groupPaginator(paginator: MatPaginator) {
     this._groupStatusTable.paginator = paginator;
   }
@@ -58,10 +56,6 @@ export class CourseOverviewComponent implements OnInit {
   @ViewChild('depPaginator') set depPaginator(paginator: MatPaginator) {
     this._departmentStatusTable.paginator = paginator;
   }
-
-  // @ViewChild('userSort') set userSort(sort: MatSort) {
-  //   this._userStatusTable.sort = sort;
-  // }
 
   @ViewChild('groupSort') set groupSort(sort: MatSort) {
     this._groupStatusTable.sort = sort;
@@ -72,46 +66,34 @@ export class CourseOverviewComponent implements OnInit {
   }
 
   constructor(
-    private service: AdminCourseService,
+    //private service: AdminCourseService,
     private globals : Globals,
     private translate: TranslateService,
   ) { }
 
   ngOnInit(): void {
-    this._courseData$ = this.service.getCourseData(this.courseId).pipe(
-      tap((data : any) => {
-        this._setupTables(data);
-        this._setupChart(data);
-      })
-    );
+
+    let sub = new Subject<any>();
+    sub.next()
+  }
+
+  ngOnChanges(changes) {
+    if(changes.courseData) {
+      this._setupTables(this.courseData);
+      this._setupChart(this.courseData);
+    }
   }
 
   private _setupTables(data : any) : void {
-
-    console.log(data);
-    //this._userStatusTable.data = data.userStatus;
     this._departmentStatusTable.data = data.departmentStatus;
     this._groupStatusTable.data = data.groupStatus;
 
-    // this._userStatusTable.filterPredicate = function (data: any, filter: string): boolean {
-    //   return this.filterFunction(
-    //     data.FIRSTNAME + ' ' + data.LASTNAME + ' ' + data.FULLNAME, filter) || 
-    //     this.filterFunction(data.EmailID, filter);
-    // }
     this._departmentStatusTable.filterPredicate = function (data: any, filter: string): boolean {
       return this.filterFunction(data.departmentName, filter);
     }
     this._groupStatusTable.filterPredicate = function (data: any, filter: string): boolean {
       return this.filterFunction(data.name, filter);
     }
-
-    // this._userStatusTable.sortingDataAccessor = (item: any, property) => {
-    //   switch (property) {
-    //     case 'email': { return item.EmailID; }
-    //     case 'status': { return item.courseStatus; }
-    //     default: { return item[property]; }
-    //   }
-    // };
 
     this._departmentStatusTable.sortingDataAccessor = (item: any, property) => {
       console.log(property);
@@ -131,22 +113,10 @@ export class CourseOverviewComponent implements OnInit {
     };
   }
 
-  openPartList() {
-    this.tabId.emit(1);
-  }
-
   private _setupChart(data) : void {
-    let courseUserOverdue : number = 0;
-    let courseUserOpen : number = 0;
-    let courseUserDone : number = 0;
-        
-    data.userStatus.forEach((userStat: any) => {
-      if (userStat.courseStatus == -1) { courseUserOverdue += 1; } 
-      else if (userStat.courseStatus == 0) { courseUserOpen += 1; }
-      else { courseUserDone += 1; }
-    });
-
-    this._courseChartData = [[courseUserDone, courseUserOpen, courseUserOverdue]];
+    this._courseChartData = [[VACUtils.calcCourseUsersDone(data.userStatus), 
+                              VACUtils.calcCourseUsersOpen(data.userStatus), 
+                              VACUtils.calcCourseUsersOverdue(data.userStatus)]];
 
     this._courseChartLabels = [this.translate.instant('course.Done'), 
                                this.translate.instant('course.Open'), 
@@ -161,19 +131,20 @@ export class CourseOverviewComponent implements OnInit {
 
   }
 
+  openPartList() {
+    this.tabId.emit(1);
+  }
+
   get userInfo() { return this.globals.userInfo; };
-  get courseData$() { return this._courseData$; };
+  //get courseData$() { return this._courseData$; };
   
-  //get userStatusTable() { return this._userStatusTable; };
   get groupStatusTable() { return this._groupStatusTable; };
   get departmentStatusTable() { return this._departmentStatusTable; };
 
-  //get userDisplayedColumns() : string[] { return ['status', 'LASTNAME', 'FIRSTNAME', 'email', 'editDelete']; }
   get departmentDisplayedColumns() : string[] { return ['status', 'name']; }
   get groupDisplayedColumns(): string[] { return ['status', 'name']; }
 
   get courseChartData() : MultiDataSet { return this._courseChartData; }
   get courseChartLabels() : Label[] { return this._courseChartLabels; }
   get courseChartColors() { return this._courseChartColors };
-
 }
