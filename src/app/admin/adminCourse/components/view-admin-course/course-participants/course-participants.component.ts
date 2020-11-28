@@ -1,10 +1,11 @@
 import { state, style, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
@@ -42,13 +43,14 @@ export class CourseParticipantsComponent implements OnInit {
     private translate: TranslateService,
     private dialog: MatDialog,
     private service: AdminCourseService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
   ) { }
 
   ngOnInit(): void {
+    
   }
 
-  ngOnChanges(changes) {
+  ngOnChanges(changes : SimpleChanges) {
     if(changes.courseData) {
       this._setupTable(this.courseData);
       this._setupData(this.courseData);

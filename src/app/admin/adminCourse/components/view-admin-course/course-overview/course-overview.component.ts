@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -57,7 +57,7 @@ export class CourseOverviewComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  ngOnChanges(changes) {
+  ngOnChanges(changes : SimpleChanges) {
     if(changes.courseData) {
       this._setupTables(this.courseData);
       this._setupChart(this.courseData);

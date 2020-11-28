@@ -147,7 +147,7 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
   public partConfDisabled = true;
   public EmpForm: FormGroup;
   EmpCourse: any = [];
-  public SelectCourse: any;
+  
   public chpId = 0;
   public isAllChecked: boolean = false;
   public isConfirmed: boolean = false;
@@ -179,8 +179,13 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
   // START chapter stuff
   displayedColumnsChapter: string[] = [];
   //ImageURL = this._globals.IMAGEURL;
+  
+  //DELETE
   dataSourceChapter: any;
+  
+  //DELETE
   selectCourse: any;
+  SelectCourse: any;
   formFieldVisibility = "visible";
   @ViewChild('ContentPaginator', { read: MatPaginator, static: true }) paginatorChapter: MatPaginator;
   // END chapter stuff
@@ -258,6 +263,7 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
         obj.showHeader = false;
       }
       obj.chpId = params.id;
+      console.log("CHAPTER ID: ", params.id);
       if (!obj.CourseData) {
         obj.updateData();
       }
@@ -726,6 +732,7 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
   applyFilterChapter(filterValue: string) {
     this.dataSourceChapter.filter = filterValue.trim().toLowerCase();
   }
+  //DELETE
   loadContent() {
     this.dataSourceChapter = new MatTableDataSource();
 
@@ -740,6 +747,8 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
       this.filterContentByCourse();
     });
   }
+
+  //DELETE
   filterContentByCourse() {
     this.route.params.subscribe(params => {
       if (params.id != undefined) {
@@ -751,6 +760,8 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  //DELETE
   addContent() {
     var path = "";
     if (this._globals.getUserType() == "1") {
@@ -764,6 +775,7 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
     }
     this.router.navigate([path, this.CourseData.courseId], { skipLocationChange: false });
   }
+  //DELETE
   editContent(obj) {
     var path = "";
     if (this._globals.getUserType() == "1") {
@@ -777,6 +789,8 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
     }
     this.router.navigate([path, obj.chapterId], { skipLocationChange: false });
   }
+
+  //DELETE
   deleteContent(obj) {
     this.translate.get('dialog.DeleteContentSure').subscribe(value => {
       const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
@@ -788,6 +802,7 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
         if (result) {
           this._service.deleteChapter(obj.chapterId).subscribe((res) => {
             if (res.success) {
+              //TODO: Philipp ATTENTION
               this.loadContent();
             }
           });
@@ -823,6 +838,8 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
 
     // }, 100);
   }
+
+  //DELETE
   downloadCompany(obj) {
     this._service.getSubChapterByChapter(obj.chapterId).subscribe((res) => {
       if (res.success) {
@@ -838,8 +855,6 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
         this.translate.get('alert.NoOfflineSubChap').subscribe(value => { alert(value); });
       }
     });
-
-
   }
   // convertImgToBase64URL(url, callback, outputFormat) {
   //   var img = new Image();
@@ -1044,6 +1059,7 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
 
     var worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
     var chapterListData = [];
+    //TODO Philipp Attention!
     for (var i = 0; i < this.dataSourceChapter.filteredData.length; ++i) {
       var chapter = this.dataSourceChapter.filteredData[i];
       // if (chapter.is_offline == 0) {
