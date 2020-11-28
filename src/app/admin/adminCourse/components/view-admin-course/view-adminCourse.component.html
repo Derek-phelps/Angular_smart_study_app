@@ -11,7 +11,9 @@
         style="overflow: hidden;padding: 0;opacity: 0;">
         <!-- Display course info -->
         <div class="row tile-row">
-            <course-data [data]="CourseData" class="w-100" *ngIf="CourseData"></course-data>
+            <div class="col-12 col-tile-outer">
+                <course-data [data]="CourseData" class="w-100" *ngIf="CourseData"></course-data>
+            </div>
         </div>
     </div>
 
@@ -30,7 +32,7 @@
             </mat-tab>
             <mat-tab label="{{'course.partList' | translate}}" [disabled]="userStatusTable.data.length == 0">
                 <ng-template matTabContent>
-                    <participant-list></participant-list>
+                    <!-- <participant-list></participant-list> -->
                     <div class="course-overview-wrapper">
                         <div class="warning-error-label error-label" *ngIf="courseUserOverdue>0">
                             <div>

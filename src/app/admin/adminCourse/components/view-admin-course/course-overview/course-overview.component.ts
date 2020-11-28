@@ -39,7 +39,8 @@ export class CourseOverviewComponent implements OnInit {
   @Output() tabId : EventEmitter<number> = new EventEmitter<number>();
 
   private _courseData$ : Observable<any>;
-  private _userStatusTable = new MatTableDataSource();
+  
+  //private _userStatusTable = new MatTableDataSource();
   private _groupStatusTable = new MatTableDataSource();
   private _departmentStatusTable = new MatTableDataSource();
   
@@ -47,22 +48,25 @@ export class CourseOverviewComponent implements OnInit {
   private _courseChartLabels : Label[] = [];
   private _courseChartColors = [];
 
-  @ViewChild('userPaginator') set userPaginator(paginator: MatPaginator) {
-    this._userStatusTable.paginator = paginator;
-  }
+  // @ViewChild('userPaginator') set userPaginator(paginator: MatPaginator) {
+  //   this._userStatusTable.paginator = paginator;
+  // }
   @ViewChild('groupPaginator') set groupPaginator(paginator: MatPaginator) {
     this._groupStatusTable.paginator = paginator;
   }
+
   @ViewChild('depPaginator') set depPaginator(paginator: MatPaginator) {
     this._departmentStatusTable.paginator = paginator;
   }
 
-  @ViewChild('userSort') set userSort(sort: MatSort) {
-    this._userStatusTable.sort = sort;
-  }
+  // @ViewChild('userSort') set userSort(sort: MatSort) {
+  //   this._userStatusTable.sort = sort;
+  // }
+
   @ViewChild('groupSort') set groupSort(sort: MatSort) {
     this._groupStatusTable.sort = sort;
   }
+
   @ViewChild('depSort') set depSort(sort: MatSort) {
     this._departmentStatusTable.sort = sort;
   }
@@ -83,11 +87,17 @@ export class CourseOverviewComponent implements OnInit {
   }
 
   private _setupTables(data : any) : void {
-    this._userStatusTable.filterPredicate = function (data: any, filter: string): boolean {
-      return this.filterFunction(
-        data.FIRSTNAME + ' ' + data.LASTNAME + ' ' + data.FULLNAME, filter) || 
-        this.filterFunction(data.EmailID, filter);
-    }
+
+    console.log(data);
+    //this._userStatusTable.data = data.userStatus;
+    this._departmentStatusTable.data = data.departmentStatus;
+    this._groupStatusTable.data = data.groupStatus;
+
+    // this._userStatusTable.filterPredicate = function (data: any, filter: string): boolean {
+    //   return this.filterFunction(
+    //     data.FIRSTNAME + ' ' + data.LASTNAME + ' ' + data.FULLNAME, filter) || 
+    //     this.filterFunction(data.EmailID, filter);
+    // }
     this._departmentStatusTable.filterPredicate = function (data: any, filter: string): boolean {
       return this.filterFunction(data.departmentName, filter);
     }
@@ -95,15 +105,16 @@ export class CourseOverviewComponent implements OnInit {
       return this.filterFunction(data.name, filter);
     }
 
-    this._userStatusTable.sortingDataAccessor = (item: any, property) => {
-      switch (property) {
-        case 'email': { return item.EmailID; }
-        case 'status': { return item.courseStatus; }
-        default: { return item[property]; }
-      }
-    };
+    // this._userStatusTable.sortingDataAccessor = (item: any, property) => {
+    //   switch (property) {
+    //     case 'email': { return item.EmailID; }
+    //     case 'status': { return item.courseStatus; }
+    //     default: { return item[property]; }
+    //   }
+    // };
 
-    this.departmentStatusTable.sortingDataAccessor = (item: any, property) => {
+    this._departmentStatusTable.sortingDataAccessor = (item: any, property) => {
+      console.log(property);
       switch (property) {
         case 'name': { return item.departmentName; }
         case 'status': { return item.departmentCourseStatus; }
@@ -111,16 +122,13 @@ export class CourseOverviewComponent implements OnInit {
       }
     };
 
-    this.groupStatusTable.sortingDataAccessor = (item: any, property) => {
+    this._groupStatusTable.sortingDataAccessor = (item: any, property) => {
+      console.log(property);
       switch (property) {
         case 'status': { return item.groupCourseStatus; }
         default: { return item[property]; }
       }
     };
-
-    this._userStatusTable.data = data.userStatus;
-      this._departmentStatusTable.data = data.departmentStatus;
-      this._groupStatusTable.data = data.groupStatus;
   }
 
   openPartList() {
@@ -156,11 +164,13 @@ export class CourseOverviewComponent implements OnInit {
   get userInfo() { return this.globals.userInfo; };
   get courseData$() { return this._courseData$; };
   
-  get userStatusTable() { return this._userStatusTable; };
+  //get userStatusTable() { return this._userStatusTable; };
   get groupStatusTable() { return this._groupStatusTable; };
   get departmentStatusTable() { return this._departmentStatusTable; };
 
-  get departmentDisplayedColumns() : string[] { return ['status', 'name'] };
+  //get userDisplayedColumns() : string[] { return ['status', 'LASTNAME', 'FIRSTNAME', 'email', 'editDelete']; }
+  get departmentDisplayedColumns() : string[] { return ['status', 'name']; }
+  get groupDisplayedColumns(): string[] { return ['status', 'name']; }
 
   get courseChartData() : MultiDataSet { return this._courseChartData; }
   get courseChartLabels() : Label[] { return this._courseChartLabels; }

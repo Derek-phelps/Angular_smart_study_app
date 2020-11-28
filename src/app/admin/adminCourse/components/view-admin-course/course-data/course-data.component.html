@@ -1,37 +1,36 @@
-<div class="col-xl-6 col-lg-12 col-tile-outer">
-    <div class="col-tile">
-        <div class="col-header">{{'course.Data' | translate}}</div>
-        <div class="col-text">
-            <div class="row profile-image-container"
-                *ngIf="data.courseImg && data.courseImg != ''">
-                <img src="{{ webURL }}/{{data.courseImg.courseImg}}"
-                    onerror="this.src='assets/img/logoakt.png'" alt="course image"
-                    class="profile-image">
-            </div>
-            <table class="info-table">
-                <tr>
-                    <td><b>{{'course.CourseName' | translate}}:</b></td>
-                    <td>{{data.courseName}}</td>
-                </tr>
-                <tr>
-                    <td><b>{{'course.Description' | translate}}:</b></td>
-                    <td>{{data.courseDes}}</td>
-                </tr>
-                <tr>
-                    <td><b>{{'course.CreatedBy' | translate}}:</b></td>
-                    <td>
-                        <ng-container *ngIf="data.creatorInfo else noInfo">
-                            <a routerLink="../../../../employees/{{data.creatorInfo.empId}}"
-                                [skipLocationChange]="false"
-                                [matTooltip]="'openVar' | translate: {var: data.creatorInfo.FULLNAME}"
-                                *ngIf="userInfo.isAdmin">{{data.creatorInfo.FULLNAME}}</a>
-                            <a href="javascript:void(0)" style="cursor: initial;"
-                                *ngIf="!userInfo.isAdmin">{{CourseData.creatorInfo.FULLNAME}}</a>
-                        </ng-container>
-                        <ng-template #noInfo>-</ng-template>
-                    </td>
-                </tr>
-            </table>
+
+<div class="col-tile">
+    <div class="col-header">{{'course.Data' | translate}}</div>
+    <div class="col-text">
+        <div class="row profile-image-container"
+            *ngIf="data.courseImg && data.courseImg != ''">
+            <img src="{{ webURL }}/{{data.courseImg.courseImg}}"
+                onerror="this.src='assets/img/logoakt.png'" alt="course image"
+                class="profile-image">
         </div>
+        <table class="info-table">
+            <tr>
+                <td><b>{{'course.CourseName' | translate}}:</b></td>
+                <td>{{data.courseName}}</td>
+            </tr>
+            <tr>
+                <td><b>{{'course.Description' | translate}}:</b></td>
+                <td>{{data.courseDes}}</td>
+            </tr>
+            <tr>
+                <td><b>{{'course.CreatedBy' | translate}}:</b></td>
+                <td>
+                    <ng-container *ngIf="data.creatorInfo else noInfo">
+                        <a routerLink="../../../../employees/{{data.creatorInfo.empId}}"
+                            [skipLocationChange]="false"
+                            [matTooltip]="'openVar' | translate: {var: data.creatorInfo.FULLNAME}"
+                            *ngIf="userInfo.isAdmin">{{data.creatorInfo.FULLNAME}}</a>
+                        <a href="javascript:void(0)" style="cursor: initial;"
+                            *ngIf="!userInfo.isAdmin">{{CourseData.creatorInfo.FULLNAME}}</a>
+                    </ng-container>
+                    <ng-template #noInfo>-</ng-template>
+                </td>
+            </tr>
+        </table>
     </div>
 </div>

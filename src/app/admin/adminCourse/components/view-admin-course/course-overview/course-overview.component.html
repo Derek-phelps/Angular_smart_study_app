@@ -1,7 +1,9 @@
 <div class="course-overview-wrapper" *ngIf="courseData$ | async as data;">
     <div class="row tile-row" style="margin-top: 20px;">
-        <course-data [data]="data.courseInfo" class="w-100"></course-data>
-        <div class="col-xl-6 col-lg-12 col-tile-outer" *ngIf="userStatusTable.data.length > 0">
+        <div class="col-xl-6 col-lg-12 col-tile-outer">
+            <course-data [data]="data.courseInfo" class=""></course-data>
+        </div>
+        <div class="col-xl-6 col-lg-12 col-tile-outer" *ngIf="data.userStatus.length > 0">
             <div class="col-tile">
                 <div class="col-header">{{'course.State' | translate}}:</div>
                 <div class="col-text" style="padding-top: 10px;">
@@ -90,10 +92,12 @@
                 <div class="col-header">{{'course.AssignedToGroup' | translate}}</div>
                 <div class="col-text">
                     <div style="width: 100%;overflow: auto;">
-                        <table mat-table [dataSource]="groupStatusTable" class="mat-elevation-z8"
-                            #groupSort="matSort" matSort matSortActive="name"
+                        <table mat-table [dataSource]="groupStatusTable" 
+                            class="mat-elevation-z8" #groupSort="matSort" matSort matSortActive="name"
                             matSortDirection="asc">
+                            asd
                             <ng-container matColumnDef="status">
+                                asd
                                 <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
                                 <td mat-cell *matCellDef="let group" class="cell-status-wrapper"
                                     [style.width]="userInfo.UserType > 2 ? '25px' : '51px'">
@@ -121,14 +125,14 @@
                                     {{'course.Group' | translate}}
                                 </th>
                                 <td style="padding-left: 10px;" mat-cell *matCellDef="let group">
-                                    <div *ngIf="_globals.userInfo.isAdmin"
+                                    <div *ngIf="userInfo.isAdmin"
                                         routerLink="../../../../groups/{{group.groupId}}"
                                         [skipLocationChange]="false"
                                         [matTooltip]="'openVar' | translate: {var: group.name}"
                                         style="cursor: pointer;">
                                         <b>{{group.name}}</b>
                                     </div>
-                                    <div *ngIf="!_globals.userInfo.isAdmin">
+                                    <div *ngIf="!userInfo.isAdmin">
                                         <b>{{group.name}}</b>
                                     </div>
                                 </td>
