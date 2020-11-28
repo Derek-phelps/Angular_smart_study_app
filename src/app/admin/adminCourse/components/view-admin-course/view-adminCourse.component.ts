@@ -1168,6 +1168,7 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
       this._globals.currentCertificateDownloadWindow.close();
     }
   }
+  //DELETE
   passUser(emp) {
     const dialogRef = this.dialog.open(DialogForwardUserDialog, {
       data: { name: emp.FULLNAME, course: this.CourseData.courseName, hasCertificate: this.CourseData.hasCertificate }

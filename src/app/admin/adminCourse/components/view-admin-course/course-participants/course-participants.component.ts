@@ -1,11 +1,16 @@
 import { state, style, trigger } from '@angular/animations';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
+import { DialogForwardUserDialog } from 'src/app/forward-user/dialog-forward-user-dialog';
+import { AdminCourseService } from '../../../adminCourse.service';
 import { VACUtils } from '../view-admin-course-utils';
 
 @Component({
@@ -17,6 +22,7 @@ import { VACUtils } from '../view-admin-course-utils';
 export class CourseParticipantsComponent implements OnInit {
 
   @Input() courseData : any;
+  @Output() updateData : EventEmitter<void> = new EventEmitter<void>();
 
   private _userStatusTable = new MatTableDataSource();
 
@@ -34,6 +40,9 @@ export class CourseParticipantsComponent implements OnInit {
   constructor(
     private globals : Globals,
     private translate: TranslateService,
+    private dialog: MatDialog,
+    private service: AdminCourseService,
+    private snackbar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -73,6 +82,27 @@ export class CourseParticipantsComponent implements OnInit {
     this.userStatusTable.filter = filterValue;
 
     if (this.userStatusTable.paginator) { this.userStatusTable.paginator.firstPage(); }
+  }
+
+  passUser(employee : any) {
+    const dialogRef = this.dialog.open(DialogForwardUserDialog, {
+      data: { name: employee.FULLNAME, course: this.courseInfo.courseName, hasCertificate: this.courseInfo.hasCertificate }
+    });
+
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if (result == 1 || result == 2) {
+        let pass : string = (result == 1 ? '1' : '0');
+        this.service.passUserCourse(employee.empId, this.courseInfo.courseId, pass).pipe(take(1)).subscribe(data => {
+          if (data.success) {
+            this.snackbar.open(this.translate.instant('course.PassEmpSuccess'), '', { duration: 3000 });
+            this.updateData.next();
+          } 
+        }, 
+        err => {
+          console.error(err); // TODO: Handle error
+        })
+      }
+    });
   }
 
   get userInfo() { return this.globals.userInfo; };
