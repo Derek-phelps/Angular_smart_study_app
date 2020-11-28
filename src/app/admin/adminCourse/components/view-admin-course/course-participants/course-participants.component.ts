@@ -112,7 +112,4 @@ export class CourseParticipantsComponent implements OnInit {
   get courseUsersOverdue() : number { return this._courseUsersOverdue; }
   get courseUsersOpen() : number { return this._courseUsersOpen; }
   get courseInfo() : any { return this.courseData.courseInfo; }
-
-
-
 }
