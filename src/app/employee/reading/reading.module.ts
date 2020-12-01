@@ -14,6 +14,8 @@ import { VgControlsModule } from '@videogular/ngx-videogular/controls';
 import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
 import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
 
+import { SafePipe } from './reading.component';
+
 // import {VgCoreModule} from 'videogular2/compiled/core';
 // import {VgControlsModule} from 'videogular2/compiled/controls';
 // import {VgOverlayPlayModule} from 'videogular2/compiled/overlay-play';
@@ -33,7 +35,8 @@ import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
     VgBufferingModule
   ],
   declarations: [
-    Reading
+    Reading,
+    SafePipe
   ],
   providers: [
     ReadingService

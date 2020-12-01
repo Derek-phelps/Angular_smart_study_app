@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnDestroy, OnInit } from '@angular/core';
+import { Component, ViewChild, OnDestroy, OnInit, Pipe, PipeTransform } from '@angular/core';
 import { ReadingService } from './reading.service';
 import { Routes } from '@angular/router';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,6 +7,15 @@ import { GlobalService } from '../../theme/services/global.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { TranslateService } from '@ngx-translate/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { DomSanitizer } from '@angular/platform-browser';
+
+@Pipe({ name: 'safe' })
+export class SafePipe implements PipeTransform {
+  constructor(private sanitizer: DomSanitizer) { }
+  transform(url) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
+}
 
 @Component({
   selector: 'reading',
@@ -178,7 +187,11 @@ export class Reading implements OnDestroy, OnInit {
         });
 
         if (this.selectedItem.IsVideo == "3") {
-          this.pdfSrc = this._globals.WebURL + "/" + this.selectedItem.FilePath
+          if (this.selectedItem.FilePath.startsWith("API/")) {
+            this.pdfSrc = this._globals.WebURL + "/API/index.php/Serve/loadData?path=" + this.selectedItem.FilePath.substring(4);
+          } else {
+            this.pdfSrc = this._globals.WebURL + "/API/index.php/Serve/loadData?path=" + this.selectedItem.FilePath;
+          }
         }
 
         // Check if course is complete due to current chapter marked as done.
