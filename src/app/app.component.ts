@@ -62,28 +62,14 @@ export class AppComponent implements OnInit {
           if (user && user.success) {
             obj.globals.setCompany(user.data[0]);
             localStorage.setItem('companyInfo', JSON.stringify(user.data[0]));
-            // console.log(obj.globals.companyInfo);
-            obj.addCacheFiles();
+          } else {
+            obj.globals.incrementAndCheckOfflineError();
           }
         }, error => { obj.errorMessage = <any>error; obj.globals.incrementAndCheckOfflineError(); });
       }
     }, error => { obj.errorMessage = <any>error; obj.globals.incrementAndCheckOfflineError(); });
   }
-  addCacheFiles() {
-    // console.log(this.globals.companyInfo);
-    // console.log(this.globals);
-    // var obj = this;
-    // caches.open('smart-study-cache').then(function(cache) {
-    //   return cache.add(obj.globals.IMAGEURL + 'Company/background/' + obj.globals.companyInfo.BackgroundImage);
-    //   console.warn("Cache add...");
-    // });
-    // self.addEventListener('fetch', function(event) {
-    //   console.log(event);
-    // });
-    // fetch(obj.globals.IMAGEURL + 'Company/background/' + obj.globals.companyInfo.BackgroundImage).then(function (response) {
-    //   return cache.
-    // });
-  }
+
   swipe(e: TouchEvent, when: string): void {
     const coord: [number, number] = [e.changedTouches[0].clientX, e.changedTouches[0].clientY];
     const time = new Date().getTime();
