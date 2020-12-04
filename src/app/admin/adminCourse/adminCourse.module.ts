@@ -50,6 +50,7 @@ import { CourseOverviewComponent } from './components/view-admin-course/course-o
 import { CourseDataComponent } from './components/view-admin-course/course-data/course-data.component';
 import { CourseParticipantsComponent } from './components/view-admin-course/course-participants/course-participants.component';
 import { CourseChaptersComponent } from './components/view-admin-course/course-chapters/course-chapters.component';
+import { CourseTestsComponent } from './components/view-admin-course/course-tests/course-tests.component';
 
 @NgModule({
   imports: [
@@ -75,7 +76,8 @@ import { CourseChaptersComponent } from './components/view-admin-course/course-c
     CourseOverviewComponent,
     CourseDataComponent,
     CourseParticipantsComponent,
-    CourseChaptersComponent
+    CourseChaptersComponent,
+    CourseTestsComponent,
     ],
   providers: [
     AdminCourseService
