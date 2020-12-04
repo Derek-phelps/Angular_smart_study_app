@@ -1,0 +1,57 @@
+@import '../style.scss';
+
+.certificate-frame {
+    background-color: white;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    width: 100%;
+    height: calc(100vh - 200px);
+}
+
+.send-certificate {
+    text-align: center;
+    .open-button{
+      background-color: lightgray;
+      width: initial;
+      margin: 5px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .open-button:hover{
+      transform: scale(1.1);
+    }
+    form {
+      .send-button{
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px;
+        width: 45%;
+      }
+      .send-button:hover {
+        transform: scale(1.1);
+      }
+      margin: 0 auto;
+      text-align: center;
+      border-width: 1px;
+      border-color: lightgray;
+      border-radius: 16px;
+      padding: 20px;
+      input {
+        margin-bottom: 10px;
+      }
+      select {
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      mat-checkbox {
+        margin-top: 10px;
+      }
+    }
+    .no-pw-warning{
+      text-align: center;
+      background-color: #ffcc00;
+      margin-top: 10px;
+      margin-left: 20px;
+    }
+}
+  

@@ -1,1 +1,25 @@
-<p>course-certificate works!</p>
+<div style="padding: 20px;overflow: hidden;">
+    <div class="row ChapterList col-md-12 send-certificate"
+        *ngIf="!courseInfo.hasCertificate && courseInfo.permission == 2">
+        <button mat-stroked-button style="margin:auto;"
+            (click)="addCertificate()">{{'certificate.New' | translate}}</button>
+    </div>
+    <div class="row" style="margin-top: 20px;text-align: center;font-size: large;"
+        *ngIf="!courseInfo.hasCertificate && courseInfo.permission!=2">
+        <div style="width: 100%;">{{'certificate.NoCertificate' | translate}}</div>
+    </div>
+    <div class="loader" style="margin-top: 20px;"
+        [@openedChanged]="courseInfo.hasCertificate ? 'shown' : 'hidden'"
+        *ngIf="courseInfo.hasCertificate"></div>
+    <iframe *ngIf="courseInfo.hasCertificate"
+        [@openedChanged]="courseInfo.hasCertificate ? 'shown' : 'hidden'"
+        class="certificate-frame" [src]="certificateURL | safe"
+        style="opacity: 0;"></iframe>
+    <div class="row ChapterList col-md-12 send-certificate"
+        *ngIf="courseInfo.hasCertificate && courseInfo.permission==2">
+        <button mat-stroked-button color="warn" style="margin:auto;"
+            (click)="deleteCertificate()">{{'certificate.Delete' | translate}}</button>
+        <button mat-stroked-button style="margin:auto;"
+            (click)="editCertificate()">{{'certificate.Edit' | translate}}</button>
+    </div>
+</div>

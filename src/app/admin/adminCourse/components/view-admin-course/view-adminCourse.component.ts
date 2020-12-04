@@ -420,11 +420,13 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
     }
     var result = /([A-Za-z/]*[/][0-9]*[/])[0-9]*$/.exec(this._location.path())[1] + event.index;
     this._location.replaceState(result);
-
+    
     if (event.index != 4) {
       this.certificateLoaded = false;
     }
   }
+
+  // DELETE
   certificateLoadedCallback() {
     if (!this.certificateLoaded) {
       this.certificateLoaded = true;
@@ -1146,6 +1148,8 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
     }
     this.router.navigate([path + this.CourseData.courseId], { skipLocationChange: false });
   }
+
+  //DELETE
   addCertificate() {
     this.spinner.show();
     var path = "";
@@ -1160,6 +1164,8 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
     }
     this.router.navigate([path + this.CourseData.courseId], { skipLocationChange: false });
   }
+
+  //DELETE
   editCertificate() {
     this.spinner.show();
     var path = "";
@@ -1174,6 +1180,8 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
     }
     this.router.navigate([path + this.CourseData.hasCertificate], { skipLocationChange: false });
   }
+
+  //DELETE
   deleteCertificate() {
     var strHead = this.translate.instant('certificate.DeleteCerti');
     var strMessage = this.translate.instant('certificate.DeleteCertiSure', { course: this.CourseData.courseName });
@@ -1202,6 +1210,7 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
   ngOnDestroy() {
     if (this._globals.currentCertificateDownloadWindow) {
       this._globals.currentCertificateDownloadWindow.close();

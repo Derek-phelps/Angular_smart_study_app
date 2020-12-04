@@ -49,60 +49,14 @@
                     <course-tests [courseData]="data" *ngIf="CourseData"></course-tests>
                 </mat-tab>
                 <mat-tab label="{{'certificate.Certificate' | translate}}">
-                    <course-certificate [courseData]="data" *ngIf="CourseData"></course-certificate>
-                    <mat-card-content>
-                        <div style="padding: 20px;overflow: hidden;">
-                            <div class="row ChapterList col-md-12 send-certificate"
-                                *ngIf="CourseData && !CourseData.hasCertificate && CourseData.permission==2">
-                                <!-- <button (click)="addCertificate()"
-                                    class="form-control open-button">{{'certificate.New' | translate}}</button> -->
-                                <button mat-stroked-button style="margin:auto;"
-                                    (click)="addCertificate()">{{'certificate.New' | translate}}</button>
-                            </div>
-                            <div class="row" style="margin-top: 20px;text-align: center;font-size: large;"
-                                *ngIf="CourseData && !CourseData.hasCertificate && CourseData.permission!=2">
-                                <div style="width: 100%;">{{'certificate.NoCertificate' | translate}}</div>
-                            </div>
-                            <div class="loader" style="margin-top: 20px;"
-                                [@openedChanged]="(CourseData && CourseData.hasCertificate && !certificateLoaded) ? 'shown' : 'hidden'"
-                                *ngIf="CourseData && CourseData.hasCertificate && !certificateLoaded"></div>
-                            <iframe *ngIf="bLoadCertificate && CourseData && CourseData.hasCertificate"
-                                [@openedChanged]="(CourseData && CourseData.hasCertificate && certificateLoaded) ? 'shown' : 'hidden'"
-                                class="certificate-frame" [src]="certificateUrl | safe" (load)="certificateLoadedCallback()"
-                                style="opacity: 0;"></iframe>
-                            <!-- <div class="row ChapterList col-md-12 send-certificate"
-                                *ngIf="CourseData && CourseData.hasCertificate">
-                                <button (click)="editCertificate()"
-                                    class="form-control open-button">{{'certificate.Edit' | translate}}</button>
-                            </div> -->
-                            <div class="row ChapterList col-md-12 send-certificate"
-                                *ngIf="CourseData && CourseData.hasCertificate && CourseData.permission==2">
-                                <!-- <button (click)="editCertificate()"
-                                    class="form-control open-button">{{'certificate.Edit' | translate}}</button>
-                                <button (click)="deleteCertificate()"
-                                    class="form-control open-button">{{'certificate.Delete' | translate}}</button> -->
-                                <button mat-stroked-button color="warn" style="margin:auto;"
-                                    (click)="deleteCertificate()">{{'certificate.Delete' | translate}}</button>
-                                <button mat-stroked-button style="margin:auto;"
-                                    (click)="editCertificate()">{{'certificate.Edit' | translate}}</button>
-                            </div>
-                        </div>
-                    </mat-card-content>
+                    <course-certificate 
+                        [courseData]="data" 
+                        *ngIf="CourseData"
+                        (updateData)="updateData()">
+                    </course-certificate>
+                    <!-- <mat-card-content>
+                    </mat-card-content> -->
                 </mat-tab>
-                <!-- <mat-tab [disabled]="CourseData == undefined || CourseData.isScormCourse!=0"
-            label="{{'menu.Certificater' | translate}}">
-            => Here comes the new certificate stuff <= </mat-tab> -->
-                <!-- <mat-tab label="{{'course.Exams' | translate}}">
-                Prüfungen
-        </mat-tab>
-        <mat-tab label="{{'dashboard.Certificates' | translate}}">
-            Prüfungen
-        </mat-tab>
-        <mat-tab label="Feedback/Feed">
-            Feedback und Feed Tab
-        </mat-tab> -->
-                <!-- <mat-tab label="{{'course.OwnCourses' | translate}}"></mat-tab>
-        <mat-tab label="{{'course.ScormCourses' | translate}}"></mat-tab> -->
             </mat-tab-group>
         </div>
     </div>

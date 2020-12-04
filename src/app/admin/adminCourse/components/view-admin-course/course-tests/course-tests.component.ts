@@ -9,11 +9,13 @@ import { take, tap } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
 import { ConfirmationBoxComponent } from 'src/app/theme/components/confirmation-box/confirmation-box.component';
 import { AdminCourseService } from '../../../adminCourse.service';
+import { VACUtils } from '../view-admin-course-utils';
 
 @Component({
   selector: 'course-tests',
   templateUrl: './course-tests.component.html',
-  styleUrls: ['./course-tests.component.scss']
+  styleUrls: ['./course-tests.component.scss'],
+  animations: VACUtils.componentAnimations
 })
 export class CourseTestsComponent implements OnInit {
 
