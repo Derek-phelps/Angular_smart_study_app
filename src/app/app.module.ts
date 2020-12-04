@@ -55,7 +55,7 @@ import { AppMaterialModule } from './app-material/app-material.module';
 import { ChartsModule } from 'ng2-charts';
 @NgModule({
   declarations: [
-    AppComponent, LoginComponent, //, ViewGroupComponent
+    AppComponent, LoginComponent,  //, ViewGroupComponent
   ],
   imports: [ReadingModule, ReadingScormModule, DownloadModule, ChartsModule, AppMaterialModule,
     BrowserModule, BrowserAnimationsModule, HttpClientModule, RouterModule, MatCardModule,

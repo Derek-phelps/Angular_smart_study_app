@@ -49,7 +49,7 @@
                     <course-tests [courseData]="data" *ngIf="CourseData"></course-tests>
                 </mat-tab>
                 <mat-tab label="{{'certificate.Certificate' | translate}}">
-                    <!-- *ngIf="CourseData && CourseData.hasCertificate" -->
+                    <course-certificate [courseData]="data" *ngIf="CourseData"></course-certificate>
                     <mat-card-content>
                         <div style="padding: 20px;overflow: hidden;">
                             <div class="row ChapterList col-md-12 send-certificate"
