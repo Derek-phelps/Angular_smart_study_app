@@ -191,13 +191,20 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
   // END chapter stuff
 
   // START question stuff
+  //DELETE 
   displayedColumnsQuestion: string[] = [];
+  
+  
   fileToUpload: File = null;
   uploadFileType = "";
+  
+  // DELETE
   dataSourceQuestion: any;
+  
   @ViewChild('fileUpload', { static: true }) public _fileUpload: ElementRef;
   @ViewChild('imageFileUpload', { static: true }) public _imageFileUpload: ElementRef;
 
+  // DELETE 
   @ViewChild('QuestionPaginator', { read: MatPaginator, static: true }) paginatorQuestion: MatPaginator;
   // END question stuff
 
@@ -876,14 +883,19 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
   // }
   // END chapter stuff
 
+  // DELETE (unused)
   // START question stuff
   applyFilterQuestion(filterValue: string) {
     this.dataSourceQuestion.filter = filterValue.trim().toLowerCase();
   }
+
+
   uploadEmp(fileType) {
     this.uploadFileType = fileType;
     this._fileUpload.nativeElement.click();
   }
+
+  // DELETE ?
   loadCompany() {
     this.dataSourceQuestion = new MatTableDataSource();
 
@@ -903,6 +915,8 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  //DELETE 
   addTest() {
     var path = "";
     if (this._globals.getUserType() == "1") {
@@ -916,6 +930,8 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
     }
     this.router.navigate([path + this.CourseData.courseId], { skipLocationChange: false });
   }
+
+  //DELETE 
   editTest(obj) {
     var path = "";
     if (this._globals.getUserType() == "1") {
@@ -929,6 +945,8 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
     }
     this.router.navigate([path + obj.questionId], { skipLocationChange: false });
   }
+
+  //DELETE 
   deleteTest(obj) {
     this.translate.get('dialog.DeleteQuestionSure').subscribe(value => {
       //alert(value);
@@ -948,6 +966,7 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
       });
     });
   }
+  
   imageFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
 
@@ -1003,6 +1022,8 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
     this._imageFileUpload.nativeElement.click();
     return false;
   }
+
+  //DELETE unused?
   filterQuestionsByCourse() {
     this.route.params.subscribe(params => {
       if (params.id != undefined) {
@@ -1014,6 +1035,8 @@ export class ViewAdminCourseComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+
   downloadExampleZip(format) {
     if (format != 'zip' && format != 'excel') {
       return false;

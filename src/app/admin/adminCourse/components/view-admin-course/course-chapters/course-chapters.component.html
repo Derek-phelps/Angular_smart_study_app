@@ -5,11 +5,11 @@
             <i class="fa fa-plus-circle iconSize" style="cursor: pointer;"></i>
         </div>
 
-        <div *ngIf="dataSourceChapter == undefined || dataSourceChapter.data.length == 0"
+        <div *ngIf="dataSourceChapter.data.length == 0"
             style="padding: 1em;">
             {{'chapter.NoChapterFound' | translate}}
         </div>
-        <div *ngIf="dataSourceChapter != undefined && dataSourceChapter.data.length > 0">
+        <div *ngIf="dataSourceChapter.data.length > 0">
             <table mat-table [dataSource]="dataSourceChapter" class="mat-elevation-z8">
 
                 <!-- Position Column -->
@@ -30,8 +30,6 @@
                             style="cursor: pointer;"></i>
                         <i *ngIf="row.is_offline!=2" class="fa fa-trash iconSize"
                             (click)="deleteChapter(row)" style="cursor: pointer;"></i>
-                        <!-- <i *ngIf="row.is_offline==1" class="fa fa-qrcode iconSize"
-                            (click)="downloadCompany(row)" style="cursor: pointer;"></i> -->
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumnsChapter"></tr>

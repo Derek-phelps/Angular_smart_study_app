@@ -19,7 +19,7 @@ export class CourseChaptersComponent implements OnInit {
 
   @Input() courseData : any;
   
-  private _dataSourceChapter: any;
+  private _dataSourceChapter : MatTableDataSource<any> = null;
   private _displayedColumnsChapter: string[] = [];
 
   @ViewChild('ContentPaginator', { read: MatPaginator, static: true }) paginatorChapter: MatPaginator;
@@ -34,17 +34,16 @@ export class CourseChaptersComponent implements OnInit {
     private dialog: MatDialog,
   ) { }
 
-  ngOnInit(): void {
-    
-  }
-
   ngOnChanges(changes : SimpleChanges) : void {
     if(changes.courseData) {
       this._loadChapters();
     }
   }
 
-  _loadChapters() : void {
+  ngOnInit(): void {
+  }
+
+  private _loadChapters() : void {
     this._chapterData$ = this.service.getChapterByCourseId(this.courseInfo.courseId).pipe(
       tap((res : any) => {
         if (res.success) {
@@ -101,10 +100,6 @@ export class CourseChaptersComponent implements OnInit {
   }
 
   get chapterData$() { return this._chapterData$; }
-  get userInfo() { return this.globals.userInfo; };
-  get webURL() { return this.globals.WebURL; }
-  get companyInfo() { return this.globals.companyInfo; };
-
   get courseInfo() { return this.courseData.courseInfo; }
   get dataSourceChapter() { return this._dataSourceChapter; }
   get displayedColumnsChapter() { return this._displayedColumnsChapter; }
