@@ -220,8 +220,8 @@ class App(QtWidgets.QWidget):
             try:
                 self.config.read(fileName)
 
-                checkState = QtCore.Qt.Checked if len(
-                    self.config.sections()) == 1 else QtCore.Qt.Unchecked
+                # QtCore.Qt.Checked if len(self.config.sections()) == 1 else QtCore.Qt.Unchecked
+                checkState = QtCore.Qt.Unchecked
 
                 if len(self.config.sections()) > 0:
                     for host in self.config.sections():
