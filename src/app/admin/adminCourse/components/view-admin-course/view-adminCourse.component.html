@@ -1,5 +1,4 @@
 <!-- <div *ngIf="courseData$ | async as courseData"> -->
-    <!-- <ng-template #container></ng-template> -->
     <div class="form-wrapper" style="max-width: 1000px;">
         <div class="edit-delete-icon-div"
             [@visibilityChanged]="bCourseInfoLoaded && bAssignmentsLoaded ? 'shown' : 'hidden'" style="opacity: 0;">
@@ -10,7 +9,6 @@
         </div>
         <div class="course-overview-wrapper" [@headerAnimation]="showHeader ? 'shown' : 'hidden'"
             style="overflow: hidden;padding: 0;opacity: 0;">
-            <!-- Display course info -->
             <div class="row tile-row">
                 <div class="col-12 col-tile-outer">
                     <course-data [data]="CourseData" class="w-100" *ngIf="CourseData"></course-data>
@@ -54,8 +52,6 @@
                         *ngIf="CourseData"
                         (updateData)="updateData()">
                     </course-certificate>
-                    <!-- <mat-card-content>
-                    </mat-card-content> -->
                 </mat-tab>
             </mat-tab-group>
         </div>
