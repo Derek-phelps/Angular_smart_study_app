@@ -187,7 +187,7 @@ export class ModifyAdminCourseComponent implements OnInit, AfterViewInit {
       trainerId: [0],
       locationId: [0],
       isLocReq: [false],
-      hasFinalExam : [false],
+      hasFinalExam: [false],
       // departmentIds: [[]],
       // mandatoryDepartmentIds: [[]],
       // departmentMandatory: [0],
@@ -211,10 +211,6 @@ export class ModifyAdminCourseComponent implements OnInit, AfterViewInit {
       // recurringTimeSpan: []
     });
   }
-
-  log() {
-     console.log(this.EmpForm.controls['minResult']);
-  }
   // radioPeriodChange($event: MatRadioChange) {
   //   currentPeriod = $event.value;
   // }
@@ -235,10 +231,10 @@ export class ModifyAdminCourseComponent implements OnInit, AfterViewInit {
         } else {
           endTime = '';
         }
-        
-        let hasFinalExam : boolean = parseInt(data.data.duration) > 0;
-        let duration : number = hasFinalExam ? parseInt(data.data.duration) : 10;
-        let minResult : number = hasFinalExam ? parseInt(data.data.minResult) : 50;
+
+        let hasFinalExam: boolean = parseInt(data.data.duration) > 0;
+        let duration: number = hasFinalExam ? parseInt(data.data.duration) / 60 : 10;
+        let minResult: number = hasFinalExam ? parseInt(data.data.minResult) : 50;
 
         this.EmpForm.setValue({
           courseId: data.data.courseId,
@@ -246,7 +242,7 @@ export class ModifyAdminCourseComponent implements OnInit, AfterViewInit {
           trainerId: data.data.trainerId,
           locationId: data.data.locationId,
           isLocReq: data.data.isLocReq == 1 ? true : false,
-          hasFinalExam : hasFinalExam,
+          hasFinalExam: hasFinalExam,
           EndTime: endTime,
           duration: duration,
           courseRate: data.data.courseRate,
@@ -365,7 +361,7 @@ export class ModifyAdminCourseComponent implements OnInit, AfterViewInit {
 
   saveEmpData(bUploadNewScormFile = false) {
 
-    if(this.EmpForm.value.hasFinalExam) {
+    if (this.EmpForm.value.hasFinalExam) {
       //multiply course duration by 60, as the backend expects seconds
       this.EmpForm.value.duration *= 60;
     }
@@ -437,7 +433,7 @@ export class ModifyAdminCourseComponent implements OnInit, AfterViewInit {
   }
 
   commitCourseData() {
-  
+
     this._globals.spinnerText = "";
     this.spinner.show();
 

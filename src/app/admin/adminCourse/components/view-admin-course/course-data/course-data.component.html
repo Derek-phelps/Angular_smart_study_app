@@ -1,11 +1,8 @@
-
 <div class="col-tile">
     <div class="col-header">{{'course.Data' | translate}}</div>
     <div class="col-text">
-        <div class="row profile-image-container"
-            *ngIf="data.courseImg && data.courseImg != ''">
-            <img src="{{ webURL }}/{{data.courseImg.courseImg}}"
-                onerror="this.src='assets/img/logoakt.png'" alt="course image"
+        <div class="row profile-image-container" *ngIf="data.courseImg && data.courseImg != ''">
+            <img src="{{ webURL }}/{{data.courseImg}}" onerror="this.src='assets/img/logoakt.png'" alt="course image"
                 class="profile-image">
         </div>
         <table class="info-table">
@@ -21,8 +18,7 @@
                 <td><b>{{'course.CreatedBy' | translate}}:</b></td>
                 <td>
                     <ng-container *ngIf="data.creatorInfo else noInfo">
-                        <a routerLink="../../../../employees/{{data.creatorInfo.empId}}"
-                            [skipLocationChange]="false"
+                        <a routerLink="../../../../employees/{{data.creatorInfo.empId}}" [skipLocationChange]="false"
                             [matTooltip]="'openVar' | translate: {var: data.creatorInfo.FULLNAME}"
                             *ngIf="userInfo.isAdmin">{{data.creatorInfo.FULLNAME}}</a>
                         <a href="javascript:void(0)" style="cursor: initial;"

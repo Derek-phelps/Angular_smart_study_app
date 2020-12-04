@@ -7,6 +7,7 @@ import { Globals } from '../../common/auth-guard.service';
 import { ActivatedRoute } from "@angular/router";
 import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
@@ -64,8 +65,14 @@ export class CompanyComponent implements OnInit {
     data: {}
   };
 
-  constructor(protected service: AdminService, private formBuilder: FormBuilder, private translate: TranslateService,
-    private route: ActivatedRoute, public _globals: Globals, private spinner: NgxSpinnerService) {
+  constructor(
+    protected service: AdminService,
+    private formBuilder: FormBuilder,
+    private translate: TranslateService,
+    private route: ActivatedRoute,
+    public _globals: Globals,
+    private spinner: NgxSpinnerService,
+    private snackbar: MatSnackBar) {
     if (this.translate.currentLang != this._globals.userInfo.userLang) {
       this.translate.use(this._globals.userInfo.userLang);
     }
@@ -201,6 +208,7 @@ export class CompanyComponent implements OnInit {
     this.DisableButton = this.DisableButton - 1;
   }
   saveEmpData() {
+    this.spinner.show();
     this.service.editCompany(this.EmpForm.value, this.bannerColor).subscribe((data) => {
       if (data.success) {
         this.service.getCompanyById(this._globals.companyInfo.companyId).subscribe((res) => {
@@ -208,11 +216,13 @@ export class CompanyComponent implements OnInit {
             this._globals.setCompany(res.data[0]);
           }
         });
-        this.translate.get('alert.UpdateCompanySuccess').subscribe(value => { alert(value); });
+        // this.translate.get('alert.UpdateCompanySuccess').subscribe(value => { alert(value); });
+        this.snackbar.open(this.translate.instant('alert.UpdateCompanySuccess'), '', { duration: 3000 });
       } else {
         this.translate.get('alert.EditCompFail').subscribe(value => { alert(value); });
         // alert(data.mes);
       }
+      this.spinner.hide();
     });
   }
   onIntervalChange(event) {
