@@ -3,6 +3,7 @@ import re
 from termcolor import colored
 import os
 import paramiko
+# import stat
 import json
 import requests
 # import sys
@@ -49,46 +50,30 @@ class CSftp(QtCore.QObject):
             print(e)
             return False
 
-    def getAllChildDirs(self):
+    def getValidAppChildDirs(self, isMulticlient=False):
         self.__isInit()
 
-        checkFiles = ['/index.html', '/Maintenance/index.html',
-                      '/assets/i18n/web.json', '/..htaccess']
+        if isMulticlient:
+            checkFiles = ['/index.html',
+                          '/Maintenance/index.html', '/..htaccess']
+        else:
+            checkFiles = ['/index.html', '/Maintenance/index.html',
+                          '/assets/i18n/web.json', '/..htaccess']
 
-        updateDirs = []
+        updateDirs = self.__getChildDirsContainingFiles(checkFiles)
 
-        for updateDir in self.__getChildDirectories():
-            validAppDir = True
-            for checkFile in checkFiles:
-                try:
-                    self.m_ftpClient.stat(updateDir + checkFile)
-                except Exception:
-                    validAppDir = False
+        if isMulticlient:
+            if len(updateDirs) == 1:
+                checkFiles = ['/index.html',
+                              '/Maintenance/index.html', '/assets/i18n/web.json']
+                symlinkDirs = self.__getChildDirsContainingFiles(checkFiles)
+                return [updateDirs[0], symlinkDirs]
+            else:
+                return []
+        else:
+            return updateDirs
 
-            updateDirs.append((updateDir, validAppDir))
-        return updateDirs
-
-    def getValidAppChildDirs(self):
-        self.__isInit()
-
-        checkFiles = ['/index.html', '/Maintenance/index.html',
-                      '/assets/i18n/web.json', '/..htaccess']
-
-        updateDirs = []
-
-        for updateDir in self.__getChildDirectories():
-            validAppDir = True
-            for checkFile in checkFiles:
-                try:
-                    self.m_ftpClient.stat(updateDir + checkFile)
-                except Exception:
-                    validAppDir = False
-
-            if validAppDir:
-                updateDirs.append(updateDir)
-        return updateDirs
-
-    def setMaintenancePage(self, updateDir):
+    def setMaintenancePage(self, updateDir, symlinkDirs=None):
         # Set maintenance page
         statusText = '[INFO] Setting maintenance page...'
         print(colored(statusText, 'blue'))
@@ -99,50 +84,13 @@ class CSftp(QtCore.QObject):
         # self.m_ftpClient.posix_rename(
         #     updateDir + '/API/.htaccess', updateDir + '/API/..htaccess')
 
-    def alterDbIfNeeded(self, updateDir, apiDir):
-        return True
-        # # print("STOR", name, localpath)
+        # Set also for symlink directories
+        if symlinkDirs:
+            for symlinkDir in symlinkDirs:
+                self.m_ftpClient.symlink(
+                    '../' + updateDir + '/.htaccess', symlinkDir + '/.htaccess')
 
-        # if not os.path.isfile('table_changes.sql'):
-        #     return False
-        # updateDbFile = open('table_changes.sql', 'r')
-        # updateStatements = updateDbFile.readlines()
-        # strippedUpdateStatements = []
-        # for updateStatement in updateStatements:
-        #     # print(updateStatement.strip())
-        #     strippedUpdateStatements.append(updateStatement.strip())
-
-        # sql = json.dumps(strippedUpdateStatements, separators=(',', ':'))
-
-        # # # print(userdata)
-        # remoteServerUrl = self.__getRemoteServerUrl(updateDir)
-        # if remoteServerUrl:
-        #     localVersionNumber = self.__getLocalVersionNumber(apiDir)
-        #     if not localVersionNumber:
-        #         return False
-        #     try:
-        #         self.m_ftpClient.put(
-        #             'UpdateDb.php', updateDir + '/API/application/controllers/UpdateDb.php')
-        #     except Exception:
-        #         return False
-        #     userdata = {"key": "laksjdfhlakdsjfhalksdjfhlaksdjfh",
-        #                 "VERSION_NUMBER": localVersionNumber,
-        #                 "SQL": sql}
-        #     resp = requests.post(
-        #         remoteServerUrl + '/API/index.php/UpdateDb/executesql', data=userdata)
-        #     # # print(resp.url)
-        #     try:
-        #         ret = json.loads(resp.text)["success"]
-        #         self.m_ftpClient.remove(
-        #             updateDir + '/API/application/controllers/UpdateDb.php')
-        #         return ret
-        #     except Exception:
-        #         return False
-        #     # print(resp.text)
-        # # return self.__getLocalVersionNumber(apiDir)
-        # return False
-
-    def resetMainTenancePage(self, updateDir):
+    def resetMainTenancePage(self, updateDir, symlinkDirs=None):
         statusText = '[INFO] Resetting maintenance page...'
         print(colored(statusText, 'blue'))
         self.updateProgressStatus.emit(statusText)
@@ -151,9 +99,23 @@ class CSftp(QtCore.QObject):
         self.m_ftpClient.posix_rename(updateDir + '/.htaccess',
                                       updateDir + '/..htaccess')
 
-    def deleteOldApp(self, updateDir):
-        # Update database
-        # TODO: copy code here
+        # Reset also for symlink directories
+        if symlinkDirs:
+            for symlinkDir in symlinkDirs:
+                self.m_ftpClient.unlink(symlinkDir + '/.htaccess')
+
+    def deleteOldApp(self, updateDir, symlinkDirs=None):
+        # Delete symlinks in symlink directories
+        if symlinkDirs:
+            for symlinkDir in symlinkDirs:
+                allFiles = self.__getFilesInFolder(
+                    symlinkDir, ['Maintenance', '.htaccess', 'API'])
+                allFiles += ['assets/' +
+                             delFile for delFile in self.__getFilesInFolder(symlinkDir + '/assets')]
+                allFiles += ['assets/i18n/' + delFile for delFile in self.__getFilesInFolder(
+                    symlinkDir + '/assets/i18n', ['web.json'])]
+                for delFile in allFiles:
+                    self.m_ftpClient.unlink(symlinkDir + '/' + delFile)
 
         # Delete old app and API files
         statusText = '[INFO] Deleting old files...'
@@ -188,7 +150,7 @@ class CSftp(QtCore.QObject):
         # Delete API model files
         self.__deleteFilesInFolder(updateDir + '/API/application/models')
 
-    def uploadNewApp(self, updateDir, appDir, apiDir):
+    def uploadNewApp(self, updateDir, appDir, apiDir, symlinkDirs=None):
         # Add new app and API files
         statusText = '[INFO] Uploading new files...'
         print(colored(statusText, 'blue'))
@@ -201,7 +163,7 @@ class CSftp(QtCore.QObject):
 
         # Add new API files
         self.m_ftpClient.put(apiDir + '/index.php', 'API/index.php')
-        self.m_ftpClient.put(apiDir + '/loadData.php', 'API/loadData.php')
+        # self.m_ftpClient.put(apiDir + '/loadData.php', 'API/loadData.php')
         self.m_ftpClient.put(apiDir + '/.htaccess', 'API/.htaccess')
         self.m_ftpClient.chdir('API/application')
         wdAPIApplication = self.m_ftpClient.getcwd()
@@ -234,14 +196,26 @@ class CSftp(QtCore.QObject):
 
         self.m_ftpClient.chdir(wd)
 
-        # # # TODO: Update database
+        # Update symlink directories
+        if symlinkDirs:
+            appFiles = self.__getFilesAndSubDirs(
+                updateDir, ['.htaccess', 'Maintenance', 'API', 'assets'])
 
-        # # # Reset maintenance page
-        # # print(colored('[INFO] Resetting maintenance page', 'blue'))
-        # # ftp_client.posix_rename(updateDir[0] + '/API/..htaccess',
-        # #                         updateDir[0] + '/API/.htaccess')
-        # # ftp_client.posix_rename(updateDir[0] + '/.htaccess',
-        # #                         updateDir[0] + '/..htaccess')
+            assetsFiles = ['assets/' + symFile for symFile in self.__getFilesAndSubDirs(
+                updateDir + '/assets', ['i18n'])]
+            i18nFiles = ['assets/i18n/' + symFile for symFile in self.__getFilesAndSubDirs(
+                updateDir + '/assets/i18n', ['web.json'])]
+
+            for symlinkDir in symlinkDirs:
+                for symFile in appFiles:
+                    self.m_ftpClient.symlink(
+                        '../' + updateDir + '/' + symFile, symlinkDir + '/' + symFile)
+                for symFile in assetsFiles:
+                    self.m_ftpClient.symlink(
+                        '../../' + updateDir + '/' + symFile, symlinkDir + '/' + symFile)
+                for symFile in i18nFiles:
+                    self.m_ftpClient.symlink(
+                        '../../../' + updateDir + '/' + symFile, symlinkDir + '/' + symFile)
 
     #####################################################################
     # PRIVATE
@@ -252,6 +226,20 @@ class CSftp(QtCore.QObject):
         else:
             return self.m_isInit
 
+    def __getChildDirsContainingFiles(self, checkFiles):
+        validDirs = []
+        for updateDir in self.__getChildDirectories():
+            validAppDir = True
+            for checkFile in checkFiles:
+                try:
+                    self.m_ftpClient.stat(updateDir + checkFile)
+                except Exception:
+                    validAppDir = False
+
+            if validAppDir:
+                validDirs.append(updateDir)
+        return validDirs
+
     def __getChildDirectories(self, folder='.', excludeFolderList=[]):
         childDirs = []
         for name in self.m_ftpClient.listdir(folder):
@@ -260,6 +248,13 @@ class CSftp(QtCore.QObject):
             if 'd' in lstatout and name not in excludeFolderList:
                 childDirs.append(name)
         return childDirs
+
+    def __getFilesAndSubDirs(self, folder='.', excludeList=[]):
+        filesAndFolders = []
+        for name in self.m_ftpClient.listdir(folder):
+            if name not in excludeList:
+                filesAndFolders.append(name)
+        return filesAndFolders
 
     def __getFilesInFolder(self, folder='.', excludeFileList=[]):
         files = []

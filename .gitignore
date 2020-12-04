@@ -1,4 +1,5 @@
-
 docker/db/mysql_data/
 node_modules/
 dist/
+update_scripts/hosts.ini
+update_scripts/__pycache__

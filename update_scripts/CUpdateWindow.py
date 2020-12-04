@@ -18,6 +18,7 @@ class CUpdateWindow(QtWidgets.QWidget):
     def __init__(self, parent):
         # QtWidgets.QWidget.__init__(self, None, QtCore.Qt.WindowStaysOnTopHint)
         QtWidgets.QWidget.__init__(self)
+        self.setWindowTitle('Update Applications')
         self.parent = parent
 
     def init(self, config, selectedConfigs, appDir, apiDir):
@@ -41,7 +42,7 @@ class CUpdateWindow(QtWidgets.QWidget):
         self.tableView.setMinimumWidth(500)
         self.tableView.verticalHeader().hide()
         self.tableView.horizontalHeader().hide()
-        self.tableView.setShowGrid(False)
+        # self.tableView.setShowGrid(False)
         self.tableView.setSelectionMode(
             QtWidgets.QAbstractItemView.NoSelection)
         self.tableView.setEditTriggers(
@@ -50,7 +51,7 @@ class CUpdateWindow(QtWidgets.QWidget):
         self.tableView.horizontalHeader().setSectionResizeMode(
             QtWidgets.QHeaderView.Stretch)
         model = QtGui.QStandardItemModel(self.tableView)
-        model.setColumnCount(2)
+        # model.setColumnCount(2)
         model.itemChanged.connect(self.checkAllSelected)
         model.itemChanged.connect(self.colorItemsCheckUpdateButton)
 
@@ -60,9 +61,12 @@ class CUpdateWindow(QtWidgets.QWidget):
                 sftp_client = CSftp(self)
                 if sftp_client.init(self.config[host]['sshhost'], self.config[host]['sshuser'], self.config[host]['sshpass']):
                     if sftp_client.changeAndCheckBaseDir(self.config[host]['basepath']):
-                        childDirs = sftp_client.getValidAppChildDirs()
-                        childDirs.sort()
-                        for childDir in childDirs:
+                        isMultiClient = self.config.has_option(
+                            host, 'multiclient') and self.config[host]['multiClient'] == "True"
+                        childDirs = sftp_client.getValidAppChildDirs(
+                            isMultiClient)
+                        if isMultiClient and len(childDirs) == 2:
+                            childDir = childDirs[0]
                             rowItem = []
                             hostItem = QtGui.QStandardItem(host)
                             hostItem.setCheckable(True)
@@ -70,11 +74,36 @@ class CUpdateWindow(QtWidgets.QWidget):
                             childItem = QtGui.QStandardItem(childDir)
                             rowItem.append(hostItem)
                             rowItem.append(childItem)
+                            if len(childDirs[1]) > 0:
+                                symlinkDirs = ""
+                                first = True
+                                for symLinkDir in childDirs[1]:
+                                    if first:
+                                        symlinkDirs += symLinkDir
+                                        first = False
+                                    else:
+                                        symlinkDirs += "\n" + symLinkDir
+                                symLinkDirItem = QtGui.QStandardItem(
+                                    symlinkDirs)
+                                rowItem.append(symLinkDirItem)
                             model.appendRow(rowItem)
+                        elif not isMultiClient:
+                            childDirs.sort()
+                            for childDir in childDirs:
+                                rowItem = []
+                                hostItem = QtGui.QStandardItem(host)
+                                hostItem.setCheckable(True)
+                                hostItem.setCheckState(QtCore.Qt.Unchecked)
+                                childItem = QtGui.QStandardItem(childDir)
+                                rowItem.append(hostItem)
+                                rowItem.append(childItem)
+                                model.appendRow(rowItem)
+
                         self.sftpClients[host] = sftp_client
                 self.parentProgressIncrement.emit()
 
         self.tableView.setModel(model)
+        self.tableView.resizeRowsToContents()
         # self.tableView.resizeColumnsToContents()
 
         self.startUpdateButton = QtWidgets.QPushButton(
@@ -148,10 +177,14 @@ class CUpdateWindow(QtWidgets.QWidget):
             if self.tableView.model().item(index).checkState() == QtCore.Qt.Checked:
                 self.tableView.model().item(index, 0).setBackground(QtCore.Qt.green)
                 self.tableView.model().item(index, 1).setBackground(QtCore.Qt.green)
+                if self.tableView.model().item(index, 2):
+                    self.tableView.model().item(index, 2).setBackground(QtCore.Qt.green)
                 numSelected += 1
             else:
                 self.tableView.model().item(index, 0).setBackground(defColor)
                 self.tableView.model().item(index, 1).setBackground(defColor)
+                if self.tableView.model().item(index, 2):
+                    self.tableView.model().item(index, 2).setBackground(defColor)
         self.startUpdateButton.setDisabled(numSelected == 0)
 
     @ QtCore.pyqtSlot()
@@ -163,8 +196,8 @@ class CUpdateWindow(QtWidgets.QWidget):
         selectedConfigs = []
         for index in range(self.tableView.model().rowCount()):
             if self.tableView.model().item(index).isCheckable() and self.tableView.model().item(index).checkState() == QtCore.Qt.Checked:
-                selectedConfigs.append((self.tableView.model().item(
-                    index, 0).text(), self.tableView.model().item(index, 1).text()))
+                selectedConfigs.append((self.tableView.model().item(index, 0).text(), self.tableView.model().item(
+                    index, 1).text(), self.tableView.model().item(index, 2).text() if self.tableView.model().item(index, 2) else None))
 
         msg = QtWidgets.QMessageBox()
         msg.setIcon(QtWidgets.QMessageBox.Warning)
@@ -191,7 +224,7 @@ class CUpdateWindow(QtWidgets.QWidget):
         self.setDisabled(True)
         self.progressBar.setRange(0, len(selectedConfigs))
         self.progressBar.setValue(0)
-        self.progressBar.setStatusTip('Test')
+        # self.progressBar.setStatusTip('Test')
         self.startUpdateButton.hide()
         self.updateLabel.show()
         self.progressBar.show()
@@ -204,17 +237,20 @@ class CUpdateWindow(QtWidgets.QWidget):
             # Update App
             currentSftp = self.sftpClients[currentConfig[0]]
             currentSftp.updateProgressStatus.connect(self.on_update_info_label)
-            if currentSftp.alterDbIfNeeded(currentConfig[1], self.apiDir):
-                try:
-                    currentSftp.setMaintenancePage(currentConfig[1])
-                    currentSftp.deleteOldApp(currentConfig[1])
-                    currentSftp.uploadNewApp(
-                        currentConfig[1], self.appDir, self.apiDir)
-                    currentSftp.resetMainTenancePage(currentConfig[1])
-                except Exception as e:
-                    print(e)
-            else:
-                print("ERROR")
+
+            try:
+                symlinkDirs = None
+                if currentConfig[2]:
+                    symlinkDirs = currentConfig[2].splitlines()
+
+                currentSftp.setMaintenancePage(currentConfig[1], symlinkDirs)
+                currentSftp.deleteOldApp(currentConfig[1], symlinkDirs)
+                currentSftp.uploadNewApp(
+                    currentConfig[1], self.appDir, self.apiDir, symlinkDirs)
+                currentSftp.resetMainTenancePage(currentConfig[1], symlinkDirs)
+            except Exception as e:
+                print(e)
+
             currentSftp.updateProgressStatus.disconnect(
                 self.on_update_info_label)
             self.progressBar.setValue(self.progressBar.value() + 1)
