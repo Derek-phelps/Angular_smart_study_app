@@ -105,6 +105,11 @@ class CSftp(QtCore.QObject):
                 self.m_ftpClient.unlink(symlinkDir + '/.htaccess')
 
     def deleteOldApp(self, updateDir, symlinkDirs=None):
+        # Delete old app and API files
+        statusText = '[INFO] Deleting old files...'
+        print(colored(statusText, 'blue'))
+        self.updateProgressStatus.emit(statusText)
+
         # Delete symlinks in symlink directories
         if symlinkDirs:
             for symlinkDir in symlinkDirs:
@@ -116,11 +121,6 @@ class CSftp(QtCore.QObject):
                     symlinkDir + '/assets/i18n', ['web.json'])]
                 for delFile in allFiles:
                     self.m_ftpClient.unlink(symlinkDir + '/' + delFile)
-
-        # Delete old app and API files
-        statusText = '[INFO] Deleting old files...'
-        print(colored(statusText, 'blue'))
-        self.updateProgressStatus.emit(statusText)
 
         # Delete files in app root folder
         self.__deleteFilesInFolder(updateDir, excludeFileList=['.htaccess'])

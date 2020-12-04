@@ -222,7 +222,7 @@ class CUpdateWindow(QtWidgets.QWidget):
 
     def startUpdate(self, selectedConfigs):
         self.setDisabled(True)
-        self.progressBar.setRange(0, len(selectedConfigs))
+        self.progressBar.setRange(0, len(selectedConfigs) * 4)
         self.progressBar.setValue(0)
         # self.progressBar.setStatusTip('Test')
         self.startUpdateButton.hide()
@@ -244,9 +244,12 @@ class CUpdateWindow(QtWidgets.QWidget):
                     symlinkDirs = currentConfig[2].splitlines()
 
                 currentSftp.setMaintenancePage(currentConfig[1], symlinkDirs)
+                self.progressBar.setValue(self.progressBar.value() + 1)
                 currentSftp.deleteOldApp(currentConfig[1], symlinkDirs)
+                self.progressBar.setValue(self.progressBar.value() + 1)
                 currentSftp.uploadNewApp(
                     currentConfig[1], self.appDir, self.apiDir, symlinkDirs)
+                self.progressBar.setValue(self.progressBar.value() + 1)
                 currentSftp.resetMainTenancePage(currentConfig[1], symlinkDirs)
             except Exception as e:
                 print(e)
