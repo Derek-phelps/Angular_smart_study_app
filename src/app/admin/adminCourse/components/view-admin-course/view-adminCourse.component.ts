@@ -106,7 +106,7 @@ export class ViewAdminCourseComponent implements OnInit {
   }
 
   editCourse() {
-    var path = "";
+    let path : string = "";
     if (this.userType == "1") { path = 'superadmin/course/edit/'; }
     else if (this.userType == "2") { path = 'admin/course/edit/'; } 
     else if (this.userType == "3") { path = 'trainer/course/edit/'; }
