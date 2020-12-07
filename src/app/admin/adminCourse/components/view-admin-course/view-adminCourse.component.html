@@ -1,5 +1,4 @@
-{{tabGroup}}
-<div *ngIf="courseData$ | async as data">
+<div *ngIf="courseData$ | async as data else loading">
     <div class="form-wrapper" style="max-width: 1000px;">
         <div class="edit-delete-icon-div">
             <i *ngIf="userInfo.isAdmin" class="fa fa-trash iconSize edit-delete-delete-icon"
@@ -15,10 +14,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- <div class="row" style="position: relative;">
-            <div class="loader" style="opacity: 1;"></div>
-        </div> -->
         <mat-tab-group #tabGroup [(selectedIndex)]="selectedIndex" (touchstart)="swipe($event, 'start')"
             (touchend)="swipe($event, 'end')" (selectedTabChange)="tabChanged($event)" class="tab-group">
             <mat-tab label="{{'course.Overview' | translate}}">
@@ -65,3 +60,9 @@
     Teilnehmerliste:
     - Option zum Anzeigen der Fortschrittdetails für jeden Mitarbeiter einfügen -->
 </div>
+
+<ng-template #loading>
+    <div style="position: relative;">
+        <div class="loader" style="opacity: 1;"></div>
+    </div>
+</ng-template>

@@ -6,19 +6,11 @@ import { Globals } from '../../../../common/auth-guard.service';
 import { TranslateService } from '@ngx-translate/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
-import { NgxSpinnerService } from 'ngx-spinner';
 import { ConfirmationBoxComponent } from '../../../../theme/components/confirmation-box/confirmation-box.component';
 import { Location } from '@angular/common';
 import { Observable, Subject } from 'rxjs';
 import { VACUtils } from './view-admin-course-utils';
 import { take, tap } from 'rxjs/operators';
-
-export interface DialogData {
-  items: any;
-  chapterId: string;
-  fun: any;
-  name: string;
-}
 
 @Pipe({ name: 'safe' })
 export class SafePipe implements PipeTransform {
@@ -38,13 +30,11 @@ export class ViewAdminCourseComponent implements OnInit {
 
   private _courseData$ : Subject<any> = null;
   private _hasParticipants : boolean = false;
-
-  private _courseId = 0;
-
+  private _courseId : number= 0;
   private _selectedIndex: number = 0;
 
-  private swipeCoord?: [number, number];
-  private swipeTime?: number;
+  private _swipeCoord? : [number, number];
+  private _swipeTime? : number;
 
   constructor(
     public dialog: MatDialog, 
@@ -62,15 +52,6 @@ export class ViewAdminCourseComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.route.params.subscribe(params => {
-    //   let tabId : number = params.tabId;
-    //   if (tabId > 4) { tabId = 0; }
-    //   this._selectedIndex = tabId;
-      
-    //   this.chpId = params.id;
-    //   this.updateData();
-    // });
-
     this._courseId = this.route.snapshot.params.id;
     this.updateData();
   }
@@ -80,11 +61,11 @@ export class ViewAdminCourseComponent implements OnInit {
     const time = new Date().getTime();
 
     if (when === 'start') {
-      this.swipeCoord = coord;
-      this.swipeTime = time;
+      this._swipeCoord = coord;
+      this._swipeTime = time;
     } else if (when === 'end') {
-      const direction = [coord[0] - this.swipeCoord[0], coord[1] - this.swipeCoord[1]];
-      const duration = time - this.swipeTime;
+      const direction = [coord[0] - this._swipeCoord[0], coord[1] - this._swipeCoord[1]];
+      const duration = time - this._swipeTime;
       if (duration < 1000 //
         && Math.abs(direction[0]) > 30 // Long enough
         && Math.abs(direction[0]) > Math.abs(direction[1] * 3)) { // Horizontal enough
@@ -133,9 +114,6 @@ export class ViewAdminCourseComponent implements OnInit {
     this.router.navigate([path + this._courseId], { skipLocationChange: false });
   }
 
-  ngOnDestroy() {
-  }
-
   deleteCourse() {
     let description : string = this.translate.instant('dialog.DeleteCourseSure');
     const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
@@ -162,6 +140,13 @@ export class ViewAdminCourseComponent implements OnInit {
   get hasParticipants() : boolean { return this._hasParticipants; }
   get selectedIndex() : number { return this._selectedIndex; }
   set selectedIndex(index : number) { this._selectedIndex = index; }
+}
+
+export interface DialogData {
+  items : any;
+  chapterId : string;
+  fun : any;
+  name : string;
 }
 
 
