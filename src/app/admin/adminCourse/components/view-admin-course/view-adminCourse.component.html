@@ -1,60 +1,54 @@
-<!-- <div *ngIf="courseData$ | async as courseData"> -->
+{{tabGroup}}
+<div *ngIf="courseData$ | async as data">
     <div class="form-wrapper" style="max-width: 1000px;">
-        <div class="edit-delete-icon-div"
-            [@visibilityChanged]="bCourseInfoLoaded && bAssignmentsLoaded ? 'shown' : 'hidden'" style="opacity: 0;">
-            <i *ngIf="_globals.userInfo.isAdmin" class="fa fa-trash iconSize edit-delete-delete-icon"
+        <div class="edit-delete-icon-div">
+            <i *ngIf="userInfo.isAdmin" class="fa fa-trash iconSize edit-delete-delete-icon"
                 style="cursor: pointer;" (click)="deleteCourse()" matTooltip="{{'course.delCourse' | translate}}"></i>
-            <i *ngIf="CourseData && CourseData.permission==2" class="fa fa-edit iconSize edit-delete-edit-icon"
+            <i *ngIf="data.courseInfo.permission==2" class="fa fa-edit iconSize edit-delete-edit-icon"
                 style="cursor: pointer;" (click)="editCourse()" matTooltip="{{'course.editCourse' | translate}}"></i>
         </div>
-        <div class="course-overview-wrapper" [@headerAnimation]="showHeader ? 'shown' : 'hidden'"
-            style="overflow: hidden;padding: 0;opacity: 0;">
+        <div class="course-overview-wrapper" [@headerAnimation]="selectedIndex > 0 ? 'shown' : 'hidden'"
+            style="overflow: hidden;padding: 0;">
             <div class="row tile-row">
                 <div class="col-12 col-tile-outer">
-                    <course-data [data]="CourseData" class="w-100" *ngIf="CourseData"></course-data>
+                    <course-data [data]="data.courseInfo" class="w-100"></course-data>
                 </div>
             </div>
         </div>
 
-        <div class="row" style="position: relative;"
-            [@visibilityChanged]="!bCourseInfoLoaded || !bAssignmentsLoaded ? 'shown' : 'hidden'"e
-            *ngIf="!bCourseInfoLoaded || !bAssignmentsLoaded">
+        <!-- <div class="row" style="position: relative;">
             <div class="loader" style="opacity: 1;"></div>
-        </div>
-        <div [@visibilityChanged]="bCourseInfoLoaded && bAssignmentsLoaded ? 'shown' : 'hidden'" style="opacity: 0;">
-            <mat-tab-group #tabGroup ([selectedIndex])="selected" (touchstart)="swipe($event, 'start')"
-                (touchend)="swipe($event, 'end')" (selectedTabChange)="tabChanged($event)" class="tab-group">
-                <mat-tab label="{{'course.Overview' | translate}}">
-                    <ng-template matTabContent>
-                        <course-overview [courseData]="data" *ngIf="CourseData" (tabId)="openPartList()"></course-overview>
-                    </ng-template>
-                </mat-tab>
-                <mat-tab label="{{'course.partList' | translate}}" [disabled]="!hasParticipants">
-                    <ng-template matTabContent>
-                        <course-participants 
-                            [courseData]="data" 
-                            *ngIf="CourseData" 
-                            (updateData)="updateData()">
-                        </course-participants>
-                    </ng-template>
-                </mat-tab>
-                <mat-tab [disabled]="!CourseData || CourseData.isScormCourse!=0 || CourseData.permission!=2"
-                    label="{{'menu.Content' | translate}}">
-                    <course-chapters [courseData]="data" *ngIf="CourseData"></course-chapters>
-                </mat-tab>
-                <mat-tab [disabled]="!CourseData || CourseData.isScormCourse!=0 || CourseData.permission!=2"
-                    label="{{'menu.Test' | translate}}">
-                    <course-tests [courseData]="data" *ngIf="CourseData"></course-tests>
-                </mat-tab>
-                <mat-tab label="{{'certificate.Certificate' | translate}}">
-                    <course-certificate 
+        </div> -->
+        <mat-tab-group #tabGroup [(selectedIndex)]="selectedIndex" (touchstart)="swipe($event, 'start')"
+            (touchend)="swipe($event, 'end')" (selectedTabChange)="tabChanged($event)" class="tab-group">
+            <mat-tab label="{{'course.Overview' | translate}}">
+                <ng-template matTabContent>
+                    <course-overview [courseData]="data" (tabId)="openPartList()"></course-overview>
+                </ng-template>
+            </mat-tab>
+            <mat-tab label="{{'course.partList' | translate}}" [disabled]="!hasParticipants">
+                <ng-template matTabContent>
+                    <course-participants 
                         [courseData]="data" 
-                        *ngIf="CourseData"
                         (updateData)="updateData()">
-                    </course-certificate>
-                </mat-tab>
-            </mat-tab-group>
-        </div>
+                    </course-participants>
+                </ng-template>
+            </mat-tab>
+            <mat-tab [disabled]="data.courseInfo.isScormCourse!=0 || data.courseInfo.permission!=2"
+                label="{{'menu.Content' | translate}}">
+                <course-chapters [courseData]="data"></course-chapters>
+            </mat-tab>
+            <mat-tab [disabled]="data.courseInfo.isScormCourse!=0 || data.courseInfo.permission!=2"
+                label="{{'menu.Test' | translate}}">
+                <course-tests [courseData]="data"></course-tests>
+            </mat-tab>
+            <mat-tab label="{{'certificate.Certificate' | translate}}">
+                <course-certificate 
+                    [courseData]="data" 
+                    (updateData)="updateData()">
+                </course-certificate>
+            </mat-tab>
+        </mat-tab-group>
     </div>
     <!-- Generell:
     - Kursname ganz oben einfügen
@@ -70,4 +64,4 @@
 
     Teilnehmerliste:
     - Option zum Anzeigen der Fortschrittdetails für jeden Mitarbeiter einfügen -->
-<!-- </div> -->
+</div>
