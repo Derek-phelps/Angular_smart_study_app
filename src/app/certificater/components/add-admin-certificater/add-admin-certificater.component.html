@@ -36,10 +36,10 @@
                 <input matInput type="text" formControlName="heldBy" placeholder="{{'certificate.HeldBy' | translate}}">
             </mat-form-field>
             <mat-form-field style="width: 100%">
-                <mat-label>{{'course.StartDate' | translate}}*</mat-label>
-                <input matInput [matDatepicker]="pickerStart" (focus)="pickerStart.open()" [formControl]="startDate">
-                <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
-                <mat-datepicker #pickerStart></mat-datepicker>
+                <mat-label>{{'certificate.FixedDate' | translate}}</mat-label>
+                <input matInput [matDatepicker]="pickerFixed" (focus)="pickerFixed.open()" [formControl]="fixedDate">
+                <mat-datepicker-toggle matSuffix [for]="pickerFixed"></mat-datepicker-toggle>
+                <mat-datepicker #pickerFixed></mat-datepicker>
             </mat-form-field>
             <mat-form-field style="width: 100%;">
                 <input matInput type="text" formControlName="bossTitleName"

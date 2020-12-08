@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { UploadInput } from 'ngx-uploader';
 import { CertificaterService } from '../../certificater.service';
 import { Globals } from '../../../common/auth-guard.service';
@@ -8,14 +8,40 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Router, ActivatedRoute } from "@angular/router";
 import { Location } from '@angular/common';
 
+import { MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+
+export const MY_DATE_FORMATS = {
+  parse: {
+    dateInput: 'DD.MM.YYYY',
+  },
+  display: {
+    dateInput: 'DD.MM.YYYY',
+    monthYearLabel: 'MM.YYYY',
+    dateA11yLabel: 'DD.MM.YYYY',
+    monthYearA11yLabel: 'MM.YYYY',
+  },
+};
+
 @Component({
   selector: 'app-add-admin-certificater',
   templateUrl: './add-admin-certificater.component.html',
-  styleUrls: ['./add-admin-certificater.component.scss']
+  styleUrls: ['./add-admin-certificater.component.scss'],
+  providers: [
+    {
+      provide: DateAdapter,
+      useClass: MomentDateAdapter,
+      deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
+    },
+    {
+      provide: MAT_DATE_FORMATS, useValue: MY_DATE_FORMATS
+    }
+  ]
 })
 export class AddAdminCertificaterComponent implements OnInit {
 
   public EmpForm: FormGroup;
+  fixedDate: any = undefined;
 
   CourseList = [];
 
@@ -60,6 +86,8 @@ export class AddAdminCertificaterComponent implements OnInit {
     this.translate.get('certificate.Signature').subscribe(value => { this.strSignature = value; });
     this.translate.get('certificate.Background').subscribe(value => { this.strBackground = value; });
     this.translate.get('certificate.Logo').subscribe(value => { this.strLogo = value; });
+
+    this.fixedDate = new FormControl();
 
     this.service.getAllCourseByCompany(this._globals.companyInfo.companyId).subscribe((data) => {
       if (data.success) {
@@ -142,9 +170,10 @@ export class AddAdminCertificaterComponent implements OnInit {
   }
   saveEmpData() {
     this.spinner.show();
-    var course = this.EmpForm.value.Course;
+    let fixed = this.fixedDate.value ? this.fixedDate.value.format('YYYY-MM-DD') : null;
+    let course = this.EmpForm.value.Course;
     this.EmpForm.value.heldBy = this.EmpForm.value.heldBy.trim();
-    this.service.addCertificate(this.EmpForm.value).subscribe((data) => {
+    this.service.addCertificate(this.EmpForm.value, fixed).subscribe((data) => {
       if (data.success) {
         //this.EmpForm.reset();
         this.setDefaultFormValues();
