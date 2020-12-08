@@ -57,7 +57,7 @@ export class CertificaterService {
             .pipe(map((response: Response) => response))
             .pipe(catchError(this.handleError))
     }
-    addCertificate(form: any): any {
+    addCertificate(form: any, fixed: any): any {
         let formData: FormData = new FormData();
         formData.append('CertificateName', form.CertificateName);
         formData.append('CertificateTitle', form.CertificateTitle);
@@ -75,11 +75,14 @@ export class CertificaterService {
         if (form.heldBy && form.heldBy != "") {
             formData.append('heldBy', form.heldBy);
         }
+        if (fixed) {
+            formData.append('fixedDate', fixed);
+        }
         return this._http.post(this.globals.APIURL + this._addCertificateUrl, formData)
             .pipe(map((response: Response) => response))
             .pipe(catchError(this.handleError))
     }
-    editCertificate(form: any): any {
+    editCertificate(form: any, fixed: any): any {
         let formData: FormData = new FormData();
 
         formData.append('CertificateName', form.CertificateName);
@@ -98,6 +101,9 @@ export class CertificaterService {
         formData.append('bossPosition', form.bossPosition);
         if (form.heldBy && form.heldBy != "") {
             formData.append('heldBy', form.heldBy);
+        }
+        if (fixed) {
+            formData.append('fixedDate', fixed);
         }
 
         return this._http.post(this.globals.APIURL + this._editCertificateUrl, formData)

@@ -11,6 +11,7 @@ import { Location } from '@angular/common';
 import { Observable, Subject } from 'rxjs';
 import { VACUtils } from './view-admin-course-utils';
 import { take, tap } from 'rxjs/operators';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Pipe({ name: 'safe' })
 export class SafePipe implements PipeTransform {
@@ -28,23 +29,24 @@ export class SafePipe implements PipeTransform {
 })
 export class ViewAdminCourseComponent implements OnInit {
 
-  private _courseData$ : Subject<any> = null;
-  private _hasParticipants : boolean = false;
-  private _courseId : number= 0;
+  private _courseData$: Subject<any> = null;
+  private _hasParticipants: boolean = false;
+  private _courseId: number = 0;
   private _selectedIndex: number = 0;
 
-  private _swipeCoord? : [number, number];
-  private _swipeTime? : number;
+  private _swipeCoord?: [number, number];
+  private _swipeTime?: number;
 
   constructor(
-    public dialog: MatDialog, 
-    public router: Router, 
+    public dialog: MatDialog,
+    public router: Router,
     private route: ActivatedRoute,
-    private translate: TranslateService, 
-    private location: Location, 
-    protected service: AdminCourseService, 
-    private globals: Globals
-    ) {
+    private translate: TranslateService,
+    private location: Location,
+    protected service: AdminCourseService,
+    private globals: Globals,
+    private spinner: NgxSpinnerService
+  ) {
     if (this.translate.currentLang != this.globals.userInfo.userLang) {
       this.translate.use(this.userInfo.userLang);
     }
@@ -53,6 +55,7 @@ export class ViewAdminCourseComponent implements OnInit {
 
   ngOnInit() {
     this._courseId = this.route.snapshot.params.id;
+    this._selectedIndex = this.route.snapshot.params.tabId;
     this.updateData();
   }
 
@@ -81,7 +84,7 @@ export class ViewAdminCourseComponent implements OnInit {
       }
     }
   }
- 
+
   updateData() {
     this.loadCourseData(this._courseId);
   }
@@ -97,25 +100,26 @@ export class ViewAdminCourseComponent implements OnInit {
 
   loadCourseData(CourseId) {
     this._courseData$ = this.service.getCourseData(CourseId).pipe(
-      tap((data : any) => {
-        if(data.success) {
+      tap((data: any) => {
+        if (data.success) {
           this._hasParticipants = data.userStatus.length != 0;
         }
+        this.spinner.hide();
       })
     );
   }
 
   editCourse() {
-    let path : string = "";
+    let path: string = "";
     if (this.userType == "1") { path = 'superadmin/course/edit/'; }
-    else if (this.userType == "2") { path = 'admin/course/edit/'; } 
+    else if (this.userType == "2") { path = 'admin/course/edit/'; }
     else if (this.userType == "3") { path = 'trainer/course/edit/'; }
     else { path = 'employee/course/edit/'; }
     this.router.navigate([path + this._courseId], { skipLocationChange: false });
   }
 
   deleteCourse() {
-    let description : string = this.translate.instant('dialog.DeleteCourseSure');
+    let description: string = this.translate.instant('dialog.DeleteCourseSure');
     const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
       width: '400px',
       data: { companyId: this._courseId, Action: false, Mes: description },
@@ -126,27 +130,27 @@ export class ViewAdminCourseComponent implements OnInit {
       this.service.delete(this._courseId).pipe(take(1)).subscribe(data => {
         if (data.success) {
           if (this.userType == "1") { this.router.navigate(['superadmin/course'], { skipLocationChange: false }); }
-          else if (this.userType == "2") { this.router.navigate(['admin/course'], { skipLocationChange: false }); } 
+          else if (this.userType == "2") { this.router.navigate(['admin/course'], { skipLocationChange: false }); }
           else if (this.userType == "3") { this.router.navigate(['trainer/course'], { skipLocationChange: false }); }
           else { this.router.navigate(['employee/course'], { skipLocationChange: false }); }
-        } 
+        }
       });
     });
   }
 
-  get userInfo() : any { return this.globals.userInfo; }
-  get userType() : string { return this.globals.getUserType(); }
-  get courseData$() : Observable<any> { return this._courseData$; }
-  get hasParticipants() : boolean { return this._hasParticipants; }
-  get selectedIndex() : number { return this._selectedIndex; }
-  set selectedIndex(index : number) { this._selectedIndex = index; }
+  get userInfo(): any { return this.globals.userInfo; }
+  get userType(): string { return this.globals.getUserType(); }
+  get courseData$(): Observable<any> { return this._courseData$; }
+  get hasParticipants(): boolean { return this._hasParticipants; }
+  get selectedIndex(): number { return this._selectedIndex; }
+  set selectedIndex(index: number) { this._selectedIndex = index; }
 }
 
 export interface DialogData {
-  items : any;
-  chapterId : string;
-  fun : any;
-  name : string;
+  items: any;
+  chapterId: string;
+  fun: any;
+  name: string;
 }
 
 
