@@ -1,1 +1,37 @@
-<p>add-chapter works!</p>
+<form [formGroup]="addChapterForm">
+
+
+    <mat-form-field style="width: 100%;">
+        <input matInput type="text" formControlName="chapterName" maxlength="100"
+            placeholder="{{'chapter.Name' | translate}}*">
+    </mat-form-field>
+
+    <mat-tab-group>
+        <mat-tab label="Sub chapters">
+            <div class="mt-4"></div>
+            <mat-accordion>
+                <ng-container formArrayName="subChapters">
+                    <ng-container *ngFor="let chapterControls of subChapters.controls; index as i" [formGroupName]="i">
+                        <mat-expansion-panel [expanded]="openedSubChapter === i">
+                            <mat-expansion-panel-header>
+                                {{ chapterControls.get('subChapterName').value }}
+                            </mat-expansion-panel-header>
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput type="text" formControlName="subChapterName" maxlength="100"
+                                        placeholder="{{'chapter.SubName' | translate}}*">
+                                </mat-form-field>
+                                <p>Quill goes here</p>
+                        </mat-expansion-panel>
+                    </ng-container>
+                </ng-container>
+            </mat-accordion>
+            <div class="d-flex justify-content-end">
+                <button mat-stroked-button class="mt-4" 
+                (click)="addSubChapter()">{{'chapter.AddSubChapter' | translate}}</button>
+            </div>
+        </mat-tab>
+        <mat-tab label="Chapter Questions">
+
+        </mat-tab>
+    </mat-tab-group>
+</form>

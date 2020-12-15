@@ -25,11 +25,33 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { QRCodeModule } from 'angularx-qrcode';
 import { SubChapterOverviewDialog } from './content.component';
 import { AddChapterComponent } from './components/add-chapter/add-chapter.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTabsModule } from '@angular/material/tabs';
 @NgModule({
   imports: [
-    NgxMaterialTimepickerModule, QRCodeModule,
-    MatCheckboxModule, MatNativeDateModule, MatDatepickerModule, CommonModule, routing, AppTranslationModule, MatCardModule, MatFormFieldModule, MatInputModule, MatListModule, MatDialogModule,
-    LayoutModule, MatTableModule, MatSortModule, MatPaginatorModule, FormsModule, ReactiveFormsModule
+    NgxMaterialTimepickerModule, 
+    //QRCodeModule,
+    MatCheckboxModule, 
+    MatNativeDateModule, 
+    MatDatepickerModule, 
+    CommonModule, 
+    routing, 
+    AppTranslationModule, 
+    MatCardModule, 
+    MatFormFieldModule, 
+    MatInputModule, 
+    MatListModule, 
+    MatDialogModule,
+    LayoutModule, 
+    MatTableModule, 
+    MatSortModule, 
+    MatPaginatorModule, 
+    FormsModule, 
+    ReactiveFormsModule,
+    MatExpansionModule,
+    MatButtonModule,
+    MatTabsModule,
   ],
   entryComponents: [
     SubChapterOverviewDialog
