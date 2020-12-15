@@ -24,6 +24,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { QRCodeModule } from 'angularx-qrcode';
 import { SubChapterOverviewDialog } from './content.component';
+import { AddChapterComponent } from './components/add-chapter/add-chapter.component';
 @NgModule({
   imports: [
     NgxMaterialTimepickerModule, QRCodeModule,
@@ -34,7 +35,7 @@ import { SubChapterOverviewDialog } from './content.component';
     SubChapterOverviewDialog
   ],
   declarations: [ContentComponent,
-    AddContentComponent, EditContentComponent, SubChapterOverviewDialog],
+    AddContentComponent, EditContentComponent, SubChapterOverviewDialog, AddChapterComponent],
   providers: [
     ContentService
   ]
