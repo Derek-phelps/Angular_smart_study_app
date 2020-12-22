@@ -1,0 +1,33 @@
+<form [formGroup]="questionnaireForm">
+    <mat-accordion>
+        <ng-container formArrayName="questions">
+            <ng-container *ngFor="let questionControls of questions.controls; index as i" [formGroupName]="i">
+                <mat-expansion-panel [expanded]="openedQuestion === i">
+                    <mat-expansion-panel-header>
+                        {{ questionControls.get('text').value }}
+                    </mat-expansion-panel-header>
+                        <mat-form-field style="width: 100%;">
+                            <input matInput type="text" formControlName="text" maxlength="100"
+                                placeholder="{{'question.Question' | translate}}*">
+                        </mat-form-field>
+                        <ng-container formArrayName="answers">
+                            <ng-container *ngFor="let answerControls of answersForQuestion(i).controls; index as j" [formGroupName]="j">
+                                <mat-form-field style="width: 60%;" class="mr-2">
+                                    <input matInput type="text" formControlName="text" maxlength="100"
+                                        placeholder="{{'question.PossibleAnswer' | translate}}*">
+                                </mat-form-field>
+                                
+                                <mat-checkbox formControlName="isCorrect">{{'question.CorrectAnswer' | translate}}</mat-checkbox>
+                            </ng-container>
+                        </ng-container>
+                        <div class="d-flex justify-content-end">
+                            <button mat-stroked-button class="mt-4" 
+                            (click)="addAnswer(i)">
+                            <i class="fa fa-plus mr-2"></i>{{'question.AddOption' | translate}}</button>
+                        </div>
+
+                </mat-expansion-panel>
+            </ng-container>
+        </ng-container>
+    </mat-accordion>
+</form>

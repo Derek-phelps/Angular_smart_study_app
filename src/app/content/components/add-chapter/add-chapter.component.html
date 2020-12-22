@@ -5,9 +5,8 @@
         <input matInput type="text" formControlName="chapterName" maxlength="100"
             placeholder="{{'chapter.Name' | translate}}*">
     </mat-form-field>
-
     <mat-tab-group>
-        <mat-tab label="Sub chapters">
+        <mat-tab label="{{'chapter.SubChapters' | translate}}">
             <div class="mt-4"></div>
             <mat-accordion>
                 <ng-container formArrayName="subChapters">
@@ -31,8 +30,8 @@
                 <i class="fa fa-plus mr-2"></i>{{'chapter.AddSubChapter' | translate}}</button>
             </div>
         </mat-tab>
-        <mat-tab label="Chapter Questions">
-
+        <mat-tab label="{{'question.Questions' | translate}}">
+            <question-container></question-container>
         </mat-tab>
     </mat-tab-group>
 </form>

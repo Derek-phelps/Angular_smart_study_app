@@ -22,7 +22,7 @@ export class AddChapterComponent implements OnInit {
   constructor(
     private formBuilder : FormBuilder,
     private translate: TranslateService,
-  private globals: Globals
+    private globals: Globals
   ) {
     if (this.translate.currentLang != this.globals.userInfo.userLang) {
       this.translate.use(this.globals.userInfo.userLang);
@@ -34,7 +34,7 @@ export class AddChapterComponent implements OnInit {
     this.addSubChapter();
   }
 
-  addSubChapter() {
+  addSubChapter() : void {
 
     /* Iterate all existing sub chapters and check if they are valid.
        if all are valid, a new chapter can be added. The check stops at 
