@@ -5,11 +5,11 @@
             <i class="fa fa-plus-circle iconSize" style="cursor: pointer;"></i>
         </div>
 
-        <div *ngIf="dataSourceChapter.data.length == 0"
+        <div *ngIf="dataSourceChapter"
             style="padding: 1em;">
             {{'chapter.NoChapterFound' | translate}}
         </div>
-        <div *ngIf="dataSourceChapter.data.length > 0">
+        <div *ngIf="dataSourceChapter && dataSourceChapter.data.length > 0">
             <table mat-table [dataSource]="dataSourceChapter" class="mat-elevation-z8">
 
                 <!-- Position Column -->
