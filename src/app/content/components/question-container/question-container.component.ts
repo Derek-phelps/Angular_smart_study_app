@@ -48,19 +48,17 @@ export class QuestionContainerComponent implements OnInit {
     this.questions.push( this.formBuilder.group({
       text : new FormControl('', [Validators.required]),
       image : new FormControl(''),
-      answers : this.createAnswer(),
+      answers : new FormArray([this.createAnswer()]),
     }));
     
     this._openedQuestion = this.questions.length -1;
   }
 
-  createAnswer() : FormArray {
-    let formArray : FormArray = new FormArray([]);
-    formArray.push(this.formBuilder.group({
+  createAnswer() : FormGroup {
+    return this.formBuilder.group({
       text : new FormControl('', [Validators.required]),
       isCorrect : new FormControl(false, []),
-    }));
-    return formArray;
+    });
   }
 
   addAnswer(pos : number) {

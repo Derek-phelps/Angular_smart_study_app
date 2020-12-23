@@ -457,7 +457,7 @@
     "DownloadExampleTemplate": "Download template file for question upload...",
     "DownloadTemplateZip": "Download ZIP file template",
     "DownloadTemplateExcel": "Download Excel file template",
-    "NewQuestion": "Add new test question...",
+    "NewQuestion": "Add new test question",
     "UploadQuestion": "Upload test questions...",
     "UploadQuestionZip": "Upload ZIP file containing questions (Excel file) and images...",
     "UploadQuestionExcel": "Upload Excel file with test questions...",

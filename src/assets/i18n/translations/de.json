@@ -457,7 +457,7 @@
     "DownloadExampleTemplate": "Template-File für Testfragen-Upload herunterladen...",
     "DownloadTemplateZip": "ZIP-File-Template herunterladen",
     "DownloadTemplateExcel": "Excel-File-Template herunterladen",
-    "NewQuestion": "Neue Testfrage hinzufügen...",
+    "NewQuestion": "Neue Testfrage hinzufügen",
     "UploadQuestion": "Testfragen hochladen...",
     "UploadQuestionZip": "ZIP-File mit Testfragen (Excel-File) und Bildern hochladen...",
     "UploadQuestionExcel": "Excel-File mit Testfragen hochladen...",

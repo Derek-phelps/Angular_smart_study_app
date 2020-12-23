@@ -7,8 +7,8 @@
     </mat-form-field>
     <mat-tab-group>
         <mat-tab label="{{'chapter.SubChapters' | translate}}">
-            <div class="mt-4"></div>
-            <mat-accordion>
+            
+            <mat-accordion class="mt-4">
                 <ng-container formArrayName="subChapters">
                     <ng-container *ngFor="let chapterControls of subChapters.controls; index as i" [formGroupName]="i">
                         <mat-expansion-panel [expanded]="openedSubChapter === i">
