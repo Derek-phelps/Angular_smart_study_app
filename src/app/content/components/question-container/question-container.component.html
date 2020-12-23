@@ -13,12 +13,19 @@
                         </mat-form-field>
                         <ng-container formArrayName="answers">
                             <ng-container *ngFor="let answerControls of answersForQuestion(i).controls; index as j" [formGroupName]="j">
-                                <mat-form-field style="width: 60%;" class="mr-2">
-                                    <input matInput type="text" formControlName="text" maxlength="100"
-                                        placeholder="{{'question.PossibleAnswer' | translate}}*">
-                                </mat-form-field>
-                                
-                                <mat-checkbox formControlName="isCorrect">{{'question.CorrectAnswer' | translate}}</mat-checkbox>
+                                <div class="row mt-4">
+                                    <span class="col-9">
+                                        <mat-form-field class="w-100">
+                                            <input matInput type="text" formControlName="text" maxlength="100"
+                                                placeholder="{{'question.PossibleAnswer' | translate}}*">
+                                        </mat-form-field>
+                                    </span>
+                                    <span class="col-3">
+                                        <mat-checkbox class="float-right" 
+                                            formControlName="isCorrect">{{'question.CorrectAnswer' | translate}}
+                                        </mat-checkbox>
+                                    </span>
+                                </div>
                             </ng-container>
                         </ng-container>
                         <div class="row mt-4">
@@ -34,8 +41,6 @@
                                 </button>
                             </div>
                         </div>
-                        
-
                 </mat-expansion-panel>
             </ng-container>
         </ng-container>
