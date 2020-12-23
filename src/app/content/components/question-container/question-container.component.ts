@@ -1,7 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { Globals } from 'src/app/common/auth-guard.service';
+
+
+
+export function atLeastOneCorrectValidator() : ValidatorFn {
+  return function validate(answers : FormArray) {
+    for(let answer of answers.controls) {
+      let isCorrect : boolean = answer.get('isCorrect').value;
+      if(isCorrect) { return null; }
+    }
+
+    return { atLeastOneCorrectRequired : true }
+  }
+}
 
 @Component({
   selector: 'question-container',
@@ -39,16 +52,16 @@ export class QuestionContainerComponent implements OnInit {
        but FormArrays don't support forEach syntax.
     */
     let index : number = 0;
-    for(let subChapter of this.questions.controls) {
-      subChapter.markAllAsTouched();      
-      if(subChapter.invalid) { this._openedQuestion = index; return; }
+    for(let question of this.questions.controls) {
+      question.markAllAsTouched();      
+      if(question.invalid) { this._openedQuestion = index; return; }
       index++;
     }
 
     this.questions.push( this.formBuilder.group({
       text : new FormControl('', [Validators.required]),
       image : new FormControl(''),
-      answers : new FormArray([this.createAnswer()]),
+      answers : new FormArray([this.createAnswer()], [atLeastOneCorrectValidator()]),
     }));
     
     this._openedQuestion = this.questions.length -1;

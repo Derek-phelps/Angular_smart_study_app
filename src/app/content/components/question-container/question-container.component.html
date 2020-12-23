@@ -21,12 +21,20 @@
                                 <mat-checkbox formControlName="isCorrect">{{'question.CorrectAnswer' | translate}}</mat-checkbox>
                             </ng-container>
                         </ng-container>
-                        <div class="d-flex justify-content-end">
-                            <button mat-stroked-button class="mt-4" 
-                                (click)="addAnswer(i)">
-                                <i class="fa fa-plus mr-2"></i>{{'question.AddOption' | translate}}
-                            </button>
+                        <div class="row mt-4">
+                            <div class="col-8">
+                                <mat-error *ngIf="answersForQuestion(i).getError('atLeastOneCorrectRequired')">
+                                    {{'question.AtLeastOneCorrectRequired' | translate}}
+                                </mat-error>
+                            </div>
+                            <div class="col-4">
+                                <button mat-stroked-button 
+                                    (click)="addAnswer(i)">
+                                    <i class="fa fa-plus mr-2"></i>{{'question.AddOption' | translate}}
+                                </button>
+                            </div>
                         </div>
+                        
 
                 </mat-expansion-panel>
             </ng-container>
@@ -39,3 +47,7 @@
         </button>
     </div>
 </form>
+
+<!-- <mat-hint *ngIf="EmpForm.get('minResult').value < 10" class="warning">
+    {{'course.MinResTooLowWarning' | translate}}
+</mat-hint> -->
