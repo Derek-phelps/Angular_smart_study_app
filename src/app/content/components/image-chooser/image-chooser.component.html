@@ -2,7 +2,7 @@
     <img [src]="imageUrl">
     <input #upload type="file" accept="image/*" (change)="onChange($event)" class="upload-handle" />
     <div class="overlay d-flex justify-content-around w-100">
-        <div class="text p-2" (click)="changeImage()">Change</div>
-        <div class="text p-2" (click)="clearImage()" *ngIf="hasChanges">Delete</div>
+        <div class="text p-2" (click)="changeImage()">{{'location.Add' | translate}}</div>
+        <div class="text p-2" (click)="clearImage()" *ngIf="hasChanges">{{'location.Delete' | translate}}</div>
     </div>
 </div>

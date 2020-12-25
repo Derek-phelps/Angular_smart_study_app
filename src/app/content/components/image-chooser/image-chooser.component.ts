@@ -1,6 +1,8 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { TranslateService } from '@ngx-translate/core';
 import { SafeHtmlPipe } from 'ngx-spinner/lib/safe-html.pipe';
+import { Globals } from 'src/app/common/auth-guard.service';
 
 export interface ImageChangedEvent {
   safeUrl : SafeHtml, 
@@ -29,14 +31,19 @@ export class ImageChooserComponent implements OnInit {
   
   constructor(
     private sanizitzer : DomSanitizer,
-  ) { }
+    private translate: TranslateService,
+    private globals: Globals
+  ) {
+    if (this.translate.currentLang != this.globals.userInfo.userLang) {
+      this.translate.use(this.globals.userInfo.userLang);
+    }
+    this.globals.currentTranslateService = this.translate;
+   }
 
   ngOnInit(): void {
   }
 
   changeImage() {
-    // let element : HTMLElement = document.getElementById('upload') as HTMLElement;
-    // element.click();
     this._uploadButton.nativeElement.click();
   }
 

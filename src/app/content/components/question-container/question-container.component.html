@@ -18,42 +18,43 @@
                                 placeholder="{{'question.Question' | translate}}*"></textarea>
                         </mat-form-field>
                     </div>
-                        <ng-container formArrayName="answers">
-                            <ng-container *ngFor="let answerControls of answersForQuestion(i).controls; index as j" [formGroupName]="j">
-                                <div class="row mt-4">
-                                    <div class="col-3">
-                                        <image-chooser (imageChanged)="answerImageChanged(i, j, $event)"></image-chooser>
-                                    </div>
-                                    <span class="col-9">
-                                        <div>
-                                            <mat-form-field class="w-100">
-                                                <textarea matInput type="text" formControlName="text"
-                                                    cdkTextareaAutosize 
-                                                    placeholder="{{'question.PossibleAnswer' | translate}}*"></textarea>
-                                            </mat-form-field>
-                                        </div>
-                                        <div>
-                                            <mat-checkbox class="float-right" 
-                                                formControlName="isCorrect">{{'question.CorrectAnswer' | translate}}
-                                            </mat-checkbox>
-                                        </div>
-                                    </span>
+                    <hr/>
+                    <ng-container formArrayName="answers">
+                        <ng-container *ngFor="let answerControls of answersForQuestion(i).controls; index as j" [formGroupName]="j">
+                            <div class="row mt-4">
+                                <div class="col-3">
+                                    <image-chooser (imageChanged)="answerImageChanged(i, j, $event)"></image-chooser>
                                 </div>
-                            </ng-container>
+                                <span class="col-9">
+                                    <div>
+                                        <mat-form-field class="w-100">
+                                            <textarea matInput type="text" formControlName="text"
+                                                cdkTextareaAutosize 
+                                                placeholder="{{'question.PossibleAnswer' | translate}}*"></textarea>
+                                        </mat-form-field>
+                                    </div>
+                                    <div>
+                                        <mat-checkbox class="float-right" 
+                                            formControlName="isCorrect">{{'question.CorrectAnswer' | translate}}
+                                        </mat-checkbox>
+                                    </div>
+                                </span>
+                            </div>
                         </ng-container>
-                        <div class="row mt-4">
-                            <div class="col-8">
-                                <mat-error *ngIf="answersForQuestion(i).getError('atLeastOneCorrectRequired')">
-                                    {{'question.AtLeastOneCorrectRequired' | translate}}
-                                </mat-error>
-                            </div>
-                            <div class="col-4">
-                                <button mat-stroked-button 
-                                    (click)="addAnswer(i)">
-                                    <i class="fa fa-plus mr-2"></i>{{'question.AddOption' | translate}}
-                                </button>
-                            </div>
+                    </ng-container>
+                    <div class="row mt-4">
+                        <div class="col-8">
+                            <mat-error *ngIf="answersForQuestion(i).getError('atLeastOneCorrectRequired')">
+                                {{'question.AtLeastOneCorrectRequired' | translate}}
+                            </mat-error>
                         </div>
+                        <div class="col-4">
+                            <button mat-stroked-button 
+                                (click)="addAnswer(i)">
+                                <i class="fa fa-plus mr-2"></i>{{'question.AddOption' | translate}}
+                            </button>
+                        </div>
+                    </div>
                 </mat-expansion-panel>
             </ng-container>
         </ng-container>
