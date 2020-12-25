@@ -28,8 +28,8 @@ import { AddChapterComponent } from './components/add-chapter/add-chapter.compon
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
-import { QuestionComponent } from './components/question/question.component';
 import { QuestionContainerComponent } from './components/question-container/question-container.component';
+import { ImageChooserComponent } from './components/image-chooser/image-chooser.component';
 @NgModule({
   imports: [
     NgxMaterialTimepickerModule, 
@@ -59,7 +59,11 @@ import { QuestionContainerComponent } from './components/question-container/ques
     SubChapterOverviewDialog
   ],
   declarations: [ContentComponent,
-    AddContentComponent, EditContentComponent, SubChapterOverviewDialog, AddChapterComponent, QuestionComponent, QuestionContainerComponent],
+    AddContentComponent, 
+    EditContentComponent, 
+    SubChapterOverviewDialog, 
+    AddChapterComponent, 
+    QuestionContainerComponent, ImageChooserComponent],
   providers: [
     ContentService
   ]

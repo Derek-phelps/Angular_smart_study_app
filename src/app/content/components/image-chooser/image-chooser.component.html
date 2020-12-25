@@ -1,0 +1,7 @@
+<div class="container">
+    <img (click)="changeImage()" [src]="imageUrl">
+    <input #upload type="file" accept="image/*" (change)="onChange($event)" class="upload-handle" />
+    <div class="overlay">
+        <div class="text">Change</div>
+    </div>
+</div>

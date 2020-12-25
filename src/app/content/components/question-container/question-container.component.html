@@ -9,7 +9,7 @@
                     </mat-expansion-panel-header>
                     <div class="row">
                         <div class="col-3">
-                            <div class="box h-100"></div>
+                            <image-chooser (imageChanged)="questionImageChanged(i, $event)"></image-chooser>
                         </div>
                         <mat-form-field class="col-9">
                             <textarea matInput type="text" formControlName="text"
@@ -22,7 +22,7 @@
                             <ng-container *ngFor="let answerControls of answersForQuestion(i).controls; index as j" [formGroupName]="j">
                                 <div class="row mt-4">
                                     <div class="col-3">
-                                        <div class="box h-100"></div>
+                                        <image-chooser (imageChanged)="answerImageChanged(i, j, $event)"></image-chooser>
                                     </div>
                                     <span class="col-9">
                                         <div>
