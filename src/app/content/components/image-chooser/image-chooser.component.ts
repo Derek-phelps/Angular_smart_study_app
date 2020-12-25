@@ -17,12 +17,13 @@ export class ImageChooserComponent implements OnInit {
   @Input('imageUrl')
   set(value : string )
   {
-    this._imageURL = value;
+    this._imageUrl = value;
   }
 
   @Output('imageChanged') imageChangedEvent : EventEmitter<ImageChangedEvent> = new EventEmitter<ImageChangedEvent>();
 
-  private _imageURL : string = "/assets/img/bulb_small.png";
+  private _imageUrl : string = "/assets/img/bulb_small.png";
+  private _originalImageUrl : string = null;
   
   @ViewChild('upload') _uploadButton : ElementRef;
   
@@ -43,15 +44,25 @@ export class ImageChooserComponent implements OnInit {
     if(event.target.files.length == 0) { return; }
 
     let image : Blob = event.target.files[0] as Blob
-    this._imageURL = URL.createObjectURL(image);
+    
+    if(this._originalImageUrl == null) { this._originalImageUrl = this._imageUrl; }
+    this._imageUrl = URL.createObjectURL(image);
 
     this.imageChangedEvent.emit({ 'safeUrl' : this.imageUrl, 'data' : image });
   }
 
-  bypass(url : string) : SafeHtml {
+  clearImage() {
+    this._imageUrl = this._originalImageUrl;
+    this._originalImageUrl = null;
+    this.imageChangedEvent.emit({ 'safeUrl' : null, 'data' : null });
+  }
+
+  private _bypass(url : string) : SafeHtml {
     return this.sanizitzer.bypassSecurityTrustUrl(url);
   }
 
-  get imageUrl() : SafeHtml { return this.bypass(this._imageURL); }
+
+  get imageUrl() : SafeHtml { return this._bypass(this._imageUrl); }
+  get hasChanges() : boolean { return this._originalImageUrl != null; }
 
 }

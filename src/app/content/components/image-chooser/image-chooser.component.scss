@@ -21,7 +21,6 @@ img {
     transform: translate(-50%, -50%);
     -ms-transform : translate(-50%, -50%);
     text-align: center;
-    pointer-events: none;
 }
 
 .container {
@@ -44,4 +43,5 @@ img {
     font-size : 12px;
     padding: 16px 32px;
     border-radius: 5%;
+    cursor: pointer;
 }
