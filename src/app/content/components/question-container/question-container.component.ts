@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { Globals } from 'src/app/common/auth-guard.service';
@@ -27,6 +27,8 @@ export class QuestionContainerComponent implements OnInit {
   private _questionnaireForm : FormGroup = this.formBuilder.group({
     questions : new FormArray([]),
   });
+
+  //@Input() questionnaire : FormArray = new FormArray([]);
 
   private _openedQuestion : number = -1;
 

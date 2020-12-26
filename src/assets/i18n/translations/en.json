@@ -451,7 +451,8 @@
     "ClassEndTime": "Class End Time",
     "ConfirmStartTime": "Confirmation Start Time",
     "ConfirmEndTime": "Confirmation End Time",
-    "NoChapterFound": "You didn't add any chapters for this course yet..."
+    "NoChapterFound": "You didn't add any chapters for this course yet...",
+    "SaveChapter" : "Save chapter"
   },
   "question": {
     "DownloadExampleTemplate": "Download template file for question upload...",

@@ -29,13 +29,18 @@
                 </mat-accordion>
                 <div class="d-flex justify-content-end">
                     <button mat-stroked-button class="mt-4" 
-                    (click)="addSubChapter()">
-                    <i class="fa fa-plus mr-2"></i>{{'chapter.AddSubChapter' | translate}}</button>
+                        (click)="addSubChapter()">
+                        <i class="fa fa-plus mr-2"></i>{{'chapter.AddSubChapter' | translate}}
+                    </button>
                 </div>
             </mat-tab>
             <mat-tab label="{{'question.Questions' | translate}}">
                 <question-container></question-container>
             </mat-tab>
         </mat-tab-group>
+            <button mat-raised-button class="mt-4" 
+                (click)="saveChapter()">
+                <i class="fa fa-save mr-2"></i>{{'chapter.SaveChapter' | translate}}
+            </button>
     </form>
 </div>

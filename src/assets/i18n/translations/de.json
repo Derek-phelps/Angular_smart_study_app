@@ -451,7 +451,8 @@
     "ClassEndTime": "Unterricht Endzeit",
     "ConfirmStartTime": "Anwesenheitstool Startzeit",
     "ConfirmEndTime": "Anwesenheitstool Endzeit",
-    "NoChapterFound": "Sie haben noch keine Kapitel zu diesem Kurs hinzugefügt..."
+    "NoChapterFound": "Sie haben noch keine Kapitel zu diesem Kurs hinzugefügt...",
+    "SaveChapter" : "Kapitel speichern"
   },
   "question": {
     "DownloadExampleTemplate": "Template-File für Testfragen-Upload herunterladen...",

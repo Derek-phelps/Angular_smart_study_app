@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { Globals } from 'src/app/common/auth-guard.service';
+import { QuestionContainerComponent } from '../question-container/question-container.component';
 
 @Component({
   selector: 'app-add-chapter',
@@ -14,10 +15,12 @@ export class AddChapterComponent implements OnInit {
     chapterName : new  FormControl('', [Validators.required]),
     course : new FormControl('', [Validators.required]),
     subChapters : new FormArray([]),
-    subModels : new FormArray([]),
+    questions : new FormArray([])
   });
 
   private _openedSubChapter : number = -1;
+
+  @ViewChild(QuestionContainerComponent) questionComponent : QuestionContainerComponent;
 
   constructor(
     private formBuilder : FormBuilder,
@@ -57,11 +60,14 @@ export class AddChapterComponent implements OnInit {
     this._openedSubChapter = this.subChapters.length -1;
   }
 
+  saveChapter() : void {
+    // let questions = this._addChapterForm.get('questions') as FormArray;
+    // questions..(this.questionComponent.questionnaireForm.getRawValue());
+     let raw = this._addChapterForm.getRawValue();
+    console.log(raw)
+  }
 
-  get addChapterForm() : FormGroup { return this._addChapterForm; }
-  get chapterName() : FormControl { return this._addChapterForm.get('chapterName') as FormControl; }
-  get subChapters() : FormArray { return this._addChapterForm.get('subChapters') as FormArray; }
-  get openedSubChapter() : number { return this._openedSubChapter; }
+
   get quillModules() : Object {
     return {
       toolbar : [
@@ -72,4 +78,10 @@ export class AddChapterComponent implements OnInit {
       ]
     }
   }
+
+  get addChapterForm() : FormGroup { return this._addChapterForm; }
+  get chapterName() : FormControl { return this._addChapterForm.get('chapterName') as FormControl; }
+  get subChapters() : FormArray { return this._addChapterForm.get('subChapters') as FormArray; }
+  get openedSubChapter() : number { return this._openedSubChapter; }
+  
 }
