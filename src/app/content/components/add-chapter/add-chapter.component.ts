@@ -50,7 +50,7 @@ export class AddChapterComponent implements OnInit {
 
     this.subChapters.push( this.formBuilder.group({
       subChapterName : new FormControl('', [Validators.required]),
-      //data : new FormControl('', [Validators.required]),
+      data : new FormControl('', [Validators.required]),
       //fileAttachement : new FormControl('', [Validators.required])
     }));
     

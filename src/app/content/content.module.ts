@@ -30,6 +30,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { QuestionContainerComponent } from './components/question-container/question-container.component';
 import { ImageChooserComponent } from './components/image-chooser/image-chooser.component';
+import { EditorModule } from 'primeng/editor';
+
 @NgModule({
   imports: [
     NgxMaterialTimepickerModule, 
@@ -54,16 +56,19 @@ import { ImageChooserComponent } from './components/image-chooser/image-chooser.
     MatExpansionModule,
     MatButtonModule,
     MatTabsModule,
+    EditorModule,
   ],
   entryComponents: [
     SubChapterOverviewDialog
   ],
-  declarations: [ContentComponent,
+  declarations: [
+    ContentComponent,
     AddContentComponent, 
     EditContentComponent, 
     SubChapterOverviewDialog, 
     AddChapterComponent, 
-    QuestionContainerComponent, ImageChooserComponent],
+    QuestionContainerComponent, 
+    ImageChooserComponent],
   providers: [
     ContentService
   ]

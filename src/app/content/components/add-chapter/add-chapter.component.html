@@ -15,11 +15,11 @@
                             <mat-expansion-panel-header>
                                 {{ chapterControls.get('subChapterName').value }}
                             </mat-expansion-panel-header>
-                                <mat-form-field style="width: 100%;">
-                                    <input matInput type="text" formControlName="subChapterName" maxlength="100"
-                                        placeholder="{{'chapter.SubName' | translate}}*">
-                                </mat-form-field>
-                                <p>Quill goes here</p>
+                            <mat-form-field style="width: 100%;">
+                                <input matInput type="text" formControlName="subChapterName" maxlength="100"
+                                    placeholder="{{'chapter.SubName' | translate}}*">
+                            </mat-form-field>
+                            <p-editor formControlName="data" class="editor"></p-editor>
                         </mat-expansion-panel>
                     </ng-container>
                 </ng-container>

@@ -485,7 +485,7 @@
     "UploadExcelFail": "Fehler beim Hochladen der Testfragen! Bitte überprüfen Sie das Excel-File (Kapitelnummern, ...).",
     "UploadFileTypeFail": "Fehler beim Hochladen der Testfragen (Dateiformat ungültig)!",
     "NoQuestionFound": "Sie haben zu diesem Kurs noch keine Fragen hinzugefügt...",
-    "AtLeastOneCorrectRequired" : "Jede Frage muss mindestens eine korrekte Antwortmöglichkeit haben!",
+    "AtLeastOneCorrectRequired" : "Jede Frage muss mindestens eine korrekte Antwortmöglichkeit haben!"
   },
   "company": {
     "Company": "Firma",
