@@ -1,41 +1,41 @@
-<form [formGroup]="addChapterForm">
-
-
-    <mat-form-field style="width: 100%;">
-        <input matInput type="text" formControlName="chapterName" maxlength="100"
-            placeholder="{{'chapter.Name' | translate}}*">
-    </mat-form-field>
-    <mat-tab-group>
-        <mat-tab label="{{'chapter.SubChapters' | translate}}">
-            <div class="mt-4"></div>
-            <mat-accordion>
-                <ng-container formArrayName="subChapters">
-                    <ng-container *ngFor="let chapterControls of subChapters.controls; index as i" [formGroupName]="i">
-                        <mat-expansion-panel [expanded]="openedSubChapter === i">
-                            <mat-expansion-panel-header>
-                                {{ chapterControls.get('subChapterName').value }}
-                            </mat-expansion-panel-header>
-                            <mat-form-field style="width: 100%;">
-                                <input matInput type="text" formControlName="subChapterName" maxlength="100"
-                                    placeholder="{{'chapter.SubName' | translate}}*">
-                            </mat-form-field>
-                            <p-editor formControlName="data" [style]="{ 'height':'320px' }" [modules]="quillModules">
-                                <p-header>
-                                    <!-- This has to stay empty to allow quill full control over the toolbar -->
-                                </p-header>
-                            </p-editor>
-                        </mat-expansion-panel>
+<div class="container" #holder>
+    <form [formGroup]="addChapterForm">
+        <mat-form-field style="width: 100%;">
+            <input matInput type="text" formControlName="chapterName" maxlength="100"
+                placeholder="{{'chapter.Name' | translate}}*">
+        </mat-form-field>
+        <mat-tab-group>
+            <mat-tab label="{{'chapter.SubChapters' | translate}}">
+                <div class="mt-4"></div>
+                <mat-accordion>
+                    <ng-container formArrayName="subChapters">
+                        <ng-container *ngFor="let chapterControls of subChapters.controls; index as i" [formGroupName]="i">
+                            <mat-expansion-panel [expanded]="openedSubChapter === i">
+                                <mat-expansion-panel-header>
+                                    {{ chapterControls.get('subChapterName').value }}
+                                </mat-expansion-panel-header>
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput type="text" formControlName="subChapterName" maxlength="100"
+                                        placeholder="{{'chapter.SubName' | translate}}*">
+                                </mat-form-field>
+                                <p-editor formControlName="data" [style]="{ 'height':'320px' }" [modules]="quillModules" [bounds]="holder">
+                                    <p-header>
+                                        <!-- This has to stay empty to allow quill full control over the toolbar -->
+                                    </p-header>
+                                </p-editor>
+                            </mat-expansion-panel>
+                        </ng-container>
                     </ng-container>
-                </ng-container>
-            </mat-accordion>
-            <div class="d-flex justify-content-end">
-                <button mat-stroked-button class="mt-4" 
-                (click)="addSubChapter()">
-                <i class="fa fa-plus mr-2"></i>{{'chapter.AddSubChapter' | translate}}</button>
-            </div>
-        </mat-tab>
-        <mat-tab label="{{'question.Questions' | translate}}">
-            <question-container></question-container>
-        </mat-tab>
-    </mat-tab-group>
-</form>
+                </mat-accordion>
+                <div class="d-flex justify-content-end">
+                    <button mat-stroked-button class="mt-4" 
+                    (click)="addSubChapter()">
+                    <i class="fa fa-plus mr-2"></i>{{'chapter.AddSubChapter' | translate}}</button>
+                </div>
+            </mat-tab>
+            <mat-tab label="{{'question.Questions' | translate}}">
+                <question-container></question-container>
+            </mat-tab>
+        </mat-tab-group>
+    </form>
+</div>
