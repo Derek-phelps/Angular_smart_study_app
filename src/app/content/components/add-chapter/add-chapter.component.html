@@ -19,7 +19,11 @@
                                 <input matInput type="text" formControlName="subChapterName" maxlength="100"
                                     placeholder="{{'chapter.SubName' | translate}}*">
                             </mat-form-field>
-                            <p-editor formControlName="data" class="editor"></p-editor>
+                            <p-editor formControlName="data" [style]="{ 'height':'320px' }" [modules]="quillModules">
+                                <p-header>
+                                    <!-- This has to stay empty to allow quill full control over the toolbar -->
+                                </p-header>
+                            </p-editor>
                         </mat-expansion-panel>
                     </ng-container>
                 </ng-container>

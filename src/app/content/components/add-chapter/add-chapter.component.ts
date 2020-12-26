@@ -62,4 +62,14 @@ export class AddChapterComponent implements OnInit {
   get chapterName() : FormControl { return this._addChapterForm.get('chapterName') as FormControl; }
   get subChapters() : FormArray { return this._addChapterForm.get('subChapters') as FormArray; }
   get openedSubChapter() : number { return this._openedSubChapter; }
+  get quillModules() : Object {
+    return {
+      toolbar : [
+        [{header : [1, 2, 3] }],
+        ['bold', 'italic', 'underline'],
+        ['image', 'code-block'],
+        ['video', 'link']
+      ]
+    }
+  }
 }
