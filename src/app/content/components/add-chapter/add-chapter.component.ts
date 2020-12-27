@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
@@ -49,6 +50,13 @@ export class AddChapterComponent implements OnInit {
     }));
     
     this._openedSubChapter = this.subChapters.length -1;
+  }
+
+  reorder(event : CdkDragDrop<any[]>) : void {
+    //moveItemInArray(this.subChapters, event.previousIndex, event.currentIndex);
+    const draggedSubChapter: FormGroup = this.subChapters.at(event.previousIndex) as FormGroup;
+    this.subChapters.removeAt(event.previousIndex);
+    this.subChapters.insert(event.currentIndex, draggedSubChapter);
   }
 
   saveChapter() : void {

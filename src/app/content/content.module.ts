@@ -31,6 +31,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { QuestionContainerComponent } from './components/question-container/question-container.component';
 import { ImageChooserComponent } from './components/image-chooser/image-chooser.component';
 import { EditorModule } from 'primeng/editor';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   imports: [
@@ -57,6 +58,8 @@ import { EditorModule } from 'primeng/editor';
     MatButtonModule,
     MatTabsModule,
     EditorModule,
+    DragDropModule,
+    MatExpansionModule
   ],
   entryComponents: [
     SubChapterOverviewDialog

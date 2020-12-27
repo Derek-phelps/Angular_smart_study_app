@@ -7,11 +7,15 @@
         <mat-tab-group>
             <mat-tab label="{{'chapter.SubChapters' | translate}}">
                 <div class="mt-4"></div>
-                <mat-accordion>
+                <mat-accordion
+                    cdkDropList
+                    (cdkDropListDropped)="reorder($event)"
+                    class="droppable">
                     <ng-container formArrayName="subChapters">
                         <ng-container *ngFor="let chapterControls of subChapters.controls; index as i" [formGroupName]="i">
-                            <mat-expansion-panel [expanded]="openedSubChapter === i">
-                                <mat-expansion-panel-header>
+                            <mat-expansion-panel 
+                                [expanded]="openedSubChapter === i">
+                                <mat-expansion-panel-header cdkDrag class="draggable">
                                     {{ chapterControls.get('subChapterName').value }}
                                 </mat-expansion-panel-header>
                                 <mat-form-field style="width: 100%;">
