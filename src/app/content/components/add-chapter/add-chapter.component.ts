@@ -53,7 +53,6 @@ export class AddChapterComponent implements OnInit {
   }
 
   reorder(event : CdkDragDrop<any[]>) : void {
-    //moveItemInArray(this.subChapters, event.previousIndex, event.currentIndex);
     const draggedSubChapter: FormGroup = this.subChapters.at(event.previousIndex) as FormGroup;
     this.subChapters.removeAt(event.previousIndex);
     this.subChapters.insert(event.currentIndex, draggedSubChapter);

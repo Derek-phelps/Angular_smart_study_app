@@ -1,3 +1,4 @@
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
@@ -81,6 +82,12 @@ export class QuestionContainerComponent implements OnInit {
 
   addAnswer(pos : number) {
     this.answersForQuestion(pos).push(this.createAnswer());
+  }
+
+  reorder(event : CdkDragDrop<any[]>) : void {
+    const draggedSubChapter: FormGroup = this.questions.at(event.previousIndex) as FormGroup;
+    this.questions.removeAt(event.previousIndex);
+    this.questions.insert(event.currentIndex, draggedSubChapter);
   }
 
   answersForQuestion(pos : number) : FormArray {

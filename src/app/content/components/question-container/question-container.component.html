@@ -1,10 +1,13 @@
 <div class="mt-4"></div>
 <form [formGroup]="form">
-    <mat-accordion>
+    <mat-accordion
+        cdkDropList
+        (cdkDropListDropped)="reorder($event)"
+        class="droppable">
         <ng-container formArrayName="questions">
             <ng-container *ngFor="let questionControls of questions.controls; index as i" [formGroupName]="i">
                 <mat-expansion-panel [expanded]="openedQuestion === i">
-                    <mat-expansion-panel-header>
+                    <mat-expansion-panel-header cdkDrag class="draggable">
                         {{ questionControls.get('text').value }}
                     </mat-expansion-panel-header>
                     <div class="row">
