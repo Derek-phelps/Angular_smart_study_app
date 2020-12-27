@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { TranslateService } from '@ngx-translate/core';
 import { Globals } from 'src/app/common/auth-guard.service';
 import { QuestionContainerComponent } from '../question-container/question-container.component';
@@ -21,6 +22,7 @@ export class AddChapterComponent implements OnInit {
   private _openedSubChapter : number = -1;
 
   @ViewChild(QuestionContainerComponent) questionComponent : QuestionContainerComponent;
+  @ViewChild(MatTabGroup) tabGroup : MatTabGroup;
 
   constructor(
     private formBuilder : FormBuilder,
@@ -38,18 +40,7 @@ export class AddChapterComponent implements OnInit {
   }
 
   addSubChapter() : void {
-
-    /* Iterate all existing sub chapters and check if they are valid.
-       if all are valid, a new chapter can be added. The check stops at 
-       the first invalid sub chapter and opens it. This is fu**king ugly, 
-       but FormArrays don't support forEach syntax.
-    */
-    let index : number = 0;
-    for(let subChapter of this.subChapters.controls) {
-      subChapter.markAllAsTouched();      
-      if(subChapter.invalid) { this._openedSubChapter = index; return; }
-      index++;
-    }
+    if(!this.checkSubChapters()) { return; }
 
     this.subChapters.push( this.formBuilder.group({
       subChapterName : new FormControl('', [Validators.required]),
@@ -61,10 +52,27 @@ export class AddChapterComponent implements OnInit {
   }
 
   saveChapter() : void {
-    // let questions = this._addChapterForm.get('questions') as FormArray;
-    // questions..(this.questionComponent.questionnaireForm.getRawValue());
-     let raw = this._addChapterForm.getRawValue();
+    if(!this.checkSubChapters()) { this.tabGroup.selectedIndex = 0; return; }
+    if(!this.questionComponent.checkQuestions()) { this.tabGroup.selectedIndex = 1; return; }
+
+    let raw = this._addChapterForm.getRawValue();
     console.log(raw)
+  }
+
+  checkSubChapters() : boolean {
+    /* Iterate all existing sub chapters and check if they are valid.
+      if all are valid, a new chapter can be added. The check stops at 
+      the first invalid sub chapter and opens it. This is fu**king ugly, 
+      but FormArrays don't support forEach syntax.
+    */
+    let index : number = 0;
+    for(let subChapter of this.subChapters.controls) {
+      subChapter.markAllAsTouched();      
+      if(subChapter.invalid) { this._openedSubChapter = index; return false; }
+      index++;
+    }
+
+    return true;
   }
 
 

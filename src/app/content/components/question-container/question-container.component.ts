@@ -24,10 +24,6 @@ export function atLeastOneCorrectValidator() : ValidatorFn {
 })
 export class QuestionContainerComponent implements OnInit {
 
-  // private _questionnaireForm : FormGroup = this.formBuilder.group({
-  //   questions : new FormArray([]),
-  // });
-
   @Input() form : FormGroup = this.formBuilder.group({});
   @Input() questions : FormArray = new FormArray([]);
 
@@ -45,22 +41,11 @@ export class QuestionContainerComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.createQuestion();
+    //this.createQuestion();
   }
 
   createQuestion() : void {
-
-    /* Iterate all existing questions and check if they are valid.
-       if all are valid, a new question can be added. The check stops at 
-       the first invalid question and opens it. This is fu**king ugly, 
-       but FormArrays don't support forEach syntax.
-    */
-    let index : number = 0;
-    for(let question of this.questions.controls) {
-      question.markAllAsTouched();      
-      if(question.invalid) { this._openedQuestion = index; return; }
-      index++;
-    }
+    if(!this.checkQuestions()) { return; }
 
     this.questions.push( this.formBuilder.group({
       text : new FormControl('', [Validators.required]),
@@ -77,6 +62,21 @@ export class QuestionContainerComponent implements OnInit {
       image : new FormControl('', []),
       isCorrect : new FormControl(false, []),
     });
+  }
+
+  checkQuestions() : boolean {
+    /* Iterate all existing questions and check if they are valid.
+       if all are valid, a new question can be added. The check stops at 
+       the first invalid question and opens it. This is fu**king ugly, 
+       but FormArrays don't support forEach syntax.
+    */
+   let index : number = 0;
+   for(let question of this.questions.controls) {
+     question.markAllAsTouched();      
+     if(question.invalid) { this._openedQuestion = index; return false; }
+     index++;
+   }
+   return true;
   }
 
   addAnswer(pos : number) {
@@ -96,9 +96,6 @@ export class QuestionContainerComponent implements OnInit {
     answerArray.at(answer).get('image').setValue(event.data);
   }
 
-  //get questionnaireForm() : FormGroup { return this._questionnaireForm; }
-  //get questions() : FormArray { return this._questionnaireForm.get('questions') as FormArray; }
-  //get questions() : FormArray { return this._questionnaireForm.get('questions') as FormArray; }
   get openedQuestion() : number { return this._openedQuestion; }
 
 }

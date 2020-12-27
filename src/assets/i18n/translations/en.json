@@ -485,7 +485,7 @@
     "UploadZipFail": "Error during question ZIP upload! Please check the uploaded ZIP file (paths to images, chapter numbers, ...).",
     "UploadExcelFail": "Error during question upload! Please check the uploaded Excel file (chapter numbers, ...).",
     "UploadFileTypeFail": "Error during question upload (invalid file type)!",
-    "NoQuestionFound": "You didn't add any questions to this course yet...",
+    "NoQuestionFound": "You haven't added any questions to this course yet.",
     "AtLeastOneCorrectRequired" : "Each Question needs at least one correct answer!"
   },
   "company": {

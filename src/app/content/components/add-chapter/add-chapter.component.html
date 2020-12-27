@@ -38,9 +38,14 @@
                 <question-container [form]="addChapterForm" [questions]="questions"></question-container>
             </mat-tab>
         </mat-tab-group>
-            <button mat-raised-button class="mt-4" 
-                (click)="saveChapter()">
-                <i class="fa fa-save mr-2"></i>{{'chapter.SaveChapter' | translate}}
-            </button>
+            <div class="d-flex justify-content-between mt-4">
+                <mat-hint *ngIf="questions.length == 0" class="warning">
+                    {{'question.NoQuestionFound' | translate}}
+                </mat-hint>
+                <button mat-raised-button 
+                    (click)="saveChapter()">
+                    <i class="fa fa-save mr-2"></i>{{'chapter.SaveChapter' | translate}}
+                </button>
+            </div>
     </form>
 </div>
