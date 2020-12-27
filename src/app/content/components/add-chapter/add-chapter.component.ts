@@ -83,5 +83,6 @@ export class AddChapterComponent implements OnInit {
   get chapterName() : FormControl { return this._addChapterForm.get('chapterName') as FormControl; }
   get subChapters() : FormArray { return this._addChapterForm.get('subChapters') as FormArray; }
   get openedSubChapter() : number { return this._openedSubChapter; }
+  get questions() : FormArray { return this._addChapterForm.get('questions') as FormArray; }
   
 }

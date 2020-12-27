@@ -1,5 +1,5 @@
 <div class="mt-4"></div>
-<form [formGroup]="questionnaireForm">
+<form [formGroup]="form">
     <mat-accordion>
         <ng-container formArrayName="questions">
             <ng-container *ngFor="let questionControls of questions.controls; index as i" [formGroupName]="i">

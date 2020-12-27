@@ -24,11 +24,12 @@ export function atLeastOneCorrectValidator() : ValidatorFn {
 })
 export class QuestionContainerComponent implements OnInit {
 
-  private _questionnaireForm : FormGroup = this.formBuilder.group({
-    questions : new FormArray([]),
-  });
+  // private _questionnaireForm : FormGroup = this.formBuilder.group({
+  //   questions : new FormArray([]),
+  // });
 
-  //@Input() questionnaire : FormArray = new FormArray([]);
+  @Input() form : FormGroup = this.formBuilder.group({});
+  @Input() questions : FormArray = new FormArray([]);
 
   private _openedQuestion : number = -1;
 
@@ -95,8 +96,9 @@ export class QuestionContainerComponent implements OnInit {
     answerArray.at(answer).get('image').setValue(event.data);
   }
 
-  get questionnaireForm() : FormGroup { return this._questionnaireForm; }
-  get questions() : FormArray { return this._questionnaireForm.get('questions') as FormArray; }
+  //get questionnaireForm() : FormGroup { return this._questionnaireForm; }
+  //get questions() : FormArray { return this._questionnaireForm.get('questions') as FormArray; }
+  //get questions() : FormArray { return this._questionnaireForm.get('questions') as FormArray; }
   get openedQuestion() : number { return this._openedQuestion; }
 
 }

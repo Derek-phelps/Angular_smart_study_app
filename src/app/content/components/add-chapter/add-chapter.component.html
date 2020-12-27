@@ -35,7 +35,7 @@
                 </div>
             </mat-tab>
             <mat-tab label="{{'question.Questions' | translate}}">
-                <question-container></question-container>
+                <question-container [form]="addChapterForm" [questions]="questions"></question-container>
             </mat-tab>
         </mat-tab-group>
             <button mat-raised-button class="mt-4" 
