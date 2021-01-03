@@ -1,7 +1,7 @@
 <div class="container" #holder>
     <form [formGroup]="addChapterForm">
         <mat-form-field style="width: 100%;">
-            <input matInput type="text" formControlName="ChapterName" maxlength="100"
+            <input matInput type="text" formControlName="chapterName" maxlength="100"
                 placeholder="{{'chapter.Name' | translate}}*">
         </mat-form-field>
         <mat-tab-group>
@@ -11,8 +11,8 @@
                     cdkDropList
                     (cdkDropListDropped)="reorder($event)"
                     class="droppable">
-                    <ng-container formArrayName="SubChapter">
-                        <ng-container *ngFor="let chapterControls of SubChapter.controls; index as i" [formGroupName]="i">
+                    <ng-container formArrayName="subChapter">
+                        <ng-container *ngFor="let chapterControls of subChapter.controls; index as i" [formGroupName]="i">
                             <mat-expansion-panel 
                                 [expanded]="openedSubChapter === i">
                                 <mat-expansion-panel-header cdkDrag class="draggable">

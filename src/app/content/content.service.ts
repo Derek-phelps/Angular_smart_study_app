@@ -84,23 +84,23 @@ export class ContentService {
     }
     add(form:any): Observable<any>  {
             let formData:FormData = new FormData();
-            formData.append('ChapterName', form.ChapterName);
-            formData.append('course', form.course);
+            formData.append('ChapterName', form.chapterName);
+            formData.append('course', form.courseId);
             formData.append('isOffline', form.isOffline ? '1' : '0');
-            formData.append('SubChapter', JSON.stringify(form.SubChapter) );
+            formData.append('SubChapter', JSON.stringify(form.subChapter) );
             formData.append('SubModel', JSON.stringify(form.SubModel) );
             formData.append('createdBy', this._globals.companyInfo.companyId+"" );
         return this._http.post(this._addUrl,formData)
         .pipe(map((response: Response) => response))
         .pipe(catchError(this.handleError))
     }
-    edit(form:any): any  {
+    edit(form:any): Observable<any>  {
         let formData:FormData = new FormData();
-        formData.append('ChapterName', form.ChapterName);
-        formData.append('course', form.course);
+        formData.append('ChapterName', form.chapterName);
+        formData.append('course', form.courseId);
         formData.append('chapterId', form.chapterId);
         formData.append('isOffline', form.isOffline ? '1' : '0');
-        formData.append('SubChapter', JSON.stringify(form.SubChapter) );
+        formData.append('SubChapter', JSON.stringify(form.subChapter) );
         formData.append('SubModel', JSON.stringify(form.SubModel) );
         formData.append('createdBy', this._globals.companyInfo.companyId+"" );
         return this._http.post(this._editUrl,formData)

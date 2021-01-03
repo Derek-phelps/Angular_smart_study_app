@@ -17,7 +17,8 @@ export const routes: Routes = [
   },
   {
     path: 'edit/:id',
-    component: EditContentComponent
+    //component: EditContentComponent
+    component: AddChapterComponent
   }
 ];
 export const routing: ModuleWithProviders<RouterModule> = RouterModule.forChild(routes);
