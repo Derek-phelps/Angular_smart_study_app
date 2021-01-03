@@ -1,7 +1,7 @@
 <div class="container" #holder>
     <form [formGroup]="addChapterForm">
         <mat-form-field style="width: 100%;">
-            <input matInput type="text" formControlName="chapterName" maxlength="100"
+            <input matInput type="text" formControlName="ChapterName" maxlength="100"
                 placeholder="{{'chapter.Name' | translate}}*">
         </mat-form-field>
         <mat-tab-group>
@@ -11,23 +11,23 @@
                     cdkDropList
                     (cdkDropListDropped)="reorder($event)"
                     class="droppable">
-                    <ng-container formArrayName="subChapters">
-                        <ng-container *ngFor="let chapterControls of subChapters.controls; index as i" [formGroupName]="i">
+                    <ng-container formArrayName="SubChapter">
+                        <ng-container *ngFor="let chapterControls of SubChapter.controls; index as i" [formGroupName]="i">
                             <mat-expansion-panel 
                                 [expanded]="openedSubChapter === i">
                                 <mat-expansion-panel-header cdkDrag class="draggable">
-                                    {{ chapterControls.get('subChapterName').value }}
+                                    {{ chapterControls.get('subChapterTitle').value }}
                                 </mat-expansion-panel-header>
                                 <mat-form-field style="width: 100%;">
-                                    <input matInput type="text" formControlName="subChapterName" maxlength="100"
+                                    <input matInput type="text" formControlName="subChapterTitle" maxlength="100"
                                         placeholder="{{'chapter.SubName' | translate}}*">
                                 </mat-form-field>
-                                <p-editor formControlName="data" [style]="{ 'height':'320px' }" [modules]="quillModules" [bounds]="holder">
+                                <p-editor formControlName="ChapterTxt" [style]="{ 'height':'320px' }" [modules]="quillModules" [bounds]="holder">
                                     <p-header>
                                         <!-- This has to stay empty to allow quill full control over the toolbar -->
                                     </p-header>
                                 </p-editor>
-                                <mat-error *ngIf="chapterControls.get('data').touched && !chapterControls.get('data').valid" 
+                                <mat-error *ngIf="chapterControls.get('ChapterTxt').touched && !chapterControls.get('ChapterTxt').valid" 
                                     class="mt-2">
                                     {{'chapter.TextArea' | translate}}
                                 </mat-error>

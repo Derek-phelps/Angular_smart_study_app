@@ -1,9 +1,14 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
+import { ConfirmationBoxComponent } from 'src/app/theme/components/confirmation-box/confirmation-box.component';
+import { ContentService } from '../../content.service';
 import { QuestionContainerComponent } from '../question-container/question-container.component';
 
 @Component({
@@ -14,9 +19,10 @@ import { QuestionContainerComponent } from '../question-container/question-conta
 export class AddChapterComponent implements OnInit {
 
   private _addChapterForm : FormGroup = this.formBuilder.group({
-    chapterName : new  FormControl('', [Validators.required]),
-    course : new FormControl('', [Validators.required]),
-    subChapters : new FormArray([]),
+    ChapterName : new  FormControl('', [Validators.required]),
+    course : new FormControl(-1, []),
+    isOffline : new FormControl(false, []),
+    SubChapter : new FormArray([]),
     questions : new FormArray([])
   });
 
@@ -27,8 +33,12 @@ export class AddChapterComponent implements OnInit {
 
   constructor(
     private formBuilder : FormBuilder,
-    private translate: TranslateService,
-    private globals: Globals
+    private translate : TranslateService,
+    private globals : Globals,
+    private service : ContentService,
+    private router : Router,
+    private route : ActivatedRoute,
+    public dialog: MatDialog,
   ) {
     if (this.translate.currentLang != this.globals.userInfo.userLang) {
       this.translate.use(this.globals.userInfo.userLang);
@@ -37,33 +47,54 @@ export class AddChapterComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this._addChapterForm.patchValue({ course: this.route.snapshot.params.id });
     this.addSubChapter();
   }
 
   addSubChapter() : void {
     if(!this.checkSubChapters()) { return; }
 
-    this.subChapters.push( this.formBuilder.group({
-      subChapterName : new FormControl('', [Validators.required]),
-      data : new FormControl('', [Validators.required]),
-      //fileAttachement : new FormControl('', [Validators.required])
+    this.SubChapter.push( this.formBuilder.group({
+      subChapterTitle : new FormControl('', [Validators.required]),
+      isVideo : new FormControl('3', []),
+      ChapterTxt : new FormControl('', [Validators.required]),
+      FilePath : new FormControl(null, [])
     }));
     
-    this._openedSubChapter = this.subChapters.length -1;
+    this._openedSubChapter = this.SubChapter.length -1;
   }
 
   reorder(event : CdkDragDrop<any[]>) : void {
-    const draggedSubChapter: FormGroup = this.subChapters.at(event.previousIndex) as FormGroup;
-    this.subChapters.removeAt(event.previousIndex);
-    this.subChapters.insert(event.currentIndex, draggedSubChapter);
+    const draggedSubChapter: FormGroup = this.SubChapter.at(event.previousIndex) as FormGroup;
+    this.SubChapter.removeAt(event.previousIndex);
+    this.SubChapter.insert(event.currentIndex, draggedSubChapter);
   }
 
   saveChapter() : void {
+
     if(!this.checkSubChapters()) { this.tabGroup.selectedIndex = 0; return; }
     if(!this.questionComponent.checkQuestions()) { this.tabGroup.selectedIndex = 1; return; }
 
-    let raw = this._addChapterForm.getRawValue();
-    console.log(raw)
+    let description: string = this.translate.instant('chapter.SaveChapterDesc');
+    const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
+      width: '400px',
+      data: { Action: false, Mes: description },
+      autoFocus: false
+    });
+
+    dialogRef.afterClosed().pipe(take(1)).subscribe(
+      res => this.service.add(this._addChapterForm.value).pipe(take(1)).subscribe(
+        _ => {
+          let path : string = "";
+            if (this.globals.getUserType() == "1") { path = 'superadmin/course/view'; } 
+            else if (this.globals.getUserType() == "2") { path = 'admin/course/view'; }
+            else if (this.globals.getUserType() == "3") { path = 'trainer/course/view'; }
+            else { path = 'employee/course/view'; }
+            
+            this.router.navigate([path, this._addChapterForm.value.course, 2], { skipLocationChange: false });
+        }
+      )
+    )    
   }
 
   checkSubChapters() : boolean {
@@ -73,7 +104,7 @@ export class AddChapterComponent implements OnInit {
       but FormArrays don't support forEach syntax.
     */
     let index : number = 0;
-    for(let subChapter of this.subChapters.controls) {
+    for(let subChapter of this.SubChapter.controls) {
       subChapter.markAllAsTouched();      
       if(subChapter.invalid) { this._openedSubChapter = index; return false; }
       index++;
@@ -81,7 +112,6 @@ export class AddChapterComponent implements OnInit {
 
     return true;
   }
-
 
   get quillModules() : Object {
     return {
@@ -95,8 +125,8 @@ export class AddChapterComponent implements OnInit {
   }
 
   get addChapterForm() : FormGroup { return this._addChapterForm; }
-  get chapterName() : FormControl { return this._addChapterForm.get('chapterName') as FormControl; }
-  get subChapters() : FormArray { return this._addChapterForm.get('subChapters') as FormArray; }
+  get chapterName() : FormControl { return this._addChapterForm.get('ChapterName') as FormControl; }
+  get SubChapter() : FormArray { return this._addChapterForm.get('SubChapter') as FormArray; }
   get openedSubChapter() : number { return this._openedSubChapter; }
   get questions() : FormArray { return this._addChapterForm.get('questions') as FormArray; }
   

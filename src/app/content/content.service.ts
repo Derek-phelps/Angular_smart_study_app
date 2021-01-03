@@ -82,7 +82,7 @@ export class ContentService {
         .pipe(map((response: Response) => response))
         .pipe(catchError(this.handleError))
     }
-    add(form:any): any  {
+    add(form:any): Observable<any>  {
             let formData:FormData = new FormData();
             formData.append('ChapterName', form.ChapterName);
             formData.append('course', form.course);

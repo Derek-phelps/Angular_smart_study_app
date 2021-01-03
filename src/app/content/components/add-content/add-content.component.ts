@@ -173,6 +173,9 @@ export class AddContentComponent implements OnInit {
     } else {
       this.ChapterForm.value.SubModel = [];
     }
+
+    console.log(this.ChapterForm.getRawValue());
+
     this.service.add(this.ChapterForm.value).subscribe((data) => {
       if (data.success) {
         // this.ChapterForm.reset();

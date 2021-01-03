@@ -452,7 +452,8 @@
     "ConfirmStartTime": "Anwesenheitstool Startzeit",
     "ConfirmEndTime": "Anwesenheitstool Endzeit",
     "NoChapterFound": "Sie haben noch keine Kapitel zu diesem Kurs hinzugefügt...",
-    "SaveChapter" : "Kapitel speichern"
+    "SaveChapter" : "Kapitel speichern",
+    "SaveChapterDesc" : "Wollen Sie dieses Kapitel speichern?"
   },
   "question": {
     "DownloadExampleTemplate": "Template-File für Testfragen-Upload herunterladen...",
