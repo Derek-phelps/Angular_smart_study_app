@@ -27,6 +27,10 @@
                                         <!-- This has to stay empty to allow quill full control over the toolbar -->
                                     </p-header>
                                 </p-editor>
+                                <mat-error *ngIf="chapterControls.get('data').touched && !chapterControls.get('data').valid" 
+                                    class="mt-2">
+                                    {{'chapter.TextArea' | translate}}
+                                </mat-error>
                             </mat-expansion-panel>
                         </ng-container>
                     </ng-container>

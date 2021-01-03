@@ -444,7 +444,7 @@
     "Text": "Text",
     "SubName": "Subchapter Name",
     "SubChapters": "Subchapters",
-    "TextArea": "Enter text here...",
+    "TextArea": "Please provide a text.",
     "FileUpload": "Upload File",
     "SelectFile": "Select File...",
     "ClassStartTime": "Class Start Time",
