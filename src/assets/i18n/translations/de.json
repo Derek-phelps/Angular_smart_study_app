@@ -453,7 +453,9 @@
     "ConfirmEndTime": "Anwesenheitstool Endzeit",
     "NoChapterFound": "Sie haben noch keine Kapitel zu diesem Kurs hinzugefügt...",
     "SaveChapter" : "Kapitel speichern",
-    "SaveChapterDesc" : "Wollen Sie dieses Kapitel speichern?"
+    "SaveChapterDesc" : "Wollen Sie dieses Kapitel speichern?",
+    "DeleteSubChapter" : "Unterkapitel Löschen",
+    "DeleteSubChapterDesc" : "Wollen Sie dieses Unterkapitel löschen?"
   },
   "question": {
     "DownloadExampleTemplate": "Template-File für Testfragen-Upload herunterladen...",
@@ -487,6 +489,7 @@
     "UploadExcelFail": "Fehler beim Hochladen der Testfragen! Bitte überprüfen Sie das Excel-File (Kapitelnummern, ...).",
     "UploadFileTypeFail": "Fehler beim Hochladen der Testfragen (Dateiformat ungültig)!",
     "NoQuestionFound": "Sie haben zu diesem Kurs noch keine Fragen hinzugefügt.",
+    "NoQuestionFoundChapter": "Sie haben zu diesem Kapitel noch keine Fragen hinzugefügt.",
     "AtLeastOneCorrectRequired" : "Jede Frage muss mindestens eine korrekte Antwortmöglichkeit haben!"
   },
   "company": {

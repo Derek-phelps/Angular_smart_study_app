@@ -31,6 +31,10 @@
                                     class="mt-2">
                                     {{'chapter.TextArea' | translate}}
                                 </mat-error>
+                                <button mat-stroked-button class="mt-4 mat-error" 
+                                    (click)="deleteSubChapter(i)">
+                                    <i class="fa fa-trash mr-2"></i>{{'chapter.DeleteSubChapter' | translate}}
+                                </button>
                             </mat-expansion-panel>
                         </ng-container>
                     </ng-container>
@@ -48,7 +52,7 @@
         </mat-tab-group>
             <div class="d-flex justify-content-between mt-4">
                 <mat-hint *ngIf="questions.length == 0" class="warning">
-                    {{'question.NoQuestionFound' | translate}}
+                    {{'question.NoQuestionFoundChapter' | translate}}
                 </mat-hint>
                 <button mat-raised-button 
                     (click)="saveChapter()">

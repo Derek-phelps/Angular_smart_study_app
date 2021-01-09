@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
+import { iif, Observable } from 'rxjs';
 import { map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
 import { ConfirmationBoxComponent } from 'src/app/theme/components/confirmation-box/confirmation-box.component';
@@ -66,8 +66,6 @@ export class AddChapterComponent implements OnInit {
             this.subChapter.at(this._openedSubChapter).patchValue(subChap);
             this.subChapter.at(this._openedSubChapter).patchValue({ ChapterTxt : subChap.chapterTxt });
           })
-          
-          console.log(this._addChapterForm.value)
       });
     }
     
@@ -94,19 +92,52 @@ export class AddChapterComponent implements OnInit {
     this.subChapter.insert(event.currentIndex, draggedSubChapter);
 
     // apply new indices
-    let index : number = 0;
-    for(let subChapter of this.subChapter.controls) {     
-      subChapter.get('Sc_index').setValue(index);
-      index++;
+    this._fixIndices();
+  }
+
+  deleteSubChapter(index : number) : void {
+    let description: string = this.translate.instant('chapter.DeleteSubChapterDesc');
+    const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
+      width: '400px',
+      data: { Action: false, Mes: description },
+      autoFocus: false
+    });
+
+    if(this.subChapter.at(index).get('subChapterId') == null) { 
+      this.subChapter.removeAt(index);
+      this._fixIndices();
+      return;
     }
 
-    console.log(this._addChapterForm.value);
+    dialogRef.afterClosed().pipe(
+      take(1),
+      switchMap( result => 
+        iif(() => result, this.service.deleteSubchapter(this.subChapter.at(index)).pipe(
+          take(1),
+          tap( result => {
+            this.subChapter.removeAt(index);
+            this._fixIndices();
+          })
+        ))
+      )
+    ).subscribe(
+      res => true
+    );
+  }
 
+  private _fixIndices() : void {
+    let newIndex : number = 0;
+    for(let subChapter of this.subChapter.controls) {     
+      subChapter.get('Sc_index').setValue(newIndex);
+      newIndex++;
+    }
+    this._nextSubChapterId = newIndex; 
   }
 
   saveChapter() : void {
     if(!this.checkSubChapters()) { this.tabGroup.selectedIndex = 0; return; }
     if(!this.questionComponent.checkQuestions()) { this.tabGroup.selectedIndex = 1; return; }
+    if(!this.addChapterForm.valid) { return; }
 
     let operation : Observable<any> = null;
     
@@ -121,20 +152,19 @@ export class AddChapterComponent implements OnInit {
     });
 
     dialogRef.afterClosed().pipe(take(1)).subscribe(
-      res => 
+      res => {
+        if(res == false) { return; }
         operation.subscribe(
-        _ => {
-          let path : string = "";
-            if (this.globals.getUserType() == "1") { path = 'superadmin/course/view'; } 
-            else if (this.globals.getUserType() == "2") { path = 'admin/course/view'; }
-            else if (this.globals.getUserType() == "3") { path = 'trainer/course/view'; }
-            else { path = 'employee/course/view'; }
-            
-            console.log(this._addChapterForm.value);
-            this.router.navigate([path, this._addChapterForm.value.courseId, 2], { skipLocationChange: false });
-        }
-      )
-    )    
+          _ => {
+            let path : string = "";
+              if (this.globals.getUserType() == "1") { path = 'superadmin/course/view'; } 
+              else if (this.globals.getUserType() == "2") { path = 'admin/course/view'; }
+              else if (this.globals.getUserType() == "3") { path = 'trainer/course/view'; }
+              else { path = 'employee/course/view'; }
+              
+              this.router.navigate([path, this._addChapterForm.value.courseId, 2], { skipLocationChange: false });
+          });
+      });
   }
 
   checkSubChapters() : boolean {
