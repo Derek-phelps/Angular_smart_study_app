@@ -29,6 +29,7 @@ export class AddChapterComponent implements OnInit {
   });
 
   private _openedSubChapter : number = -1;
+  private _nextSubChapterId : number = 0;
 
   @ViewChild(QuestionContainerComponent) questionComponent : QuestionContainerComponent;
   @ViewChild(MatTabGroup) tabGroup : MatTabGroup;
@@ -58,9 +59,9 @@ export class AddChapterComponent implements OnInit {
       let chapterId : number = this.route.snapshot.params.id;
       this.service.getChapterById(chapterId).pipe(take(1)).subscribe(
         result => {
-          console.log(result.data);
           this._addChapterForm.patchValue(result.data[0])
           result.data[0]['SubChapter'].forEach(subChap => {
+            if(subChap.Sc_index == null) { subChap.Sc_index = this._nextSubChapterId; }
             this.addSubChapter();
             this.subChapter.at(this._openedSubChapter).patchValue(subChap);
             this.subChapter.at(this._openedSubChapter).patchValue({ ChapterTxt : subChap.chapterTxt });
@@ -81,26 +82,35 @@ export class AddChapterComponent implements OnInit {
       ChapterTxt : new FormControl('', [Validators.required]),
       FilePath : new FormControl(null, []),
       subChapterId : new FormControl(null, []),
+      Sc_index : new FormControl(this._nextSubChapterId, [])
     }));
-    
+    this._nextSubChapterId++;
     this._openedSubChapter = this.subChapter.length -1;
   }
 
   reorder(event : CdkDragDrop<any[]>) : void {
-    const draggedSubChapter: FormGroup = this.subChapter.at(event.previousIndex) as FormGroup;
+    let draggedSubChapter: FormGroup = this.subChapter.at(event.previousIndex) as FormGroup;
     this.subChapter.removeAt(event.previousIndex);
     this.subChapter.insert(event.currentIndex, draggedSubChapter);
+
+    // apply new indices
+    let index : number = 0;
+    for(let subChapter of this.subChapter.controls) {     
+      subChapter.get('Sc_index').setValue(index);
+      index++;
+    }
+
+    console.log(this._addChapterForm.value);
+
   }
 
   saveChapter() : void {
-
     if(!this.checkSubChapters()) { this.tabGroup.selectedIndex = 0; return; }
     if(!this.questionComponent.checkQuestions()) { this.tabGroup.selectedIndex = 1; return; }
 
     let operation : Observable<any> = null;
     
     if(this.route.snapshot.url[0].path == 'add') { operation = this.service.add(this._addChapterForm.value).pipe(take(1)); }
-    
     else { operation = this.service.edit(this._addChapterForm.value).pipe(take(1)); }
 
     let description: string = this.translate.instant('chapter.SaveChapterDesc');
