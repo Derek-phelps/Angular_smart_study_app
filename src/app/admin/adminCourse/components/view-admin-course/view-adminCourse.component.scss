@@ -9,3 +9,7 @@
   min-height: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
   min-height: stretch;
 }
+
+:host ::ng-deep .mat-tab-body-content {
+  overflow-x: hidden;
+}
