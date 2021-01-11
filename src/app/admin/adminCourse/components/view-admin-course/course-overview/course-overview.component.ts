@@ -16,23 +16,38 @@ import { VACUtils } from '../view-admin-course-utils';
   selector: 'course-overview',
   templateUrl: './course-overview.component.html',
   styleUrls: ['./course-overview.component.scss'],
-  animations: VACUtils.componentAnimations
+  animations: [
+    VACUtils.componentAnimations,
+    trigger('visibilityChanged', [
+      state('shown', style({ opacity: 1, zIndex: 1 })),
+      state('hidden', style({ opacity: 0, zIndex: -1 })),
+      transition('* => *', animate(500))
+    ]),
+    trigger('openedChanged', [
+      state('shown', style({ opacity: 1, height: '*' })),
+      state('hidden', style({ opacity: 0, height: 0 })),
+      transition('* => *', animate(200))
+    ])
+  ]
 })
 export class CourseOverviewComponent implements OnInit {
 
-  @Input() courseId : number = -1;
-  @Input() courseData : any;
-  
-  @Output() tabId : EventEmitter<number> = new EventEmitter<number>();
-  
+  @Input() courseId: number = -1;
+  @Input() courseData: any;
+
+  @Output() tabId: EventEmitter<number> = new EventEmitter<number>();
+
   private _groupStatusTable = new MatTableDataSource();
   private _departmentStatusTable = new MatTableDataSource();
-  
-  private _courseChartData : MultiDataSet = [];
-  private _courseChartLabels : Label[] = [];
+
+  private _courseChartData: MultiDataSet = [];
+  private _courseChartLabels: Label[] = [];
   private _courseChartColors = [];
 
-  
+
+  public bUpdatingCourseAssignments = true;
+
+
   @ViewChild('groupPaginator') set groupPaginator(paginator: MatPaginator) {
     this._groupStatusTable.paginator = paginator;
   }
@@ -50,21 +65,21 @@ export class CourseOverviewComponent implements OnInit {
   }
 
   constructor(
-    private globals : Globals,
+    private globals: Globals,
     private translate: TranslateService,
   ) { }
 
   ngOnInit(): void {
   }
 
-  ngOnChanges(changes : SimpleChanges) {
-    if(changes.courseData) {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.courseData) {
       this._setupTables(this.courseData);
       this._setupChart(this.courseData);
     }
   }
 
-  private _setupTables(data : any) : void {
+  private _setupTables(data: any): void {
     this._departmentStatusTable.data = data.departmentStatus;
     this._groupStatusTable.data = data.groupStatus;
 
@@ -93,20 +108,20 @@ export class CourseOverviewComponent implements OnInit {
     };
   }
 
-  private _setupChart(data) : void {
-    this._courseChartData = [[VACUtils.calcCourseUsersDone(data.userStatus), 
-                              VACUtils.calcCourseUsersOpen(data.userStatus), 
-                              VACUtils.calcCourseUsersOverdue(data.userStatus)]];
+  private _setupChart(data): void {
+    this._courseChartData = [[VACUtils.calcCourseUsersDone(data.userStatus),
+    VACUtils.calcCourseUsersOpen(data.userStatus),
+    VACUtils.calcCourseUsersOverdue(data.userStatus)]];
 
-    this._courseChartLabels = [this.translate.instant('course.Done'), 
-                               this.translate.instant('course.Open'), 
-                               this.translate.instant('course.Overdue')];
+    this._courseChartLabels = [this.translate.instant('course.Done'),
+    this.translate.instant('course.Open'),
+    this.translate.instant('course.Overdue')];
 
-    let opacity : number = 0.8;
-    let style : CSSStyleDeclaration = getComputedStyle(document.body);
-    let strDanger : string = hexToRgbaString(style.getPropertyValue('--myDanger'), opacity);
-    let strWarning : string = hexToRgbaString(style.getPropertyValue('--myWarning'), opacity);
-    let strSuccess : string = hexToRgbaString(style.getPropertyValue('--mySuccess'), opacity);
+    let opacity: number = 0.8;
+    let style: CSSStyleDeclaration = getComputedStyle(document.body);
+    let strDanger: string = hexToRgbaString(style.getPropertyValue('--myDanger'), opacity);
+    let strWarning: string = hexToRgbaString(style.getPropertyValue('--myWarning'), opacity);
+    let strSuccess: string = hexToRgbaString(style.getPropertyValue('--mySuccess'), opacity);
     this._courseChartColors = [{ backgroundColor: [strSuccess, strWarning, strDanger] }];
   }
 
@@ -115,14 +130,14 @@ export class CourseOverviewComponent implements OnInit {
   }
 
   get userInfo() { return this.globals.userInfo; };
-  
+
   get groupStatusTable() { return this._groupStatusTable; };
   get departmentStatusTable() { return this._departmentStatusTable; };
 
-  get departmentDisplayedColumns() : string[] { return ['status', 'name']; }
+  get departmentDisplayedColumns(): string[] { return ['status', 'name']; }
   get groupDisplayedColumns(): string[] { return ['status', 'name']; }
 
-  get courseChartData() : MultiDataSet { return this._courseChartData; }
-  get courseChartLabels() : Label[] { return this._courseChartLabels; }
+  get courseChartData(): MultiDataSet { return this._courseChartData; }
+  get courseChartLabels(): Label[] { return this._courseChartLabels; }
   get courseChartColors() { return this._courseChartColors };
 }

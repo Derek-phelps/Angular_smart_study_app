@@ -265,6 +265,8 @@
     "NoCourse": "Dieser Abteilung wurden noch keine Kurse zugeteilt."
   },
   "course": {
+    "GlobalAssignments": "Globale Kurszuweisungen",
+    "NoGlobalAss": "Für diesen Kurs wurden keine globalen Zuweisungen definiert.",
     "SaveAndUploadNewScorm": "Speichern und neue SCORM-Datei hochladen",
     "ErrorScormSave": "Ihr Kursstatus wurde von einem Administrator gelöscht (möglicherweise wurde der Kursinhalt upgedated). Bitte starten Sie den Kurs erneut.",
     "PassEmpQ": "Kurs überspringen?",

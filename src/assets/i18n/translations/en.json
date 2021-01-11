@@ -265,6 +265,8 @@
     "NoCourse": "No courses were assigned to this department yet."
   },
   "course": {
+    "GlobalAssignments": "Global course assignments",
+    "NoGlobalAss": "No global assignments defined for this course.",
     "SaveAndUploadNewScorm": "Save and upload new SCORM file",
     "ErrorScormSave": "Your course state was deleted by an administrator (maybe the course content was updated). Please restart the course.",
     "PassEmpQ": "Pass course?",
