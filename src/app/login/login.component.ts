@@ -372,6 +372,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
               this.translate.get('alert.NotActivated').subscribe(value => { alert(value); });
             } else if (user.autoLoginFailed) {
               // automatic login failed...
+              this.spinner.hide();
             } else {
               this.translate.get('alert.UnAuth').subscribe(value => { alert(value); });
               this.form.controls['password'].setValue("");
