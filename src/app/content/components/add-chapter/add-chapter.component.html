@@ -14,8 +14,9 @@
                     <ng-container formArrayName="subChapter">
                         <ng-container *ngFor="let chapterControls of subChapter.controls; index as i" [formGroupName]="i">
                             <mat-expansion-panel 
-                                [expanded]="openedSubChapter === i">
-                                <mat-expansion-panel-header cdkDrag class="draggable">
+                                [expanded]="openedSubChapter === i"
+                                (opened)="setOpenedPanel(i)" (closed)="checkPanelClosed(i)">
+                                <mat-expansion-panel-header cdkDrag>
                                     {{ chapterControls.get('subChapterTitle').value }}
                                 </mat-expansion-panel-header>
                                 <mat-form-field style="width: 100%;">

@@ -51,10 +51,16 @@ export class QuestionContainerComponent implements OnInit {
     this.questions.push( this.formBuilder.group({
       text : new FormControl('', [Validators.required]),
       image : new FormControl('', []),
+      explanation : new FormControl('', []),
       answers : new FormArray([this.createAnswer()], [atLeastOneCorrectValidator()]),
     }));
     
     this._openedQuestion = this.questions.length -1;
+  }
+
+  deleteQuestion($event, pos : number) {
+    console.log(pos);
+    $event.stopPropagation();
   }
 
   createAnswer() : FormGroup {
@@ -101,6 +107,14 @@ export class QuestionContainerComponent implements OnInit {
   answerImageChanged(question : number, answer : number, event : ImageChangedEvent) : void {
     let answerArray : FormArray = this.questions.at(question).get('answers') as FormArray;
     answerArray.at(answer).get('image').setValue(event.data);
+  }
+
+  setOpenedPanel(pos : number) {
+    this._openedQuestion = pos;
+  }
+
+  checkPanelClosed(pos : number) {
+    if(this._openedQuestion == pos) { this._openedQuestion = -1;}
   }
 
   get openedQuestion() : number { return this._openedQuestion; }

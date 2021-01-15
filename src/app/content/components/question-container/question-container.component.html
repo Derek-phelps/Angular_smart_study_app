@@ -6,20 +6,38 @@
         class="droppable">
         <ng-container formArrayName="questions">
             <ng-container *ngFor="let questionControls of questions.controls; index as i" [formGroupName]="i">
-                <mat-expansion-panel [expanded]="openedQuestion === i">
-                    <mat-expansion-panel-header cdkDrag class="draggable">
-                        {{ questionControls.get('text').value }}
+                <mat-expansion-panel [expanded]="openedQuestion === i" 
+                    (opened)="setOpenedPanel(i)" (closed)="checkPanelClosed(i)">
+                    <mat-expansion-panel-header cdkDrag>
+                        <mat-panel-title>
+                            {{ questionControls.get('text').value }}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <i class="fa fa-trash ml-auto iconbutton" (click)="deleteQuestion($event, i)"></i>
+                        </mat-panel-description>
                     </mat-expansion-panel-header>
                     <div class="row">
                         <div class="col-3">
                             <image-chooser (imageChanged)="questionImageChanged(i, $event)"></image-chooser>
                         </div>
-                        <mat-form-field class="col-9">
-                            <textarea matInput type="text" formControlName="text"
-                                cdkTextareaAutosize
-                                cdkAutosizeMinRows="5"
-                                placeholder="{{'question.Question' | translate}}*"></textarea>
-                        </mat-form-field>
+                        <div class="col-9">
+                            <div>
+                                <mat-form-field class="w-100">
+                                    <textarea matInput type="text" formControlName="text"
+                                        cdkTextareaAutosize
+                                        cdkAutosizeMinRows="3"
+                                        placeholder="{{'question.Question' | translate}}*"></textarea>
+                                </mat-form-field>
+                            </div>
+                            <div>
+                                <mat-form-field class="w-100">
+                                    <textarea matInput type="text" formControlName="explanation"
+                                        cdkTextareaAutosize
+                                        cdkAutosizeMinRows="3"
+                                        placeholder="{{'question.Explanation' | translate}}"></textarea>
+                                </mat-form-field>
+                            </div>
+                        </div>
                     </div>
                     <hr/>
                     <ng-container formArrayName="answers">
@@ -45,18 +63,14 @@
                             </div>
                         </ng-container>
                     </ng-container>
-                    <div class="row mt-4">
-                        <div class="col-8">
-                            <mat-error *ngIf="answersForQuestion(i).getError('atLeastOneCorrectRequired')">
-                                {{'question.AtLeastOneCorrectRequired' | translate}}
-                            </mat-error>
-                        </div>
-                        <div class="col-4">
-                            <button mat-stroked-button 
-                                (click)="addAnswer(i)">
-                                <i class="fa fa-plus mr-2"></i>{{'question.AddOption' | translate}}
-                            </button>
-                        </div>
+                    <div class="d-flex justify-content-between mt-4">
+                        <mat-error *ngIf="answersForQuestion(i).getError('atLeastOneCorrectRequired')">
+                            {{'question.AtLeastOneCorrectRequired' | translate}}
+                        </mat-error>
+                        <button mat-stroked-button 
+                            (click)="addAnswer(i)">
+                            <i class="fa fa-plus mr-2 draggable"></i>{{'question.AddOption' | translate}}
+                        </button>
                     </div>
                 </mat-expansion-panel>
             </ng-container>

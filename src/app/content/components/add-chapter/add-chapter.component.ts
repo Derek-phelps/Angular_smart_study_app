@@ -59,6 +59,7 @@ export class AddChapterComponent implements OnInit {
       let chapterId : number = this.route.snapshot.params.id;
       this.service.getChapterById(chapterId).pipe(take(1)).subscribe(
         result => {
+          console.log(result);
           this._addChapterForm.patchValue(result.data[0])
           result.data[0]['SubChapter'].forEach(subChap => {
             if(subChap.Sc_index == null) { subChap.Sc_index = this._nextSubChapterId; }
@@ -183,6 +184,14 @@ export class AddChapterComponent implements OnInit {
     return true;
   }
 
+  setOpenedPanel(pos : number) {
+    this._openedSubChapter = pos;
+  }
+
+  checkPanelClosed(pos : number) {
+    if(this._openedSubChapter == pos) { this._openedSubChapter = -1;}
+  }
+
   get quillModules() : Object {
     return {
       toolbar : [
@@ -193,6 +202,8 @@ export class AddChapterComponent implements OnInit {
       ]
     }
   }
+
+  
 
   get addChapterForm() : FormGroup { return this._addChapterForm; }
   get chapterName() : FormControl { return this._addChapterForm.get('chapterName') as FormControl; }
