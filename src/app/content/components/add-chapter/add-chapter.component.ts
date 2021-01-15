@@ -47,6 +47,7 @@ export class AddChapterComponent implements OnInit {
       this.translate.use(this.globals.userInfo.userLang);
     }
     this.globals.currentTranslateService = this.translate;
+    
    }
 
   ngOnInit(): void {
