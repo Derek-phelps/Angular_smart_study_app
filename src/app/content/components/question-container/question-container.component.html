@@ -13,7 +13,9 @@
                             {{ questionControls.get('text').value }}
                         </mat-panel-title>
                         <mat-panel-description>
-                            <i class="fa fa-trash ml-auto iconbutton" (click)="deleteQuestion($event, i)"></i>
+                            <i class="fa fa-trash ml-auto iconbutton" 
+                               (click)="deleteQuestion($event, i)"
+                               matTooltip="{{ 'question.Delete' | translate }}"></i>
                         </mat-panel-description>
                     </mat-expansion-panel-header>
                     <div class="row">

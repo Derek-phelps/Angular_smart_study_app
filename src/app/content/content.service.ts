@@ -60,10 +60,9 @@ export class ContentService {
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
     }
-    deleteSubchapter(subChp):any{
+    deleteSubchapter(id : number ) : Observable<any>{
         let formData:FormData = new FormData();
-
-        formData.append('subChapterId', subChp.value.subChapterId);
+        formData.append('subChapterId', id+'');
       return this._http.post(this._getDeleteSubChapUrl,formData)
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))

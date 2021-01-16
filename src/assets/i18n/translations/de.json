@@ -484,6 +484,8 @@
     "Next": "Weiter",
     "Submit": "Abgabe",
     "Result": "Ergebnis",
+    "Delete": "Frage Löschen",
+    "DeleteDesc": "Wolllen Sie diese Frage wirklich löschen?",
     "CorrectAnswer": "Richtige Antwort",
     "PossibleAnswer": "Antwortmöglichkeit",
     "UploadZipFail": "Fehler beim Hochladen der Testfragen! Bitte überprüfen Sie das ZIP-File (Pfade zu Bildern, Kapitelnummern, ...).",

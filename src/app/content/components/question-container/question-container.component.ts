@@ -1,8 +1,10 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { Globals } from 'src/app/common/auth-guard.service';
+import { ConfirmationBoxComponent } from 'src/app/theme/components/confirmation-box/confirmation-box.component';
 import { ImageChangedEvent } from '../image-chooser/image-chooser.component';
 
 
@@ -33,7 +35,8 @@ export class QuestionContainerComponent implements OnInit {
   constructor(
     private formBuilder : FormBuilder,
     private translate: TranslateService,
-    private globals: Globals
+    private globals: Globals,
+    public dialog: MatDialog,
   ) {
     if (this.translate.currentLang != this.globals.userInfo.userLang) {
       this.translate.use(this.globals.userInfo.userLang);
@@ -58,8 +61,36 @@ export class QuestionContainerComponent implements OnInit {
   }
 
   deleteQuestion($event, pos : number) {
-    console.log(pos);
     $event.stopPropagation();
+
+    // let description: string = this.translate.instant('question.DeleteDesc');
+    // const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
+    //   width: '400px',
+    //   data: { Action: false, Mes: description },
+    //   autoFocus: false
+    // });
+
+    // if(this.questions.at(pos).get('subChapterId') == null) { 
+    //   this.subChapter.removeAt(index);
+    //   this._fixIndices();
+    //   return;
+    // }
+
+    // dialogRef.afterClosed().pipe(
+    //   take(1),
+    //   switchMap( result => 
+    //     iif(() => result, this.service.deleteSubchapter(this.subChapter.at(index)).pipe(
+    //       take(1),
+    //       tap( result => {
+    //         this.subChapter.removeAt(index);
+    //         this._fixIndices();
+    //       })
+    //     ))
+    //   )
+    // ).subscribe(
+    //   res => true
+    // );
+
   }
 
   createAnswer() : FormGroup {

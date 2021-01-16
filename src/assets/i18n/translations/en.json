@@ -484,6 +484,8 @@
     "Next": "Next",
     "Submit": "Submit",
     "Result": "Result",
+    "Delete": "Delete Question",
+    "DeleteDesc": "Are you sure you want to delete this question?",
     "CorrectAnswer": "Correct answer",
     "PossibleAnswer": "Possible Answer",
     "UploadZipFail": "Error during question ZIP upload! Please check the uploaded ZIP file (paths to images, chapter numbers, ...).",

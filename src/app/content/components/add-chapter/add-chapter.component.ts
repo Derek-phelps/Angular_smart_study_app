@@ -5,8 +5,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { iif, Observable } from 'rxjs';
-import { map, mergeMap, switchMap, take, tap } from 'rxjs/operators';
+import { from, iif, Observable } from 'rxjs';
+import { map, mergeMap, switchMap, take, tap, toArray } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
 import { ConfirmationBoxComponent } from 'src/app/theme/components/confirmation-box/confirmation-box.component';
 import { ContentService } from '../../content.service';
@@ -31,6 +31,8 @@ export class AddChapterComponent implements OnInit {
   private _openedSubChapter : number = -1;
   private _nextSubChapterId : number = 0;
 
+  private _deleteChaptersOnSave : number[] = [];
+
   @ViewChild(QuestionContainerComponent) questionComponent : QuestionContainerComponent;
   @ViewChild(MatTabGroup) tabGroup : MatTabGroup;
 
@@ -48,7 +50,7 @@ export class AddChapterComponent implements OnInit {
     }
     this.globals.currentTranslateService = this.translate;
 
-    
+
    }
 
   ngOnInit(): void {
@@ -106,23 +108,21 @@ export class AddChapterComponent implements OnInit {
       autoFocus: false
     });
 
-    if(this.subChapter.at(index).get('subChapterId') == null) { 
-      this.subChapter.removeAt(index);
-      this._fixIndices();
-      return;
-    }
+    // if(this.subChapter.at(index).get('subChapterId') == null) { 
+    //   this.subChapter.removeAt(index);
+    //   this._fixIndices();
+    //   return;
+    // }
 
     dialogRef.afterClosed().pipe(
       take(1),
-      switchMap( result => 
-        iif(() => result, this.service.deleteSubchapter(this.subChapter.at(index)).pipe(
-          take(1),
-          tap( result => {
-            this.subChapter.removeAt(index);
-            this._fixIndices();
-          })
-        ))
-      )
+      tap( result => {
+        let subChapterId : number = this.subChapter.at(index).get('subChapterId').value
+        if( subChapterId != null) { this._deleteChaptersOnSave.push(subChapterId); }
+        this.subChapter.removeAt(index);
+        this._fixIndices();
+
+      })
     ).subscribe(
       res => true
     );
@@ -145,7 +145,15 @@ export class AddChapterComponent implements OnInit {
     let operation : Observable<any> = null;
     
     if(this.route.snapshot.url[0].path == 'add') { operation = this.service.add(this._addChapterForm.value).pipe(take(1)); }
-    else { operation = this.service.edit(this._addChapterForm.value).pipe(take(1)); }
+    else { 
+      operation = this.service.edit(this._addChapterForm.value).pipe(
+        take(1),
+        switchMap( result => from(this._deleteChaptersOnSave)),
+        mergeMap( id => this.service.deleteSubchapter(id)),
+        tap( result => console.log(result)),
+        toArray(),
+        ); 
+    }
 
     let description: string = this.translate.instant('chapter.SaveChapterDesc');
     const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
