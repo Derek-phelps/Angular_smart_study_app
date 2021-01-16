@@ -48,7 +48,7 @@
                 </div>
             </mat-tab>
             <mat-tab label="{{'question.Questions' | translate}}">
-                <question-container [form]="addChapterForm" [questions]="questions" (questionDeleted)="deleteQuestion(event)"></question-container>
+                <question-container [form]="questionForm" [questions]="questions" (questionDeleted)="deleteQuestion(event)"></question-container>
             </mat-tab>
         </mat-tab-group>
             <div class="d-flex justify-content-between mt-4">

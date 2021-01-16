@@ -10,6 +10,7 @@ import { map, mergeMap, switchMap, take, tap, toArray } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
 import { ConfirmationBoxComponent } from 'src/app/theme/components/confirmation-box/confirmation-box.component';
 import { ContentService } from '../../content.service';
+import { QuestionService } from '../../question.service';
 import { QuestionContainerComponent } from '../question-container/question-container.component';
 
 @Component({
@@ -25,7 +26,11 @@ export class AddChapterComponent implements OnInit {
     courseId : new FormControl(-1, []),
     isOffline : new FormControl(false, []),
     subChapter : new FormArray([]),
-    questions : new FormArray([])
+    
+  });
+
+  private _questionForm = this.formBuilder.group({
+    questions : new FormArray([]),
   });
 
   private _openedSubChapter : number = -1;
@@ -42,6 +47,7 @@ export class AddChapterComponent implements OnInit {
     private translate : TranslateService,
     private globals : Globals,
     private service : ContentService,
+    private questionSerivce : QuestionService,
     private router : Router,
     private route : ActivatedRoute,
     public dialog: MatDialog,
@@ -139,7 +145,15 @@ export class AddChapterComponent implements OnInit {
 
     let operation : Observable<any> = null;
     
-    if(this.route.snapshot.url[0].path == 'add') { operation = this.service.add(this._addChapterForm.value).pipe(take(1)); }
+    if(this.route.snapshot.url[0].path == 'add') { 
+      let questions : Array<FormGroup> = new Array(this.questions.length).map((v, index) => this.questions.at(index) as FormGroup);
+      let x : number[] = []
+      operation = this.service.add(this._addChapterForm.value).pipe(
+        take(1),
+        tap( value => console.log(value) )
+
+      ); 
+    }
     else { 
       operation = this.service.edit(this._addChapterForm.value).pipe(
         take(1),
@@ -219,6 +233,7 @@ export class AddChapterComponent implements OnInit {
   get chapterName() : FormControl { return this._addChapterForm.get('chapterName') as FormControl; }
   get subChapter() : FormArray { return this._addChapterForm.get('subChapter') as FormArray; }
   get openedSubChapter() : number { return this._openedSubChapter; }
-  get questions() : FormArray { return this._addChapterForm.get('questions') as FormArray; }
+  get questionForm() : FormGroup { return this._questionForm; }
+  get questions() : FormArray { return this._questionForm.get('questions') as FormArray; }
   
 }

@@ -33,6 +33,7 @@ import { ImageChooserComponent } from './components/image-chooser/image-chooser.
 import { EditorModule } from 'primeng/editor';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { QuestionService } from './question.service';
 
 @NgModule({
   imports: [
@@ -75,7 +76,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     QuestionContainerComponent, 
     ImageChooserComponent],
   providers: [
-    ContentService
+    ContentService,
+    QuestionService
   ]
 })
 export class ContentModule { }
