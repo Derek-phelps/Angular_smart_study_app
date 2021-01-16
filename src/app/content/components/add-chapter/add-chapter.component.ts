@@ -32,6 +32,7 @@ export class AddChapterComponent implements OnInit {
   private _nextSubChapterId : number = 0;
 
   private _deleteChaptersOnSave : number[] = [];
+  private _deleteQuestionsOnSave : number[] = [];
 
   @ViewChild(QuestionContainerComponent) questionComponent : QuestionContainerComponent;
   @ViewChild(MatTabGroup) tabGroup : MatTabGroup;
@@ -108,16 +109,10 @@ export class AddChapterComponent implements OnInit {
       autoFocus: false
     });
 
-    // if(this.subChapter.at(index).get('subChapterId') == null) { 
-    //   this.subChapter.removeAt(index);
-    //   this._fixIndices();
-    //   return;
-    // }
-
     dialogRef.afterClosed().pipe(
       take(1),
       tap( result => {
-        let subChapterId : number = this.subChapter.at(index).get('subChapterId').value
+        let subChapterId : number = this.subChapter.at(index).get('subChapterId').value;
         if( subChapterId != null) { this._deleteChaptersOnSave.push(subChapterId); }
         this.subChapter.removeAt(index);
         this._fixIndices();
@@ -167,13 +162,14 @@ export class AddChapterComponent implements OnInit {
         if(res == false) { return; }
         operation.subscribe(
           _ => {
+            console.log(this._addChapterForm.value)
             let path : string = "";
-              if (this.globals.getUserType() == "1") { path = 'superadmin/course/view'; } 
-              else if (this.globals.getUserType() == "2") { path = 'admin/course/view'; }
-              else if (this.globals.getUserType() == "3") { path = 'trainer/course/view'; }
-              else { path = 'employee/course/view'; }
-              
-              this.router.navigate([path, this._addChapterForm.value.courseId, 2], { skipLocationChange: false });
+            if (this.globals.getUserType() == "1") { path = 'superadmin/course/view'; } 
+            else if (this.globals.getUserType() == "2") { path = 'admin/course/view'; }
+            else if (this.globals.getUserType() == "3") { path = 'trainer/course/view'; }
+            else { path = 'employee/course/view'; }
+            
+            this.router.navigate([path, this._addChapterForm.value.courseId, 2], { skipLocationChange: false });
           });
       });
   }
@@ -200,6 +196,10 @@ export class AddChapterComponent implements OnInit {
 
   checkPanelClosed(pos : number) {
     if(this._openedSubChapter == pos) { this._openedSubChapter = -1;}
+  }
+
+  deleteQuestion(id : number) {
+    this._deleteQuestionsOnSave.push(id);
   }
 
   get quillModules() : Object {
