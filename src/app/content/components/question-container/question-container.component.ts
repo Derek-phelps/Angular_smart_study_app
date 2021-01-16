@@ -42,7 +42,6 @@ export class QuestionContainerComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    //this.createQuestion();
   }
 
   createQuestion() : void {
@@ -50,7 +49,7 @@ export class QuestionContainerComponent implements OnInit {
 
     this.questions.push( this.formBuilder.group({
       text : new FormControl('', [Validators.required]),
-      image : new FormControl('', []),
+      imagePath : new FormControl('', []),
       explanation : new FormControl('', []),
       answers : new FormArray([this.createAnswer()], [atLeastOneCorrectValidator()]),
     }));
@@ -66,7 +65,7 @@ export class QuestionContainerComponent implements OnInit {
   createAnswer() : FormGroup {
     return this.formBuilder.group({
       text : new FormControl('', [Validators.required]),
-      image : new FormControl('', []),
+      imagePath : new FormControl('', []),
       isCorrect : new FormControl(false, []),
     });
   }
@@ -101,12 +100,12 @@ export class QuestionContainerComponent implements OnInit {
   }
 
   questionImageChanged(question : number, event : ImageChangedEvent) : void {
-    this.questions.at(question).get('image').setValue(event.data);
+    this.questions.at(question).get('imagePath').setValue(event.data);
   }
 
   answerImageChanged(question : number, answer : number, event : ImageChangedEvent) : void {
     let answerArray : FormArray = this.questions.at(question).get('answers') as FormArray;
-    answerArray.at(answer).get('image').setValue(event.data);
+    answerArray.at(answer).get('imagePath').setValue(event.data);
   }
 
   setOpenedPanel(pos : number) {

@@ -32,6 +32,7 @@ import { QuestionContainerComponent } from './components/question-container/ques
 import { ImageChooserComponent } from './components/image-chooser/image-chooser.component';
 import { EditorModule } from 'primeng/editor';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
   imports: [
@@ -59,7 +60,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     MatTabsModule,
     EditorModule,
     DragDropModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatTooltipModule,
   ],
   entryComponents: [
     SubChapterOverviewDialog

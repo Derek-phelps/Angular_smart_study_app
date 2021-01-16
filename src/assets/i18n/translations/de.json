@@ -478,6 +478,7 @@
     "AnswerCorrect": "Richtige Antwort",
     "AnswerOption": "Antwortoption",
     "Explanation": "Erklärung",
+    "ExplanationDesc": "Die Erklärung wird dem Benutzer erst nach der Auswahl einer Antwort gezeigt, egal ob die gewählte Antwort richtig oder falsch war.",
     "Back": "Zurück",
     "CorrectAnswers": "Richtige Antworten",
     "Next": "Weiter",

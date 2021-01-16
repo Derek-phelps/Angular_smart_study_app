@@ -478,6 +478,7 @@
     "AnswerCorrect": "Correct answer",
     "AnswerOption": "Answer option",
     "Explanation": "Explanation",
+    "ExplanationDesc": "The explanation is only shown after the user chooses an answer, regardless of its correctness.",
     "Back": "Back",
     "CorrectAnswers": "Correct answers",
     "Next": "Next",
