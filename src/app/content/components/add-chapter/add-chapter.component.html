@@ -1,4 +1,5 @@
 <div class="container" #holder>
+    <!-- {{ addChapterForm.value | json }} -->
     <form [formGroup]="addChapterForm">
         <mat-form-field style="width: 100%;">
             <input matInput type="text" formControlName="chapterName" maxlength="100"
@@ -48,7 +49,9 @@
                 </div>
             </mat-tab>
             <mat-tab label="{{'question.Questions' | translate}}">
-                <question-container [form]="questionForm" [questions]="questions" (questionDeleted)="deleteQuestion(event)"></question-container>
+                <question-container 
+                    (questionDeleted)="deleteQuestion($event)">
+                </question-container>
             </mat-tab>
         </mat-tab-group>
             <div class="d-flex justify-content-between mt-4">

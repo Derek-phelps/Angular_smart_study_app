@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { from, iif, Observable } from 'rxjs';
+import { from, iif, Observable, of } from 'rxjs';
 import { map, mergeMap, switchMap, take, tap, toArray } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
 import { ConfirmationBoxComponent } from 'src/app/theme/components/confirmation-box/confirmation-box.component';
@@ -26,12 +26,15 @@ export class AddChapterComponent implements OnInit {
     courseId : new FormControl(-1, []),
     isOffline : new FormControl(false, []),
     subChapter : new FormArray([]),
-    
-  });
-
-  private _questionForm = this.formBuilder.group({
+    ignoreOrder : new FormControl(false, []),
     questions : new FormArray([]),
   });
+
+  // private _questionForm = this.formBuilder.group({
+  //   //ignoreOrder : new FormControl(false, []),
+  //   //ignoreOrder : this._addChapterForm.get('ignoreOrder') as FormControl,
+    
+  // });
 
   private _openedSubChapter : number = -1;
   private _nextSubChapterId : number = 0;
@@ -70,7 +73,6 @@ export class AddChapterComponent implements OnInit {
       let chapterId : number = this.route.snapshot.params.id;
       this.service.getChapterById(chapterId).pipe(take(1)).subscribe(
         result => {
-          console.log(result);
           this._addChapterForm.patchValue(result.data[0])
           result.data[0]['SubChapter'].forEach(subChap => {
             if(subChap.Sc_index == null) { subChap.Sc_index = this._nextSubChapterId; }
@@ -78,6 +80,9 @@ export class AddChapterComponent implements OnInit {
             this.subChapter.at(this._openedSubChapter).patchValue(subChap);
             this.subChapter.at(this._openedSubChapter).patchValue({ ChapterTxt : subChap.chapterTxt });
           })
+          
+          this.questionComponent.chapterId = result.data[0]['chapterId']
+          //TODO: fetch questions.
       });
     }
     
@@ -143,15 +148,19 @@ export class AddChapterComponent implements OnInit {
     if(!this.questionComponent.checkQuestions()) { this.tabGroup.selectedIndex = 1; return; }
     if(!this.addChapterForm.valid) { return; }
 
-    let operation : Observable<any> = null;
     
+
+    let operation : Observable<any> = null;
     if(this.route.snapshot.url[0].path == 'add') { 
-      let questions : Array<FormGroup> = new Array(this.questions.length).map((v, index) => this.questions.at(index) as FormGroup);
-      let x : number[] = []
+      
       operation = this.service.add(this._addChapterForm.value).pipe(
         take(1),
-        tap( value => console.log(value) )
-
+        tap(response => this.questionComponent.chapterId = response['insert_id']),
+        switchMap( result => from(this.questions.value)),
+        //TODO:  upload images
+        //tap(question => this.questionSerivce.add(questions)),
+        tap(question => console.log(question)),
+        toArray(),
       ); 
     }
     else { 
@@ -160,6 +169,11 @@ export class AddChapterComponent implements OnInit {
         switchMap( result => from(this._deleteChaptersOnSave)),
         mergeMap( id => this.service.deleteSubchapter(id)),
         tap( result => console.log(result)),
+        toArray(),
+        switchMap( result => from(this.questions.value)),
+        //TODO:  upload images
+        //tap(question => this.questionSerivce.edit(question, {})),
+        tap(question => console.log(question)),
         toArray(),
         ); 
     }
@@ -176,7 +190,6 @@ export class AddChapterComponent implements OnInit {
         if(res == false) { return; }
         operation.subscribe(
           _ => {
-            console.log(this._addChapterForm.value)
             let path : string = "";
             if (this.globals.getUserType() == "1") { path = 'superadmin/course/view'; } 
             else if (this.globals.getUserType() == "2") { path = 'admin/course/view'; }
@@ -233,7 +246,6 @@ export class AddChapterComponent implements OnInit {
   get chapterName() : FormControl { return this._addChapterForm.get('chapterName') as FormControl; }
   get subChapter() : FormArray { return this._addChapterForm.get('subChapter') as FormArray; }
   get openedSubChapter() : number { return this._openedSubChapter; }
-  get questionForm() : FormGroup { return this._questionForm; }
-  get questions() : FormArray { return this._questionForm.get('questions') as FormArray; }
+  get questions() : FormArray { return this._addChapterForm.get('questions') as FormArray; }
   
 }

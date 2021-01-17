@@ -1,6 +1,7 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { ControlContainer, FormArray, FormBuilder, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { take, tap } from 'rxjs/operators';
@@ -28,16 +29,34 @@ export function atLeastOneCorrectValidator() : ValidatorFn {
 })
 export class QuestionContainerComponent implements OnInit {
 
-  @Input() form : FormGroup = this.formBuilder.group({});
-  @Input() questions : FormArray = new FormArray([]);
+  private _parentFormGroup : FormGroup = null;
+  //@Input() questions : FormArray = new FormArray([]);  
 
   @Output() questionDeleted : EventEmitter<number> = new EventEmitter<number>();
 
   private _openedQuestion : number = -1;
   private _nextQuestionId : number = 0;
 
+  private _courseId : number = null;
+  private _chapterId : number = null;
+
+  @Input() 
+  set chapterId(id : number) {
+    this._chapterId = id;
+    this._courseId = null;
+    this._applyIds();
+  }
+
+  @Input() 
+  set courseId(id : number) {
+    this._chapterId = null;
+    this._courseId = id;
+    this._applyIds();
+  }
+
   constructor(
     private formBuilder : FormBuilder,
+    private controlContainer : ControlContainer,
     private translate: TranslateService,
     private globals: Globals,
     public dialog: MatDialog,
@@ -49,16 +68,20 @@ export class QuestionContainerComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this._parentFormGroup = this.controlContainer.control as FormGroup;
   }
 
   createQuestion() : void {
     if(!this.checkQuestions()) { return; }
 
     this.questions.push( this.formBuilder.group({
-      id : new FormControl(null, [Validators.required]),
+      id : new FormControl(null, []),
       text : new FormControl('', [Validators.required]),
+      chapterId : new FormControl(this._chapterId, []),
+      courseId : new FormControl(this._courseId, []),
       imagePath : new FormControl('', []),
       explanation : new FormControl('', []),
+      Q_index : new FormControl(this._nextQuestionId, []),
       answers : new FormArray([this.createAnswer()], [atLeastOneCorrectValidator()]),
     }));
     
@@ -155,6 +178,16 @@ export class QuestionContainerComponent implements OnInit {
     if(this._openedQuestion == pos) { this._openedQuestion = -1;}
   }
 
+  private _applyIds() : void {
+    for(let question of this.questions.controls) {     
+      question.get('courseId').setValue(this._courseId);
+      question.get('chapterId').setValue(this.chapterId);
+    }
+  }
+
   get openedQuestion() : number { return this._openedQuestion; }
+  get parentForm() : FormGroup { return this._parentFormGroup; }
+  get ignoreOrder() : FormControl { return this.parentForm.get('ignoreOrder') as FormControl; }
+  get questions() : FormArray { return this.parentForm.get('questions') as FormArray; }
 
 }
