@@ -71,8 +71,8 @@ export class QuestionContainerComponent implements OnInit {
     this._parentFormGroup = this.controlContainer.control as FormGroup;
   }
 
-  createQuestion() : void {
-    if(!this.checkQuestions()) { return; }
+  addQuestion(validate : boolean = true) : void {
+    if(validate && !this.checkQuestions()) { return; }
 
     this.questions.push( this.formBuilder.group({
       id : new FormControl(null, []),

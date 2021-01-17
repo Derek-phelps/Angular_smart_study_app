@@ -44,7 +44,7 @@ export class AddChapterComponent implements OnInit, OnDestroy {
 
   private _defaultImage = '/assets/img/theme/add-image.png';
 
-  private _saveInterval : number = 5;
+  private _saveInterval : number = 5000;
   private _saveSubscription : Subscription = null;
 
   
@@ -75,7 +75,19 @@ export class AddChapterComponent implements OnInit, OnDestroy {
       this._addChapterForm.patchValue({ courseId: this.route.snapshot.params.id });
       this.addSubChapter();
 
-      //TODO: check local storage if chapter present.
+      let candidateChapter : Object = null;
+      try {
+        let candidate : string = localStorage.getItem('currentCourse');
+        if(candidate === null) { this.addSubChapter(); }
+        else { 
+          candidateChapter = JSON.parse(candidate);
+          candidateChapter['subChapter'].forEach( _ => this.addSubChapter(false));
+          candidateChapter['questions'].forEach( _ => this.questionComponent.addQuestion(false));
+          this._addChapterForm.patchValue(candidateChapter);
+        }
+      }
+      catch( err ) { localStorage.removeItem('currentCourse') }
+
       
     }
 
@@ -97,7 +109,7 @@ export class AddChapterComponent implements OnInit, OnDestroy {
     }
 
     this._saveSubscription = timer(this._saveInterval, this._saveInterval).pipe(
-      tap( _ => localStorage.setItem('currentCourse', this._addChapterForm.value))
+      tap( _ => localStorage.setItem('currentCourse', JSON.stringify(this._addChapterForm.value)))
     ).subscribe(
       _ => this.snackbar.open(this.translate.instant('chapter.Saved'), '', { duration: 1000 })
     );    
@@ -107,8 +119,8 @@ export class AddChapterComponent implements OnInit, OnDestroy {
     if( this._saveSubscription != null ) { this._saveSubscription.unsubscribe() }
   }
 
-  addSubChapter() : void {
-    if(!this.checkSubChapters()) { return; }
+  addSubChapter(validate : boolean = true) : void {
+    if(validate && !this.checkSubChapters()) { return; }
 
     this.subChapter.push( this.formBuilder.group({
       subChapterTitle : new FormControl('', [Validators.required]),
@@ -216,6 +228,7 @@ export class AddChapterComponent implements OnInit, OnDestroy {
             else if (this.globals.getUserType() == "3") { path = 'trainer/course/view'; }
             else { path = 'employee/course/view'; }
             
+            localStorage.removeItem('currenCourse');
             this.router.navigate([path, this._addChapterForm.value.courseId, 2], { skipLocationChange: false });
           });
       });

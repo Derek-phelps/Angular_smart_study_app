@@ -64,7 +64,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     DragDropModule,
     MatExpansionModule,
     MatTooltipModule,
-    MatSnackBar
   ],
   entryComponents: [
     SubChapterOverviewDialog
