@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -21,7 +21,7 @@ import { QuestionContainerComponent } from '../question-container/question-conta
   templateUrl: './add-chapter.component.html',
   styleUrls: ['./add-chapter.component.scss']
 })
-export class AddChapterComponent implements OnInit, OnDestroy {
+export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private _addChapterForm : FormGroup = this.formBuilder.group({
     chapterName : new  FormControl('', [Validators.required]),
@@ -71,9 +71,12 @@ export class AddChapterComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+       
+  }
+
+  ngAfterViewInit(): void {
     if(this.route.snapshot.url[0].path == 'add') {
       this._addChapterForm.patchValue({ courseId: this.route.snapshot.params.id });
-      this.addSubChapter();
 
       let candidateChapter : Object = null;
       try {
@@ -112,7 +115,7 @@ export class AddChapterComponent implements OnInit, OnDestroy {
       tap( _ => localStorage.setItem('currentCourse', JSON.stringify(this._addChapterForm.value)))
     ).subscribe(
       _ => this.snackbar.open(this.translate.instant('chapter.Saved'), '', { duration: 1000 })
-    );    
+    ); 
   }
 
   ngOnDestroy(): void {
