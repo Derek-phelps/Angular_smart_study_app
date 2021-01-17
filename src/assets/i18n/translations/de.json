@@ -449,6 +449,7 @@
     "AllowDownload": "Download erlauben",
     "AllowDownloadDesc": "Wenn diese Funktion aktiviert ist, kann die hochgeladene Datei von Prüflingen heruntergeladen werden.",
     "SelectFile": "Datei auswählen...",
+    "Saved" : "Kapitel zwischengespeichert.",
     "ClassStartTime": "Unterricht Startzeit",
     "ClassEndTime": "Unterricht Endzeit",
     "ConfirmStartTime": "Anwesenheitstool Startzeit",

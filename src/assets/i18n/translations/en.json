@@ -449,6 +449,7 @@
     "AllowDownload": "Allow Download",
     "AllowDownloadDesc": "If enabled, the uploaded file can be downloaded when taking the course",
     "SelectFile": "Select File...",
+    "Saved" : "Chapter cached.",
     "ClassStartTime": "Class Start Time",
     "ClassEndTime": "Class End Time",
     "ConfirmStartTime": "Confirmation Start Time",

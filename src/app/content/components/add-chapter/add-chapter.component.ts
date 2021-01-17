@@ -1,12 +1,14 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbToast } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
 import { UploadInput } from 'ngx-uploader';
-import { from, iif, Observable, of } from 'rxjs';
+import { from, iif, Observable, of, Subscription, timer } from 'rxjs';
 import { map, mergeMap, switchMap, take, tap, toArray } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
 import { ConfirmationBoxComponent } from 'src/app/theme/components/confirmation-box/confirmation-box.component';
@@ -19,7 +21,7 @@ import { QuestionContainerComponent } from '../question-container/question-conta
   templateUrl: './add-chapter.component.html',
   styleUrls: ['./add-chapter.component.scss']
 })
-export class AddChapterComponent implements OnInit {
+export class AddChapterComponent implements OnInit, OnDestroy {
 
   private _addChapterForm : FormGroup = this.formBuilder.group({
     chapterName : new  FormControl('', [Validators.required]),
@@ -42,6 +44,11 @@ export class AddChapterComponent implements OnInit {
 
   private _defaultImage = '/assets/img/theme/add-image.png';
 
+  private _saveInterval : number = 5;
+  private _saveSubscription : Subscription = null;
+
+  
+
   @ViewChild(QuestionContainerComponent) questionComponent : QuestionContainerComponent;
   @ViewChild(MatTabGroup) tabGroup : MatTabGroup;
 
@@ -53,20 +60,23 @@ export class AddChapterComponent implements OnInit {
     private questionSerivce : QuestionService,
     private router : Router,
     private route : ActivatedRoute,
-    public dialog: MatDialog,
+    private dialog: MatDialog,
+    private snackbar: MatSnackBar
   ) {
     if (this.translate.currentLang != this.globals.userInfo.userLang) {
       this.translate.use(this.globals.userInfo.userLang);
     }
     this.globals.currentTranslateService = this.translate;
-
-
-   }
+    
+  }
 
   ngOnInit(): void {
     if(this.route.snapshot.url[0].path == 'add') {
       this._addChapterForm.patchValue({ courseId: this.route.snapshot.params.id });
       this.addSubChapter();
+
+      //TODO: check local storage if chapter present.
+      
     }
 
     else {
@@ -85,7 +95,16 @@ export class AddChapterComponent implements OnInit {
           //TODO: fetch questions.
       });
     }
-    
+
+    this._saveSubscription = timer(this._saveInterval, this._saveInterval).pipe(
+      tap( _ => localStorage.setItem('currentCourse', this._addChapterForm.value))
+    ).subscribe(
+      _ => this.snackbar.open(this.translate.instant('chapter.Saved'), '', { duration: 1000 })
+    );    
+  }
+
+  ngOnDestroy(): void {
+    if( this._saveSubscription != null ) { this._saveSubscription.unsubscribe() }
   }
 
   addSubChapter() : void {

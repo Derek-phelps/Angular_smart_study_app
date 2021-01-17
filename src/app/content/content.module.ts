@@ -34,6 +34,7 @@ import { EditorModule } from 'primeng/editor';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { QuestionService } from './question.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @NgModule({
   imports: [
@@ -63,6 +64,7 @@ import { QuestionService } from './question.service';
     DragDropModule,
     MatExpansionModule,
     MatTooltipModule,
+    MatSnackBar
   ],
   entryComponents: [
     SubChapterOverviewDialog
