@@ -29,6 +29,19 @@
                                         <!-- This has to stay empty to allow quill full control over the toolbar -->
                                     </p-header>
                                 </p-editor>
+                                
+                                <div class="d-flex justify-content-start mt-4">
+                                    <ba-picture-uploader  imageTitle="{{ 'chapter.FileUpload' | translate }}"
+                                        [FileuploadInput]="uploaderOptions" (onUploadCompleted)="imgUploaded($event, i)" (onUpload)="preventSave = true"
+                                        [picture]="chapterControls.get('FilePath').value" [defaultPicture]="defaultImage">
+                                    </ba-picture-uploader>
+                                    <mat-checkbox
+                                        formControlName="allowDownload"
+                                        class="mx-2 my-auto"
+                                        matTooltip="{{ 'chapter.AllowDownloadDesc' | translate }}">
+                                        {{ 'chapter.AllowDownload' | translate}}
+                                    </mat-checkbox>
+                                </div>
                                 <mat-error *ngIf="chapterControls.get('ChapterTxt').touched && !chapterControls.get('ChapterTxt').valid" 
                                     class="mt-2">
                                     {{'chapter.TextArea' | translate}}
@@ -59,7 +72,7 @@
                     {{'question.NoQuestionFoundChapter' | translate}}
                 </mat-hint>
                 <button mat-raised-button 
-                    (click)="saveChapter()">
+                    (click)="saveChapter()" [disabled]="preventSave">
                     <i class="fa fa-save mr-2"></i>{{'chapter.SaveChapter' | translate}}
                 </button>
             </div>

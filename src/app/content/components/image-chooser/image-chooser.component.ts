@@ -24,7 +24,7 @@ export class ImageChooserComponent implements OnInit {
 
   @Output('imageChanged') imageChangedEvent : EventEmitter<ImageChangedEvent> = new EventEmitter<ImageChangedEvent>();
 
-  private _imageUrl : string = "/assets/img/bulb_small.png";
+  private _imageUrl : string = "/assets/img/theme/add-image.png";
   private _originalImageUrl : string = null;
   
   @ViewChild('upload') _uploadButton : ElementRef;

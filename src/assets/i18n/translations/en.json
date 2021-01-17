@@ -446,6 +446,8 @@
     "SubChapters": "Subchapters",
     "TextArea": "Please provide a text.",
     "FileUpload": "Upload File",
+    "AllowDownload": "Allow Download",
+    "AllowDownloadDesc": "If enabled, the uploaded file can be downloaded when taking the course",
     "SelectFile": "Select File...",
     "ClassStartTime": "Class Start Time",
     "ClassEndTime": "Class End Time",

@@ -446,6 +446,8 @@
     "SubChapters": "Unterkapitel",
     "TextArea": "Bitte einen Text angeben.",
     "FileUpload": "Datei hochladen",
+    "AllowDownload": "Download erlauben",
+    "AllowDownloadDesc": "Wenn diese Funktion aktiviert ist, kann die hochgeladene Datei von Prüflingen heruntergeladen werden.",
     "SelectFile": "Datei auswählen...",
     "ClassStartTime": "Unterricht Startzeit",
     "ClassEndTime": "Unterricht Endzeit",

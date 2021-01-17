@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { UploadInput } from 'ngx-uploader';
 import { from, iif, Observable, of } from 'rxjs';
 import { map, mergeMap, switchMap, take, tap, toArray } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
@@ -30,17 +31,16 @@ export class AddChapterComponent implements OnInit {
     questions : new FormArray([]),
   });
 
-  // private _questionForm = this.formBuilder.group({
-  //   //ignoreOrder : new FormControl(false, []),
-  //   //ignoreOrder : this._addChapterForm.get('ignoreOrder') as FormControl,
-    
-  // });
 
   private _openedSubChapter : number = -1;
   private _nextSubChapterId : number = 0;
 
   private _deleteChaptersOnSave : number[] = [];
   private _deleteQuestionsOnSave : number[] = [];
+
+  private _preventSave : boolean = false;
+
+  private _defaultImage = '/assets/img/theme/add-image.png';
 
   @ViewChild(QuestionContainerComponent) questionComponent : QuestionContainerComponent;
   @ViewChild(MatTabGroup) tabGroup : MatTabGroup;
@@ -95,7 +95,8 @@ export class AddChapterComponent implements OnInit {
       subChapterTitle : new FormControl('', [Validators.required]),
       isVideo : new FormControl('3', []),
       ChapterTxt : new FormControl('', [Validators.required]),
-      FilePath : new FormControl(null, []),
+      FilePath : new FormControl("", []),
+      allowDownload : new FormControl(true, []),
       subChapterId : new FormControl(null, []),
       Sc_index : new FormControl(this._nextSubChapterId, [])
     }));
@@ -229,6 +230,18 @@ export class AddChapterComponent implements OnInit {
     this._deleteQuestionsOnSave.push(id);
   }
 
+  imgUploaded(event, i : number) {
+    console.log(event);
+    this.preventSave = false;
+    // if (e.success) {
+    //   this.EmpForm.controls['courseImg'].setValue(e.UserImg);
+    // } else {
+    //   this.profile = "";
+    // }
+
+    // this.DisableButton = false;
+  }
+
   get quillModules() : Object {
     return {
       toolbar : [
@@ -240,12 +253,22 @@ export class AddChapterComponent implements OnInit {
     }
   }
 
-  
+  get uploaderOptions() : UploadInput {
+    return  {
+      type: 'uploadAll',
+      url: this.globals.APIURL + 'Company/userImgUpload?folderName=Course',
+      method: 'POST',
+      data: {}
+    };
+  }
 
   get addChapterForm() : FormGroup { return this._addChapterForm; }
   get chapterName() : FormControl { return this._addChapterForm.get('chapterName') as FormControl; }
   get subChapter() : FormArray { return this._addChapterForm.get('subChapter') as FormArray; }
   get openedSubChapter() : number { return this._openedSubChapter; }
   get questions() : FormArray { return this._addChapterForm.get('questions') as FormArray; }
+  get defaultImage() : string { return this._defaultImage; }
+  get preventSave() : boolean { return this._preventSave; }
+  set preventSave(v : boolean) { this._preventSave = v; }
   
 }
