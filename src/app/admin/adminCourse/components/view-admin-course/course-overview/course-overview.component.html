@@ -136,18 +136,19 @@
         <div class="col-tile">
             <div class="col-header">
                 {{'course.GlobalAssignments' | translate}}</div>
-            <div *ngIf="bUpdatingCourseAssignments"
-                [@visibilityChanged]="bUpdatingCourseAssignments ? 'shown' : 'hidden'" class="loader member-loader">
+            <div *ngIf="updatingCourseAssignments" [@visibilityChanged]="updatingCourseAssignments ? 'shown' : 'hidden'"
+                class="loader member-loader">
             </div>
-            <div class="col-text" [style.opacity]="bUpdatingCourseAssignments ? '0' : '1'">
-                <div *ngIf="globalAssignmentList.data.length == 0" style="padding-top: 20px;">
+            <div class="col-text" [style.opacity]="updatingCourseAssignments ? '0' : '1'">
+                <div *ngIf="companyAssignmentTable.data.length == 0" style="padding-top: 20px;">
                     {{'course.NoGlobalAss' | translate}}
                 </div>
                 <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12"
-                    [style.height]="!bUpdatingCourseAssignmentList && globalAssignmentList.data.length > 0 ? 'auto' : '0'"
-                    [style.overflow]="!bUpdatingCourseAssignmentList && globalAssignmentList.data.length > 0 ? 'scroll' : 'hidden'">
-                    <table mat-table [dataSource]="globalAssignmentList" matSort matSortActive="nextEvent"
-                        matSortDirection="asc" class="mat-elevation-z8" style="width: 100%;margin-top: 20px;">
+                    [style.height]="!updatingCourseAssignments && companyAssignmentTable.data.length > 0 ? 'auto' : '0'"
+                    [style.overflow]="!updatingCourseAssignments && companyAssignmentTable.data.length > 0 ? 'scroll' : 'hidden'">
+                    <table mat-table [dataSource]="companyAssignmentTable" #companyAssSort="matSort" matSort
+                        matSortActive="nextEvent" matSortDirection="asc" class="mat-elevation-z8"
+                        style="width: 100%;margin-top: 20px;">
                         <ng-container matColumnDef="courseName">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>
                                 {{'course.Course' | translate}}</th>
@@ -247,21 +248,22 @@
                                 </ng-template>
                             </td>
                         </ng-container>
-                        <tr mat-header-row *matHeaderRowDef="displayedColumnsAssignments"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumnsAssignments;" class="group-row"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumnsAssignments when isDarkenedRow"
+                        <tr mat-header-row *matHeaderRowDef="companyAssDisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: companyAssDisplayedColumns;" class="group-row"></tr>
+                        <tr mat-row *matRowDef="let row; columns: companyAssDisplayedColumns when isDarkenedRow"
                             class="darken"
                             matTooltip="{{(row.active == -1 ? 'assignment.NoFurtherDates' : 'assignment.NotEffective') | translate}}">
                         </tr>
                     </table>
-                    <mat-paginator [pageSizeOptions]="[3, 5, 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons>
+                    <mat-paginator #companyAssPaginator [pageSizeOptions]="[3, 5, 10, 20, 50, 100]" [pageSize]="10"
+                        showFirstLastButtons>
                     </mat-paginator>
-                </div>
-                <div *ngIf="bGroupDataLoaded && allowEdit" class="row ChapterList col-md-12 send-certificate">
-                    <button mat-stroked-button style="margin:auto;" (click)="addCourse()">{{'course.AddAssignment' |
-                        translate}}...</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
+<div class="row ChapterList col-md-12" style="text-align: center;">
+    <button mat-stroked-button style="margin:auto;" (click)="addCourseAssignment()">{{'course.AddAssignment' |
+        translate}}...</button>
 </div> -->
