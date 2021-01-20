@@ -19,6 +19,7 @@
                         <ng-container *ngIf="!params.groupId && !params.userId && !params.departmentId">
                             {{'course.AddAssFor' | translate}}:
                             <mat-radio-group [(ngModel)]="assignmentType" class="example-radio-group"
+                                style="margin: 10px;"
                                 [disabled]="params.groupId || params.userId || params.departmentId">
                                 <mat-radio-button [value]="0">{{'course.Employee' | translate}}</mat-radio-button>
                                 <mat-radio-button [value]="1">{{'course.Group' | translate}}</mat-radio-button>
