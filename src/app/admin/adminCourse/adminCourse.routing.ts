@@ -27,6 +27,10 @@ export const routes: Routes = [
     component: CourseAssignmentComponent
   },
   {
+    path: 'assigncourse/:courseId/:assId',
+    component: CourseAssignmentComponent
+  },
+  {
     path: 'add',
     component: ModifyAdminCourseComponent
   },
