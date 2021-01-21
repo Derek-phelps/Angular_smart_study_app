@@ -200,6 +200,21 @@ export class CourseOverviewComponent implements OnInit {
     }
   }
 
+  editAssignment(ass) {
+    //console.log(ass);
+    this.spinner.show();
+    var userType = this.globals.getUserType();
+    if (userType == "1") {
+      this.router.navigate(['./superadmin/course/assigncourse', this.courseData.courseInfo.courseId, ass.courseAssId], { skipLocationChange: false });
+    } else if (userType == "2") {
+      this.router.navigate(['./admin/course/assigncourse', this.courseData.courseInfo.courseId, ass.courseAssId], { skipLocationChange: false });
+    } else if (userType == "3") {
+      this.router.navigate(['./employee/course/assigncourse', this.courseData.courseInfo.courseId, ass.courseAssId], { skipLocationChange: false });
+    } else {
+      this.router.navigate(['./employee/course/assigncourse', this.courseData.courseInfo.courseId, ass.courseAssId], { skipLocationChange: false });
+    }
+  }
+
   get userInfo() { return this.globals.userInfo; };
 
   get groupStatusTable() { return this._groupStatusTable; };
@@ -208,7 +223,7 @@ export class CourseOverviewComponent implements OnInit {
 
   get departmentDisplayedColumns(): string[] { return ['status', 'name']; };
   get groupDisplayedColumns(): string[] { return ['status', 'name']; };
-  get companyAssDisplayedColumns(): string[] { return ['courseName', 'firstEvent', 'nextEvent', 'recurrence', 'endDate', 'status', 'editDelete']; };
+  get companyAssDisplayedColumns(): string[] { return ['courseName', 'firstEvent', 'nextEvent', 'recurrence', 'endDate', /*'status',*/ 'editDelete']; };
 
   get courseChartData(): MultiDataSet { return this._courseChartData; };
   get courseChartLabels(): Label[] { return this._courseChartLabels; };
