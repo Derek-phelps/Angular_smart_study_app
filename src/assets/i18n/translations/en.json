@@ -265,6 +265,7 @@
     "NoCourse": "No courses were assigned to this department yet."
   },
   "course": {
+    "GlobalAssignment": "All employees (global course assignment)",
     "GlobalAssignments": "Global course assignments",
     "NoGlobalAss": "No global assignments defined for this course.",
     "SaveAndUploadNewScorm": "Save and upload new SCORM file",
@@ -298,7 +299,8 @@
     "TileView": "Show tiles",
     "LastFinished": "Last finished",
     "FutureCourse": "This course did not start yet...",
-    "AddAssFor": "Create course assignment for",
+    "AddAssFor": "<p>Create new course assignment of <b>{{name}}</b> for:</p>",
+    "EditAssFor": "<p>Edit global course assignment of <b>{{name}}</b>:</p>",
     "Employee": "Employee",
     "Group": "Group",
     "Department": "Department",
@@ -308,7 +310,7 @@
     "Title": "Title",
     "Date": "Date",
     "FilterBy": "Search",
-    "searchNoFound": "No matching course found.",
+    "searchNoFound": "No match found for the entered search string.",
     "Course": "Course",
     "SelectCourse": "Select Course",
     "CourseName": "Course name",

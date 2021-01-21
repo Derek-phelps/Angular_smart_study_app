@@ -265,6 +265,7 @@
     "NoCourse": "Dieser Abteilung wurden noch keine Kurse zugeteilt."
   },
   "course": {
+    "GlobalAssignment": "Alle Mitarbeiter (Globale Kurszuweisung)",
     "GlobalAssignments": "Globale Kurszuweisungen",
     "NoGlobalAss": "Für diesen Kurs wurden keine globalen Zuweisungen definiert.",
     "SaveAndUploadNewScorm": "Speichern und neue SCORM-Datei hochladen",
@@ -298,7 +299,8 @@
     "TileView": "Kacheln anzeigen",
     "LastFinished": "Zuletzt abgeschlossen",
     "FutureCourse": "Dieser Kurs hat noch nicht begonnen...",
-    "AddAssFor": "Kurszuweisung erstellen für",
+    "AddAssFor": "<p>Neue Kurszuweisung von <b>{{name}}</b> erstellen für:</p>",
+    "EditAssFor": "<p>Globale Kurszuweisung von <b>{{name}}</b> bearbeiten:</p>",
     "Employee": "Mitarbeiter",
     "Group": "Mitarbeitergruppe",
     "Department": "Abteilung",
@@ -308,7 +310,7 @@
     "Title": "Titel",
     "Date": "Datum",
     "FilterBy": "Suchen",
-    "searchNoFound": "Für den eingegebenen Suchbegriff wurden keine Kurse gefunden.",
+    "searchNoFound": "Für den eingegebenen Suchbegriff wurden keine Ergebnisse gefunden.",
     "Course": "Kurs",
     "SelectCourse": "Kurs auswählen",
     "CourseName": "Kursname",
