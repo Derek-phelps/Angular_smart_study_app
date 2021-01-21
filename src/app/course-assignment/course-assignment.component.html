@@ -16,42 +16,68 @@
                         </ng-container>
                     </div>
                     <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" style="padding-top: 40px;">
-                        <ng-container *ngIf="!params.groupId && !params.userId && !params.departmentId">
-                            {{'course.AddAssFor' | translate}}:
-                            <mat-radio-group [(ngModel)]="assignmentType" class="example-radio-group"
-                                style="margin: 10px;"
-                                [disabled]="params.groupId || params.userId || params.departmentId">
+                        <ng-container *ngIf="bGenericCourseAssignment && !params.assId">
+                            <div style="font-size: large;"
+                                [innerHTML]="'course.AddAssFor' | translate: {name: selectedCourseName}"></div>
+                            <mat-radio-group [(ngModel)]="assignmentType" (change)="assignmentTypeChanged()"
+                                class="example-radio-group" style="margin: 10px;"
+                                [disabled]="!bGenericCourseAssignment">
+                                <mat-radio-button [value]="3">{{'course.GlobalAssignment' | translate}}
+                                </mat-radio-button>
                                 <mat-radio-button [value]="0">{{'course.Employee' | translate}}</mat-radio-button>
                                 <mat-radio-button [value]="1">{{'course.Group' | translate}}</mat-radio-button>
                                 <mat-radio-button [value]="2">{{'course.Department' | translate}}</mat-radio-button>
                             </mat-radio-group>
+                            <!-- Select model -->
+                            <mat-form-field [@openedChanged]="assignmentType != 3 ? 'shown' : 'hidden'"
+                                style="overflow: hidden;height: 0; width: 100%;">
+                                <mat-label>{{selectedLabel | translate}}</mat-label>
+                                <mat-select #matSelectModel [(ngModel)]="selectedModel" required>
+                                    <mat-option>
+                                        <ngx-mat-select-search [formControl]="modelSingleFilterCtrl"
+                                            placeholderLabel="{{'course.FilterBy' | translate}}"
+                                            noEntriesFoundLabel="{{'course.searchNoFound' | translate}}">
+                                            <mat-icon ngxMatSelectSearchClear>close</mat-icon>
+                                        </ngx-mat-select-search>
+                                    </mat-option>
+                                    <mat-option *ngFor="let model of filteredModelList | async"
+                                        [value]="getModelValue(model)">
+                                        {{getModelName(model)}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
                         </ng-container>
+                        <div *ngIf="bGenericCourseAssignment && params.assId" style="font-size: large;"
+                            [innerHTML]="'course.EditAssFor' | translate: {name: selectedCourseName}"></div>
                         <!-- Group -->
-                        <div *ngIf="!params.assId && params.groupId && bGroupNameListLoaded" style="font-size: large;"
+                        <div *ngIf="!params.assId && assignmentType == 1 && bGroupNameListLoaded"
+                            style="font-size: large;"
                             [innerHTML]="'assignment.CreateNewFor' | translate: {target: groupNameList[0].name}">
                         </div>
-                        <div *ngIf="params.assId && params.groupId && bGroupNameListLoaded" style="font-size: large;"
+                        <div *ngIf="params.assId && assignmentType == 1 && bGroupNameListLoaded"
+                            style="font-size: large;"
                             [innerHTML]="'assignment.EditFor' | translate: {target: groupNameList[0].name}">
                         </div>
                         <!-- Department -->
-                        <div *ngIf="!params.assId && params.departmentId && bGroupNameListLoaded"
+                        <div *ngIf="!params.assId && assignmentType == 2 && bGroupNameListLoaded"
                             style="font-size: large;"
                             [innerHTML]="'assignment.CreateNewFor' | translate: {target: groupNameList[0].departmentName}">
                         </div>
-                        <div *ngIf="params.assId && params.departmentId && bGroupNameListLoaded"
+                        <div *ngIf="params.assId && assignmentType == 2 && bGroupNameListLoaded"
                             style="font-size: large;"
                             [innerHTML]="'assignment.EditFor' | translate: {target: groupNameList[0].departmentName}">
                         </div>
                         <!-- User -->
-                        <div *ngIf="!params.assId && params.userId && bEmpNameListLoaded" style="font-size: large;"
+                        <div *ngIf="!params.assId && assignmentType == 0 && bEmpNameListLoaded"
+                            style="font-size: large;"
                             [innerHTML]="'assignment.CreateNewFor' | translate: {target: empNameList[0].FULLNAME}">
                         </div>
-                        <div *ngIf="params.assId && params.userId && bEmpNameListLoaded" style="font-size: large;"
+                        <div *ngIf="params.assId && assignmentType == 0 && bEmpNameListLoaded" style="font-size: large;"
                             [innerHTML]="'assignment.EditFor' | translate: {target: empNameList[0].FULLNAME}">
                         </div>
                         <div *ngIf="!params.courseId">
                             <mat-form-field style="width: 100%;">
-                                <mat-label>{{'assignment.SelectCourse' | translate}}*</mat-label>
+                                <mat-label>{{'assignment.SelectCourse' | translate}} *</mat-label>
                                 <mat-select [(ngModel)]="selectedCourse">
                                     <mat-option>
                                         <ngx-mat-select-search [formControl]="courseSingleFilterCtrl"
@@ -74,16 +100,16 @@
                         <mat-checkbox [(ngModel)]="bIncludeSubDeps" *ngIf="params.departmentId">
                             {{'assignment.IncludeSubDeps' | translate}}</mat-checkbox>
                         <mat-form-field style="width: 100%;">
-                            <mat-label>{{'course.StartDate' | translate}}*</mat-label>
+                            <mat-label>{{'course.StartDate' | translate}}</mat-label>
                             <input matInput [matDatepicker]="pickerStart" (focus)="pickerStart.open()"
-                                [formControl]="startDate">
+                                [formControl]="startDate" required>
                             <mat-datepicker-toggle matSuffix [for]="pickerStart"></mat-datepicker-toggle>
                             <mat-datepicker #pickerStart></mat-datepicker>
                         </mat-form-field>
                         <mat-form-field [@openedChanged]="bIsMandatory ? 'shown' : 'hidden'"
                             style="overflow: hidden; width: 100%;">
-                            <mat-label>{{'assignment.Time' | translate}}*</mat-label>
-                            <input matInput type="number" min="1" [(ngModel)]="timeSpan">
+                            <mat-label>{{'assignment.Time' | translate}}</mat-label>
+                            <input matInput type="number" min="1" [(ngModel)]="timeSpan" required>
                         </mat-form-field>
                         <mat-checkbox [(ngModel)]="bIsRecurring" [disabled]="!bIsMandatory">
                             {{'assignment.Recurring' | translate}}</mat-checkbox>
@@ -100,10 +126,10 @@
                                 </mat-select>
                             </mat-form-field>
                             <br>
-                            <div *ngIf="params.groupId || params.departmentId">
-                                <ng-container *ngIf="params.groupId">{{'assignment.CatchUpG' | translate}}...
+                            <div *ngIf="assignmentType == 1 || assignmentType == 2">
+                                <ng-container *ngIf="assignmentType == 1">{{'assignment.CatchUpG' | translate}}...
                                 </ng-container>
-                                <ng-container *ngIf="params.departmentId">{{'assignment.CatchUpD' | translate}}...
+                                <ng-container *ngIf="assignmentType == 2">{{'assignment.CatchUpD' | translate}}...
                                 </ng-container>
                                 <mat-radio-group [(ngModel)]="bCatchUp" class="example-radio-group"
                                     style="padding-top: 10px;">
@@ -113,7 +139,7 @@
                                     </mat-radio-button>
                                 </mat-radio-group>
                             </div>
-                            <div *ngIf="params.userId">
+                            <div *ngIf="assignmentType == 0">
                                 {{'assignment.Priority' | translate}}:
                                 <mat-radio-group [(ngModel)]="bForceSeries" class="example-radio-group"
                                     style="padding-top: 10px;">
@@ -123,7 +149,7 @@
                                     </mat-radio-button>
                                 </mat-radio-group>
                             </div>
-                            <mat-form-field *ngIf="params.userId">
+                            <mat-form-field *ngIf="assignmentType == 0">
                                 <mat-label>{{'assignment.EndDate' | translate}}</mat-label>
                                 <input matInput [matDatepicker]="pickerEnd" (focus)="pickerEnd.open()"
                                     [formControl]="endDate">
@@ -131,7 +157,7 @@
                                 <mat-datepicker #pickerEnd></mat-datepicker>
                             </mat-form-field>
                         </div>
-                        <mat-form-field *ngIf="!params.userId" style="width: 100%;">
+                        <mat-form-field *ngIf="assignmentType != 0" style="width: 100%;">
                             <mat-label>{{'assignment.SetCourseEndDate' | translate}}</mat-label>
                             <input matInput [matDatepicker]="pickerEnd" (focus)="pickerEnd.open()"
                                 [formControl]="endDate">
