@@ -1,1 +1,57 @@
 @import '../style.scss';
+@import "../../../../../theme/theme/conf";
+
+.darken {
+    color: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.05);
+    width: 100%;
+    opacity: 0.6;
+    .resize-hover {
+      transition: all 0.2s ease;
+    }
+  }
+  .darken:hover {
+    .resize-hover {
+      font-size: larger;
+    }
+  }
+
+  .group-row {
+    opacity: 0.7;
+    .resize-hover {
+      transition: all 0.2s ease;
+    }
+  }
+  
+  .group-row:hover {
+    opacity: 1;
+    .resize-hover {
+      font-size: larger;
+    }
+  }
+
+  .done-color {
+    color: $success;
+  }
+  
+  .open-color {
+    color: $warning;
+  }
+  
+  .overdue-color {
+    color: $danger;
+  }
+  
+  .status-list {
+    .status-list-head {
+      text-align: center;
+    }
+    width: fit-content;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  .menu-disabled {
+    pointer-events: none;
+    cursor: initial;
+  }

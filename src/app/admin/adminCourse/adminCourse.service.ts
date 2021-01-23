@@ -494,6 +494,13 @@ export class AdminCourseService {
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
+  deleteCourseAssignment(courseAssId): any {
+    let formData: FormData = new FormData();
+    formData.append('courseAssId', courseAssId);
+    return this._http.post(this.globals.APIURL + 'Course/deleteCourseAssignment', formData)
+      .pipe(map((response: Response) => response))
+      .pipe(catchError(this.handleError))
+  }
   private _appendImageUrl(formData, strAppendValue, strPath, strValue) {
     if (strValue && strValue.indexOf("API/img") >= 0) {
       formData.append(strAppendValue, strValue);

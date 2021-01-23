@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { routing } from './adminCourse.routing';
+import { CourseRoutingModule } from './adminCourse.routing';
 
 
 import { MatListModule } from '@angular/material/list';
@@ -46,6 +46,8 @@ import { SafePipe } from './components/view-admin-course/view-adminCourse.compon
 
 import { AppMaterialModule } from '../../app-material/app-material.module';
 import { ChartsModule } from 'ng2-charts';
+import { CourseAssignmentModule } from '../../course-assignment/course-assignment.module';
+
 import { CourseOverviewComponent } from './components/view-admin-course/course-overview/course-overview.component';
 import { CourseDataComponent } from './components/view-admin-course/course-data/course-data.component';
 import { CourseParticipantsComponent } from './components/view-admin-course/course-participants/course-participants.component';
@@ -55,32 +57,32 @@ import { CourseCertificateComponent } from './components/view-admin-course/cours
 
 @NgModule({
   imports: [
-    CommonModule, routing, MatListModule, MatDialogModule, LayoutModule,
+    CommonModule, CourseRoutingModule, MatListModule, MatDialogModule, LayoutModule,
     FormsModule, ReactiveFormsModule, AppTranslationModule,
     MatCheckboxModule,
     MatSortModule, MatTableModule, MatPaginatorModule,
     QRCodeModule, SharedAppModule, /*SatDatepickerModule, SatNativeDateModule,*/ AppMaterialModule,
-    ChartsModule
+    ChartsModule, CourseAssignmentModule
   ],
   entryComponents: [BottomSheetModifyCourse, SubChapterOverviewDialog],
   declarations: [
-    AdminCourseComponent, 
+    AdminCourseComponent,
     ModifyAdminCourseComponent,
     NumberDirective,
     ViewAdminCourseComponent,
-    SignupCourseComponent, 
-    EditParticipantComponent, 
-    BottomSheetModifyCourse, 
+    SignupCourseComponent,
+    EditParticipantComponent,
+    BottomSheetModifyCourse,
     SubChapterOverviewDialog,
     ModifyAdminCourseDatepickerYearComponent,
-    SafePipe, 
+    SafePipe,
     CourseOverviewComponent,
     CourseDataComponent,
     CourseParticipantsComponent,
     CourseChaptersComponent,
     CourseTestsComponent,
     CourseCertificateComponent
-    ],
+  ],
   providers: [
     AdminCourseService
   ],

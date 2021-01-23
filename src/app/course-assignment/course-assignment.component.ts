@@ -64,6 +64,8 @@ export const MY_DATE_FORMATS = {
 export class CourseAssignmentComponent implements OnInit {
   public courseSingleFilterCtrl: FormControl = new FormControl();
   public filteredCourseList: ReplaySubject<[]> = new ReplaySubject<[]>(1);
+  public modelSingleFilterCtrl: FormControl = new FormControl();
+  public filteredModelList: ReplaySubject<[]> = new ReplaySubject<[]>(1);
   protected _onDestroy = new Subject<void>();
 
   bLoaded = false;
@@ -79,22 +81,27 @@ export class CourseAssignmentComponent implements OnInit {
 
   bIncludeSubDeps = false;
 
+  bGenericCourseAssignment = false;
+
   courseList: any = [];
   bCourseListLoaded = false;
   selectedCourse: any = undefined;
+  selectedCourseName: any = undefined;
   selectedUser: any = undefined;
   selectedDepartment: any = undefined;
   selectedGroup: any = undefined;
 
-  groupNameList = [];
+  groupNameList: any = [];
   bGroupNameListLoaded = false;
 
-  empNameList = [];
+  empNameList: any = [];
   bEmpNameListLoaded = false;
 
   bIsRecurring = false;
   recurringSpan = 1;
   recurringMY = 'year';
+
+  @ViewChild('matSelectModel', { static: false }) matSelectModel: MatSelect;
 
   constructor(private _changeDetectorRef: ChangeDetectorRef, private route: ActivatedRoute, private spinner: NgxSpinnerService, private translate: TranslateService,
     private _globals: Globals, private service: CourseAssignmentService, private _location: Location, private snackbar: MatSnackBar) {
@@ -106,7 +113,6 @@ export class CourseAssignmentComponent implements OnInit {
     //console.log(this.route);
 
     this.route.params.subscribe(params => {
-      //console.log(params);
       this.params = params;
       if (this.params.groupId) {
         this.assignmentType = 1;
@@ -117,6 +123,10 @@ export class CourseAssignmentComponent implements OnInit {
       } else if (this.params.userId) {
         this.assignmentType = 0;
         this.selectedUser = this.params.userId;
+      } else {
+        this.assignmentType = 3;
+        this.bGenericCourseAssignment = true;
+        this.selectedCourse = this.params.courseId;
       }
     });
 
@@ -132,6 +142,11 @@ export class CourseAssignmentComponent implements OnInit {
       .subscribe(() => {
         this.filterCourseSingle();
       });
+    this.modelSingleFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filterModelSingle();
+      });
 
     if (this.params.assId) {
       this.loadCourseAssignment();
@@ -142,6 +157,15 @@ export class CourseAssignmentComponent implements OnInit {
     this.loadCourseList();
     this.loadGroups();
     this.loadEmployees();
+  }
+
+  assignmentTypeChanged() {
+    this.selectedUser = undefined;
+    this.selectedGroup = undefined;
+    this.selectedDepartment = undefined;
+    this.modelSingleFilterCtrl.setValue('');
+
+    this.matSelectModel.ngControl.reset();
   }
 
   protected filterCourseSingle() {
@@ -157,10 +181,44 @@ export class CourseAssignmentComponent implements OnInit {
       search = search.toLowerCase();
     }
     // filter the leaders
-    var obj = this;
     this.filteredCourseList.next(
       this.courseList.filter(course => (course.courseName.toLowerCase().indexOf(search) > -1))
     );
+  }
+
+  protected filterModelSingle() {
+    let search = this.modelSingleFilterCtrl.value;
+    if (!search) {
+      switch (this.assignmentType) {
+        case 0:
+          this.filteredModelList.next(this.empNameList.slice());
+          return;
+        case 1:
+          this.filteredModelList.next(this.groupNameList.filter(group => (!group.departmentId)));
+          return;
+        case 2:
+          this.filteredModelList.next(this.groupNameList.filter(group => (group.departmentId)));
+          return;
+        default:
+          return;
+      }
+    } else {
+      search = search.toLowerCase();
+    }
+
+    switch (this.assignmentType) {
+      case 0:
+        this.filteredModelList.next(this.empNameList.filter(emp => (emp.FULLNAME.toLowerCase().indexOf(search) > -1)));
+        return;
+      case 1:
+        this.filteredModelList.next(this.groupNameList.filter(group => (!group.departmentId && group.name.toLowerCase().indexOf(search) > -1)));
+        return;
+      case 2:
+        this.filteredModelList.next(this.empNameList.filter(group => (group.departmentId && group.departmentName.toLowerCase().indexOf(search) > -1)));
+        return;
+      default:
+        return;
+    }
   }
 
   loadCourseAssignment() {
@@ -208,6 +266,15 @@ export class CourseAssignmentComponent implements OnInit {
     this.service.getMyAssignmentCourseList().subscribe(data => {
       if (data.success) {
         this.courseList = data.data;
+
+        if (this.bGenericCourseAssignment) {
+          this.courseList.forEach(course => {
+            if (course.courseId == this.selectedCourse) {
+              this.selectedCourseName = course.courseName;
+            }
+          });
+        }
+
         this.bCourseListLoaded = true;
       } else {
         this.courseList = [];
@@ -273,6 +340,11 @@ export class CourseAssignmentComponent implements OnInit {
   }
 
   checkValid() {
+    if (this.bGenericCourseAssignment) {
+      if ((this.assignmentType == 0 && !this.selectedUser) || (this.assignmentType == 1 && !this.selectedGroup) || (this.assignmentType == 2 && !this.selectedDepartment)) {
+        return false;
+      }
+    }
     if (this.selectedCourse && this.startDate.value && (this.timeSpan > 0 || !this.bIsMandatory)) {
       if (this.bIsRecurring && !this.recurringSpan) {
         return false;
@@ -292,5 +364,72 @@ export class CourseAssignmentComponent implements OnInit {
 
   onValueChange() {
     this._changeDetectorRef.detectChanges();
+  }
+
+  get selectedModel() {
+    switch (this.assignmentType) {
+      case 0:
+        return this.selectedUser;
+      case 1:
+        return this.selectedGroup;
+      case 2:
+        return this.selectedDepartment;
+      default:
+        return undefined;
+    }
+  };
+
+  set selectedModel(value) {
+    switch (this.assignmentType) {
+      case 0:
+        this.selectedUser = value;
+        break;
+      case 1:
+        this.selectedGroup = value;
+        break;
+      case 2:
+        this.selectedDepartment = value;
+      default:
+        break;
+    }
+  };
+
+  get selectedLabel() {
+    switch (this.assignmentType) {
+      case 0:
+        return 'group.SelectMember';
+      case 1:
+        return 'employees.SelGroup';
+      case 2:
+        return 'employees.SelDep';
+      default:
+        return '';
+    }
+  };
+
+  getModelName(model) {
+    switch (this.assignmentType) {
+      case 0:
+        return model.FULLNAME;
+      case 1:
+        return model.name;
+      case 2:
+        return model.departmentName;
+      default:
+        return undefined;
+    }
+  }
+
+  getModelValue(model) {
+    switch (this.assignmentType) {
+      case 0:
+        return model.UserId;
+      case 1:
+        return model.groupId;
+      case 2:
+        return model.departmentId;
+      default:
+        return undefined;
+    }
   }
 }

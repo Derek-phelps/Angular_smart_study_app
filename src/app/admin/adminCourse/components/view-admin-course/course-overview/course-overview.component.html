@@ -8,13 +8,11 @@
             <div class="col-text" style="padding-top: 10px;">
                 <div>
                     <div class="chart-container" style="cursor: pointer;"
-                        matTooltip="{{'course.OpenMemberView' | translate}}"
-                        (click)="openPartList()">
+                        matTooltip="{{'course.OpenMemberView' | translate}}" (click)="openPartList()">
                         <div>
                             <div style="display: block">
-                                <canvas baseChart [data]="courseChartData"
-                                    [labels]="courseChartLabels" [chartType]="'doughnut'"
-                                    [colors]="courseChartColors">
+                                <canvas baseChart [data]="courseChartData" [labels]="courseChartLabels"
+                                    [chartType]="'doughnut'" [colors]="courseChartColors">
                                 </canvas>
                             </div>
                         </div>
@@ -31,39 +29,32 @@
             <div class="col-header">{{'course.AssignedToDep' | translate}}</div>
             <div class="col-text">
                 <div style="width: 100%;overflow: auto;">
-                    <table mat-table [dataSource]="departmentStatusTable"
-                        class="mat-elevation-z8" #depSort="matSort" matSort matSortActive="name"
-                        matSortDirection="asc">
+                    <table mat-table [dataSource]="departmentStatusTable" class="mat-elevation-z8" #depSort="matSort"
+                        matSort matSortActive="name" matSortDirection="asc">
                         <ng-container matColumnDef="status">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
                             <td mat-cell *matCellDef="let dep" class="cell-status-wrapper"
                                 [style.width]="userInfo.UserType > 2 ? '25px' : '51px'">
-                                <div class="status-div"
-                                    [style.width]="userInfo.UserType > 2 ? '25px' : '51px'">
+                                <div class="status-div" [style.width]="userInfo.UserType > 2 ? '25px' : '51px'">
                                     <div class="status-div-inner-left"
                                         [ngClass]="{'status-done': dep.departmentCourseStatus==1, 'status-current': dep.departmentCourseStatus==0, 'status-overdue': dep.departmentCourseStatus==-1}">
-                                        <i class="fa fa-book fa-lg center-icon"
-                                            aria-hidden="true"
+                                        <i class="fa fa-book fa-lg center-icon" aria-hidden="true"
                                             matTooltip="{{'course.DepCourseState' | translate}}"></i>
                                     </div>
-                                    <div *ngIf="2 >= userInfo.UserType"
-                                        class="status-div-inner-right"
+                                    <div *ngIf="2 >= userInfo.UserType" class="status-div-inner-right"
                                         [ngClass]="{'status-done': dep.status==1, 'status-current': dep.status==0, 'status-overdue': dep.status==-1}">
                                         <i class="fa fa-user fa-lg center-icon"
-                                            matTooltip="{{'course.StateDep' | translate}}"
-                                            aria-hidden="true"></i>
+                                            matTooltip="{{'course.StateDep' | translate}}" aria-hidden="true"></i>
                                     </div>
                                 </div>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                style="padding-left: 10px;">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 10px;">
                                 {{'course.Department' | translate}}
                             </th>
                             <td style="padding-left: 10px;" mat-cell *matCellDef="let dep">
-                                <div *ngIf="userInfo.isAdmin"
-                                    routerLink="../../../../department/{{dep.departmentId}}"
+                                <div *ngIf="userInfo.isAdmin" routerLink="../../../../department/{{dep.departmentId}}"
                                     [skipLocationChange]="false"
                                     [matTooltip]="'openVar' | translate: {var: dep.departmentName}"
                                     style="cursor: pointer;">
@@ -75,13 +66,12 @@
                             </td>
                         </ng-container>
                         <tr mat-header-row *matHeaderRowDef="departmentDisplayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: departmentDisplayedColumns;"
-                            class="group-row">
+                        <tr mat-row *matRowDef="let row; columns: departmentDisplayedColumns;" class="group-row">
                         </tr>
                     </table>
                 </div>
-                <mat-paginator #depPaginator [pageSizeOptions]="[5, 10, 20, 50, 100]"
-                    [pageSize]="10" showFirstLastButtons>
+                <mat-paginator #depPaginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="10"
+                    showFirstLastButtons>
                 </mat-paginator>
             </div>
         </div>
@@ -91,43 +81,35 @@
             <div class="col-header">{{'course.AssignedToGroup' | translate}}</div>
             <div class="col-text">
                 <div style="width: 100%;overflow: auto;">
-                    <table mat-table [dataSource]="groupStatusTable" 
-                        class="mat-elevation-z8" #groupSort="matSort" matSort matSortActive="name"
-                        matSortDirection="asc">
+                    <table mat-table [dataSource]="groupStatusTable" class="mat-elevation-z8" #groupSort="matSort"
+                        matSort matSortActive="name" matSortDirection="asc">
                         asd
                         <ng-container matColumnDef="status">
                             asd
                             <th mat-header-cell *matHeaderCellDef mat-sort-header></th>
                             <td mat-cell *matCellDef="let group" class="cell-status-wrapper"
                                 [style.width]="userInfo.UserType > 2 ? '25px' : '51px'">
-                                <div class="status-div"
-                                    [style.width]="userInfo.UserType > 2 ? '25px' : '51px'">
+                                <div class="status-div" [style.width]="userInfo.UserType > 2 ? '25px' : '51px'">
                                     <div class="status-div-inner-left"
                                         [ngClass]="{'status-done': group.groupCourseStatus==1, 'status-current': group.groupCourseStatus==0, 'status-overdue': group.groupCourseStatus==-1}">
-                                        <i class="fa fa-book fa-lg center-icon"
-                                            aria-hidden="true"
+                                        <i class="fa fa-book fa-lg center-icon" aria-hidden="true"
                                             matTooltip="{{'course.GroupCourseState' | translate}}"></i>
                                     </div>
-                                    <div *ngIf="2 >= userInfo.UserType"
-                                        class="status-div-inner-right"
+                                    <div *ngIf="2 >= userInfo.UserType" class="status-div-inner-right"
                                         [ngClass]="{'status-done': group.status==1, 'status-current': group.status==0, 'status-overdue': group.status==-1}">
                                         <i class="fa fa-user fa-lg center-icon"
-                                            matTooltip="{{'course.StateGroup' | translate}}"
-                                            aria-hidden="true"></i>
+                                            matTooltip="{{'course.StateGroup' | translate}}" aria-hidden="true"></i>
                                     </div>
                                 </div>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                style="padding-left: 10px;">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 10px;">
                                 {{'course.Group' | translate}}
                             </th>
                             <td style="padding-left: 10px;" mat-cell *matCellDef="let group">
-                                <div *ngIf="userInfo.isAdmin"
-                                    routerLink="../../../../groups/{{group.groupId}}"
-                                    [skipLocationChange]="false"
-                                    [matTooltip]="'openVar' | translate: {var: group.name}"
+                                <div *ngIf="userInfo.isAdmin" routerLink="../../../../groups/{{group.groupId}}"
+                                    [skipLocationChange]="false" [matTooltip]="'openVar' | translate: {var: group.name}"
                                     style="cursor: pointer;">
                                     <b>{{group.name}}</b>
                                 </div>
@@ -137,15 +119,151 @@
                             </td>
                         </ng-container>
                         <tr mat-header-row *matHeaderRowDef="groupDisplayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: groupDisplayedColumns;"
-                            class="group-row">
+                        <tr mat-row *matRowDef="let row; columns: groupDisplayedColumns;" class="group-row">
                         </tr>
                     </table>
                 </div>
-                <mat-paginator #groupPaginator [pageSizeOptions]="[5, 10, 20, 50, 100]"
-                    [pageSize]="10" showFirstLastButtons>
+                <mat-paginator #groupPaginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="10"
+                    showFirstLastButtons>
                 </mat-paginator>
             </div>
-        </div> 
+        </div>
     </div>
+</div>
+
+<div class="row tile-row">
+    <div class="col-12 col-tile-outer">
+        <div class="col-tile">
+            <div class="col-header">
+                {{'course.GlobalAssignments' | translate}}</div>
+            <div *ngIf="updatingCourseAssignments" [@visibilityChanged]="updatingCourseAssignments ? 'shown' : 'hidden'"
+                class="loader member-loader">
+            </div>
+            <div class="col-text" [style.opacity]="updatingCourseAssignments ? '0' : '1'">
+                <div *ngIf="companyAssignmentTable.data.length == 0" style="padding-top: 20px;">
+                    {{'course.NoGlobalAss' | translate}}
+                </div>
+                <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12"
+                    [style.height]="!updatingCourseAssignments && companyAssignmentTable.data.length > 0 ? 'auto' : '0'"
+                    [style.overflow]="!updatingCourseAssignments && companyAssignmentTable.data.length > 0 ? 'scroll' : 'hidden'">
+                    <table mat-table [dataSource]="companyAssignmentTable" #companyAssSort="matSort" matSort
+                        matSortActive="nextEvent" matSortDirection="asc" class="mat-elevation-z8"
+                        style="width: 100%;margin-top: 20px;">
+                        <ng-container matColumnDef="courseName">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                {{'course.Course' | translate}}</th>
+                            <td mat-cell *matCellDef="let course" (click)="viewCourse(course)"
+                                [style.cursor]="!isAdmin ? 'initial' : 'pointer'"
+                                matTooltip="{{'group.OpenCourse' | translate}}" [matTooltipDisabled]="!isAdmin">
+                                <b>{{course.courseName}}</b>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="firstEvent">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                {{'course.FirstEvent' | translate}}</th>
+                            <td mat-cell *matCellDef="let course">{{course.formatFirstEvent}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="nextEvent">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                {{'course.NextEvent' | translate}}</th>
+                            <td mat-cell *matCellDef="let course"
+                                [style.color]="course.currentlyActive && course.effective && '#8bd22f'">
+                                {{course.nextEvent}}<ng-container *ngIf="!course.nextEvent">-</ng-container>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="recurrence">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                {{'assignment.Interval' | translate}}</th>
+                            <td mat-cell *matCellDef="let course">
+                                <ng-container *ngIf="course.isSeries=='1'">
+                                    {{course.repeatSpan}}
+                                    {{(course.repeatUnit=='year' ? 'assignment.Years' : 'assignment.Months') |
+                                    translate}}
+                                </ng-container>
+                                <ng-container *ngIf="course.isSeries=='0'">-</ng-container>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="endDate">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                                {{'assignment.End' | translate}}
+                            </th>
+                            <td mat-cell *matCellDef="let course">{{course.formatEndDate}}<ng-container
+                                    *ngIf="!course.endDate">-</ng-container>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef>
+                                {{'course.State' | translate}}</th>
+                            <td mat-cell *matCellDef="let course">
+                                <mat-menu #appMenu="matMenu" yPosition="above" style="padding: 10px;">
+                                    <div class="status-list">
+                                        <div class="status-list-head">
+                                            <i *ngIf="currentListStatus == -1"
+                                                class="fa fa-exclamation-triangle course-icon-overdue"></i>
+                                            <i *ngIf="currentListStatus == 0"
+                                                class="fa fa-clock-o course-icon-current"></i>
+                                            <i *ngIf="currentListStatus == 1"
+                                                class="fa fa-check-circle course-icon-done"></i>
+                                        </div>
+                                        <div>
+                                            <ng-container *ngFor="let member of statusList">
+                                                <a *ngIf="isAdmin" href="javascript:void(0)"
+                                                    (click)="openEmpView(member.userId)">{{member.FULLNAME}}</a>
+                                                <ng-container *ngIf="!isAdmin">
+                                                    {{member.FULLNAME}}</ng-container>
+                                                <br>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </mat-menu>
+                                <span *ngIf="course.hasStatus">
+                                    <b class="done-color" style="cursor: pointer;" [matMenuTriggerFor]="appMenu"
+                                        [ngClass]="{ 'menu-disabled': course.completed.length == 0, 'resize-hover': course.completed.length > 0 }"
+                                        (click)="setStatusList(course.completed, 1)">{{course.completed.length}}</b>/<b
+                                        class="open-color" style="cursor: pointer;" [matMenuTriggerFor]="appMenu"
+                                        [ngClass]="{ 'menu-disabled': course.open.length == 0, 'resize-hover': course.open.length > 0 }"
+                                        (click)="setStatusList(course.open, 0)">{{course.open.length}}</b>/<b
+                                        class="overdue-color" style="cursor: pointer;" [matMenuTriggerFor]="appMenu"
+                                        [ngClass]="{ 'menu-disabled': course.overdue.length == 0, 'resize-hover': course.overdue.length > 0 }"
+                                        (click)="setStatusList(course.overdue, -1)">{{course.overdue.length}}</b>
+                                </span>
+                                <ng-container *ngIf="!course.hasStatus">-</ng-container>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="editDelete">
+                            <th mat-header-cell *matHeaderCellDef></th>
+                            <td mat-cell *matCellDef="let course">
+                                <ng-container
+                                    *ngIf="course.departmentId && course.departmentId != departmentId; else editDelBlock">
+                                    <i class="fa fa-info-circle iconSize float-right"
+                                        [matTooltip]="'assignment.ParentAss' | translate: {parent: course.departmentName}"></i>
+                                </ng-container>
+                                <ng-template #editDelBlock>
+                                    <i class="fa fa-trash iconSize float-right edit-delete-delete-icon"
+                                        style="cursor: pointer;" (click)="deleteAssignment(course)"
+                                        matTooltip="{{'assignment.Delete' | translate}}"></i>
+                                    <i class="fa fa-edit iconSize float-right edit-delete-edit-icon"
+                                        style="cursor: pointer;" (click)="editAssignment(course)"
+                                        matTooltip="{{'assignment.Edit' | translate}}"></i>
+                                </ng-template>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="companyAssDisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: companyAssDisplayedColumns;" class="group-row"></tr>
+                        <tr mat-row *matRowDef="let row; columns: companyAssDisplayedColumns when isDarkenedRow"
+                            class="darken"
+                            matTooltip="{{(row.active == -1 ? 'assignment.NoFurtherDates' : 'assignment.NotEffective') | translate}}">
+                        </tr>
+                    </table>
+                    <mat-paginator #companyAssPaginator [pageSizeOptions]="[3, 5, 10, 20, 50, 100]" [pageSize]="10"
+                        showFirstLastButtons>
+                    </mat-paginator>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row ChapterList col-md-12" style="text-align: center;">
+    <button mat-stroked-button style="margin:auto;" (click)="addCourseAssignment()">{{'course.AddAssignment' |
+        translate}}...</button>
 </div>
