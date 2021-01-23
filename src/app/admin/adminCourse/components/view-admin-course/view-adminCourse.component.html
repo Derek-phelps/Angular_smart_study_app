@@ -1,8 +1,8 @@
 <div *ngIf="courseData$ | async as data else loading">
     <div class="form-wrapper" style="max-width: 1000px;">
         <div class="edit-delete-icon-div">
-            <i *ngIf="userInfo.isAdmin" class="fa fa-trash iconSize edit-delete-delete-icon"
-                style="cursor: pointer;" (click)="deleteCourse()" matTooltip="{{'course.delCourse' | translate}}"></i>
+            <i *ngIf="userInfo.isAdmin" class="fa fa-trash iconSize edit-delete-delete-icon" style="cursor: pointer;"
+                (click)="deleteCourse()" matTooltip="{{'course.delCourse' | translate}}"></i>
             <i *ngIf="data.courseInfo.permission==2" class="fa fa-edit iconSize edit-delete-edit-icon"
                 style="cursor: pointer;" (click)="editCourse()" matTooltip="{{'course.editCourse' | translate}}"></i>
         </div>
@@ -18,14 +18,13 @@
             (touchend)="swipe($event, 'end')" (selectedTabChange)="tabChanged($event)" class="tab-group">
             <mat-tab label="{{'course.Overview' | translate}}">
                 <ng-template matTabContent>
-                    <course-overview [courseData]="data" (tabId)="openPartList()"></course-overview>
+                    <course-overview [courseData]="data" (tabId)="openPartList()" (updateData)="updateData()">
+                    </course-overview>
                 </ng-template>
             </mat-tab>
             <mat-tab label="{{'course.partList' | translate}}" [disabled]="!hasParticipants">
                 <ng-template matTabContent>
-                    <course-participants 
-                        [courseData]="data" 
-                        (updateData)="updateData()">
+                    <course-participants [courseData]="data" (updateData)="updateData()">
                     </course-participants>
                 </ng-template>
             </mat-tab>
@@ -38,9 +37,7 @@
                 <course-tests [courseData]="data"></course-tests>
             </mat-tab>
             <mat-tab label="{{'certificate.Certificate' | translate}}">
-                <course-certificate 
-                    [courseData]="data" 
-                    (updateData)="updateData()">
+                <course-certificate [courseData]="data" (updateData)="updateData()">
                 </course-certificate>
             </mat-tab>
         </mat-tab-group>
