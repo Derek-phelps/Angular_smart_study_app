@@ -50,29 +50,30 @@
                         <div *ngIf="bGenericCourseAssignment && params.assId" style="font-size: large;"
                             [innerHTML]="'course.EditAssFor' | translate: {name: selectedCourseName}"></div>
                         <!-- Group -->
-                        <div *ngIf="!params.assId && assignmentType == 1 && bGroupNameListLoaded"
+                        <div *ngIf="!bGenericCourseAssignment && !params.assId && assignmentType == 1 && bGroupNameListLoaded"
                             style="font-size: large;"
                             [innerHTML]="'assignment.CreateNewFor' | translate: {target: groupNameList[0].name}">
                         </div>
-                        <div *ngIf="params.assId && assignmentType == 1 && bGroupNameListLoaded"
+                        <div *ngIf="!bGenericCourseAssignment && params.assId && assignmentType == 1 && bGroupNameListLoaded"
                             style="font-size: large;"
                             [innerHTML]="'assignment.EditFor' | translate: {target: groupNameList[0].name}">
                         </div>
                         <!-- Department -->
-                        <div *ngIf="!params.assId && assignmentType == 2 && bGroupNameListLoaded"
+                        <div *ngIf="!bGenericCourseAssignment && !params.assId && assignmentType == 2 && bGroupNameListLoaded"
                             style="font-size: large;"
                             [innerHTML]="'assignment.CreateNewFor' | translate: {target: groupNameList[0].departmentName}">
                         </div>
-                        <div *ngIf="params.assId && assignmentType == 2 && bGroupNameListLoaded"
+                        <div *ngIf="!bGenericCourseAssignment && params.assId && assignmentType == 2 && bGroupNameListLoaded"
                             style="font-size: large;"
                             [innerHTML]="'assignment.EditFor' | translate: {target: groupNameList[0].departmentName}">
                         </div>
                         <!-- User -->
-                        <div *ngIf="!params.assId && assignmentType == 0 && bEmpNameListLoaded"
+                        <div *ngIf="!bGenericCourseAssignment && !params.assId && assignmentType == 0 && bEmpNameListLoaded"
                             style="font-size: large;"
                             [innerHTML]="'assignment.CreateNewFor' | translate: {target: empNameList[0].FULLNAME}">
                         </div>
-                        <div *ngIf="params.assId && assignmentType == 0 && bEmpNameListLoaded" style="font-size: large;"
+                        <div *ngIf="!bGenericCourseAssignment && params.assId && assignmentType == 0 && bEmpNameListLoaded"
+                            style="font-size: large;"
                             [innerHTML]="'assignment.EditFor' | translate: {target: empNameList[0].FULLNAME}">
                         </div>
                         <div *ngIf="!params.courseId">
@@ -97,7 +98,7 @@
                             matTooltip="{{(bIsMandatory ? 'assignment.MandatoryExp' : 'assignment.VoluntaryExp') | translate}}">
                             {{'assignment.Mandatory' | translate}}</mat-checkbox>
                         <br>
-                        <mat-checkbox [(ngModel)]="bIncludeSubDeps" *ngIf="params.departmentId">
+                        <mat-checkbox [(ngModel)]="bIncludeSubDeps" *ngIf="assignmentType == 2">
                             {{'assignment.IncludeSubDeps' | translate}}</mat-checkbox>
                         <mat-form-field style="width: 100%;">
                             <mat-label>{{'course.StartDate' | translate}}</mat-label>
@@ -184,9 +185,11 @@
                         class="btn btn-success">{{'confirm' | translate}}</button>
                     <button style="float: right;margin-right: 15px" (click)="cancel()" type="button"
                         class="btn btn-success">{{'cancel' | translate}}</button> -->
-                    <button mat-stroked-button [disabled]="!checkValid()" style="float: right;top: 30px;"
+                    <button mat-stroked-button [disabled]="!checkValid()"
+                        style="float: right;top: 30px;margin-bottom: 20px;"
                         (click)="saveAssignment()">{{'save'|translate}}</button>
-                    <button mat-stroked-button color="warn" style="float: right;margin-right: 10px;top: 30px;"
+                    <button mat-stroked-button color="warn"
+                        style="float: right;margin-right: 10px;top: 30px;margin-bottom: 20px;"
                         (click)="cancel()">{{'cancel'|translate}}</button>
                 </div>
             </div>
