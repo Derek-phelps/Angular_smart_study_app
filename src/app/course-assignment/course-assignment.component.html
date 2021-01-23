@@ -165,26 +165,7 @@
                             <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
                             <mat-datepicker #pickerEnd></mat-datepicker>
                         </mat-form-field>
-                        <!-- <mat-form-field style="width: 100%">
-                            <mat-select placeholder="{{'group.SelectCategory' | translate}}" multiple
-                                formControlName="categories">
-                                <mat-option *ngFor="let category of categoryList" [value]="category.categoryId"
-                                    style="width: auto;"
-                                    [ngStyle]="{'background-image':'-webkit-gradient(linear, right top, left top, color-stop(0%,'+category.color+'), color-stop(100%,rgba(255,255,255,0)))'}">
-                                    {{category.name}}
-                                </mat-option>
-                            </mat-select>
-                            </mat-form-field> -->
                     </div>
-                    <!-- <div class="row ChapterList col-md-12 send-certificate" style="padding-top: 10px">
-                            <button (click)="addCourse()"
-                                class="form-control open-button open-button-active">{{'course.AddAssignment' | translate}}...</button>
-                        </div> -->
-                    <!-- <button [disabled]="!checkValid()" [style.cursor]="checkValid() ? 'pointer' : 'initial'"
-                        style="float: right;margin-right: 20px" (click)="saveAssignment()" type="button"
-                        class="btn btn-success">{{'confirm' | translate}}</button>
-                    <button style="float: right;margin-right: 15px" (click)="cancel()" type="button"
-                        class="btn btn-success">{{'cancel' | translate}}</button> -->
                     <button mat-stroked-button [disabled]="!checkValid()"
                         style="float: right;top: 30px;margin-bottom: 20px;"
                         (click)="saveAssignment()">{{'save'|translate}}</button>
