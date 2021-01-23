@@ -814,6 +814,7 @@
     "DeleteCourseAssQ": "Delete course assignment?",
     "DeleteCourseAssFull": "<p>Are you sure that you want to delete this course assignment of course <b>{{course}}</b> from this group?</p>",
     "DeleteDirectCourseAssFull": "<p>Are you sure that you want to delete this personal course assignment of course <b>{{course}}</b> for <b>{{name}}</b>?</p>",
+    "DeleteGlobalAssFull": "<p>Are you sure that you want to delete this <b>global course assignment</b> of course <b>{{course}}</b>?</p>",
     "CatchUpG": "Group members assigned to this group after the first date",
     "CatchUpD": "Department members assigned to this department after the first date",
     "CatchUpExp": "are assigned to this course instantly.",
