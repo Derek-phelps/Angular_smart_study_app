@@ -14,6 +14,9 @@ import { VACUtils } from '../view-admin-course-utils';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
 
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationBoxComponent } from '../../../../../theme/components/confirmation-box/confirmation-box.component';
+
 @Component({
   selector: 'course-overview',
   templateUrl: './course-overview.component.html',
@@ -33,12 +36,13 @@ import { Router } from '@angular/router';
   ]
 })
 export class CourseOverviewComponent implements OnInit {
-  isDarkenedRow = (index, item) => ((item.active == -1 && item.completed == 1) || !item.effective);
+  isDarkenedRow = (index, item) => (item.active == -1 || item.effective == false);
 
   @Input() courseId: number = -1;
   @Input() courseData: any;
 
   @Output() tabId: EventEmitter<number> = new EventEmitter<number>();
+  @Output() updateData: EventEmitter<void> = new EventEmitter<void>();
 
   private _groupStatusTable = new MatTableDataSource();
   private _departmentStatusTable = new MatTableDataSource();
@@ -80,7 +84,9 @@ export class CourseOverviewComponent implements OnInit {
     private globals: Globals,
     private translate: TranslateService,
     private spinner: NgxSpinnerService,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog,
+    private service: AdminCourseService
   ) { }
 
   ngOnInit(): void {
@@ -88,7 +94,6 @@ export class CourseOverviewComponent implements OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.courseData) {
-      console.log(changes.courseData);
       this._setupTables(this.courseData);
       this._setupChart(this.courseData);
     }
@@ -107,7 +112,6 @@ export class CourseOverviewComponent implements OnInit {
     }
 
     this._departmentStatusTable.sortingDataAccessor = (item: any, property) => {
-      console.log(property);
       switch (property) {
         case 'name': { return item.departmentName; }
         case 'status': { return item.departmentCourseStatus; }
@@ -116,7 +120,6 @@ export class CourseOverviewComponent implements OnInit {
     };
 
     this._groupStatusTable.sortingDataAccessor = (item: any, property) => {
-      console.log(property);
       switch (property) {
         case 'status': { return item.groupCourseStatus; }
         default: { return item[property]; }
@@ -201,7 +204,6 @@ export class CourseOverviewComponent implements OnInit {
   }
 
   editAssignment(ass) {
-    //console.log(ass);
     this.spinner.show();
     var userType = this.globals.getUserType();
     if (userType == "1") {
@@ -213,6 +215,33 @@ export class CourseOverviewComponent implements OnInit {
     } else {
       this.router.navigate(['./employee/course/assigncourse', this.courseData.courseInfo.courseId, ass.courseAssId], { skipLocationChange: false });
     }
+  }
+
+  deleteAssignment(ass) {
+    var strHead = this.translate.instant('assignment.DeleteCourseAssQ');
+    var strMessage = this.translate.instant('assignment.DeleteGlobalAssFull', { course: ass.courseName });
+
+    const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
+      width: '400px',
+      data: { companyId: this.globals.companyInfo.companyId, Action: false, Mes: strMessage, Head: strHead },
+      autoFocus: false
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this._updatingCourseAssignments = true;
+        this.service.deleteCourseAssignment(ass.courseAssId).subscribe(data => {
+          if (data.success) {
+            //this.loadGroup(true);
+            this.updateData.next();
+          }
+        }, err => {
+          // TODO: Handle error!
+          console.error("Not deleted!!");
+          console.error(err);
+        });
+      }
+    });
   }
 
   get userInfo() { return this.globals.userInfo; };
