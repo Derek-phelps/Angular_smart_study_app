@@ -24,13 +24,14 @@ import { QuestionContainerComponent } from '../question-container/question-conta
 export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private _addChapterForm : FormGroup = this.formBuilder.group({
-    chapterName : new  FormControl('', [Validators.required]),
-    chapterId : new FormControl('', []),
+    title : new  FormControl('', [Validators.required]),
+    id : new FormControl('', []),
     courseId : new FormControl(-1, []),
-    isOffline : new FormControl(false, []),
-    subChapter : new FormArray([]),
+    courseName : new FormControl('', []),
+    subChapters : new FormArray([]),
     ignoreOrder : new FormControl(false, []),
     questions : new FormArray([]),
+    index : new FormControl('', []),
   });
 
 
@@ -84,7 +85,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
         if(candidate === null) { this.addSubChapter(); }
         else { 
           candidateChapter = JSON.parse(candidate);
-          candidateChapter['subChapter'].forEach( _ => this.addSubChapter(false));
+          candidateChapter['subChapters'].forEach( _ => this.addSubChapter(false));
           candidateChapter['questions'].forEach( _ => this.questionComponent.addQuestion(false));
           this._addChapterForm.patchValue(candidateChapter);
         }
@@ -96,17 +97,19 @@ export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
 
     else {
       let chapterId : number = this.route.snapshot.params.id;
-      this.service.getChapterById(chapterId).pipe(take(1)).subscribe(
+      //this.service.getChapterByIdFixed(chapterId).pipe(take(1)).subscribe( res => true );
+      this.service.getChapterByIdFixed(chapterId).pipe(take(1)).subscribe(
         result => {
-          this._addChapterForm.patchValue(result.data[0])
-          result.data[0]['SubChapter'].forEach(subChap => {
-            if(subChap.Sc_index == null) { subChap.Sc_index = this._nextSubChapterId; }
-            this.addSubChapter();
-            this.subChapter.at(this._openedSubChapter).patchValue(subChap);
-            this.subChapter.at(this._openedSubChapter).patchValue({ ChapterTxt : subChap.chapterTxt });
-          })
+          result.subChapters.forEach( _ => this.addSubChapter(false) );
+          this._addChapterForm.patchValue(result)
+          // result.subChapters.forEach(subChap => {
+          //   if(subChap.id == null) { subChap.index = this._nextSubChapterId; }
+          //   this.addSubChapter();
+          //   this.subChapters.at(this._openedSubChapter).patchValue(subChap);
+          //   //this.subChapters.at(this._openedSubChapter).patchValue({ ChapterTxt : subChap.chapterTxt });
+          // })
           
-          this.questionComponent.chapterId = result.data[0]['chapterId']
+          this.questionComponent.chapterId = result.id;
           //TODO: fetch questions.
       });
     }
@@ -125,23 +128,23 @@ export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
   addSubChapter(validate : boolean = true) : void {
     if(validate && !this.checkSubChapters()) { return; }
 
-    this.subChapter.push( this.formBuilder.group({
-      subChapterTitle : new FormControl('', [Validators.required]),
-      isVideo : new FormControl('3', []),
-      ChapterTxt : new FormControl('', [Validators.required]),
-      FilePath : new FormControl("", []),
-      allowDownload : new FormControl(true, []),
-      subChapterId : new FormControl(null, []),
-      Sc_index : new FormControl(this._nextSubChapterId, [])
+    this.subChapters.push( this.formBuilder.group({
+      id : new FormControl(null, []),
+      title : new FormControl('', [Validators.required]),
+      text : new FormControl('', [Validators.required]),
+      chapterId : new FormControl('', []),
+      filePath : new FormControl("", []),
+      isDownloadable : new FormControl(true, []),
+      index : new FormControl(this._nextSubChapterId, [])
     }));
     this._nextSubChapterId++;
-    this._openedSubChapter = this.subChapter.length -1;
+    this._openedSubChapter = this.subChapters.length -1;
   }
 
   reorder(event : CdkDragDrop<any[]>) : void {
-    let draggedSubChapter: FormGroup = this.subChapter.at(event.previousIndex) as FormGroup;
-    this.subChapter.removeAt(event.previousIndex);
-    this.subChapter.insert(event.currentIndex, draggedSubChapter);
+    let draggedSubChapter: FormGroup = this.subChapters.at(event.previousIndex) as FormGroup;
+    this.subChapters.removeAt(event.previousIndex);
+    this.subChapters.insert(event.currentIndex, draggedSubChapter);
 
     // apply new indices
     this._fixIndices();
@@ -158,9 +161,9 @@ export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
     dialogRef.afterClosed().pipe(
       take(1),
       tap( result => {
-        let subChapterId : number = this.subChapter.at(index).get('subChapterId').value;
+        let subChapterId : number = this.subChapters.at(index).get('id').value;
         if( subChapterId != null) { this._deleteChaptersOnSave.push(subChapterId); }
-        this.subChapter.removeAt(index);
+        this.subChapters.removeAt(index);
         this._fixIndices();
 
       })
@@ -171,8 +174,8 @@ export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private _fixIndices() : void {
     let newIndex : number = 0;
-    for(let subChapter of this.subChapter.controls) {     
-      subChapter.get('Sc_index').setValue(newIndex);
+    for(let subChapter of this.subChapters.controls) {     
+      subChapter.get('index').setValue(newIndex);
       newIndex++;
     }
     this._nextSubChapterId = newIndex; 
@@ -183,12 +186,10 @@ export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
     if(!this.questionComponent.checkQuestions()) { this.tabGroup.selectedIndex = 1; return; }
     if(!this.addChapterForm.valid) { return; }
 
-    
-
     let operation : Observable<any> = null;
     if(this.route.snapshot.url[0].path == 'add') { 
       
-      operation = this.service.add(this._addChapterForm.value).pipe(
+      operation = this.service.addFixed(this._addChapterForm.value).pipe(
         take(1),
         tap(response => this.questionComponent.chapterId = response['insert_id']),
         switchMap( result => from(this.questions.value)),
@@ -199,7 +200,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
       ); 
     }
     else { 
-      operation = this.service.edit(this._addChapterForm.value).pipe(
+      operation = this.service.editFixed(this._addChapterForm.value).pipe(
         take(1),
         switchMap( result => from(this._deleteChaptersOnSave)),
         mergeMap( id => this.service.deleteSubchapter(id)),
@@ -244,7 +245,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
       but FormArrays don't support forEach syntax.
     */
     let index : number = 0;
-    for(let subChapter of this.subChapter.controls) {
+    for(let subChapter of this.subChapters.controls) {
       subChapter.markAllAsTouched();      
       if(subChapter.invalid) { this._openedSubChapter = index; return false; }
       index++;
@@ -298,8 +299,8 @@ export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   get addChapterForm() : FormGroup { return this._addChapterForm; }
-  get chapterName() : FormControl { return this._addChapterForm.get('chapterName') as FormControl; }
-  get subChapter() : FormArray { return this._addChapterForm.get('subChapter') as FormArray; }
+  get title() : FormControl { return this._addChapterForm.get('title') as FormControl; }
+  get subChapters() : FormArray { return this._addChapterForm.get('subChapters') as FormArray; }
   get openedSubChapter() : number { return this._openedSubChapter; }
   get questions() : FormArray { return this._addChapterForm.get('questions') as FormArray; }
   get defaultImage() : string { return this._defaultImage; }
