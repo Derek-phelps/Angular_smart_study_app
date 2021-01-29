@@ -146,7 +146,7 @@ export class ContentService {
       let subChapter : Object = {
         ChapterId : sc.chapterId+'',
         FilePath : sc.filePath+'',
-        IsVideo: '3',
+        isVideo: '3',
         Sc_index : sc.index+'',
         ChapterTxt : sc.text,
         isDownloadable : sc.isDownloadable,
