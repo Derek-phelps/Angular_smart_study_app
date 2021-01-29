@@ -53,7 +53,8 @@
                             {{'employees.Surname' | translate}}</th>
                         <td (click)="viewEmp(emp)" matTooltip="{{emp.FULLNAME}}"
                             style="cursor: pointer;padding-left: 10px;" mat-cell *matCellDef="let emp">
-                            <b>{{emp.LASTNAME}}</b></td>
+                            <b>{{emp.LASTNAME}}</b>
+                        </td>
                     </ng-container>
                     <ng-container matColumnDef="FIRSTNAME">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header style="padding-left: 10px;">
@@ -61,7 +62,8 @@
                         <td (click)="viewEmp(emp)" matTooltip="{{emp.FULLNAME}}"
                             style="cursor: pointer;padding-left: 10px;" mat-cell *matCellDef="let emp"
                             [attr.colspan]="bEmpEntriesFound ? 1 : 8">
-                            <b>{{emp.FIRSTNAME}}</b></td>
+                            <b>{{emp.FIRSTNAME}}</b>
+                        </td>
                     </ng-container>
                     <ng-container matColumnDef="admin">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>TODO</th>
@@ -117,7 +119,8 @@
                     <!-- <tr mat-row *matRowDef="let row; columns: ['name'] when isExtendedRow" class="darken"></tr> -->
                 </table>
             </div>
-            <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons>
+            <mat-paginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="10" showFirstLastButtons
+                (page)="pageChanged($event)">
             </mat-paginator>
         </div>
     </div>

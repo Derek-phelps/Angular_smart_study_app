@@ -151,6 +151,7 @@ export class AdminEmployeeComponent implements OnInit, AfterViewInit {
         }
         this.fullEmpList = data.data;
         this.setEmpList(this._globals.empFilter);
+        this.setPaginationInfo();
         this.bLoading = false;
         this.spinner.hide();
       }
@@ -382,6 +383,30 @@ export class AdminEmployeeComponent implements OnInit, AfterViewInit {
       this.employeeList.data = newEmpList;
     }
     this.bLoading = false;
+  }
+
+  public pageChanged(event: any) {
+    if (event) {
+      delete event.previousPageIndex;
+      delete event.length;
+      localStorage.setItem('empTableInfo', JSON.stringify(event));
+    }
+  }
+
+  private setPaginationInfo() {
+    try {
+      let strEmpTableInfo: string = localStorage.getItem('empTableInfo');
+      if (strEmpTableInfo !== null) {
+        let empTableInfo: Object = JSON.parse(strEmpTableInfo);
+        setTimeout(() => {
+          this.paginator.pageSize = Number(empTableInfo['pageSize']);
+          this.paginator.pageIndex = Math.min(Number(empTableInfo['pageIndex']), this.paginator.getNumberOfPages() - 1);
+          this.paginator.page.next();
+        }, 0);
+      }
+    } catch (error) {
+      localStorage.removeItem('empTableInfo');
+    }
   }
 }
 
