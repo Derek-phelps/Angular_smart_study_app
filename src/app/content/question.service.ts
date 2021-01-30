@@ -89,6 +89,34 @@ export class QuestionService {
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
+
+  addChapterQuestion(question : any): Observable<any> {
+
+    let formData: FormData = new FormData();
+
+    formData.append('CourceId', question['courseId']);
+    formData.append('ChapterId', question['chapterId']);
+    formData.append('qustionText', question['text']);
+    formData.append('qustionImg', question['imagePath']);
+    //this._appendImageUrl(formData, 'qustionImg', 'API/img/Question/', formField.qustionImg);
+    formData.append('Explanation', question['explanation']);
+    formData.append('companyId', this._globals.companyInfo.companyId + "");
+    formData.append('createdBy', this._globals.companyInfo.companyId + "");
+    let answers : Array<any> = [];
+    question['answers'].forEach( a => {
+      answers.push({
+        'ans' : a['text'],
+        'CurAns' : ''+a['isCorrect'],
+        'QuestionOptionID' : a['id'],
+      })
+    })
+    formData.append('answers', JSON.stringify(answers));
+    
+    return this._http.post(this._addQustionUrl, formData)
+      .pipe(map((response: Response) => response))
+      .pipe(catchError(this.handleError))
+  }
+
   edit(formField: any, deleteOptions: any): any {
 
     let formData: FormData = new FormData();

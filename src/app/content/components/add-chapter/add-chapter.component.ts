@@ -220,7 +220,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
         tap(response => this.questionComponent.chapterId = response['insert_id']),
         switchMap( result => from(this.questions.value)),
         //TODO:  upload images
-        //tap(question => this.questionSerivce.add(questions)),
+        tap(question => this.questionSerivce.addChapterQuestion(question)),
         tap(question => console.log(question)),
         toArray(),
       ); 

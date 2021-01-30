@@ -81,7 +81,7 @@ export class QuestionContainerComponent implements OnInit {
       courseId : new FormControl(this._courseId, []),
       imagePath : new FormControl('', []),
       explanation : new FormControl('', []),
-      Q_index : new FormControl(this._nextQuestionId, []),
+      index : new FormControl(this._nextQuestionId, []),
       answers : new FormArray([this.createAnswer()], [atLeastOneCorrectValidator()]),
     }));
     
@@ -116,7 +116,7 @@ export class QuestionContainerComponent implements OnInit {
   private _fixIndices() : void {
     let newIndex : number = 0;
     for(let subChapter of this.questions.controls) {     
-      subChapter.get('Q_index').setValue(newIndex);
+      subChapter.get('index').setValue(newIndex);
       newIndex++;
     }
     this._nextQuestionId = newIndex; 
@@ -127,6 +127,7 @@ export class QuestionContainerComponent implements OnInit {
       text : new FormControl('', [Validators.required]),
       imagePath : new FormControl('', []),
       isCorrect : new FormControl(false, []),
+      id : new FormControl(null, [])
     });
   }
 
