@@ -46,7 +46,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
 
   private _defaultImage = '/assets/img/theme/add-image.png';
 
-  private _saveInterval : number = 5000;
+  private _saveInterval : number = 30000;
   private _saveSubscription : Subscription = null;
 
   
@@ -141,7 +141,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
     this._saveSubscription = timer(this._saveInterval, this._saveInterval).pipe(
       tap( _ => localStorage.setItem('currentCourse', JSON.stringify(this._addChapterForm.value)))
     ).subscribe(
-      _ => this.snackbar.open(this.translate.instant('chapter.Saved'), '', { duration: 30000 })
+      _ => this.snackbar.open(this.translate.instant('chapter.Saved'), '', { duration: 1000 })
     );      
   }
 
@@ -259,6 +259,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
             else { path = 'employee/course/view'; }
             
             localStorage.removeItem('currentCourse');
+            this.addChapterForm.markAsPristine();
             this.router.navigate([path, this._addChapterForm.value.courseId, 2], { skipLocationChange: false });
           });
       });
@@ -295,9 +296,15 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
   fileUploaded(event, i : number) {
     console.log(event);
     if (event.success) {
-      this.subChapters.controls[i].get('filePath').setValue(event.data);
+      this.subChapters.controls[i].get('filePath').setValue('API/img/Course/' + event.UserImg);
     }
+    console.log(this.subChapters.controls[i]);
     this.preventSave = false;
+  }
+
+  public getImage(url : string) : string {
+    if(url === "") { return null; }
+    return this.globals.adminURL + '/' + url;
   }
 
   get quillModules() : Object {

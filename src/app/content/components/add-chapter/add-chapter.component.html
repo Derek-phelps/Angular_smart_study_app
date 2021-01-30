@@ -33,7 +33,7 @@
                                 <div class="d-flex justify-content-start mt-4">
                                     <ba-picture-uploader  imageTitle="{{ 'chapter.FileUpload' | translate }}"
                                         [FileuploadInput]="uploaderOptions" (onUploadCompleted)="fileUploaded($event, i)" (onUpload)="preventSave = true"
-                                        [picture]="chapterControls.get('filePath').value" [defaultPicture]="defaultImage">
+                                        [picture]="getImage(chapterControls.get('filePath').value)" [defaultPicture]="defaultImage">
                                     </ba-picture-uploader>
                                     <mat-checkbox
                                         formControlName="isDownloadable"
