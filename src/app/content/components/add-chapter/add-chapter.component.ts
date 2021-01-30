@@ -21,7 +21,7 @@ import { QuestionContainerComponent } from '../question-container/question-conta
   templateUrl: './add-chapter.component.html',
   styleUrls: ['./add-chapter.component.scss']
 })
-export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
+export class AddChapterComponent implements OnInit, OnDestroy {
 
   private _addChapterForm : FormGroup = this.formBuilder.group({
     title : new  FormControl('', [Validators.required]),
@@ -72,27 +72,36 @@ export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit(): void {
-       
-  }
-
-  ngAfterViewInit(): void {
     if(this.route.snapshot.url[0].path == 'add') {
       this._addChapterForm.patchValue({ courseId: this.route.snapshot.params.id });
 
       let candidateChapter : Object = null;
       try {
         let candidate : string = localStorage.getItem('currentCourse');
-        if(candidate === null) { this.addSubChapter(); }
+        if(candidate === null) { this.addSubChapter(false); }
         else { 
-          candidateChapter = JSON.parse(candidate);
-          candidateChapter['subChapters'].forEach( _ => this.addSubChapter(false));
-          candidateChapter['questions'].forEach( _ => this.questionComponent.addQuestion(false));
-          this._addChapterForm.patchValue(candidateChapter);
+      
+          let description: string = this.translate.instant('chapter.LoadPreSavedDesc');
+          const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
+            width: '400px',
+            data: { Action: false, Mes: description },
+            autoFocus: false
+          });
+
+          dialogRef.afterClosed().pipe(take(1)).subscribe( result => {
+            if(result) {
+              candidateChapter = JSON.parse(candidate);
+              candidateChapter['subChapters'].forEach( _ => this.addSubChapter(false));
+              candidateChapter['questions'].forEach( _ => this.questionComponent.addQuestion(false));
+              this._addChapterForm.patchValue(candidateChapter);
+            }
+            else { this.addSubChapter(false); }
+          });
+
+          
         }
       }
       catch( err ) { localStorage.removeItem('currentCourse') }
-
-      
     }
 
     else {
@@ -118,7 +127,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
       tap( _ => localStorage.setItem('currentCourse', JSON.stringify(this._addChapterForm.value)))
     ).subscribe(
       _ => this.snackbar.open(this.translate.instant('chapter.Saved'), '', { duration: 1000 })
-    ); 
+    );      
   }
 
   ngOnDestroy(): void {
@@ -232,7 +241,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
             else if (this.globals.getUserType() == "3") { path = 'trainer/course/view'; }
             else { path = 'employee/course/view'; }
             
-            localStorage.removeItem('currenCourse');
+            localStorage.removeItem('currentCourse');
             this.router.navigate([path, this._addChapterForm.value.courseId, 2], { skipLocationChange: false });
           });
       });
@@ -266,16 +275,12 @@ export class AddChapterComponent implements OnInit, OnDestroy, AfterViewInit {
     this._deleteQuestionsOnSave.push(id);
   }
 
-  imgUploaded(event, i : number) {
+  fileUploaded(event, i : number) {
     console.log(event);
+    if (event.success) {
+      this.subChapters.controls[i].get('filePath').setValue(event.data);
+    }
     this.preventSave = false;
-    // if (e.success) {
-    //   this.EmpForm.controls['courseImg'].setValue(e.UserImg);
-    // } else {
-    //   this.profile = "";
-    // }
-
-    // this.DisableButton = false;
   }
 
   get quillModules() : Object {

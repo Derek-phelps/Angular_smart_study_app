@@ -450,6 +450,7 @@
     "AllowDownloadDesc": "Wenn diese Funktion aktiviert ist, kann die hochgeladene Datei von Prüflingen heruntergeladen werden.",
     "SelectFile": "Datei auswählen...",
     "Saved" : "Kapitel zwischengespeichert.",
+    "LoadPreSavedDesc" : "Es wurde ein bestehendes Kapitel gefunden, das nicht gespeichert wurde. Möchten Sie es laden?",
     "ClassStartTime": "Unterricht Startzeit",
     "ClassEndTime": "Unterricht Endzeit",
     "ConfirmStartTime": "Anwesenheitstool Startzeit",

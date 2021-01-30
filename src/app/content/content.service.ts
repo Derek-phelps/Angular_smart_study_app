@@ -79,9 +79,7 @@ export class ContentService {
 
     return this._http.post(this._getChapterById,formData)
     .pipe(
-      tap(response => console.log(response)),
       map(response  => this._parseChapter(response as Response)),
-      tap(res => console.log(res)),
       ).pipe(catchError(this.handleError))
   }
 
@@ -92,13 +90,6 @@ export class ContentService {
   }
 
   editFixed(chapter : ChapterResponse): Observable<any>  {
-    // var formData = this._unparseChapter(chapter);
-    // for(var key of formData.entries())
-    // {
-    //   console.log(key[0] + ' : ' + key[1]);
-    // }
-    
-    //return of(1);
     return this._http.post(this._editUrl, this._unparseChapter(chapter))
     .pipe(map((response: Response) => response))
     .pipe(catchError(this.handleError));
@@ -131,7 +122,6 @@ export class ContentService {
   }
 
   private _unparseChapter( chapter : any ) : FormData {
-    
     let formData : FormData = new FormData();
     formData.append('Ch_index', ''+chapter.index);
     formData.append('chapterId', ''+chapter.id);
@@ -152,18 +142,10 @@ export class ContentService {
         isDownloadable : sc.isDownloadable,
         subChapterId : sc.id,
         subChapterTitle : sc.title,
-        // trainerId : '0',
-        // trainingConfirmdEndTime : '',
-        // trainingConfirmdStartTime : '',
-        // trainingDate : '',
-        // trainingEndTime : '',
-        // trainingPlace : '',
-        // trainingstartTime : '',
       }
       subChapters.push(subChapter);
     });
 
-    console.log(JSON.stringify(subChapters));
     formData.append('SubChapter', JSON.stringify(subChapters));
     return formData;
   }
