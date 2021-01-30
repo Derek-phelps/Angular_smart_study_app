@@ -4,6 +4,7 @@ import { ModuleWithProviders } from '@angular/core';
 import { AddContentComponent } from './components/add-content/add-content.component';
 import { EditContentComponent } from './components/edit-content/edit-content.component';
 import { AddChapterComponent } from './components/add-chapter/add-chapter.component';
+import { PendingChangesGuardGuard } from './pending-changes-guard.guard';
 
 export const routes: Routes = [
   {
@@ -13,7 +14,8 @@ export const routes: Routes = [
   {
     path: 'add/:id',
     //component: AddContentComponent
-    component : AddChapterComponent
+    component : AddChapterComponent,
+    canDeactivate : [PendingChangesGuardGuard]
   },
   {
     path: 'edit/:id',

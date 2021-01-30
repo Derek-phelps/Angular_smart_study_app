@@ -451,6 +451,7 @@
     "SelectFile": "Select File...",
     "Saved" : "Chapter cached.",
     "LoadPreSavedDesc" : "An unsaved chapter was found. Would you like to continue editing it now?",
+    "PreventCloseDesc" : "You have unsaved data. Do you really want to quit? All unsaved progress will be lost.",
     "ClassStartTime": "Class Start Time",
     "ClassEndTime": "Class End Time",
     "ConfirmStartTime": "Confirmation Start Time",

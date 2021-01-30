@@ -1,5 +1,5 @@
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
-import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -13,6 +13,7 @@ import { map, mergeMap, switchMap, take, tap, toArray } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
 import { ConfirmationBoxComponent } from 'src/app/theme/components/confirmation-box/confirmation-box.component';
 import { ContentService } from '../../content.service';
+import { ComponentCanDeactivate, PendingChangesGuardGuard } from '../../pending-changes-guard.guard';
 import { QuestionService } from '../../question.service';
 import { QuestionContainerComponent } from '../question-container/question-container.component';
 
@@ -21,7 +22,7 @@ import { QuestionContainerComponent } from '../question-container/question-conta
   templateUrl: './add-chapter.component.html',
   styleUrls: ['./add-chapter.component.scss']
 })
-export class AddChapterComponent implements OnInit, OnDestroy {
+export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGuardGuard {
 
   private _addChapterForm : FormGroup = this.formBuilder.group({
     title : new  FormControl('', [Validators.required]),
@@ -69,6 +70,21 @@ export class AddChapterComponent implements OnInit, OnDestroy {
     }
     this.globals.currentTranslateService = this.translate;
     
+  }
+
+  @HostListener('window:beforeunload')
+  canDeactivate(component: ComponentCanDeactivate): boolean | Observable<boolean> {
+        
+    if(this.addChapterForm.touched) {
+      let description: string = this.translate.instant('chapter.PreventCloseDesc');
+      const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
+        width: '400px',
+        data: { Action: false, Mes: description },
+        autoFocus: false
+      });
+      return dialogRef.afterClosed();
+    }
+    else { return true; }    
   }
 
   ngOnInit(): void {

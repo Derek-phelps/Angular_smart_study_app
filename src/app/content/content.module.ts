@@ -35,6 +35,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { QuestionService } from './question.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PendingChangesGuardGuard } from './pending-changes-guard.guard';
 
 @NgModule({
   imports: [
@@ -78,7 +79,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     ImageChooserComponent],
   providers: [
     ContentService,
-    QuestionService
+    QuestionService,
+    PendingChangesGuardGuard
   ]
 })
 export class ContentModule { }
