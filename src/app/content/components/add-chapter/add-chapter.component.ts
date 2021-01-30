@@ -121,8 +121,8 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
     else {
       let chapterId : number = this.route.snapshot.params.id;
       //this.service.getChapterByIdFixed(chapterId).pipe(take(1)).subscribe( res => true );
-      this.service.getChapterByIdFixed(chapterId).pipe(take(1)).subscribe(
-        result => {
+      this.service.getChapterByIdFixed(chapterId).pipe(
+        tap(result => {
           result.subChapters.forEach( _ => this.addSubChapter(false) );
           this._addChapterForm.patchValue(result);
           //this._addChapterForm.markAsPristine();
@@ -135,7 +135,10 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
           
           this.questionComponent.chapterId = result.id;
           //TODO: fetch questions.
-      });
+        }),
+        switchMap( _ => this.questionSerivce.getAllQuestions(this.courseId.value)),
+        tap( questions => console.log(questions)),
+      ).pipe(take(1)).subscribe(result => true);
     }
 
     this._saveSubscription = timer(this._saveInterval, this._saveInterval).pipe(
@@ -234,7 +237,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
         toArray(),
         switchMap( result => from(this.questions.value)),
         //TODO:  upload images
-        //tap(question => this.questionSerivce.edit(question, {})),
+        tap(question => this.questionSerivce.editChapterQuestion(question)),
         tap(question => console.log(question)),
         toArray(),
         ); 
@@ -329,6 +332,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
 
   get addChapterForm() : FormGroup { return this._addChapterForm; }
   get title() : FormControl { return this._addChapterForm.get('title') as FormControl; }
+  get courseId() : FormControl { return this._addChapterForm.get('courseId') as FormControl; }
   get subChapters() : FormArray { return this._addChapterForm.get('subChapters') as FormArray; }
   get openedSubChapter() : number { return this._openedSubChapter; }
   get questions() : FormArray { return this._addChapterForm.get('questions') as FormArray; }

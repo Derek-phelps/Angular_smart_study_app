@@ -127,7 +127,9 @@ export class QuestionContainerComponent implements OnInit {
       text : new FormControl('', [Validators.required]),
       imagePath : new FormControl('', []),
       isCorrect : new FormControl(false, []),
-      id : new FormControl(null, [])
+      id : new FormControl(null, []),
+      index : new FormControl(0, []),
+
     });
   }
 
