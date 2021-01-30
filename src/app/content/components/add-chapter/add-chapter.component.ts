@@ -74,8 +74,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
 
   @HostListener('window:beforeunload')
   canDeactivate(component: ComponentCanDeactivate): boolean | Observable<boolean> {
-        
-    if(this.addChapterForm.touched) {
+    if(!this.addChapterForm.pristine) {
       let description: string = this.translate.instant('chapter.PreventCloseDesc');
       const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
         width: '400px',
@@ -110,11 +109,10 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
               candidateChapter['subChapters'].forEach( _ => this.addSubChapter(false));
               candidateChapter['questions'].forEach( _ => this.questionComponent.addQuestion(false));
               this._addChapterForm.patchValue(candidateChapter);
+              //this._addChapterForm.markAsPristine();
             }
             else { this.addSubChapter(false); }
           });
-
-          
         }
       }
       catch( err ) { localStorage.removeItem('currentCourse') }
@@ -126,7 +124,8 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
       this.service.getChapterByIdFixed(chapterId).pipe(take(1)).subscribe(
         result => {
           result.subChapters.forEach( _ => this.addSubChapter(false) );
-          this._addChapterForm.patchValue(result)
+          this._addChapterForm.patchValue(result);
+          //this._addChapterForm.markAsPristine();
           // result.subChapters.forEach(subChap => {
           //   if(subChap.id == null) { subChap.index = this._nextSubChapterId; }
           //   this.addSubChapter();
@@ -142,7 +141,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
     this._saveSubscription = timer(this._saveInterval, this._saveInterval).pipe(
       tap( _ => localStorage.setItem('currentCourse', JSON.stringify(this._addChapterForm.value)))
     ).subscribe(
-      _ => this.snackbar.open(this.translate.instant('chapter.Saved'), '', { duration: 1000 })
+      _ => this.snackbar.open(this.translate.instant('chapter.Saved'), '', { duration: 30000 })
     );      
   }
 
@@ -164,6 +163,8 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
     }));
     this._nextSubChapterId++;
     this._openedSubChapter = this.subChapters.length -1;
+
+    //if(!validate) { this._addChapterForm.markAsPristine(); }
   }
 
   reorder(event : CdkDragDrop<any[]>) : void {

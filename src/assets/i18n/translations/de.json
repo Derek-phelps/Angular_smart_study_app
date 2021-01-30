@@ -451,7 +451,7 @@
     "SelectFile": "Datei auswählen...",
     "Saved" : "Kapitel zwischengespeichert.",
     "LoadPreSavedDesc" : "Es wurde ein bestehendes Kapitel gefunden, das nicht gespeichert wurde. Möchten Sie es laden?",
-    "PreventCloseDesc" : "Sie haben ungesicherte Daten. Wollen sie diese Ansicht wirklich verlassen? Sämtlicher Fortschritt wird nicht gespeichert.",
+    "PreventCloseDesc" : "Sie haben ungesicherte Daten. Wollen sie diese Ansicht wirklich verlassen? Ihr Fortschritt wird nicht gespeichert.",
     "ClassStartTime": "Unterricht Startzeit",
     "ClassEndTime": "Unterricht Endzeit",
     "ConfirmStartTime": "Anwesenheitstool Startzeit",
