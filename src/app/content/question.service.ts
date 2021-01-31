@@ -53,6 +53,12 @@ export class QuestionService {
       .pipe(catchError(this.handleError))
   }
 
+  getAllQuestionsByChapter(courseId : number, chapterId : number) : Observable<any> {
+    return this.getAllQuestions(courseId).pipe(
+      map( questions => questions.filter(q => q['chapterId'] == ''+chapterId))
+    );
+  }
+
   getAllQuestions(courseId : number): Observable<any> {
     let formData: FormData = new FormData();
     let questions : Array<any> = [];
@@ -124,29 +130,29 @@ export class QuestionService {
   //     .pipe(catchError(this.handleError))
   // }
 
-  addChapterQuestion(question : any): Observable<any> {
-
+  addChapterQuestion(courseId : number, chapterId : number, question : any): Observable<any> {
     let formData: FormData = new FormData();
-
     let correctAnswers : Array<number> = []
-    formData.append('CourceId', question['courseId']);
-    formData.append('ChapterId', question['chapterId']);
-    formData.append('qustionText', question['text']);
-    formData.append('qustionImg', question['imagePath']);
+    formData.append('CourceId', ''+courseId);
+    formData.append('ChapterId', ''+chapterId);
+    formData.append('qustionText', ''+question['text']);
+    formData.append('qustionImg', ''+question['imagePath']);
+    formData.append('Q_index', ''+question['index']);
     //this._appendImageUrl(formData, 'qustionImg', 'API/img/Question/', formField.qustionImg);
-    formData.append('Explanation', question['explanation']);
+    formData.append('Explanation', ''+question['explanation']);
     formData.append('companyId', this._globals.companyInfo.companyId + "");
     formData.append('createdBy', this._globals.companyInfo.companyId + "");
+    formData.append('IsTraning', '0');
     let answers : Array<any> = [];
     question['answers'].forEach( a => {
       answers.push({
         'ans' : a['text'],
         'CurAns' : ''+a['isCorrect'],
-        'QuestionOptionID' : a['id'],
-        'QuestionOptionIndex' : a['index'],
+        'QuestionOptionID' : ''+a['id'],
+        'QuestionOptionIndex' : ''+a['index'],
       })
 
-      if(a['isCorrect']) { correctAnswers.push(a['isCorrect']); }
+      if(a['isCorrect']) { correctAnswers.push(a['index']); }
     })
     formData.append('answers', JSON.stringify(answers));
     formData.append('CorrectAnswerOptionNumber', correctAnswers.join('@'));
@@ -156,49 +162,54 @@ export class QuestionService {
       .pipe(catchError(this.handleError))
   }
 
-  editChapterQuestion(question : any): Observable<any> {
-
+  editChapterQuestion(courseId : number, chapterId : number, question : any): Observable<any> {
     let formData: FormData = new FormData();
-
-    formData.append('CourceId', question['courseId']);
-    formData.append('ChapterId', question['chapterId']);
-    formData.append('qustionText', question['text']);
-    formData.append('qustionImg', question['imagePath']);
+    let correctAnswers : Array<number> = []
+    formData.append('CourceId', ''+courseId);
+    formData.append('ChapterId', ''+chapterId);
+    formData.append('qustionText', ''+question['text']);
+    formData.append('qustionImg', ''+question['imagePath']);
+    formData.append('Q_index', ''+question['index']);
     //this._appendImageUrl(formData, 'qustionImg', 'API/img/Question/', formField.qustionImg);
-    formData.append('Explanation', question['explanation']);
+    formData.append('Explanation', ''+question['explanation']);
     formData.append('companyId', this._globals.companyInfo.companyId + "");
     formData.append('createdBy', this._globals.companyInfo.companyId + "");
+    formData.append('IsTraning', '0');
     let answers : Array<any> = [];
     question['answers'].forEach( a => {
       answers.push({
         'ans' : a['text'],
         'CurAns' : ''+a['isCorrect'],
-        'QuestionOptionID' : a['id'],
+        'QuestionOptionID' : ''+a['id'],
+        'QuestionOptionIndex' : ''+a['index'],
       })
+
+      if(a['isCorrect']) { correctAnswers.push(a['index']); }
     })
     formData.append('answers', JSON.stringify(answers));
+    formData.append('CorrectAnswerOptionNumber', correctAnswers.join('@'));
     
     return this._http.post(this._editQuestionUrl, formData)
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
 
-  edit(formField: any, deleteOptions: any): any {
+  // edit(formField: any, deleteOptions: any): any {
 
-    let formData: FormData = new FormData();
-    formData.append('CourceId', formField.CourceId);
-    formData.append('ChapterId', formField.ChapterId);
-    formData.append('qustionText', formField.qustionText);
-    this._appendImageUrl(formData, 'qustionImg', 'API/img/Question/', formField.qustionImg);
-    formData.append('Explanation', formField.Explanation);
-    formData.append('questionId', formField.questionId);
-    formData.append('answers', JSON.stringify(formField.answers));
-    formData.append('createdBy', this._globals.companyInfo.companyId + "");
-    formData.append('deleteOptions', JSON.stringify(deleteOptions));
-    return this._http.post(this._editQuestionUrl, formData)
-      .pipe(map((response: Response) => response))
-      .pipe(catchError(this.handleError))
-  }
+  //   let formData: FormData = new FormData();
+  //   formData.append('CourceId', formField.CourceId);
+  //   formData.append('ChapterId', formField.ChapterId);
+  //   formData.append('qustionText', formField.qustionText);
+  //   this._appendImageUrl(formData, 'qustionImg', 'API/img/Question/', formField.qustionImg);
+  //   formData.append('Explanation', formField.Explanation);
+  //   formData.append('questionId', formField.questionId);
+  //   formData.append('answers', JSON.stringify(formField.answers));
+  //   formData.append('createdBy', this._globals.companyInfo.companyId + "");
+  //   formData.append('deleteOptions', JSON.stringify(deleteOptions));
+  //   return this._http.post(this._editQuestionUrl, formData)
+  //     .pipe(map((response: Response) => response))
+  //     .pipe(catchError(this.handleError))
+  // }
   delete(qustionId): any {
     let formData: FormData = new FormData();
     formData.append('QustionId', qustionId);

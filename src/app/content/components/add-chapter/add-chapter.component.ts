@@ -59,7 +59,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
     private translate : TranslateService,
     private globals : Globals,
     private service : ContentService,
-    private questionSerivce : QuestionService,
+    private questionService : QuestionService,
     private router : Router,
     private route : ActivatedRoute,
     private dialog: MatDialog,
@@ -89,6 +89,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
   ngOnInit(): void {
     if(this.route.snapshot.url[0].path == 'add') {
       this._addChapterForm.patchValue({ courseId: this.route.snapshot.params.id });
+      // this.questionComponent.courseId = this.courseId.value;
 
       let candidateChapter : Object = null;
       try {
@@ -133,11 +134,12 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
           //   //this.subChapters.at(this._openedSubChapter).patchValue({ ChapterTxt : subChap.chapterTxt });
           // })
           
-          this.questionComponent.chapterId = result.id;
+          //this.questionComponent.chapterId = result.id;
           //TODO: fetch questions.
         }),
-        switchMap( _ => this.questionSerivce.getAllQuestions(this.courseId.value)),
-        tap( questions => console.log(questions)),
+        switchMap( _ => this.questionService.getAllQuestionsByChapter(this.courseId.value, this.chapterId.value)),
+        tap(questions => console.log(questions)),
+        tap(questions => this.questionComponent.patchValue(questions))
       ).pipe(take(1)).subscribe(result => true);
     }
 
@@ -219,26 +221,27 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
     if(this.route.snapshot.url[0].path == 'add') { 
       
       operation = this.service.addFixed(this._addChapterForm.value).pipe(
-        take(1),
-        tap(response => this.questionComponent.chapterId = response['insert_id']),
+        tap(response => this.chapterId.setValue(response['insert_id'])),
+        //tap(response => this.questionComponent.chapterId = response['insert_id']),
         switchMap( result => from(this.questions.value)),
-        //TODO:  upload images
-        tap(question => this.questionSerivce.addChapterQuestion(question)),
         tap(question => console.log(question)),
+        mergeMap(question => this.questionService.addChapterQuestion(this.courseId.value, this.chapterId.value, question)),
         toArray(),
       ); 
     }
     else { 
       operation = this.service.editFixed(this._addChapterForm.value).pipe(
-        take(1),
+        //take(1),
         switchMap( result => from(this._deleteChaptersOnSave)),
         mergeMap( id => this.service.deleteSubchapter(id)),
-        tap( result => console.log(result)),
+        toArray(),
+        switchMap(_ => from(this._deleteQuestionsOnSave)),
+        mergeMap( id => this.questionService.delete(id)),
         toArray(),
         switchMap( result => from(this.questions.value)),
-        //TODO:  upload images
-        tap(question => this.questionSerivce.editChapterQuestion(question)),
         tap(question => console.log(question)),
+        mergeMap(question => this.questionService.editChapterQuestion(this.courseId.value, this.chapterId.value, question)),
+        
         toArray(),
         ); 
     }
@@ -333,6 +336,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
   get addChapterForm() : FormGroup { return this._addChapterForm; }
   get title() : FormControl { return this._addChapterForm.get('title') as FormControl; }
   get courseId() : FormControl { return this._addChapterForm.get('courseId') as FormControl; }
+  get chapterId() : FormControl { return this._addChapterForm.get('id') as FormControl; }
   get subChapters() : FormArray { return this._addChapterForm.get('subChapters') as FormArray; }
   get openedSubChapter() : number { return this._openedSubChapter; }
   get questions() : FormArray { return this._addChapterForm.get('questions') as FormArray; }

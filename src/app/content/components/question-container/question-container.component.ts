@@ -42,16 +42,14 @@ export class QuestionContainerComponent implements OnInit {
 
   @Input() 
   set chapterId(id : number) {
-    this._chapterId = id;
-    this._courseId = null;
-    this._applyIds();
+    // this._chapterId = id;
+    // this._applyIds();
   }
 
   @Input() 
   set courseId(id : number) {
-    this._chapterId = null;
-    this._courseId = id;
-    this._applyIds();
+    // this._courseId = id;
+    // this._applyIds();
   }
 
   constructor(
@@ -71,6 +69,16 @@ export class QuestionContainerComponent implements OnInit {
     this._parentFormGroup = this.controlContainer.control as FormGroup;
   }
 
+  public patchValue(questions : Array<any>) : void {
+    questions.forEach( q => {
+      this.addQuestion(false);
+      q.answers.forEach(a => {
+        this.addAnswer(this._openedQuestion);
+      })
+    });
+    this.questions.patchValue(questions);
+  }
+
   addQuestion(validate : boolean = true) : void {
     if(validate && !this.checkQuestions()) { return; }
 
@@ -82,7 +90,7 @@ export class QuestionContainerComponent implements OnInit {
       imagePath : new FormControl('', []),
       explanation : new FormControl('', []),
       index : new FormControl(this._nextQuestionId, []),
-      answers : new FormArray([this.createAnswer()], [atLeastOneCorrectValidator()]),
+      answers : new FormArray([], [atLeastOneCorrectValidator()]),
     }));
     
     this._openedQuestion = this.questions.length -1;
@@ -129,7 +137,6 @@ export class QuestionContainerComponent implements OnInit {
       isCorrect : new FormControl(false, []),
       id : new FormControl(null, []),
       index : new FormControl(0, []),
-
     });
   }
 
@@ -184,7 +191,7 @@ export class QuestionContainerComponent implements OnInit {
   private _applyIds() : void {
     for(let question of this.questions.controls) {     
       question.get('courseId').setValue(this._courseId);
-      question.get('chapterId').setValue(this.chapterId);
+      question.get('chapterId').setValue(this._chapterId);
     }
   }
 
