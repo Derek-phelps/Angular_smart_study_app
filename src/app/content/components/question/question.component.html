@@ -1,4 +1,3 @@
-<pre>{{parentForm.value | json}}</pre>
 <form [formGroup]="parentForm">
     <div class="row">
         <div class="col-3">
@@ -34,7 +33,7 @@
             <div class="row mt-4">
                 <div class="col-3">
                     <ba-picture-uploader  imageTitle="{{ 'chapter.FileUpload' | translate }}"
-                        [FileuploadInput]="uploaderOptions" (onUploadCompleted)="answerFileUploaded($event, j)" (onUpload)="preventSave = true"
+                        [FileuploadInput]="uploaderOptionsAnswer" (onUploadCompleted)="answerFileUploaded($event, j)" (onUpload)="preventSave = true"
                         [picture]="this.answers.controls[j].get('imagePath').value" [defaultPicture]="defaultImage">
                     </ba-picture-uploader>
                 </div>

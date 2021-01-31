@@ -88,8 +88,6 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
   ngOnInit(): void {
     if(this.route.snapshot.url[0].path == 'add') {
       this._addChapterForm.patchValue({ courseId: this.route.snapshot.params.id });
-      // this.questionComponent.courseId = this.courseId.value;
-
       let candidateChapter : Object = null;
       try {
         let candidate : string = localStorage.getItem('currentCourse');
@@ -107,9 +105,8 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
             if(result) {
               candidateChapter = JSON.parse(candidate);
               candidateChapter['subChapters'].forEach( _ => this.addSubChapter(false));
-              candidateChapter['questions'].forEach( _ => this.questionComponent.addQuestion(false));
               this._addChapterForm.patchValue(candidateChapter);
-              //this._addChapterForm.markAsPristine();
+              this.questionComponent.patchValue(candidateChapter['questions']);
             }
             else { this.addSubChapter(false); }
           });

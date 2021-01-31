@@ -62,7 +62,7 @@ export class QuestionComponent implements OnInit {
 
   answerFileUploaded(event, i : number) {
     console.log(event);
-    if (event.success && event.UserImg) { this.answers.controls[i].get('imagePath').setValue('API/img/Question/' + event.UserImg); }
+    if (event.success && event.UserImg) { this.answers.controls[i].get('imagePath').setValue('API/img/QuestionOption/' + event.UserImg); }
     else { this.answers.controls[i].get('imagePath').setValue(''); }
     this.preventSave = false;
   }
@@ -71,6 +71,15 @@ export class QuestionComponent implements OnInit {
     return  {
       type: 'uploadAll',
       url: this.globals.APIURL + 'Company/userImgUpload?folderName=Question',
+      method: 'POST',
+      data: {}
+    };
+  }
+
+  get uploaderOptionsAnswer() : UploadInput {
+    return  {
+      type: 'uploadAll',
+      url: this.globals.APIURL + 'Company/userImgUpload?folderName=QuestionOption',
       method: 'POST',
       data: {}
     };

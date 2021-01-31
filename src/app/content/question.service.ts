@@ -87,7 +87,6 @@ export class QuestionService {
           'chapterId' : data['chapterId'],
           'courseId' : data['CourseId'],
           'imagePath' : data['QuestionImg'] == '' ? '' : this._globals.adminURL + '/' + data['QuestionImg'],
-          //formData.append('qustionImg', question['filePath'] == '' ? '' : this._globals.adminURL + '/' + question['filePath'],
           'explanation' : data['Explanation'],
           'index' : data['Q_index'],
           'answers' : answers
