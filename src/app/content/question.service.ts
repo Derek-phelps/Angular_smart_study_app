@@ -76,7 +76,7 @@ export class QuestionService {
             'id' : q['QuestionOptionId'],
             'index' : q['QuestionOptionIndex'],
             'text' : q['QuestionOptionName'],
-            'imagePath' : q['optionImg'],
+            'imagePath' : q['optionImg'] == '' ? '' : this._globals.adminURL + '/' + q['optionImg'],
             'isCorrect' : data['CorrectAnswerOptionNumber'].split('@').find(o => o == q['QuestionOptionIndex']) != undefined,
           });
         });
@@ -86,7 +86,8 @@ export class QuestionService {
           'text' : data['Question'],
           'chapterId' : data['chapterId'],
           'courseId' : data['CourseId'],
-          'imagePath' : data['QuestionImg'],
+          'imagePath' : data['QuestionImg'] == '' ? '' : this._globals.adminURL + '/' + data['QuestionImg'],
+          //formData.append('qustionImg', question['filePath'] == '' ? '' : this._globals.adminURL + '/' + question['filePath'],
           'explanation' : data['Explanation'],
           'index' : data['Q_index'],
           'answers' : answers
@@ -150,10 +151,9 @@ export class QuestionService {
     formData.append('CourceId', ''+courseId);
     formData.append('ChapterId', ''+chapterId);
     formData.append('qustionText', ''+question['text']);
-    formData.append('qustionImg', ''+question['imagePath']);
+    formData.append('qustionImg', ''+question['imagePath'].replace(this._globals.adminURL + '/', ''));
     formData.append('questionId', ''+question['id']);
     formData.append('Q_index', ''+question['index']);
-    //this._appendImageUrl(formData, 'qustionImg', 'API/img/Question/', formField.qustionImg);
     formData.append('Explanation', ''+question['explanation']);
     formData.append('companyId', this._globals.companyInfo.companyId + "");
     formData.append('createdBy', this._globals.companyInfo.companyId + "");
@@ -165,6 +165,7 @@ export class QuestionService {
         'CurAns' : a['isCorrect'],
         'QuestionOptionID' : a['id'] ? ''+a['id'] : null,
         'QuestionOptionIndex' : ''+a['index'],
+        'optionImg' : ''+a['imagePath'].replace(this._globals.adminURL + '/', '')
       })
 
       if(a['isCorrect']) { correctAnswers.push(a['index']); }

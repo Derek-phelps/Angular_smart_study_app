@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ControlContainer, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { UploadInput } from 'ngx-uploader';
 import { Globals } from 'src/app/common/auth-guard.service';
 
 @Component({
@@ -12,6 +13,8 @@ export class QuestionComponent implements OnInit {
   
   private _parentFormGroup: FormGroup = null;
   private _nextAnswerIndex = 0;
+  private _preventSave : boolean = false;
+  private _defaultImage = '/assets/img/theme/add-image.png';
 
   constructor(
     private formBuilder : FormBuilder,
@@ -50,8 +53,34 @@ export class QuestionComponent implements OnInit {
     this._nextAnswerIndex = newIndex; 
   }
 
+  questionFileUploaded(event) {
+    console.log(event);
+    if (event.success && event.UserImg) { this.parentForm.get('imagePath').setValue('API/img/Question/' + event.UserImg); }
+    else { this.parentForm.get('imagePath').setValue(''); }
+    this.preventSave = false;
+  }
+
+  answerFileUploaded(event, i : number) {
+    console.log(event);
+    if (event.success && event.UserImg) { this.answers.controls[i].get('imagePath').setValue('API/img/Question/' + event.UserImg); }
+    else { this.answers.controls[i].get('imagePath').setValue(''); }
+    this.preventSave = false;
+  }
+
+  get uploaderOptions() : UploadInput {
+    return  {
+      type: 'uploadAll',
+      url: this.globals.APIURL + 'Company/userImgUpload?folderName=Question',
+      method: 'POST',
+      data: {}
+    };
+  }
+
   
 
   get parentForm() : FormGroup { return this._parentFormGroup; }
   get answers() : FormArray { return this.parentForm.get('answers') as FormArray; }
+  get defaultImage() : string { return this._defaultImage; }
+  get preventSave() : boolean { return this._preventSave; }
+  set preventSave(v : boolean) { this._preventSave = v; }
 }

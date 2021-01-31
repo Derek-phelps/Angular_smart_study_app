@@ -43,7 +43,6 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
   private _deleteQuestionsOnSave : number[] = [];
 
   private _preventSave : boolean = false;
-
   private _defaultImage = '/assets/img/theme/add-image.png';
 
   private _saveInterval : number = 30000;
@@ -300,17 +299,9 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
   }
 
   fileUploaded(event, i : number) {
-    console.log(event);
-    if (event.success) {
-      this.subChapters.controls[i].get('filePath').setValue('API/img/Course/' + event.UserImg);
-    }
-    console.log(this.subChapters.controls[i]);
+    if (event.success && event.UserImg) { this.subChapters.controls[i].get('filePath').setValue('API/img/Course/' + event.UserImg); }
+    else { this.subChapters.controls[i].get('filePath').setValue(''); }
     this.preventSave = false;
-  }
-
-  public getImage(url : string) : string {
-    if(url === "") { return null; }
-    return this.globals.adminURL + '/' + url;
   }
 
   get quillModules() : Object {

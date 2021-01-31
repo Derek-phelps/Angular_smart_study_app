@@ -113,7 +113,7 @@ export class ContentService {
         id : subChap['subChapterId'],
         title : subChap['subChapterTitle'],
         chapterId : subChap['ChapterId'],
-        filePath : subChap['FilePath'],
+        filePath : subChap['FilePath'] == '' ? '' : this._globals.adminURL + '/' + subChap['FilePath'],
         index : subChap['Sc_index'],
         text : subChap['chapterTxt'],
         isDownloadable : subChap['isDownloadable']
@@ -136,7 +136,7 @@ export class ContentService {
     chapter.subChapters.forEach( sc => {
       let subChapter : Object = {
         ChapterId : sc.chapterId+'',
-        FilePath : sc.filePath+'',
+        FilePath : sc.filePath.replace(this._globals.adminURL + '/', '')+'',
         isVideo: '3',
         Sc_index : sc.index+'',
         ChapterTxt : sc.text,

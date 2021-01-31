@@ -2,6 +2,10 @@
 <form [formGroup]="parentForm">
     <div class="row">
         <div class="col-3">
+            <ba-picture-uploader  imageTitle="{{ 'chapter.FileUpload' | translate }}"
+                [FileuploadInput]="uploaderOptions" (onUploadCompleted)="questionFileUploaded($event)" (onUpload)="preventSave = true"
+                [picture]="parentForm.get('imagePath').value" [defaultPicture]="defaultImage">
+            </ba-picture-uploader>
             <!-- <image-chooser (imageChanged)="questionImageChanged(i, $event)"></image-chooser> -->
         </div>
         <div class="col-9">
@@ -29,7 +33,10 @@
         <ng-container *ngFor="let answerControls of answers.controls; index as j" [formGroupName]="j">
             <div class="row mt-4">
                 <div class="col-3">
-                    <!-- <image-chooser (imageChanged)="answerImageChanged(i, j, $event)"></image-chooser> -->
+                    <ba-picture-uploader  imageTitle="{{ 'chapter.FileUpload' | translate }}"
+                        [FileuploadInput]="uploaderOptions" (onUploadCompleted)="answerFileUploaded($event, j)" (onUpload)="preventSave = true"
+                        [picture]="this.answers.controls[j].get('imagePath').value" [defaultPicture]="defaultImage">
+                    </ba-picture-uploader>
                 </div>
                 <span class="col-9">
                     <div>
