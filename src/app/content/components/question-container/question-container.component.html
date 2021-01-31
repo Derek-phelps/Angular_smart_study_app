@@ -18,7 +18,8 @@
                                matTooltip="{{ 'question.Delete' | translate }}"></i>
                         </mat-panel-description>
                     </mat-expansion-panel-header>
-                    <div class="row">
+                        <question></question>
+                    <!-- <div class="row">
                         <div class="col-3">
                             <image-chooser (imageChanged)="questionImageChanged(i, $event)"></image-chooser>
                         </div>
@@ -76,7 +77,7 @@
                             (click)="addAnswer(i)">
                             <i class="fa fa-plus mr-2 draggable"></i>{{'question.AddOption' | translate}}
                         </button>
-                    </div>
+                    </div> -->
                 </mat-expansion-panel>
             </ng-container>
         </ng-container>

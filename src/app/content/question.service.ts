@@ -131,44 +131,27 @@ export class QuestionService {
   // }
 
   addChapterQuestion(courseId : number, chapterId : number, question : any): Observable<any> {
-    let formData: FormData = new FormData();
-    let correctAnswers : Array<number> = []
-    formData.append('CourceId', ''+courseId);
-    formData.append('ChapterId', ''+chapterId);
-    formData.append('qustionText', ''+question['text']);
-    formData.append('qustionImg', ''+question['imagePath']);
-    formData.append('Q_index', ''+question['index']);
-    //this._appendImageUrl(formData, 'qustionImg', 'API/img/Question/', formField.qustionImg);
-    formData.append('Explanation', ''+question['explanation']);
-    formData.append('companyId', this._globals.companyInfo.companyId + "");
-    formData.append('createdBy', this._globals.companyInfo.companyId + "");
-    formData.append('IsTraning', '0');
-    let answers : Array<any> = [];
-    question['answers'].forEach( a => {
-      answers.push({
-        'ans' : a['text'],
-        'CurAns' : ''+a['isCorrect'],
-        'QuestionOptionID' : ''+a['id'],
-        'QuestionOptionIndex' : ''+a['index'],
-      })
-
-      if(a['isCorrect']) { correctAnswers.push(a['index']); }
-    })
-    formData.append('answers', JSON.stringify(answers));
-    formData.append('CorrectAnswerOptionNumber', correctAnswers.join('@'));
-    
-    return this._http.post(this._addQustionUrl, formData)
+    return this._http.post(this._addQustionUrl, this._unparseQuestion(question, courseId, chapterId))
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
 
   editChapterQuestion(courseId : number, chapterId : number, question : any): Observable<any> {
+    let data : FormData = this._unparseQuestion(question, courseId, chapterId);
+    data.append('deleteOptions', '[]');
+    return this._http.post(this._editQuestionUrl, data)
+      .pipe(map((response: Response) => response))
+      .pipe(catchError(this.handleError))
+  }
+
+  private _unparseQuestion(question : any, courseId : number, chapterId : number) : FormData {
     let formData: FormData = new FormData();
     let correctAnswers : Array<number> = []
     formData.append('CourceId', ''+courseId);
     formData.append('ChapterId', ''+chapterId);
     formData.append('qustionText', ''+question['text']);
     formData.append('qustionImg', ''+question['imagePath']);
+    formData.append('questionId', ''+question['id']);
     formData.append('Q_index', ''+question['index']);
     //this._appendImageUrl(formData, 'qustionImg', 'API/img/Question/', formField.qustionImg);
     formData.append('Explanation', ''+question['explanation']);
@@ -179,19 +162,15 @@ export class QuestionService {
     question['answers'].forEach( a => {
       answers.push({
         'ans' : a['text'],
-        'CurAns' : ''+a['isCorrect'],
-        'QuestionOptionID' : ''+a['id'],
+        'CurAns' : a['isCorrect'],
+        'QuestionOptionID' : a['id'] ? ''+a['id'] : null,
         'QuestionOptionIndex' : ''+a['index'],
       })
 
       if(a['isCorrect']) { correctAnswers.push(a['index']); }
     })
     formData.append('answers', JSON.stringify(answers));
-    formData.append('CorrectAnswerOptionNumber', correctAnswers.join('@'));
-    
-    return this._http.post(this._editQuestionUrl, formData)
-      .pipe(map((response: Response) => response))
-      .pipe(catchError(this.handleError))
+    return formData;
   }
 
   // edit(formField: any, deleteOptions: any): any {

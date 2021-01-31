@@ -239,10 +239,10 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
         mergeMap( id => this.questionService.delete(id)),
         toArray(),
         switchMap( result => from(this.questions.value)),
-        tap(question => console.log(question)),
-        mergeMap(question => this.questionService.editChapterQuestion(this.courseId.value, this.chapterId.value, question)),
-        
-        toArray(),
+        mergeMap( (question : any) => iif( () => question.id === null, 
+          this.questionService.addChapterQuestion(this.courseId.value, this.chapterId.value, question),
+          this.questionService.editChapterQuestion(this.courseId.value, this.chapterId.value, question))),
+        toArray()
         ); 
     }
 

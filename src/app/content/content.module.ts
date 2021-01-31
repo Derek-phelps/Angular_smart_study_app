@@ -36,6 +36,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { QuestionService } from './question.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PendingChangesGuardGuard } from './pending-changes-guard.guard';
+import { QuestionComponent } from './components/question/question.component';
 
 @NgModule({
   imports: [
@@ -76,7 +77,7 @@ import { PendingChangesGuardGuard } from './pending-changes-guard.guard';
     SubChapterOverviewDialog, 
     AddChapterComponent, 
     QuestionContainerComponent, 
-    ImageChooserComponent],
+    ImageChooserComponent, QuestionComponent],
   providers: [
     ContentService,
     QuestionService,
