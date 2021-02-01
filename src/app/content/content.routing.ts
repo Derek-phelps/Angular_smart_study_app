@@ -20,7 +20,8 @@ export const routes: Routes = [
   {
     path: 'edit/:id',
     //component: EditContentComponent
-    component: AddChapterComponent
+    component: AddChapterComponent,
+    canDeactivate : [PendingChangesGuardGuard]
   }
 ];
 export const routing: ModuleWithProviders<RouterModule> = RouterModule.forChild(routes);

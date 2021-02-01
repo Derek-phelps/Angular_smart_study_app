@@ -19,76 +19,18 @@
                         </mat-panel-description>
                     </mat-expansion-panel-header>
                         <question></question>
-                    <!-- <div class="row">
-                        <div class="col-3">
-                            <image-chooser (imageChanged)="questionImageChanged(i, $event)"></image-chooser>
-                        </div>
-                        <div class="col-9">
-                            <div>
-                                <mat-form-field class="w-100">
-                                    <textarea matInput type="text" formControlName="text"
-                                        cdkTextareaAutosize
-                                        cdkAutosizeMinRows="3"
-                                        placeholder="{{'question.Question' | translate}}*"></textarea>
-                                </mat-form-field>
-                            </div>
-                            <div>
-                                <mat-form-field class="w-100">
-                                    <textarea matInput type="text" formControlName="explanation"
-                                        cdkTextareaAutosize
-                                        cdkAutosizeMinRows="3"
-                                        matTooltip="{{ 'question.ExplanationDesc' | translate }}"
-                                        placeholder="{{'question.Explanation' | translate}}"></textarea>
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                    <hr/>
-                    <ng-container formArrayName="answers">
-                        <ng-container *ngFor="let answerControls of answersForQuestion(i).controls; index as j" [formGroupName]="j">
-                            <div class="row mt-4">
-                                <div class="col-3">
-                                    <image-chooser (imageChanged)="answerImageChanged(i, j, $event)"></image-chooser>
-                                </div>
-                                <span class="col-9">
-                                    <div>
-                                        <mat-form-field class="w-100">
-                                            <textarea matInput type="text" formControlName="text"
-                                                cdkTextareaAutosize 
-                                                placeholder="{{'question.PossibleAnswer' | translate}}*"></textarea>
-                                        </mat-form-field>
-                                    </div>
-                                    <div>
-                                        <mat-checkbox class="float-right" 
-                                            formControlName="isCorrect">{{'question.CorrectAnswer' | translate}}
-                                        </mat-checkbox>
-                                    </div>
-                                </span>
-                            </div>
-                        </ng-container>
-                    </ng-container>
-                    <div class="d-flex justify-content-between mt-4">
-                        <div>
-                            <mat-error *ngIf="answersForQuestion(i).getError('atLeastOneCorrectRequired')">
-                                {{'question.AtLeastOneCorrectRequired' | translate}}
-                            </mat-error>
-                        </div>
-                        <button mat-stroked-button 
-                            (click)="addAnswer(i)">
-                            <i class="fa fa-plus mr-2 draggable"></i>{{'question.AddOption' | translate}}
-                        </button>
-                    </div> -->
                 </mat-expansion-panel>
             </ng-container>
         </ng-container>
     </mat-accordion>
     <div class="d-flex justify-content-between">
-        <mat-checkbox *ngIf="questions.length > 0"
-            formControlName="ignoreOrder"
-            class="mt-4" 
-            matTooltip="{{ 'question.IgnoreOrderDesc' | translate }}">
-            {{ 'question.IgnoreOrder' | translate}}
-        </mat-checkbox>
+        <div class="mt-4">
+            <mat-checkbox *ngIf="questions.length > 0"
+                formControlName="ignoreOrder"
+                matTooltip="{{ 'question.IgnoreOrderDesc' | translate }}">
+                {{ 'question.IgnoreOrder' | translate}}
+            </mat-checkbox>
+        </div>
         <button mat-stroked-button class="mt-4" 
             (click)="addQuestion()">
             <i class="fa fa-plus mr-2"></i>{{'question.NewQuestion' | translate}}

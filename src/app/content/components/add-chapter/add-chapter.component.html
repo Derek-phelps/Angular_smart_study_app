@@ -70,9 +70,11 @@
             </mat-tab>
         </mat-tab-group>
             <div class="d-flex justify-content-between mt-4">
-                <mat-hint *ngIf="questions.length == 0" class="warning">
-                    {{'question.NoQuestionFoundChapter' | translate}}
-                </mat-hint>
+                <div>
+                    <mat-hint *ngIf="questions.length == 0" class="warning">
+                        {{'question.NoQuestionFoundChapter' | translate}}
+                    </mat-hint>
+                </div>
                 <button mat-raised-button 
                     (click)="saveChapter()" [disabled]="preventSave">
                     <i class="fa fa-save mr-2"></i>{{'chapter.SaveChapter' | translate}}

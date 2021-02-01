@@ -54,15 +54,13 @@ export class QuestionComponent implements OnInit {
   }
 
   questionFileUploaded(event) {
-    console.log(event);
     if (event.success && event.UserImg) { this.parentForm.get('imagePath').setValue('API/img/Question/' + event.UserImg); }
     else { this.parentForm.get('imagePath').setValue(''); }
     this.preventSave = false;
   }
 
   answerFileUploaded(event, i : number) {
-    console.log(event);
-    if (event.success && event.UserImg) { this.answers.controls[i].get('imagePath').setValue('API/img/QuestionOption/' + event.UserImg); }
+    if (event.success && event.UserImg) { this.answers.controls[i].get('imagePath').setValue('API/img/Question/' + event.UserImg); }
     else { this.answers.controls[i].get('imagePath').setValue(''); }
     this.preventSave = false;
   }
@@ -76,16 +74,6 @@ export class QuestionComponent implements OnInit {
     };
   }
 
-  get uploaderOptionsAnswer() : UploadInput {
-    return  {
-      type: 'uploadAll',
-      url: this.globals.APIURL + 'Company/userImgUpload?folderName=QuestionOption',
-      method: 'POST',
-      data: {}
-    };
-  }
-
-  
 
   get parentForm() : FormGroup { return this._parentFormGroup; }
   get answers() : FormArray { return this.parentForm.get('answers') as FormArray; }

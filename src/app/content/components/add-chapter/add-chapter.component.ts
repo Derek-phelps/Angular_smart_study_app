@@ -80,7 +80,11 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
         data: { Action: false, Mes: description },
         autoFocus: false
       });
-      return dialogRef.afterClosed();
+      return dialogRef.afterClosed().pipe(
+        tap(result => {
+          if(result) { localStorage.removeItem('currentCourse'); }
+        })
+      );
     }
     else { return true; }    
   }
@@ -218,7 +222,6 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
       
       operation = this.service.addFixed(this._addChapterForm.value).pipe(
         tap(response => this.chapterId.setValue(response['insert_id'])),
-        //tap(response => this.questionComponent.chapterId = response['insert_id']),
         switchMap( result => from(this.questions.value)),
         tap(question => console.log(question)),
         mergeMap(question => this.questionService.addChapterQuestion(this.courseId.value, this.chapterId.value, question)),
@@ -227,7 +230,6 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
     }
     else { 
       operation = this.service.editFixed(this._addChapterForm.value).pipe(
-        //take(1),
         switchMap( result => from(this._deleteChaptersOnSave)),
         mergeMap( id => this.service.deleteSubchapter(id)),
         toArray(),

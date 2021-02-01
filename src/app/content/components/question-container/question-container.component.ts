@@ -70,7 +70,7 @@ export class QuestionContainerComponent implements OnInit {
   }
 
   public patchValue(questions : Array<any>) : void {
-    questions.forEach( q => {
+    questions.forEach(q => {
       this.addQuestion(false);
       q.answers.forEach(a => {
         this.addAnswer(this._openedQuestion);
