@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { ControlContainer, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 import { UploadInput } from 'ngx-uploader';
+import { take, tap } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
+import { ConfirmationBoxComponent } from 'src/app/theme/components/confirmation-box/confirmation-box.component';
 
 @Component({
   selector: 'question',
@@ -21,6 +24,7 @@ export class QuestionComponent implements OnInit {
     private controlContainer : ControlContainer,
     private translate: TranslateService,
     private globals: Globals,
+    public dialog: MatDialog,
   ) { 
     if (this.translate.currentLang != this.globals.userInfo.userLang) {
       this.translate.use(this.globals.userInfo.userLang);
@@ -42,6 +46,30 @@ export class QuestionComponent implements OnInit {
     }));
 
     this._fixIndices();
+  }
+
+  deleteAnswer(pos : number) {
+    let description: string = this.translate.instant('question.DeleteDesc');
+    const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
+      width: '400px',
+      data: { Action: false, Mes: description },
+      autoFocus: false
+    });
+
+    dialogRef.afterClosed().pipe(
+      take(1),
+      tap( result => {
+        if(result) {
+          //let questionId : number = this.answers.at(pos).get('id').value;
+          //if( questionId != null) { this.questionDeleted.emit(questionId); }
+          this.deleteOptions.value.push(this.answers.at(pos).get('id').value)
+          this.answers.removeAt(pos);
+          this._fixIndices();
+        }
+      })
+    ).subscribe(
+      res => true
+    );
   }
 
   private _fixIndices() : void {
@@ -77,6 +105,7 @@ export class QuestionComponent implements OnInit {
 
   get parentForm() : FormGroup { return this._parentFormGroup; }
   get answers() : FormArray { return this.parentForm.get('answers') as FormArray; }
+  get deleteOptions() : FormGroup { return this.parentForm.get('deleteOptions') as FormGroup }
   get defaultImage() : string { return this._defaultImage; }
   get preventSave() : boolean { return this._preventSave; }
   set preventSave(v : boolean) { this._preventSave = v; }

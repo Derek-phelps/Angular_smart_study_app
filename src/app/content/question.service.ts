@@ -138,7 +138,7 @@ export class QuestionService {
 
   editChapterQuestion(courseId : number, chapterId : number, question : any): Observable<any> {
     let data : FormData = this._unparseQuestion(question, courseId, chapterId);
-    data.append('deleteOptions', '[]');
+    data.append('deleteOptions', JSON.stringify(question.deleteOptions));
     return this._http.post(this._editQuestionUrl, data)
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))

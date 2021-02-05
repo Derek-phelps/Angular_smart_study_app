@@ -50,6 +50,11 @@
                             formControlName="isCorrect">{{'question.CorrectAnswer' | translate}}
                         </mat-checkbox>
                     </div>
+                    <div class="mt-auto ml-auto">
+                        <i class="fa fa-trash ml-auto iconbutton" 
+                               (click)="deleteAnswer(j)"
+                               matTooltip="{{ 'question.Delete' | translate }}"></i>
+                    </div>
                 </span>
             </div>
         </ng-container>

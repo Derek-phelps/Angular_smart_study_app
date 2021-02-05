@@ -91,6 +91,7 @@ export class QuestionContainerComponent implements OnInit {
       explanation : new FormControl('', []),
       index : new FormControl(this._nextQuestionId, []),
       answers : new FormArray([], [atLeastOneCorrectValidator()]),
+      deleteOptions : new FormControl([], [])
     }));
     
     this._openedQuestion = this.questions.length -1;
@@ -109,16 +110,16 @@ export class QuestionContainerComponent implements OnInit {
     dialogRef.afterClosed().pipe(
       take(1),
       tap( result => {
-        let questionId : number = this.questions.at(pos).get('id').value;
-        if( questionId != null) { this.questionDeleted.emit(questionId); }
-        this.questions.removeAt(pos);
-        this._fixIndices();
-
+        if(result) {
+          let questionId : number = this.questions.at(pos).get('id').value;
+          if( questionId != null) { this.questionDeleted.emit(questionId); }
+          this.questions.removeAt(pos);
+          this._fixIndices();
+        }
       })
     ).subscribe(
       res => true
     );
-
   }
 
   private _fixIndices() : void {
