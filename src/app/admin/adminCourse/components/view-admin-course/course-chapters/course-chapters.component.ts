@@ -48,7 +48,7 @@ export class CourseChaptersComponent implements OnInit {
       tap((res : any) => {
         if (res.success) {
           this._dataSourceChapter = new MatTableDataSource(res.data);
-          this._displayedColumnsChapter = ['chapterId', 'chapterName', 'actions'];
+          this._displayedColumnsChapter = ['chapterName', 'actions'];
           this._dataSourceChapter.paginator = this.paginatorChapter;
           this.filterChapterByCourse();
         }
