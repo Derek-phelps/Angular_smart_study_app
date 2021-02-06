@@ -500,7 +500,9 @@
     "UploadFileTypeFail": "Fehler beim Hochladen der Testfragen (Dateiformat ungültig)!",
     "NoQuestionFound": "Sie haben zu diesem Kurs noch keine Fragen hinzugefügt.",
     "NoQuestionFoundChapter": "Sie haben zu diesem Kapitel noch keine Fragen hinzugefügt.",
-    "AtLeastOneCorrectRequired" : "Jede Frage muss mindestens eine korrekte Antwortmöglichkeit haben!"
+    "AtLeastOneCorrectRequired" : "Jede Frage muss mindestens eine korrekte Antwortmöglichkeit haben!",
+    "DeleteAnswer" : "Antwort löschen",
+    "DeleteAnswerDesc" : "Sind Sie sicher, dass sie diese Antwort löschen möchten?"
   },
   "company": {
     "Company": "Firma",

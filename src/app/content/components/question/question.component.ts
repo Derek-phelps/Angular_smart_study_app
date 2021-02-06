@@ -49,7 +49,7 @@ export class QuestionComponent implements OnInit {
   }
 
   deleteAnswer(pos : number) {
-    let description: string = this.translate.instant('question.DeleteDesc');
+    let description: string = this.translate.instant('question.DeleteAnswerDesc');
     const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
       width: '400px',
       data: { Action: false, Mes: description },

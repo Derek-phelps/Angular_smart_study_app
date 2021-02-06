@@ -37,23 +37,24 @@
                         [picture]="this.answers.controls[j].get('imagePath').value" [defaultPicture]="defaultImage">
                     </ba-picture-uploader>
                 </div>
-                <span class="col-9">
-                    <div>
+                <span class="col-9 d-flex flex-column">
+                    <div class="">
                         <mat-form-field class="w-100">
                             <textarea matInput type="text" formControlName="text"
                                 cdkTextareaAutosize 
                                 placeholder="{{'question.PossibleAnswer' | translate}}*"></textarea>
                         </mat-form-field>
                     </div>
-                    <div>
+                    <div>    
                         <mat-checkbox class="float-right" 
                             formControlName="isCorrect">{{'question.CorrectAnswer' | translate}}
                         </mat-checkbox>
                     </div>
                     <div class="mt-auto ml-auto">
-                        <i class="fa fa-trash ml-auto iconbutton" 
-                               (click)="deleteAnswer(j)"
-                               matTooltip="{{ 'question.Delete' | translate }}"></i>
+                        <button mat-stroked-button class="mt-4 mat-error" 
+                            (click)="deleteAnswer(j)">
+                            <i class="fa fa-trash mr-2"></i>{{ 'question.DeleteAnswer' | translate }}
+                        </button>
                     </div>
                 </span>
             </div>

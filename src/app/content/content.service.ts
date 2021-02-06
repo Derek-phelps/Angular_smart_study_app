@@ -128,10 +128,7 @@ export class ContentService {
     formData.append('chapterId', ''+chapter.id);
     formData.append('ChapterName', chapter.title);
     formData.append('course', ''+chapter.courseId);
-    // console.log(chapter.ignoreOrder)
-    // if(!chapter.ignoreOrder){ formData.append('ignore_ordering', '1'); }
-    if(chapter.ignoreOrder) { formData.append('ignore_ordering', '2') }
-    else { formData.append('ignore_ordering', '1') }
+    formData.append('ignore_ordering', chapter.ignoreOrder ? '1' : '0');
     formData.append('isOffline', '0');
     formData.append('createdBy', ''+this._globals.companyInfo.companyId);
 

@@ -500,7 +500,9 @@
     "UploadFileTypeFail": "Error during question upload (invalid file type)!",
     "NoQuestionFound": "You haven't added any questions to this course yet.",
     "NoQuestionFoundChapter": "You haven't added any questions to this chapter yet.",
-    "AtLeastOneCorrectRequired" : "Each Question needs at least one correct answer!"
+    "AtLeastOneCorrectRequired" : "Each Question needs at least one correct answer!",
+    "DeleteAnswer" : "Delete answer",
+    "DeleteAnswerDesc" : "Are you sure you want to delete this answer?"
   },
   "company": {
     "Company": "Company",
