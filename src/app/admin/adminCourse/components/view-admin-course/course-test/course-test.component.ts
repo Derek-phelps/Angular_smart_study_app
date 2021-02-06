@@ -7,11 +7,15 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class CourseTestComponent implements OnInit {
 
-  @Input() courseData : any;
+  private _courseData : any = null;
+
+  @Input() set courseData(data : any) { this._courseData = data['courseInfo']};
   
   constructor() { }
 
   ngOnInit(): void {
   }
+
+  get courseData() : any { return this._courseData; }
 
 }
