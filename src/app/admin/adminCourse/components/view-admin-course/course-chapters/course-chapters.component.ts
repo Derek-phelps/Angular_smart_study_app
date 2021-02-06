@@ -1,11 +1,12 @@
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
-import { take, tap } from 'rxjs/operators';
+import { from, Observable, of } from 'rxjs';
+import { mergeMap, take, tap, toArray } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
 import { ConfirmationBoxComponent } from 'src/app/theme/components/confirmation-box/confirmation-box.component';
 import { AdminCourseService } from '../../../adminCourse.service';
@@ -21,6 +22,8 @@ export class CourseChaptersComponent implements OnInit {
   
   private _dataSourceChapter : MatTableDataSource<any> = null;
   private _displayedColumnsChapter: string[] = [];
+  private _chapterData : Array<any> = [];
+  private _showSaveOrderingButton : boolean = false;
 
   @ViewChild('ContentPaginator', { read: MatPaginator, static: true }) paginatorChapter: MatPaginator;
 
@@ -47,10 +50,12 @@ export class CourseChaptersComponent implements OnInit {
     this._chapterData$ = this.service.getChapterByCourseId(this.courseInfo.courseId).pipe(
       tap((res : any) => {
         if (res.success) {
+          this._chapterData = res['data']
           this._dataSourceChapter = new MatTableDataSource(res.data);
           this._displayedColumnsChapter = ['chapterName', 'actions'];
           this._dataSourceChapter.paginator = this.paginatorChapter;
           this.filterChapterByCourse();
+          this._showSaveOrderingButton = false;
         }
     }));
   }
@@ -99,10 +104,36 @@ export class CourseChaptersComponent implements OnInit {
     this._dataSourceChapter.filter = this.courseData.courseId;
   }
 
+  reorder(event : CdkDragDrop<any[]>) : void {
+    console.log(event);
+    let draggesChapter: any = this.chapterData[event.previousIndex];
+    this.chapterData.splice(event.previousIndex, 1);
+    this.chapterData.splice(event.currentIndex, 0, draggesChapter);
+
+    // // apply new indices
+    this._fixIndices();
+    this._showSaveOrderingButton = true;
+  }
+
+  saveChapter() {
+    from(this.chapterData).pipe(
+      mergeMap(chapter => this.service.editChapterOrder(chapter)),
+      toArray(),
+    ).subscribe(result => this._loadChapters())
+  }
+
+  private _fixIndices() : void {
+    let newIndex : number = 0;
+    this.chapterData.forEach( ch => ch['Ch_index'] = newIndex++);
+    this._dataSourceChapter = new MatTableDataSource(this.chapterData);
+  }
+
   get chapterData$() { return this._chapterData$; }
+  get chapterData() { return this._chapterData; }
   get courseInfo() { return this.courseData.courseInfo; }
   get dataSourceChapter() { return this._dataSourceChapter; }
   get displayedColumnsChapter() { return this._displayedColumnsChapter; }
+  get showSaveOrderingButton() : boolean { return this._showSaveOrderingButton; }
 
   
 }

@@ -52,6 +52,7 @@ import { CourseParticipantsComponent } from './components/view-admin-course/cour
 import { CourseChaptersComponent } from './components/view-admin-course/course-chapters/course-chapters.component';
 import { CourseTestsComponent } from './components/view-admin-course/course-tests/course-tests.component';
 import { CourseCertificateComponent } from './components/view-admin-course/course-certificate/course-certificate.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   imports: [
@@ -60,7 +61,8 @@ import { CourseCertificateComponent } from './components/view-admin-course/cours
     MatCheckboxModule,
     MatSortModule, MatTableModule, MatPaginatorModule,
     QRCodeModule, SharedAppModule, /*SatDatepickerModule, SatNativeDateModule,*/ AppMaterialModule,
-    ChartsModule
+    ChartsModule,
+    DragDropModule
   ],
   entryComponents: [BottomSheetModifyCourse, SubChapterOverviewDialog],
   declarations: [
