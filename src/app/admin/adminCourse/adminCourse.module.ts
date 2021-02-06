@@ -53,6 +53,7 @@ import { CourseChaptersComponent } from './components/view-admin-course/course-c
 import { CourseTestsComponent } from './components/view-admin-course/course-tests/course-tests.component';
 import { CourseCertificateComponent } from './components/view-admin-course/course-certificate/course-certificate.component';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { CourseTestComponent } from './components/view-admin-course/course-test/course-test.component';
 
 @NgModule({
   imports: [
@@ -81,7 +82,8 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
     CourseParticipantsComponent,
     CourseChaptersComponent,
     CourseTestsComponent,
-    CourseCertificateComponent
+    CourseCertificateComponent,
+    CourseTestComponent
     ],
   providers: [
     AdminCourseService
