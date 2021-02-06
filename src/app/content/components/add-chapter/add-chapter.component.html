@@ -70,10 +70,7 @@
                 </div>
             </mat-tab>
             <mat-tab label="{{'question.Questions' | translate}}">
-                <question-container 
-                    [chapterId]="chapterId.value"
-                    [courseId]="courseId.value"
-                    (questionDeleted)="deleteQuestion($event)">
+                <question-container (questionDeleted)="deleteQuestion($event)">
                 </question-container>
             </mat-tab>
         </mat-tab-group>

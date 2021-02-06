@@ -7,7 +7,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { take, tap } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
 import { ConfirmationBoxComponent } from 'src/app/theme/components/confirmation-box/confirmation-box.component';
-import { ImageChangedEvent } from '../image-chooser/image-chooser.component';
 
 
 
@@ -36,21 +35,6 @@ export class QuestionContainerComponent implements OnInit {
 
   private _openedQuestion : number = -1;
   private _nextQuestionId : number = 0;
-
-  private _courseId : number = null;
-  private _chapterId : number = null;
-
-  @Input() 
-  set chapterId(id : number) {
-    // this._chapterId = id;
-    // this._applyIds();
-  }
-
-  @Input() 
-  set courseId(id : number) {
-    // this._courseId = id;
-    // this._applyIds();
-  }
 
   constructor(
     private formBuilder : FormBuilder,
@@ -85,8 +69,6 @@ export class QuestionContainerComponent implements OnInit {
     this.questions.push( this.formBuilder.group({
       id : new FormControl(null, []),
       text : new FormControl('', [Validators.required]),
-      chapterId : new FormControl(this._chapterId, []),
-      courseId : new FormControl(this._courseId, []),
       imagePath : new FormControl('', []),
       explanation : new FormControl('', []),
       index : new FormControl(this._nextQuestionId, []),
@@ -172,28 +154,12 @@ export class QuestionContainerComponent implements OnInit {
     return this.questions.at(pos).get('answers') as FormArray;
   }
 
-  questionImageChanged(question : number, event : ImageChangedEvent) : void {
-    this.questions.at(question).get('imagePath').setValue(event.data);
-  }
-
-  answerImageChanged(question : number, answer : number, event : ImageChangedEvent) : void {
-    let answerArray : FormArray = this.questions.at(question).get('answers') as FormArray;
-    answerArray.at(answer).get('imagePath').setValue(event.data);
-  }
-
   setOpenedPanel(pos : number) {
     this._openedQuestion = pos;
   }
 
   checkPanelClosed(pos : number) {
     if(this._openedQuestion == pos) { this._openedQuestion = -1;}
-  }
-
-  private _applyIds() : void {
-    for(let question of this.questions.controls) {     
-      question.get('courseId').setValue(this._courseId);
-      question.get('chapterId').setValue(this._chapterId);
-    }
   }
 
   get openedQuestion() : number { return this._openedQuestion; }

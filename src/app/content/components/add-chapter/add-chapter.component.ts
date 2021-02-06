@@ -11,11 +11,11 @@ import { UploadInput } from 'ngx-uploader';
 import { from, iif, Observable, of, Subscription, timer } from 'rxjs';
 import { map, mergeMap, switchMap, take, tap, toArray } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
+import { QuestionContainerComponent } from 'src/app/core/components/question-container/question-container.component';
+import { QuestionService } from 'src/app/core/services/question.service';
 import { ConfirmationBoxComponent } from 'src/app/theme/components/confirmation-box/confirmation-box.component';
 import { ContentService } from '../../content.service';
 import { ComponentCanDeactivate, PendingChangesGuardGuard } from '../../pending-changes-guard.guard';
-import { QuestionService } from '../../question.service';
-import { QuestionContainerComponent } from '../question-container/question-container.component';
 
 @Component({
   selector: 'app-add-chapter',

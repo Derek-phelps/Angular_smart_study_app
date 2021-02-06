@@ -3,7 +3,7 @@ import { throwError as observableThrowError, Observable, from, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { map, catchError, switchMap, tap, toArray, mergeMap } from 'rxjs/operators';
-import { Globals } from '../common/auth-guard.service';
+import { Globals } from 'src/app/common/auth-guard.service';
 
 @Injectable()
 export class QuestionService {
