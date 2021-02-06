@@ -138,7 +138,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
           //TODO: fetch questions.
         }),
         switchMap( _ => this.questionService.getAllQuestionsByChapter(this.courseId.value, this.chapterId.value)),
-        tap(questions => console.log(questions)),
+        // tap(questions => console.log(questions)),
         tap(questions => this.questionComponent.patchValue(questions))
       ).pipe(take(1)).subscribe(result => true);
     }
