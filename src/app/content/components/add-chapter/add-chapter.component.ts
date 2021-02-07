@@ -301,7 +301,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
   }
 
   fileUploaded(event, i : number) {
-    if (event.success && event.UserImg) { this.subChapters.controls[i].get('filePath').setValue('API/img/Course/' + event.UserImg); }
+    if (event.success && event.data) { this.subChapters.controls[i].get('filePath').setValue('API/img/Course/' + event.data); }
     else { this.subChapters.controls[i].get('filePath').setValue(''); }
     this.preventSave = false;
   }
@@ -320,7 +320,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
   get uploaderOptions() : UploadInput {
     return  {
       type: 'uploadAll',
-      url: this.globals.APIURL + 'Company/userImgUpload?folderName=Course',
+      url: this.globals.APIURL + 'Chapter/videoUpload',
       method: 'POST',
       data: {}
     };

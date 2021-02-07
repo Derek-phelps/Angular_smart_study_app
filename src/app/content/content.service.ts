@@ -79,8 +79,9 @@ export class ContentService {
 
     return this._http.post(this._getChapterById,formData)
     .pipe(
+      tap( o => console.log(o)),
       map(response  => this._parseChapter(response as Response)),
-      // tap( o => console.log(o))
+      
       ).pipe(catchError(this.handleError))
   }
 
