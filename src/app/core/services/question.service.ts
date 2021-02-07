@@ -54,12 +54,18 @@ export class QuestionService {
   }
 
   getAllQuestionsByChapter(courseId : number, chapterId : number) : Observable<any> {
-    return this.getAllQuestions(courseId).pipe(
+    return this._getAllQuestions(courseId).pipe(
       map( questions => questions.filter(q => q['chapterId'] == ''+chapterId))
     );
   }
 
-  getAllQuestions(courseId : number): Observable<any> {
+  getAllCourseQuestions(courseId : number) : Observable<any> {
+    return this._getAllQuestions(courseId).pipe(
+      map( questions => questions.filter(q => q['chapterId'] === '0'))
+    );
+  }
+
+  public _getAllQuestions(courseId : number): Observable<any> {
     let formData: FormData = new FormData();
     let questions : Array<any> = [];
     formData.append('companyId', ''+this._globals.companyInfo.companyId);
@@ -97,38 +103,6 @@ export class QuestionService {
     ).pipe(catchError(this.handleError))
   }
 
-  // getData(companyId): any {
-  //   let formData: FormData = new FormData();
-  //   formData.append('companyId', companyId);
-  //   return this._http.post(this._getByCompanyUrl, formData)
-  //     .pipe(map((response: Response) => response))
-  //     .pipe(catchError(this.handleError))
-  // }
-
-  // getChaptersBYCourseId(CourceId): any {
-  //   let formData: FormData = new FormData();
-  //   formData.append('CourceId', CourceId);
-  //   return this._http.post(this._getByChapterByCouseUrl, formData)
-  //     .pipe(map((response: Response) => response))
-  //     .pipe(catchError(this.handleError))
-  // }
-
-  // add(formField: any): any {
-
-  //   let formData: FormData = new FormData();
-  //   formData.append('CourceId', formField.CourceId);
-  //   formData.append('ChapterId', formField.ChapterId);
-  //   formData.append('qustionText', formField.qustionText);
-  //   this._appendImageUrl(formData, 'qustionImg', 'API/img/Question/', formField.qustionImg);
-  //   formData.append('Explanation', formField.Explanation);
-  //   formData.append('companyId', this._globals.companyInfo.companyId + "");
-  //   formData.append('IsTraning', formField.IsTraning);
-  //   formData.append('answers', JSON.stringify(formField.answers));
-  //   formData.append('createdBy', this._globals.companyInfo.companyId + "");
-  //   return this._http.post(this._addQustionUrl, formData)
-  //     .pipe(map((response: Response) => response))
-  //     .pipe(catchError(this.handleError))
-  // }
 
   addChapterQuestion(courseId : number, chapterId : number, question : any): Observable<any> {
     return this._http.post(this._addQustionUrl, this._unparseQuestion(question, courseId, chapterId))

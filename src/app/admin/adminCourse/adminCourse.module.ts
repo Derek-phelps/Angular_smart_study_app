@@ -55,10 +55,12 @@ import { CourseCertificateComponent } from './components/view-admin-course/cours
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CourseTestComponent } from './components/view-admin-course/course-test/course-test.component';
 import { ContentModule } from 'src/app/content/content.module';
+import { CoreModule } from 'src/app/core/core.module';
 
 @NgModule({
   imports: [
-    CommonModule, routing, MatListModule, MatDialogModule, LayoutModule,
+    CommonModule, CoreModule,
+    routing, MatListModule, MatDialogModule, LayoutModule,
     FormsModule, ReactiveFormsModule, AppTranslationModule,
     MatCheckboxModule,
     MatSortModule, MatTableModule, MatPaginatorModule,

@@ -1,2 +1,5 @@
 <p>course-test works!</p>
-<pre>{{courseData | json }}</pre>
+<!-- <pre>{{courseData | json }}</pre> -->
+<form [formGroup]="courseTestForm">
+    <question-container (questionDeleted)="deleteQuestion($event)"></question-container>
+</form>

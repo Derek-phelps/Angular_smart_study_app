@@ -29,8 +29,6 @@ export function atLeastOneCorrectValidator() : ValidatorFn {
 export class QuestionContainerComponent implements OnInit {
 
   private _parentFormGroup : FormGroup = null;
-  //@Input() questions : FormArray = new FormArray([]);  
-
   @Output() questionDeleted : EventEmitter<number> = new EventEmitter<number>();
 
   private _openedQuestion : number = -1;

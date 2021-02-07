@@ -7,6 +7,8 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbToast } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateService } from '@ngx-translate/core';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NgxSpinner, Spinner } from 'ngx-spinner/lib/ngx-spinner.enum';
 import { UploadInput } from 'ngx-uploader';
 import { from, iif, Observable, of, Subscription, timer } from 'rxjs';
 import { map, mergeMap, switchMap, take, tap, toArray } from 'rxjs/operators';
@@ -62,19 +64,20 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
     private router : Router,
     private route : ActivatedRoute,
     private dialog: MatDialog,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private spinnerService : NgxSpinnerService
   ) {
     if (this.translate.currentLang != this.globals.userInfo.userLang) {
       this.translate.use(this.globals.userInfo.userLang);
     }
     this.globals.currentTranslateService = this.translate;
-    
   }
 
   @HostListener('window:beforeunload')
   canDeactivate(component: ComponentCanDeactivate): boolean | Observable<boolean> {
     if(!this.addChapterForm.pristine) {
       let description: string = this.translate.instant('chapter.PreventCloseDesc');
+      this.spinnerService.hide();
       const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
         width: '400px',
         data: { Action: false, Mes: description },
@@ -82,7 +85,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
       });
       return dialogRef.afterClosed().pipe(
         tap(result => {
-          if(result) { localStorage.removeItem('currentCourse'); }
+          if(result) { this.spinnerService.show(); localStorage.removeItem('currentCourse'); }
         })
       );
     }
