@@ -205,6 +205,7 @@ export class AdminCourseService {
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
+
   edit(formField: any, informEmp: any, viewList, adminList, bNewScormFile: boolean): any {
     let formData: FormData = new FormData();
     formData.append('courseId', formField.courseId);
@@ -243,6 +244,17 @@ export class AdminCourseService {
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
+
+  editCourseIgnoreOrder(courseId : number, ignoreOrder : boolean): any {
+    let formData: FormData = new FormData();
+    formData.append('courseId', ''+courseId);
+    formData.append('ignore_ordering', ignoreOrder ? '1' : '0');
+    
+    return this._http.post(this.globals.APIURL + 'Course/ignoreOrdering', formData)
+      .pipe(map((response: Response) => response))
+      .pipe(catchError(this.handleError))
+  }
+
   delete(CourseId): any {
     let formData: FormData = new FormData();
     formData.append('CourseId', CourseId);

@@ -2,6 +2,7 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -35,6 +36,7 @@ export class CourseChaptersComponent implements OnInit {
     private router: Router,
     private service: AdminCourseService,
     private dialog: MatDialog,
+    private snackbar: MatSnackBar
   ) { }
 
   ngOnChanges(changes : SimpleChanges) : void {
@@ -119,7 +121,11 @@ export class CourseChaptersComponent implements OnInit {
     from(this.chapterData).pipe(
       mergeMap(chapter => this.service.editChapterOrder(chapter)),
       toArray(),
-    ).subscribe(result => this._loadChapters())
+    ).subscribe(
+      result => {
+        this._loadChapters();
+        this.snackbar.open(this.translate.instant('chapter.ChapterSaved'), '', { duration: 3000 });
+      })
   }
 
   private _fixIndices() : void {

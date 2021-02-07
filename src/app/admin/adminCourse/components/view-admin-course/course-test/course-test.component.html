@@ -1,5 +1,12 @@
-<p>course-test works!</p>
 <!-- <pre>{{courseData | json }}</pre> -->
 <form [formGroup]="courseTestForm">
     <question-container (questionDeleted)="deleteQuestion($event)"></question-container>
 </form>
+<div class="d-flex">
+    <div class="mt-4 ml-auto">
+        <button mat-raised-button 
+            (click)="saveQuestions()" *ngIf="!courseTestForm.pristine">
+            <i class="fa fa-save mr-2"></i>{{'question.SaveQuestions' | translate}}
+        </button>
+    </div>
+</div>

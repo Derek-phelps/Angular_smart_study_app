@@ -118,6 +118,20 @@ export class QuestionService {
       .pipe(catchError(this.handleError))
   }
 
+  addCourseQuestion(courseId : number, question : any): Observable<any> {
+    return this._http.post(this._addQustionUrl, this._unparseQuestion(question, courseId, 0))
+      .pipe(map((response: Response) => response))
+      .pipe(catchError(this.handleError))
+  }
+
+  editCourseQuestion(courseId : number, question : any): Observable<any> {
+    let data : FormData = this._unparseQuestion(question, courseId, 0);
+    data.append('deleteOptions', JSON.stringify(question.deleteOptions));
+    return this._http.post(this._editQuestionUrl, data)
+      .pipe(map((response: Response) => response))
+      .pipe(catchError(this.handleError))
+  }
+
   private _unparseQuestion(question : any, courseId : number, chapterId : number) : FormData {
     let formData: FormData = new FormData();
     let correctAnswers : Array<number> = []

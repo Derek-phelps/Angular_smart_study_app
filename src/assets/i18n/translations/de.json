@@ -460,7 +460,8 @@
     "SaveChapter" : "Kapitel speichern",
     "SaveChapterDesc" : "Wollen Sie dieses Kapitel speichern?",
     "DeleteSubChapter" : "Unterkapitel Löschen",
-    "DeleteSubChapterDesc" : "Wollen Sie dieses Unterkapitel löschen?"
+    "DeleteSubChapterDesc" : "Wollen Sie dieses Unterkapitel löschen?",
+    "ChaptersSaved" : "Kapitel erfolgreich gespeichert."
   },
   "question": {
     "DownloadExampleTemplate": "Template-File für Testfragen-Upload herunterladen...",
@@ -502,7 +503,10 @@
     "NoQuestionFoundChapter": "Sie haben zu diesem Kapitel noch keine Fragen hinzugefügt.",
     "AtLeastOneCorrectRequired" : "Jede Frage muss mindestens eine korrekte Antwortmöglichkeit haben!",
     "DeleteAnswer" : "Antwort löschen",
-    "DeleteAnswerDesc" : "Sind Sie sicher, dass sie diese Antwort löschen möchten?"
+    "DeleteAnswerDesc" : "Sind Sie sicher, dass sie diese Antwort löschen möchten?",
+    "SaveQuestions" : "Fragen speichern",
+    "SaveQuestionsDesc" : "Sind Sie sicher, dass sie diese Fragen speichern möchten?",
+    "QuestionsSaved" : "Fragen erfolgreich gespeichert."
   },
   "company": {
     "Company": "Firma",
@@ -645,7 +649,7 @@
     "Departments": "Abteilungen",
     "Course": "Kursverwaltung",
     "Content": "Kapitel",
-    "Test": "Tests",
+    "Test": "Abschlussprüfung",
     "Trainer": "Trainer",
     "Certificater": "Zertifikate",
     "Messages": "Nachrichten",

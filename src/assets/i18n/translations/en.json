@@ -460,7 +460,8 @@
     "SaveChapter" : "Save chapter",
     "SaveChapterDesc" : "Are you sure you want to save this chapter?",
     "DeleteSubChapter" : "Delete Subchapter",
-    "DeleteSubChapterDesc" : "Are you sure you want to delete this subchapter?"
+    "DeleteSubChapterDesc" : "Are you sure you want to delete this subchapter?",
+    "ChaptersSaved" : "Chapters successfully saved."
   },
   "question": {
     "DownloadExampleTemplate": "Download template file for question upload...",
@@ -502,7 +503,10 @@
     "NoQuestionFoundChapter": "You haven't added any questions to this chapter yet.",
     "AtLeastOneCorrectRequired" : "Each Question needs at least one correct answer!",
     "DeleteAnswer" : "Delete answer",
-    "DeleteAnswerDesc" : "Are you sure you want to delete this answer?"
+    "DeleteAnswerDesc" : "Are you sure you want to delete this answer?",
+    "SaveQuestions" : "Save Questions",
+    "SaveQuestionsDesc" : "Are you sure you want to save this questions?",
+    "QuestionsSaved" : "Questions successfully saved."
   },
   "company": {
     "Company": "Company",
@@ -645,7 +649,7 @@
     "Departments": "Departments",
     "Course": "Course administration",
     "Content": "Content",
-    "Test": "Tests",
+    "Test": "Final Exam",
     "Trainer": "Trainer",
     "Certificater": "Certificates",
     "Messages": "Messages",

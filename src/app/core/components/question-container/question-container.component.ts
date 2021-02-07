@@ -61,6 +61,10 @@ export class QuestionContainerComponent implements OnInit {
     this.questions.patchValue(questions);
   }
 
+  public closeQuestions() : void {
+    this._openedQuestion = -1;
+  }
+
   addQuestion(validate : boolean = true) : void {
     if(validate && !this.checkQuestions()) { return; }
 
@@ -95,6 +99,7 @@ export class QuestionContainerComponent implements OnInit {
           if( questionId != null) { this.questionDeleted.emit(questionId); }
           this.questions.removeAt(pos);
           this._fixIndices();
+          this.parentForm.markAsDirty();
         }
       })
     ).subscribe(
@@ -146,6 +151,7 @@ export class QuestionContainerComponent implements OnInit {
     this.questions.insert(event.currentIndex, draggedSubChapter);
 
     this._fixIndices();
+    this.parentForm.markAsDirty();
   }
 
   answersForQuestion(pos : number) : FormArray {
