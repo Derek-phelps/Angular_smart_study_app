@@ -36,7 +36,8 @@
   <div class="msg-tips-wrap">
 
     <div *ngIf="pagInfo">
-      <button (click)="BackBut()" class="btn-lg btn-primary btn-auth">{{'backToCourseOverview' | translate}}</button>
+      <button mat-stroked-button class="overview-button" (click)="BackBut()">{{'backToCourseOverview' |
+        translate}}</button>
     </div>
     <div class="msg-entrance">
       <span mat-button [matMenuTriggerFor]="langMenu" class="fa fa-globe" matTooltip="Sprache/Language"></span>

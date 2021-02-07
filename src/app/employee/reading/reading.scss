@@ -1,6 +1,41 @@
+@import '../../theme/theme/conf';
 @import '../../theme/sass/treeView';
+
+.pages-body-reading {
+    display: table;
+    // background: $sidebar-bg;
+}
+
+.sidebar-reading {
+    background: $sidebar-bg;
+    display: table-cell;
+}
+
+.subchapter-title {
+    width: 100%;
+    text-align: center;
+    // padding: 2em;
+}
+
+.editor-view-text {
+    background-color: white;
+    width: 100%;
+    padding: 20px;
+    margin-left: 2em;
+    margin-right: 2em;
+    border-radius: 10px;
+}
 
 .subchapter-text {
     color: black;
     padding: 2em;
+}
+
+.image {
+    max-width: 100%;
+    margin-bottom: 20px;
+}
+
+.nav-button {
+    margin: 5px;
 }
