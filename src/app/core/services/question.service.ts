@@ -22,14 +22,14 @@ export class QuestionService {
   constructor(private _http: HttpClient, public _globals: Globals) {
 
   }
-  postFile(fileToUpload: File): any {
-    const formData: FormData = new FormData();
-    formData.append('fileKey', fileToUpload, fileToUpload.name);
-    return this._http
-      .post(this._globals.APIURL + 'Question/uploadQustionExcel?companyId=' + this._globals.companyInfo.companyId, formData, { headers: { contentType: 'multipart/form-data' } })
-      .pipe(map((response: Response) => response))
-      .pipe(catchError(this.handleError))
-  }
+  // postFile(fileToUpload: File): any {
+  //   const formData: FormData = new FormData();
+  //   formData.append('fileKey', fileToUpload, fileToUpload.name);
+  //   return this._http
+  //     .post(this._globals.APIURL + 'Question/uploadQustionExcel?companyId=' + this._globals.companyInfo.companyId, formData, { headers: { contentType: 'multipart/form-data' } })
+  //     .pipe(map((response: Response) => response))
+  //     .pipe(catchError(this.handleError))
+  // }
   getByQuestionById(QusId): any {
     let formData: FormData = new FormData();
     formData.append('QuestionId', QusId);
@@ -37,21 +37,21 @@ export class QuestionService {
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
-  getCourse(companyId): any {
-    let formData: FormData = new FormData();
-    formData.append('companyId', companyId);
-    return this._http.post(this._getByCourseUrl, formData)
-      .pipe(map((response: Response) => response))
-      .pipe(catchError(this.handleError))
-  }
-  postImage(fileToUpload: File) {
-    const formData: FormData = new FormData();
-    formData.append('file', fileToUpload, fileToUpload.name);
-    return this._http
-      .post(this._globals.APIURL + 'Question/uploadQuestionImage?companyId=' + this._globals.companyInfo.companyId, formData, { headers: { contentType: 'multipart/form-data' } })
-      .pipe(map((response: Response) => response))
-      .pipe(catchError(this.handleError))
-  }
+  // getCourse(companyId): any {
+  //   let formData: FormData = new FormData();
+  //   formData.append('companyId', companyId);
+  //   return this._http.post(this._getByCourseUrl, formData)
+  //     .pipe(map((response: Response) => response))
+  //     .pipe(catchError(this.handleError))
+  // }
+  // postImage(fileToUpload: File) {
+  //   const formData: FormData = new FormData();
+  //   formData.append('file', fileToUpload, fileToUpload.name);
+  //   return this._http
+  //     .post(this._globals.APIURL + 'Question/uploadQuestionImage?companyId=' + this._globals.companyInfo.companyId, formData, { headers: { contentType: 'multipart/form-data' } })
+  //     .pipe(map((response: Response) => response))
+  //     .pipe(catchError(this.handleError))
+  // }
 
   getAllQuestionsByChapter(courseId : number, chapterId : number) : Observable<any> {
     return this._getAllQuestions(courseId).pipe(
@@ -170,15 +170,15 @@ export class QuestionService {
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
-  private _appendImageUrl(formData, strAppendValue, strPath, strValue) {
-    if (strValue && strValue.indexOf("API/img") >= 0) {
-      formData.append(strAppendValue, strValue);
-    } else if (strValue && strValue != '') {
-      formData.append(strAppendValue, strPath + strValue);
-    } else {
-      formData.append(strAppendValue, "");
-    }
-  }
+  // private _appendImageUrl(formData, strAppendValue, strPath, strValue) {
+  //   if (strValue && strValue.indexOf("API/img") >= 0) {
+  //     formData.append(strAppendValue, strValue);
+  //   } else if (strValue && strValue != '') {
+  //     formData.append(strAppendValue, strPath + strValue);
+  //   } else {
+  //     formData.append(strAppendValue, "");
+  //   }
+  // }
   private handleError(error: Response) {
     // in a real world app, we may send the server to some remote logging infrastructure
     // instead of just logging it to the console
