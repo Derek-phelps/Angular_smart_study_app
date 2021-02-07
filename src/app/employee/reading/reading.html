@@ -1,62 +1,69 @@
 <div class="pages-wrap" style="opacity: 0;overflow: hidden;" [@visibilityChanged]="fadeIn ? 'shown' : 'hidden'">
     <pages-top [pagInfo]=true [chapterId]="selectedItem.courseId"></pages-top>
-    <div class="pages-body" style="display: table;">
-        <sidebar [menuInfo]="PAGES_Sub_MENU" [style.height]="Divheight" style="display: table-cell;"></sidebar>
+    <div class="pages-body pages-body-reading">
+        <sidebar class="sidebar-reading" [menuInfo]="PAGES_Sub_MENU" [style.height]="Divheight"></sidebar>
         <div class="pages-content" [style.width]="DivWidth">
             <content-top></content-top>
             <div>
                 <div>
-                    <vg-player style="width: 80%;" *ngIf="selectedItem.IsVideo=='1'">
-                        <vg-controls>
-                            <vg-play-pause></vg-play-pause>
-                            <vg-playback-button></vg-playback-button>
-
-                            <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
-
-                            <vg-scrub-bar>
-                                <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
-                                <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
-                            </vg-scrub-bar>
-
-                            <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
-
-                            <vg-mute></vg-mute>
-                            <vg-volume></vg-volume>
-
-                            <vg-fullscreen></vg-fullscreen>
-                        </vg-controls>
-                        <video *ngIf="selectedItem.IsVideo=='1'" #videoPlayer [vgMedia]="videoPlayer" preload="auto">
-                            <source src="{{_globals.WebURL}}/{{selectedItem.FilePath}}" />
-                        </video>
-                    </vg-player>
-                    <!--
-
-              <mat-video *ngIf="selectedItem.IsVideo=='1'" title="{{selectedItem.subChapterTitle}}" [autoplay]="true" [preload]="true" [fullscreen]="false" [download]="false" color="accent" >
-                    <source matVideoSource src="{{_globals.IMAGEURL}}Course/{{selectedItem.FilePath}}" type="video/mp4">
-                </mat-video> -->
-                    <audio *ngIf="selectedItem.IsVideo=='2'" autoplay controls (click)="toggleAudioVideo(audioPlayer)"
-                        #audioPlayer style="width: 100%;min-width: 300px;">
-                        <source src="{{_globals.WebURL}}/{{selectedItem.FilePath}}" />
-                    </audio>
-                    <div *ngIf="selectedItem.IsVideo=='3'" class="displatTxtCls subchapter-text">
-                        <div class="row" style="padding-bottom: 20px;">
-                            {{selectedItem.chapterTxt}}
-                        </div>
-                        <!-- <pdf-viewer *ngIf="pdfSrc" [src]="pdfSrc" [render-text]="true" style="display: block;">
-                        </pdf-viewer> -->
-                        <iframe *ngIf="pdfSrc" [src]="pdfSrc | safe" style="width: 100%;height: 90vh;"></iframe>
+                    <h2 class="subchapter-title">{{selectedItem.subChapterTitle}}</h2>
+                    <div class="row" style="padding-bottom: 20px;">
+                        <div class="editor-view-text" [innerHTML]="selectedItem.chapterTxt"></div>
                     </div>
+                    <ng-container *ngIf="fileType!=0 && selectedItem.FilePath && selectedItem.FilePath!=''">
+                        <vg-player style="width: 80%;" *ngIf="fileType==1">
+                            <vg-controls>
+                                <vg-play-pause></vg-play-pause>
+                                <vg-playback-button></vg-playback-button>
+
+                                <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
+
+                                <vg-scrub-bar>
+                                    <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+                                    <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+                                </vg-scrub-bar>
+
+                                <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
+
+                                <vg-mute></vg-mute>
+                                <vg-volume></vg-volume>
+
+                                <vg-fullscreen></vg-fullscreen>
+                            </vg-controls>
+                            <video *ngIf="selectedItem.IsVideo=='1'" #videoPlayer [vgMedia]="videoPlayer"
+                                preload="auto">
+                                <source src="{{_globals.WebURL}}/{{selectedItem.FilePath}}" />
+                            </video>
+                        </vg-player>
+                        <audio *ngIf="fileType==2" autoplay controls (click)="toggleAudioVideo(audioPlayer)"
+                            #audioPlayer style="width: 100%;min-width: 300px;">
+                            <source src="{{_globals.WebURL}}/{{selectedItem.FilePath}}" />
+                        </audio>
+                        <div *ngIf="fileType==3" class="displatTxtCls subchapter-text">
+                            <iframe *ngIf="pdfSrc" [src]="pdfSrc | safe" style="width: 100%;height: 90vh;"></iframe>
+                        </div>
+                        <div *ngIf="fileType==4">
+                            <img class="image" src="{{_globals.WebURL}}/{{selectedItem.FilePath}}" />
+                        </div>
+                        <div class="displatTxtCls subchapter-text" style="text-align: center;">
+                            <button mat-stroked-button (click)="downloadFile()">
+                                <mat-icon>download</mat-icon>Download
+                            </button>
+                            <!-- <iframe *ngIf="pdfSrc" [src]="pdfSrc | safe" style="width: 100%;height: 90vh;"></iframe> -->
+                        </div>
+                    </ng-container>
                 </div>
                 <div class="clearfix"></div>
-                <div style="height: 95px;">
-                    <button *ngIf="backSubChapId!=0" (click)="BackSubChap()"
-                        class="btn-lg btn-primary btn-auth">{{'question.Back' | translate}}</button>
-                    <button *ngIf="(nextSubChapId!=0 && !isExam) || selectedItem.QusCount == 0" (click)="NextSubChap()"
-                        class="btn-lg btn-primary btn-auth">{{'question.Next' | translate}}</button>
-                    <!-- <button *ngIf="nextSubChapId==0 && isExam && selectedItem.QusCount &gt;  0 " (click)="ExamChapter()" style="float: right;" class="btn-lg btn-primary btn-auth" >{{'course.Exam' | translate}}</button> -->
-                    <button *ngIf="(isExam || nextSubChapId==0) && selectedItem.QusCount &gt;  0 "
-                        (click)="ExamChapter()"
-                        class="btn-lg btn-primary btn-auth">{{'course.Exam' | translate}}</button>
+                <div style="height: 95px;text-align: center;">
+                    <button mat-stroked-button class="nav-button" *ngIf="backSubChapId!=0"
+                        (click)="BackSubChap()">{{'question.Back' |
+                        translate}}</button>
+                    <button mat-stroked-button class="nav-button"
+                        *ngIf="(nextSubChapId!=0 && !isExam) || selectedItem.QusCount == 0"
+                        (click)="NextSubChap()">{{'question.Next' | translate}}</button>
+                    <button mat-stroked-button class="nav-button"
+                        *ngIf="(isExam || nextSubChapId==0) && selectedItem.QusCount &gt;  0 "
+                        (click)="ExamChapter()">{{'course.Exam' | translate}}</button>
                 </div>
             </div>
         </div>
