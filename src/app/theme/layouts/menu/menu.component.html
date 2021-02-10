@@ -1,5 +1,5 @@
 <ul class="menu-wrap animated fadeIn">
-  <hr class="separator" style="margin-top:-5px; margin-bottom: 10px;">
+  <hr *ngIf="showSeparators" class="separator" style="margin-top:-5px; margin-bottom: 10px;">
   <ng-container *ngFor="let item of menuInfo;let i = index">
     <li
       *ngIf="(!item.checkDepartments && !item.checkGroups && !item.checkCourses) || (item.checkDepartments && appendDepartments) || (item.checkGroups && appendGroups) || (item.checkCourses && appendCourses)"
@@ -34,7 +34,7 @@
       </a>
 
       <div class="item-children" [@collapse]="item.toggle" *ngIf="item.children">
-        <du-menu [menuInfo]="item.children"></du-menu>
+        <du-menu [menuInfo]="item.children" [showSeparators]="false"></du-menu>
       </div>
       <hr *ngIf="item.separateAfter && (appendDepartments || appendGroups || appendCourses)" class="separator">
     </li>
