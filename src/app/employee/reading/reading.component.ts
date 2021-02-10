@@ -199,22 +199,36 @@ export class Reading implements OnDestroy, OnInit {
           }
         });
 
+        // 0 => no file
+        // 1 => video
+        // 2 => audio
+        // 3 => pdf
+        // 4 => image
+        // -1 => unknown
         this.fileEnding = this.selectedItem.FilePath.split('.').pop().toLowerCase();
         if (this.fileEnding.match(/(jpg|jpeg|png|gif)$/i)) {
           this.fileType = 4;
         } else if (this.fileEnding.match(/(pdf)$/i)) {
           this.fileType = 3;
+        } else if (this.fileEnding.match(/(mp4|mov|avi|webm)$/i)) {
+          this.fileType = 1;
+        } else if (this.fileEnding.match(/(mp3|m4a|wav)$/i)) {
+          this.fileType = 2;
         } else if (this.fileEnding.length > 0) {
           console.log("unknown file type");
           this.fileType = -1;
         }
 
-        if (this.selectedItem.IsVideo == "3") {
+        console.log(this.fileType);
+
+        if (this.fileType == 3) {
           if (this.selectedItem.FilePath.startsWith("API/")) {
             this.pdfSrc = this._globals.WebURL + "/API/index.php/Serve/loadData?path=" + this.selectedItem.FilePath.substring(4);
           } else {
             this.pdfSrc = this._globals.WebURL + "/API/index.php/Serve/loadData?path=" + this.selectedItem.FilePath;
           }
+        } else {
+          this.pdfSrc = null;
         }
 
         // Check if course is complete due to current chapter marked as done.
@@ -233,7 +247,7 @@ export class Reading implements OnDestroy, OnInit {
     saveAs(this._globals.WebURL + '/' + this.selectedItem.FilePath, fileName + '.' + this.fileEnding);
   }
   toggleAudioVideo(event: any) {
-    // console.log(event);
+    console.log(event);
     if (!this.isplayed) {
       this.isplayed = true;
       event.play();

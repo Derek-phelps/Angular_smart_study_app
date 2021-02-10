@@ -8,33 +8,34 @@
                 <div>
                     <h2 class="subchapter-title">{{selectedItem.subChapterTitle}}</h2>
                     <div class="row" style="padding-bottom: 20px;">
-                        <div class="editor-view-text" [innerHTML]="selectedItem.chapterTxt"></div>
+                        <div class="editor-view-text view-element" [innerHTML]="selectedItem.chapterTxt"></div>
                     </div>
                     <ng-container *ngIf="fileType!=0 && selectedItem.FilePath && selectedItem.FilePath!=''">
-                        <vg-player style="width: 80%;" *ngIf="fileType==1">
-                            <vg-controls>
-                                <vg-play-pause></vg-play-pause>
-                                <vg-playback-button></vg-playback-button>
+                        <div *ngIf="fileType==1" class="view-element">
+                            <vg-player>
+                                <vg-controls>
+                                    <vg-play-pause></vg-play-pause>
+                                    <vg-playback-button></vg-playback-button>
 
-                                <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
+                                    <vg-time-display vgProperty="current" vgFormat="mm:ss"></vg-time-display>
 
-                                <vg-scrub-bar>
-                                    <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
-                                    <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
-                                </vg-scrub-bar>
+                                    <vg-scrub-bar>
+                                        <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+                                        <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
+                                    </vg-scrub-bar>
 
-                                <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
+                                    <vg-time-display vgProperty="total" vgFormat="mm:ss"></vg-time-display>
 
-                                <vg-mute></vg-mute>
-                                <vg-volume></vg-volume>
+                                    <vg-mute></vg-mute>
+                                    <vg-volume></vg-volume>
 
-                                <vg-fullscreen></vg-fullscreen>
-                            </vg-controls>
-                            <video *ngIf="selectedItem.IsVideo=='1'" #videoPlayer [vgMedia]="videoPlayer"
-                                preload="auto">
-                                <source src="{{_globals.WebURL}}/{{selectedItem.FilePath}}" />
-                            </video>
-                        </vg-player>
+                                    <vg-fullscreen></vg-fullscreen>
+                                </vg-controls>
+                                <video #videoPlayer class="video-player" [vgMedia]=" videoPlayer" preload="auto">
+                                    <source src="{{_globals.WebURL}}/{{selectedItem.FilePath}}" />
+                                </video>
+                            </vg-player>
+                        </div>
                         <audio *ngIf="fileType==2" autoplay controls (click)="toggleAudioVideo(audioPlayer)"
                             #audioPlayer style="width: 100%;min-width: 300px;">
                             <source src="{{_globals.WebURL}}/{{selectedItem.FilePath}}" />
@@ -42,12 +43,13 @@
                         <div *ngIf="fileType==3" class="displatTxtCls subchapter-text">
                             <iframe *ngIf="pdfSrc" [src]="pdfSrc | safe" style="width: 100%;height: 90vh;"></iframe>
                         </div>
-                        <div *ngIf="fileType==4">
+                        <div *ngIf="fileType==4" class="view-element">
                             <img class="image" src="{{_globals.WebURL}}/{{selectedItem.FilePath}}" />
                         </div>
-                        <div class="displatTxtCls subchapter-text" style="text-align: center;">
+                        <div *ngIf="selectedItem.isDownloadable" class="displatTxtCls subchapter-text"
+                            style="text-align: center;">
                             <button mat-stroked-button (click)="downloadFile()">
-                                <mat-icon>download</mat-icon>Download
+                                <mat-icon>download</mat-icon>Download<mat-icon>download</mat-icon>
                             </button>
                             <!-- <iframe *ngIf="pdfSrc" [src]="pdfSrc | safe" style="width: 100%;height: 90vh;"></iframe> -->
                         </div>

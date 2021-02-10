@@ -17,12 +17,15 @@
     // padding: 2em;
 }
 
+.view-element {
+    margin-left: 2em;
+    margin-right: 2em;
+}
+
 .editor-view-text {
     background-color: white;
     width: 100%;
     padding: 20px;
-    margin-left: 2em;
-    margin-right: 2em;
     border-radius: 10px;
 }
 
@@ -34,6 +37,10 @@
 .image {
     max-width: 100%;
     margin-bottom: 20px;
+}
+
+.video-player {
+    max-height: 60vh;
 }
 
 .nav-button {
