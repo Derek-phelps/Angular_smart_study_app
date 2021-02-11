@@ -164,4 +164,14 @@ export class FinelExam implements OnInit {
     var s = Math.floor(d % 3600 % 60);
     return ((h > 0 ? h + ":" + (m < 10 ? "0" : "") : "") + m + ":" + (s < 10 ? "0" : "") + s);
   }
+  getAnswerBackground(isAnswer) {
+    switch (isAnswer) {
+      case 1:
+        return '#71f442D9';
+      case 2:
+        return '#f44141D9';
+      default:
+        break;
+    }
+  }
 }

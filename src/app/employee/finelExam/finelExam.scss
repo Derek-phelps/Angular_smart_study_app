@@ -1,5 +1,13 @@
+@import '../../theme/theme/conf';
 @import '../../theme/sass/treeView';
 
+.timer-wrapper {
+    text-align: center;
+    left: 0;
+    width: 100vw;
+    z-index: 10;
+    position: fixed;
+}
 .timer-class-green {
     background-color: #8bd22f;
     padding: 10px;
@@ -14,4 +22,67 @@
     background-color: #f95372;
     padding: 10px;
     border-radius: 10px;
+}
+
+.pages-body-exam {
+    display: table;
+}
+
+.sidebar-exam {
+    background: $sidebar-bg;
+    display: table-cell;
+}
+
+.nav-button {
+    margin: 5px;
+}
+
+.question-box {
+    background-color: white;
+    color: black;
+    padding: 2em;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    .question-box-question {
+        padding: 20px;
+        border: 1px outset rgba(0,0,0,0.1);
+        border-radius: 5px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        .q-image-container {
+            text-align: center;
+            .question-image {
+                max-height: 300px;
+                max-width: 100%;
+                object-fit: contain;
+            }
+        }
+    }
+}
+
+.answer-box {
+    padding: 2em;
+    .answer-option  {
+        // cursor: pointer;
+        padding: 2em;
+        border: 1px outset rgba(0,0,0,0.1);
+        border-radius: 5px;
+        margin: 0;
+        text-align: center;
+        .option-image-container {
+            text-align: center;
+            
+        }
+        .option-image {
+            max-height: 300px;
+            max-width: 100%;
+            object-fit: contain;
+            margin: 0;
+            padding: 5px;
+        }
+        .option-text {
+            white-space: normal;
+            margin: 0;
+        }
+    }
 }

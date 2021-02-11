@@ -1,9 +1,9 @@
 <div class="pages-wrap" style="overflow: hidden;">
     <pages-top [showMenuIcon]=false></pages-top>
-    <div class="pages-body">
+    <div class="pages-body pages-body-exam">
         <div class="pages-content">
-            <div style="padding: 20px;color: #000;width: 100%">
-                <div class="timerCls" style="text-align: center;">
+            <div style="color: #000;width: 100%;">
+                <div class="timer-wrapper">
                     <b *ngIf="totalTime > 0 && currentChpInfo.duration >= (totalTime/10*3)"
                         class="timer-class-green">{{time}}</b>
                     <b *ngIf="totalTime > 0 && (totalTime/10*3) > currentChpInfo.duration && currentChpInfo.duration >= (totalTime/10)"
@@ -11,40 +11,49 @@
                     <b *ngIf="totalTime > 0 && (totalTime/10) > currentChpInfo.duration"
                         class="timer-class-red">{{time}}</b>
                 </div>
-                <div class="al-content" style="background: #fff;" *ngIf="selectIndex">
-                    <div class="QuestionBoxCls col-md-12">
-                        <span>{{'question.Question' | translate}} {{indexNo+1}}/{{QustionList.length}}: </span>
-                        <div style="margin-top: 20px;">
-                            <p style="font-size: large;">{{selectIndex.Question}}</p>
-                            <img *ngIf="selectIndex.QuestionImg && selectIndex.QuestionImg!='null'"
-                                style="max-height: 300px;max-width: 100%;object-fit: contain;padding:10px;"
-                                src="{{_globals.WebURL}}/{{selectIndex.QuestionImg}}" />
+                <div class="question-box" *ngIf="selectIndex">
+                    <span>{{'question.Question' | translate}} {{indexNo+1}}/{{QustionList.length}}: </span>
+                    <div class="container question-box-question">
+                        <div class="row">
+                            <div *ngIf="selectIndex.QuestionImg && selectIndex.QuestionImg!='null'"
+                                class="col-12 col-md-4 q-image-container">
+                                <img onerror="this.src='assets/img/logoakt.png'" class="question-image"
+                                    src="{{_globals.WebURL}}/{{selectIndex.QuestionImg}}" />
+                            </div>
+                            <div [ngClass]="{'col-md-8': selectIndex.QuestionImg && selectIndex.QuestionImg!='null'}"
+                                class="col-12">
+                                {{selectIndex.Question}}
+                            </div>
                         </div>
                     </div>
                     <form [formGroup]="myForm">
-                        <ul *ngIf="selectIndex.AnsList" formArrayName="Ans" role="group" style="list-style-type: none;"
-                            class="AnsBoxCls">
-                            <li *ngFor="let item of selectIndex.AnsList;index as i;" [formGroupName]="i"
-                                style="padding-top:5px;">
-                                <div class="col-md-12">
-                                    <label class="radio-inline nowrap">
-                                        <input type="checkbox" name="inlineRadioOptions" formControlName="SelectIndex"
-                                            value="{{item.QuestionOptionId}}">
-                                        <span> {{item.QuestionOptionName}}</span>
-                                    </label>
-                                </div>
-                            </li>
-                        </ul>
+                        <div *ngIf="selectIndex.AnsList" formArrayName="Ans" role="group"
+                            class="row justify-content-center d-flex answer-box">
+                            <div *ngFor="let item of selectIndex.AnsList;index as i;" [formGroupName]="i"
+                                class="answer-option p-2 align-self-end col-12 col-md-6 col-lg-4"
+                                [style.background-color]="getAnswerBackground(item.isAns)">
+                                <mat-checkbox class="col-12" formControlName="SelectIndex">
+                                    <div class="col-12">
+                                        <img *ngIf="item.optionImg && item.optionImg!=null && item.optionImg!=''"
+                                            onerror="this.src='assets/img/logoakt.png'" class="row option-image"
+                                            src="{{_globals.WebURL}}/{{item.optionImg}}" />
+                                        <span
+                                            class="col align-self-center option-text">{{item.QuestionOptionName}}</span>
+                                    </div>
+                                </mat-checkbox>
+                            </div>
+                        </div>
                     </form>
                 </div>
             </div>
-            <div style="height: 95px;">
-                <button *ngIf="indexNo!=0" (click)="BackQus()"
-                    class="btn-lg btn-primary btn-auth">{{'question.Back' | translate}}</button>
-                <button *ngIf="indexNo!=QustionList.length-1" (click)="NextQus()" style="float: right;"
-                    class="btn-lg btn-primary btn-auth">{{'question.Next' | translate}}</button>
-                <button [disabled]="isDisable" *ngIf="indexNo==QustionList.length-1" (click)="SubmitQus()"
-                    style="float: right;" class="btn-lg btn-primary btn-auth">{{'question.Submit' | translate}}</button>
+            <div style="height: 95px;text-align: center;">
+                <button mat-stroked-button class="nav-button" *ngIf="indexNo!=0" (click)="BackQus()">{{'question.Back' |
+                    translate}}</button>
+                <button mat-stroked-button class="nav-button" *ngIf="indexNo!=QustionList.length-1"
+                    (click)="NextQus()">{{'question.Next' | translate}}</button>
+                <button mat-stroked-button class="nav-button" [disabled]="isDisable"
+                    *ngIf="indexNo==QustionList.length-1" (click)="SubmitQus()">{{'question.Submit' |
+                    translate}}</button>
             </div>
         </div>
     </div>
