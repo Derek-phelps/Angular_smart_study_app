@@ -25,12 +25,6 @@
                                 <div *ngFor="let item of selectIndex.AnsList;index as i;" [formGroupName]="i"
                                     class="answer-option p-2 align-self-end col-12 col-md-6 col-lg-4"
                                     [style.background-color]="getAnswerBackground(item.isAns)">
-                                    <!-- <div class="col-12 option-image-container"
-                                        *ngIf="item.optionImg && item.optionImg!=null && item.optionImg!=''">
-                                        <img onerror="this.src='assets/img/logoakt.png'" class="option-image"
-                                            src="{{_globals.WebURL}}/{{item.optionImg}}" />
-                                    </div> -->
-                                    <!-- <div class="col-12"> -->
                                     <mat-checkbox class="col-12" formControlName="SelectIndex">
                                         <div class="col-12">
                                             <img *ngIf="item.optionImg && item.optionImg!=null && item.optionImg!=''"
@@ -40,15 +34,6 @@
                                                 class="col align-self-center option-text">{{item.QuestionOptionName}}</span>
                                         </div>
                                     </mat-checkbox>
-                                    <!-- </div> -->
-                                    <!-- <div style="background-color: brown;margin: 1px;">Test</div> -->
-                                    <!-- <div [style.background-color]="getAnswerBackground(item.isAns)" class="col-md-12"> -->
-                                    <!-- <label class="radio-inline nowrap">
-                                        <input type="checkbox" formControlName="SelectIndex"
-                                            value="{{item.QuestionOptionId}}">
-                                        <span> {{item.QuestionOptionName}}</span>
-                                    </label> -->
-                                    <!-- </div> -->
                                 </div>
                             </div>
                         </form>
