@@ -6,15 +6,17 @@ import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'result',
-  templateUrl: './result.html'
+  templateUrl: './result.html',
+  styleUrls: ['./result.scss']
 })
 export class Result implements OnInit {
   result_Id = 0;
   displayQustion: any = [];
   Resultscore: any;
   courseId = 0;
+  minResult = 0;
 
-  @ViewChild('videoPlayer', { static: true }) videoplayer: any;
+  // @ViewChild('videoPlayer', { static: true }) videoplayer: any;
   constructor(public router: Router, private route: ActivatedRoute, protected service: ResultService, public _globals: Globals, private spinner: NgxSpinnerService) {
     this.spinner.show();
   }
@@ -35,6 +37,7 @@ export class Result implements OnInit {
       if (res.success) {
         this.courseId = res.data.CourseId;
         this.Resultscore = res.data.result;
+        this.minResult = res.data.minResult;
         if (res.data.AnswerChosen.length > 0) {
           var AnswerChosen = res.data.AnswerChosen;
           for (let i = 0; i < AnswerChosen.length; i++) {

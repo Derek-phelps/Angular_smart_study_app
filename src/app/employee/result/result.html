@@ -3,36 +3,60 @@
   <div class="pages-body">
     <div style="padding: 20px;width:100%;">
       <div class="al-content" style="color: #000;">
-        <div class="ResultCls" style="text-align: center;"> {{'question.Result' | translate}}: {{Resultscore}}%</div>
-        <div *ngFor="let p of displayQustion;let i=index " style="background: #0169d95e;    padding: 10px;">
-          <div class="QustionNoHead">
-            <div style="text-align: center">
-              <i class="fa fa-check font16px cursorlink" *ngIf="p.Answer"
-                style="color:#71f442;font-size: 25px;font-weight: bold;" aria-hidden="true"></i>
-              <i class="fa fa-times font16px cursorlink" *ngIf="!p.Answer"
-                style="color:#f44141;font-size: 25px;font-weight: bold;" aria-hidden="true"></i>
-              {{'question.Question' | translate}}: {{i+1}}
-            </div>
+        <div class="ResultCls" style="text-align: center;font-size: larger;"> {{'question.Result' | translate}}:
+          {{Resultscore}}%</div>
+        <div *ngFor="let p of displayQustion;let i=index " style="padding: 10px;">
+          <div style="text-align: center;padding: 10px;font-size: larger;">
+            <i class="fa fa-check font16px cursorlink" *ngIf="p.Answer"
+              style="color:#71f442;font-size: 25px;font-weight: bold;" aria-hidden="true"></i>
+            <i class="fa fa-times font16px cursorlink" *ngIf="!p.Answer"
+              style="color:#f44141;font-size: 25px;font-weight: bold;" aria-hidden="true"></i>
+            {{'question.Question' | translate}}: {{i+1}}
           </div>
-          <div>
-            <div class="QustionHead">
-              <div [innerHTML]="p.Question"></div>
-              <img *ngIf="p.img" src="{{p.img}}"
-                style="max-height: 300px;max-width: 100%;object-fit: contain;padding:10px;" />
+          <div class="question-box">
+            <div class="container question-box-question"
+              [style.background-color]="p.Answer ? '#71f442D9' : '#f44141D9'">
+              <div class="row">
+                <div *ngIf="p.img" class="col-12 col-md-4 q-image-container">
+                  <img onerror="this.src='assets/img/logoakt.png'" class="question-image" src="{{p.img}}" />
+                </div>
+                <div [ngClass]="{'col-md-8': p.img}" class="col-12">
+                  {{p.Question}}
+                </div>
+              </div>
             </div>
-            <div class="QustionAns">
+            <!-- <div class="QustionAns">
               {{'question.CorrectAnswer' | translate}}:
               <div *ngFor="let q of p.CorrectAnswer;let j=index ">
                 {{j+1}}){{q.QuestionOptionName}}
               </div>
+            </div> -->
+            <div style="font-size: larger;">{{(p.CorrectAnswer.length == 1 ? 'question.CorrectAnswer' :
+              'question.CorrectAnswers') | translate}}:</div>
+            <div *ngFor="let q of p.CorrectAnswer;let j=index " class="container question-box-question">
+              <div class="row">
+                <div *ngIf="q.optionImg && q.optionImg!=null && q.optionImg!=''"
+                  class="col-12 col-md-4 q-image-container">
+                  <img onerror="this.src='assets/img/logoakt.png'" class="question-image" src="{{q.optionImg}}" />
+                </div>
+                <div [ngClass]="{'col-md-8': q.optionImg && q.optionImg!=null && q.optionImg!=''}" class="col-12">
+                  {{q.QuestionOptionName}}
+                </div>
+              </div>
+            </div>
+            <div *ngIf="p.Explanation != ''">
+              <div style="font-size: larger;">{{'question.Explanation' | translate}}:</div>
+              <div style="padding: 10px;">
+                {{p.Explanation}}
+              </div>
             </div>
           </div>
-          <div class="footerCls" *ngIf="p.Explanation != ''">
+          <!-- <div class="footerCls" *ngIf="p.Explanation != ''">
             {{'question.Explanation' | translate}}:
             <div>
               {{p.Explanation}}
             </div>
-          </div>
+          </div> -->
 
         </div>
       </div>
