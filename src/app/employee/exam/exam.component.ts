@@ -226,7 +226,6 @@ export class Exam implements OnInit {
         this.selectIndex.AnsList.forEach(function (value) {
           obj.addNewAns();
         });
-        console.log(this.selectIndex);
       }
       this.spinner.hide();
     });
