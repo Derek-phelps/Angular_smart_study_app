@@ -34,7 +34,7 @@ export class Exam implements OnInit {
   selectIndex: any;
   nextSub = 0;
   foundVal = 0;
-  isAns = false;
+  // isAns = false;
   currentCourseId = 0;
   public emp_courseId: string;
   public PAGES_Sub_MENU = [];
@@ -123,7 +123,7 @@ export class Exam implements OnInit {
     window.onbeforeunload = undefined;
   }
   onCorrectAnswer() {
-    if (!this.isAns) {
+    if (!this.QustionList[this.indexNo].isAns) {
       var cur = this.selectIndex.CorrectAnswerOptionNumber.toString().split("@");
       var Data = this.myForm.value;
       if (Data.Ans.length == 0) {
@@ -153,10 +153,11 @@ export class Exam implements OnInit {
           }
         }
       }
-      this.isAns = true;
-    } else {
-      this.isAns = false;
+      this.QustionList[this.indexNo].isAns = true;
     }
+    //  else {
+    //   this.isAns = false;
+    // }
   }
   inArray(value, arr): any {
     var no = -1;
@@ -218,12 +219,14 @@ export class Exam implements OnInit {
         this.QustionList = data.ChapQus.map(i => ({
           ...i,
           selectedAns: [],
+          isAns: false
         }))
         this.selectIndex = this.QustionList[0];
         this.selectIndex.hasImage = this.selectIndex.QuestionImg && this.selectIndex.QuestionImg != 'null' && this.selectIndex.QuestionImg != '';
         this.selectIndex.AnsList.forEach(function (value) {
           obj.addNewAns();
         });
+        console.log(this.selectIndex);
       }
       this.spinner.hide();
     });
@@ -243,11 +246,11 @@ export class Exam implements OnInit {
     control.removeAt(i);
   }
   NextQus() {
-    if (!this.isAns) {
+    if (!this.QustionList[this.indexNo].isAns) {
       this.onCorrectAnswer();
     } else {
       var obj = this;
-      this.isAns = false;
+      // this.isAns = false;
       let Data = this.myForm.value;
       this.QustionList[this.indexNo].selectedAns = Data;
 
@@ -280,11 +283,11 @@ export class Exam implements OnInit {
     });
   }
   SubmitQus() {
-    if (!this.isAns) {
+    if (!this.QustionList[this.indexNo].isAns) {
       this.onCorrectAnswer();
     } else {
       var obj = this;
-      this.isAns = false;
+      // this.isAns = false;
       let Data = this.myForm.value;
       this.QustionList[this.indexNo].selectedAns = Data;
       if (this.QustionList.length > 0) {

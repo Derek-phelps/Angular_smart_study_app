@@ -37,14 +37,22 @@
                                 </div>
                             </div>
                         </form>
+                        <div *ngIf="QustionList[indexNo].isAns && selectIndex.Explanation && selectIndex.Explanation!=''"
+                            class="row justify-content-center" style="height: 0;">
+                            <button mat-mini-fab color="primary" #tooltip="matTooltip" (click)="tooltip.toggle()"
+                                [matTooltip]="selectIndex.Explanation" [matTooltipPosition]="'above'">
+                                <mat-icon>info</mat-icon>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div class="clearfix"></div>
                 <div style="height: 95px;text-align: center;">
                     <button mat-stroked-button class="nav-button" *ngIf="indexNo!=0"
                         (click)="BackQus()">{{'question.Back' | translate}}</button>
-                    <button mat-stroked-button class="nav-button"
-                        (click)="onCorrectAnswer()">{{'question.CorrectAnswers' | translate}}</button>
+                    <button mat-stroked-button class="nav-button" (click)="onCorrectAnswer()"
+                        [disabled]="QustionList[indexNo] && QustionList[indexNo].isAns">{{'question.CorrectAnswers' |
+                        translate}}</button>
                     <button mat-stroked-button class="nav-button" *ngIf="indexNo!=QustionList.length-1"
                         (click)="NextQus()">{{'question.Next' | translate}}</button>
                     <button mat-stroked-button class="nav-button" *ngIf="indexNo==QustionList.length-1"
