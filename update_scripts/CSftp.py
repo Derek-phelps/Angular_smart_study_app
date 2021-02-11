@@ -139,7 +139,7 @@ class CSftp(QtCore.QObject):
             self.__removeDirectory(updateDir + '/assets/i18n/' + delSubFolder)
 
         self.__deleteFiles([updateDir + '/API/index.php', updateDir + '/API/test.php',
-                            updateDir + '/API/loadData.php', updateDir + '/API/.htaccess'])
+                            updateDir + '/API/loadData.php', updateDir + '/API/.htaccess', updateDir + '/API/application/config/autoload.php'])
 
         # Delete API controller files
         self.__deleteFilesInFolder(updateDir + '/API/application/controllers')
@@ -165,6 +165,8 @@ class CSftp(QtCore.QObject):
         self.m_ftpClient.put(apiDir + '/index.php', 'API/index.php')
         # self.m_ftpClient.put(apiDir + '/loadData.php', 'API/loadData.php')
         self.m_ftpClient.put(apiDir + '/.htaccess', 'API/.htaccess')
+        self.m_ftpClient.put(
+            apiDir + '/application/config/autoload.php', 'API/application/config/autoload.php')
         self.m_ftpClient.chdir('API/application')
         wdAPIApplication = self.m_ftpClient.getcwd()
         # Upload new controllers
