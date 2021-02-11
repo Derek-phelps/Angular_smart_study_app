@@ -39,7 +39,7 @@
       <button mat-stroked-button class="overview-button" (click)="BackBut()">{{'backToCourseOverview' |
         translate}}</button>
     </div>
-    <div class="msg-entrance">
+    <div class="msg-entrance" *ngIf="showLangProfile">
       <span mat-button [matMenuTriggerFor]="langMenu" class="fa fa-globe" matTooltip="Sprache/Language"></span>
     </div>
     <mat-menu #langMenu="matMenu">
@@ -70,7 +70,7 @@
         </table>
       </button>
     </mat-menu>
-    <div class="msg-entrance">
+    <div class="msg-entrance" *ngIf="showLangProfile">
       <span mat-button [matMenuTriggerFor]="menu" class="fa fa-user-circle"></span>
     </div>
     <mat-menu #menu="matMenu">

@@ -19,6 +19,7 @@ export class PagesTopComponent {
   @Input() pagInfo: boolean = false;
   @Input() chapterId = 0;
   @Input() showMenuIcon: boolean = true;
+  @Input() showLangProfile: boolean = true;
   sidebarToggle: boolean = true;
   tip = { ring: false, email: false };
 
