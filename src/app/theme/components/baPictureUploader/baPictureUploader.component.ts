@@ -22,6 +22,7 @@ export class BaPictureUploader {
     data: {}
   };
   @Input() canDelete: boolean = true;
+  @Input() acceptType: string = 'image/*';
 
   @Output() onUpload = new EventEmitter<any>();
   @Output() onUploadCompleted = new EventEmitter<any>();
@@ -40,12 +41,12 @@ export class BaPictureUploader {
   private uploadFile: any = undefined;
 
   constructor(
-    private renderer: Renderer2, 
-    private http: HttpClient, 
-    private translate: TranslateService, 
+    private renderer: Renderer2,
+    private http: HttpClient,
+    private translate: TranslateService,
     public _globals: Globals,
     private snackbar: MatSnackBar
-    ) {
+  ) {
     this.options = { concurrency: 1, maxUploads: 1 };
 
     if (this.translate.currentLang != this._globals.userInfo.userLang) {
@@ -102,7 +103,7 @@ export class BaPictureUploader {
 
 
   _onUploadCompleted(data): void {
-    if (data.success) { this._changePicture(this.uploadFile);} 
+    if (data.success) { this._changePicture(this.uploadFile); }
     else { this.snackbar.open(this.translate.instant('alert.uploadImgFail'), '', { duration: 3000 }); }
     this.uploadFile = undefined;
     this.uploadInProgress = false;
@@ -124,3 +125,18 @@ export class BaPictureUploader {
     }
   }
 }
+
+
+// if (fileEnding.match(/(jpg|jpeg|png|gif)$/i)) {
+//   return this.picture;
+// } else if (fileEnding.match(/(csv)$/i)) {
+//   return 'assets/img/theme/csv.png';
+// } else if (fileEnding.match(/(7z|rar|z|zip)$/i)) {
+//   return 'assets/img/theme/zip.png';
+// } else if (fileEnding.match(/(doc|docx)$/i)) {
+//   return 'assets/img/theme/word.png';
+// } else if (fileEnding.match(/(xls|xlsx|xlsm)$/i)) {
+//   return 'assets/img/theme/excel.png';
+// } else {
+//   return 'assets/img/theme/file.png';
+// }

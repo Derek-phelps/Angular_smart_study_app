@@ -12,6 +12,6 @@
   </div>
   <i class="fa fa-trash" (click)="removePicture();" *ngIf="picture != '' && canDelete"></i>
   <a href class="change-picture" (click)="bringFileSelector();">{{imageTitle}}</a>
-  <input #fileUpload type="file" accept="image/*" hidden  (change)="beforeUpload($event.target.files)" > 
+  <input #fileUpload type="file" [accept]="acceptType" hidden (change)="beforeUpload($event.target.files)">
 
 </div>
