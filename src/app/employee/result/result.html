@@ -25,12 +25,6 @@
                 </div>
               </div>
             </div>
-            <!-- <div class="QustionAns">
-              {{'question.CorrectAnswer' | translate}}:
-              <div *ngFor="let q of p.CorrectAnswer;let j=index ">
-                {{j+1}}){{q.QuestionOptionName}}
-              </div>
-            </div> -->
             <div style="font-size: larger;">{{(p.CorrectAnswer.length == 1 ? 'question.CorrectAnswer' :
               'question.CorrectAnswers') | translate}}:</div>
             <div *ngFor="let q of p.CorrectAnswer;let j=index " class="container question-box-question">
@@ -51,13 +45,6 @@
               </div>
             </div>
           </div>
-          <!-- <div class="footerCls" *ngIf="p.Explanation != ''">
-            {{'question.Explanation' | translate}}:
-            <div>
-              {{p.Explanation}}
-            </div>
-          </div> -->
-
         </div>
       </div>
     </div>
