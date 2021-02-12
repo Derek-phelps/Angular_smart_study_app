@@ -67,8 +67,10 @@ import { CoreModule } from 'src/app/core/core.module';
     MatCheckboxModule,
     MatSortModule, MatTableModule, MatPaginatorModule,
     QRCodeModule, SharedAppModule, /*SatDatepickerModule, SatNativeDateModule,*/ AppMaterialModule,
-    ChartsModule, CourseAssignmentModule
+    ChartsModule, CourseAssignmentModule,
     DragDropModule,
+    CourseTestComponent,
+    ContentModule
   ],
   entryComponents: [BottomSheetModifyCourse, SubChapterOverviewDialog],
   declarations: [
@@ -88,7 +90,7 @@ import { CoreModule } from 'src/app/core/core.module';
     CourseChaptersComponent,
     CourseTestsComponent,
     CourseCertificateComponent
-    ],
+  ],
   providers: [
     AdminCourseService
   ],
