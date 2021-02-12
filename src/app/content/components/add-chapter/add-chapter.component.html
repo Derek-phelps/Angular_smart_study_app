@@ -1,0 +1,86 @@
+<div class="container" #holder>
+    <!-- <pre>{{ addChapterForm.value | json }}</pre> -->
+    <form [formGroup]="addChapterForm">
+        <mat-form-field style="width: 100%;">
+            <input matInput type="text" formControlName="title" maxlength="100"
+                placeholder="{{'chapter.Name' | translate}}*">
+        </mat-form-field>
+        <mat-tab-group>
+            <mat-tab label="{{'chapter.SubChapters' | translate}}">
+                <div class="mt-4"></div>
+                <mat-accordion cdkDropList (cdkDropListDropped)="reorder($event)" class="droppable">
+                    <ng-container formArrayName="subChapters">
+                        <ng-container *ngFor="let chapterControls of subChapters.controls; index as i"
+                            [formGroupName]="i">
+                            <mat-expansion-panel [expanded]="openedSubChapter === i" (opened)="setOpenedPanel(i)"
+                                (closed)="checkPanelClosed(i)">
+                                <mat-expansion-panel-header cdkDrag>
+                                    {{ chapterControls.get('title').value }}
+                                </mat-expansion-panel-header>
+                                <mat-form-field style="width: 100%;">
+                                    <input matInput type="text" formControlName="title" maxlength="100"
+                                        placeholder="{{'chapter.SubName' | translate}}*">
+                                </mat-form-field>
+                                <p-editor formControlName="text" [style]="{ 'height':'320px' }" [modules]="quillModules"
+                                    [bounds]="holder">
+                                    <p-header>
+                                        <!-- This has to stay empty to allow quill full control over the toolbar -->
+                                    </p-header>
+                                </p-editor>
+                                <div class="d-flex">
+                                    <div class="">
+                                        <mat-error
+                                            *ngIf="chapterControls.get('text').touched && !chapterControls.get('text').valid"
+                                            class="mt-2">
+                                            {{'chapter.TextArea' | translate}}
+                                        </mat-error>
+                                        <div class="d-flex flex-column justify-content-start mt-4">
+                                            <div>
+                                                <ba-picture-uploader imageTitle="{{ 'chapter.FileUpload' | translate }}"
+                                                    [FileuploadInput]="uploaderOptions"
+                                                    (onUploadCompleted)="fileUploaded($event, i)"
+                                                    (onUpload)="preventSave = true" [defaultPicture]="defaultImage"
+                                                    [picture]="chapterControls.get('filePath').value" [acceptType]="''">
+                                                </ba-picture-uploader>
+                                            </div>
+                                            <div *ngIf="chapterControls.get('filePath').value!=''">
+                                                <mat-checkbox formControlName="isDownloadable" class="mx-2 my-auto"
+                                                    matTooltip="{{ 'chapter.AllowDownloadDesc' | translate }}">
+                                                    {{ 'chapter.AllowDownload' | translate}}
+                                                </mat-checkbox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-auto ml-auto">
+                                        <button mat-stroked-button class="mat-error" (click)="deleteSubChapter(i)">
+                                            <i class="fa fa-trash mr-2"></i>{{'chapter.DeleteSubChapter' | translate}}
+                                        </button>
+                                    </div>
+                                </div>
+                            </mat-expansion-panel>
+                        </ng-container>
+                    </ng-container>
+                </mat-accordion>
+                <div class="d-flex justify-content-end">
+                    <button mat-stroked-button class="mt-4" (click)="addSubChapter()">
+                        <i class="fa fa-plus mr-2"></i>{{'chapter.AddSubChapter' | translate}}
+                    </button>
+                </div>
+            </mat-tab>
+            <mat-tab label="{{'question.Questions' | translate}}">
+                <question-container (questionDeleted)="deleteQuestion($event)">
+                </question-container>
+            </mat-tab>
+        </mat-tab-group>
+        <div class="d-flex justify-content-between mt-4">
+            <div>
+                <mat-hint *ngIf="questions.length == 0" class="warning">
+                    {{'question.NoQuestionFoundChapter' | translate}}
+                </mat-hint>
+            </div>
+            <button mat-raised-button (click)="saveChapter()" [disabled]="preventSave">
+                <i class="fa fa-save mr-2"></i>{{'chapter.SaveChapter' | translate}}
+            </button>
+        </div>
+    </form>
+</div>

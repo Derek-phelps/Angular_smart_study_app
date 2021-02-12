@@ -16,27 +16,46 @@ import { AppTranslationModule } from '../app.translation.module';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { AddContentComponent } from './components/add-content/add-content.component';
-import { EditContentComponent } from './components/edit-content/edit-content.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule, DateAdapter } from '@angular/material/core';
 import { MatSliderModule } from '@angular/material/slider';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { QRCodeModule } from 'angularx-qrcode';
 import { SubChapterOverviewDialog } from './content.component';
+import { AddChapterComponent } from './components/add-chapter/add-chapter.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTabsModule } from '@angular/material/tabs';
+import { EditorModule } from 'primeng/editor';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { PendingChangesGuardGuard } from './pending-changes-guard.guard';
+import { CoreModule } from '../core/core.module';
+
 @NgModule({
   imports: [
-    NgxMaterialTimepickerModule, QRCodeModule,
-    MatCheckboxModule, MatNativeDateModule, MatDatepickerModule, CommonModule, routing, AppTranslationModule, MatCardModule, MatFormFieldModule, MatInputModule, MatListModule, MatDialogModule,
-    LayoutModule, MatTableModule, MatSortModule, MatPaginatorModule, FormsModule, ReactiveFormsModule
+    CoreModule,
+    CommonModule, 
+    routing, 
+    MatCardModule, 
+    LayoutModule, 
+    MatTableModule, 
+    MatSortModule, 
+    MatPaginatorModule, 
+    MatTabsModule,
+    EditorModule,
   ],
   entryComponents: [
     SubChapterOverviewDialog
   ],
-  declarations: [ContentComponent,
-    AddContentComponent, EditContentComponent, SubChapterOverviewDialog],
+  declarations: [
+    ContentComponent,
+    SubChapterOverviewDialog, 
+    AddChapterComponent],
   providers: [
-    ContentService
+    ContentService,
+    PendingChangesGuardGuard
   ]
 })
 export class ContentModule { }

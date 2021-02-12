@@ -9,6 +9,8 @@ import { PdfViewerModule } from 'ng2-pdf-viewer';
 import { LayoutModule } from '../../theme/layout.module';
 import { SharedModule } from '../../theme/shared.module';
 
+import { AppMaterialModule } from '../../app-material/app-material.module';
+
 import { VgCoreModule } from '@videogular/ngx-videogular/core'
 import { VgControlsModule } from '@videogular/ngx-videogular/controls';
 import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
@@ -32,7 +34,8 @@ import { SafePipe } from './reading.component';
     VgCoreModule,
     VgControlsModule,
     VgOverlayPlayModule,
-    VgBufferingModule
+    VgBufferingModule,
+    AppMaterialModule
   ],
   declarations: [
     Reading,

@@ -32,9 +32,10 @@
                 label="{{'menu.Content' | translate}}">
                 <course-chapters [courseData]="data"></course-chapters>
             </mat-tab>
-            <mat-tab [disabled]="data.courseInfo.isScormCourse!=0 || data.courseInfo.permission!=2"
+            <mat-tab [disabled]="data.courseInfo.isScormCourse!=0 || data.courseInfo.permission!=2 || data.courseInfo.duration == 0"
                 label="{{'menu.Test' | translate}}">
-                <course-tests [courseData]="data"></course-tests>
+                <!-- <course-tests [courseData]="data"></course-tests> -->
+                <course-test [courseData]="data"></course-test>
             </mat-tab>
             <mat-tab label="{{'certificate.Certificate' | translate}}">
                 <course-certificate [courseData]="data" (updateData)="updateData()">

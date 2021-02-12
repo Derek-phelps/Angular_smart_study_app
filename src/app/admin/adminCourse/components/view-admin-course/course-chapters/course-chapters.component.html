@@ -1,22 +1,24 @@
-<div *ngIf="chapterData$ | async as chapterData;">
+<!-- <pre>{{chapterData | json }}</pre> -->
+<div *ngIf="chapterData$ | async">
     <div [ngClass]="{'hide-tab': courseInfo.isScormCourse != 0 || courseInfo.permission != 2}">
         <div style="float: right;" (click)="addChapter()"
             matTooltip="{{'chapter.AddNewChapter' | translate}}" [matTooltipPosition]="'left'">
             <i class="fa fa-plus-circle iconSize" style="cursor: pointer;"></i>
         </div>
 
-        <div *ngIf="!dataSourceChapter"
+        <div *ngIf="dataSourceChapter && dataSourceChapter.data.length == 0"
             style="padding: 1em;">
             {{'chapter.NoChapterFound' | translate}}
         </div>
         <div *ngIf="dataSourceChapter && dataSourceChapter.data.length > 0">
-            <table mat-table [dataSource]="dataSourceChapter" class="mat-elevation-z8">
+            <table mat-table [dataSource]="dataSourceChapter" class="mat-elevation-z8" cdkDropList
+            (cdkDropListDropped)="reorder($event)">
 
                 <!-- Position Column -->
-                <ng-container matColumnDef="chapterId">
+                <!-- <ng-container matColumnDef="chapterId">
                     <th mat-header-cell *matHeaderCellDef>{{ 'chapter.chapterId' | translate }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.chapterId }} </td>
-                </ng-container>
+                </ng-container> -->
                 <!-- Position Column -->
                 <ng-container matColumnDef="chapterName">
                     <th mat-header-cell *matHeaderCellDef>{{ 'chapter.Name' | translate }}</th>
@@ -33,11 +35,16 @@
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumnsChapter"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumnsChapter;"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsChapter;" cdkDrag></tr>
             </table>
             <mat-paginator #ContentPaginator [pageSizeOptions]="[5, 10, 20, 50, 100]" [pageSize]="50"
                 showFirstLastButtons>
             </mat-paginator>
         </div>
+    </div>
+    <div class="mt-4 float-right">
+        <button mat-raised-button  *ngIf="showSaveOrderingButton" (click)="saveChapter()">
+            <i class="fa fa-save mr-2"></i>{{'chapter.SaveChapter' | translate}}
+        </button>
     </div>
 </div>

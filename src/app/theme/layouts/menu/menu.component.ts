@@ -12,6 +12,7 @@ import { Globals } from 'src/app/common/auth-guard.service';
 })
 export class MenuComponent {
   @Input() menuInfo: any;
+  @Input() showSeparators = true;
   appendDepartments = false;
   appendGroups = false;
   appendCourses = false;

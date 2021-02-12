@@ -54,15 +54,21 @@ import { CourseParticipantsComponent } from './components/view-admin-course/cour
 import { CourseChaptersComponent } from './components/view-admin-course/course-chapters/course-chapters.component';
 import { CourseTestsComponent } from './components/view-admin-course/course-tests/course-tests.component';
 import { CourseCertificateComponent } from './components/view-admin-course/course-certificate/course-certificate.component';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { CourseTestComponent } from './components/view-admin-course/course-test/course-test.component';
+import { ContentModule } from 'src/app/content/content.module';
+import { CoreModule } from 'src/app/core/core.module';
 
 @NgModule({
   imports: [
-    CommonModule, CourseRoutingModule, MatListModule, MatDialogModule, LayoutModule,
+    CommonModule, CoreModule,
+    CourseRoutingModule, MatListModule, MatDialogModule, LayoutModule,
     FormsModule, ReactiveFormsModule, AppTranslationModule,
     MatCheckboxModule,
     MatSortModule, MatTableModule, MatPaginatorModule,
     QRCodeModule, SharedAppModule, /*SatDatepickerModule, SatNativeDateModule,*/ AppMaterialModule,
     ChartsModule, CourseAssignmentModule
+    DragDropModule,
   ],
   entryComponents: [BottomSheetModifyCourse, SubChapterOverviewDialog],
   declarations: [
@@ -82,7 +88,7 @@ import { CourseCertificateComponent } from './components/view-admin-course/cours
     CourseChaptersComponent,
     CourseTestsComponent,
     CourseCertificateComponent
-  ],
+    ],
   providers: [
     AdminCourseService
   ],

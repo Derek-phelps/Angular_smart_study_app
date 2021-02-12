@@ -1,0 +1,14 @@
+@import '../../style.scss';
+
+.container {
+    max-width: 1000px;
+}
+
+.warning {
+    color:orange !important;
+}
+
+.draggable {
+    cursor: grab;
+}
+

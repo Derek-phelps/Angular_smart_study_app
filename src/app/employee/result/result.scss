@@ -1,1 +1,24 @@
 @import '../../theme/sass/treeView';
+
+.question-box {
+    background-color: white;
+    color: black;
+    padding: 2em;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    .question-box-question {
+        padding: 20px;
+        border: 1px outset rgba(0,0,0,0.1);
+        border-radius: 5px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+        .q-image-container {
+            text-align: center;
+            .question-image {
+                max-height: 300px;
+                max-width: 100%;
+                object-fit: contain;
+            }
+        }
+    }
+}

@@ -1,0 +1,39 @@
+<div class="mt-4"></div>
+<form [formGroup]="parentForm">
+    <mat-accordion
+        cdkDropList
+        (cdkDropListDropped)="reorder($event)"
+        class="droppable">
+        <ng-container formArrayName="questions">
+            <ng-container *ngFor="let questionControls of questions.controls; index as i" [formGroupName]="i">
+                <mat-expansion-panel [expanded]="openedQuestion === i" 
+                    (opened)="setOpenedPanel(i)" (closed)="checkPanelClosed(i)">
+                    <mat-expansion-panel-header cdkDrag>
+                        <mat-panel-title>
+                            {{ questionControls.get('text').value }}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <i class="fa fa-trash ml-auto iconbutton" 
+                               (click)="deleteQuestion($event, i)"
+                               matTooltip="{{ 'question.Delete' | translate }}"></i>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+                        <question></question>
+                </mat-expansion-panel>
+            </ng-container>
+        </ng-container>
+    </mat-accordion>
+    <div class="d-flex justify-content-between">
+        <div class="mt-4">
+            <mat-checkbox *ngIf="questions.length > 0"
+                formControlName="ignoreOrder"
+                matTooltip="{{ 'question.IgnoreOrderDesc' | translate }}">
+                {{ 'question.IgnoreOrder' | translate}}
+            </mat-checkbox>
+        </div>
+        <button mat-stroked-button class="mt-4" 
+            (click)="addQuestion()">
+            <i class="fa fa-plus mr-2"></i>{{'question.NewQuestion' | translate}}
+        </button>
+    </div>
+</form>

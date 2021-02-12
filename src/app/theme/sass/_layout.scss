@@ -33,6 +33,10 @@ main {
   }
 }
 
+.mat-checkbox-layout {
+  margin: 0;
+}
+
 @media screen and (-ms-high-contrast: active), (-ms-high-contrast: none) {
   html {
     overflow: hidden;
@@ -143,15 +147,15 @@ a {
   }
 }
 
-.al-content {
-  padding: 8px 32px 8px 40px;
-}
+// .al-content {
+//   padding: 8px 32px 8px 40px;
+// }
 
-@media screen and (max-width: $resXS) {
-  .al-content {
-    padding: 8px 20px;
-  }
-}
+// @media screen and (max-width: $resXS) {
+//   .al-content {
+//     padding: 8px 20px;
+//   }
+// }
 
 .vis-hidden {
   visibility: hidden;

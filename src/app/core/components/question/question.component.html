@@ -1,0 +1,74 @@
+<form [formGroup]="parentForm">
+    <div class="row">
+        <div class="col-3">
+            <ba-picture-uploader  imageTitle="{{ 'chapter.FileUpload' | translate }}"
+                [FileuploadInput]="uploaderOptions" (onUploadCompleted)="questionFileUploaded($event)" (onUpload)="preventSave = true"
+                [picture]="parentForm.get('imagePath').value" [defaultPicture]="defaultImage">
+            </ba-picture-uploader>
+            <!-- <image-chooser (imageChanged)="questionImageChanged(i, $event)"></image-chooser> -->
+        </div>
+        <div class="col-9">
+            <div>
+                <mat-form-field class="w-100">
+                    <textarea matInput type="text" formControlName="text"
+                        cdkTextareaAutosize
+                        cdkAutosizeMinRows="3"
+                        placeholder="{{'question.Question' | translate}}*"></textarea>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field class="w-100">
+                    <textarea matInput type="text" formControlName="explanation"
+                        cdkTextareaAutosize
+                        cdkAutosizeMinRows="3"
+                        matTooltip="{{ 'question.ExplanationDesc' | translate }}"
+                        placeholder="{{'question.Explanation' | translate}}"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+    <hr/>
+    <ng-container formArrayName="answers">
+        <ng-container *ngFor="let answerControls of answers.controls; index as j" [formGroupName]="j">
+            <div class="row mt-4">
+                <div class="col-3">
+                    <ba-picture-uploader  imageTitle="{{ 'chapter.FileUpload' | translate }}"
+                        [FileuploadInput]="uploaderOptions" (onUploadCompleted)="answerFileUploaded($event, j)" (onUpload)="preventSave = true"
+                        [picture]="this.answers.controls[j].get('imagePath').value" [defaultPicture]="defaultImage">
+                    </ba-picture-uploader>
+                </div>
+                <span class="col-9 d-flex flex-column">
+                    <div class="">
+                        <mat-form-field class="w-100">
+                            <textarea matInput type="text" formControlName="text"
+                                cdkTextareaAutosize 
+                                placeholder="{{'question.PossibleAnswer' | translate}}*"></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div>    
+                        <mat-checkbox class="float-right" 
+                            formControlName="isCorrect">{{'question.CorrectAnswer' | translate}}
+                        </mat-checkbox>
+                    </div>
+                    <div class="mt-auto ml-auto">
+                        <button mat-stroked-button class="mt-4 mat-error" 
+                            (click)="deleteAnswer(j)">
+                            <i class="fa fa-trash mr-2"></i>{{ 'question.DeleteAnswer' | translate }}
+                        </button>
+                    </div>
+                </span>
+            </div>
+        </ng-container>
+    </ng-container>
+    <div class="d-flex justify-content-between mt-4">
+        <div>
+            <mat-error *ngIf="answers.getError('atLeastOneCorrectRequired')">
+                {{'question.AtLeastOneCorrectRequired' | translate}}
+            </mat-error>
+        </div>
+        <button mat-stroked-button 
+            (click)="addAnswer()">
+            <i class="fa fa-plus mr-2 draggable"></i>{{'question.AddOption' | translate}}
+        </button>
+    </div>
+</form>
