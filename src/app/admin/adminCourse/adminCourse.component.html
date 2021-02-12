@@ -46,7 +46,8 @@
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'course.Course' | translate}}</th>
                     <td (click)="viewCourse(course.courseId)" style="cursor: pointer;" mat-cell *matCellDef="let course"
                         [attr.colspan]="bCoursesFound ? 1 : 6">
-                        <b>{{course.courseName}}</b></td>
+                        <b>{{course.courseName}}</b>
+                    </td>
                 </ng-container>
                 <ng-container matColumnDef="sumAss">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'course.SumAss' | translate}}</th>
@@ -88,8 +89,7 @@
                 *ngIf="_globals.userInfo.isAdmin || _globals.canCreateCourses">
                 <!-- <button (click)="addCourse()"
                     class="form-control open-button">{{'course.CreateNew' | translate}}</button> -->
-                <button mat-stroked-button 
-                    (click)="addCourse()">{{'course.CreateNew' | translate}}</button>
+                <button mat-stroked-button (click)="addCourse()">{{'course.CreateNew' | translate}}</button>
             </div>
         </div>
         <!-- <div class="content" [@visibilityChanged]="(!bCategoryView && groupList.data.length > 0) ? 'shown' : 'hidden'">

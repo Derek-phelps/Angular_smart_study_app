@@ -53,109 +53,109 @@ export class QuestionService {
   //     .pipe(catchError(this.handleError))
   // }
 
-  getAllQuestionsByChapter(courseId : number, chapterId : number) : Observable<any> {
+  getAllQuestionsByChapter(courseId: number, chapterId: number): Observable<any> {
     return this._getAllQuestions(courseId).pipe(
-      map( questions => questions.filter(q => q['chapterId'] == ''+chapterId))
+      map(questions => questions.filter(q => q['chapterId'] == '' + chapterId))
     );
   }
 
-  getAllCourseQuestions(courseId : number) : Observable<any> {
+  getAllCourseQuestions(courseId: number): Observable<any> {
     return this._getAllQuestions(courseId).pipe(
-      map( questions => questions.filter(q => q['chapterId'] === '0'))
+      map(questions => questions.filter(q => q['chapterId'] === '0'))
     );
   }
 
-  public _getAllQuestions(courseId : number): Observable<any> {
+  public _getAllQuestions(courseId: number): Observable<any> {
     let formData: FormData = new FormData();
-    let questions : Array<any> = [];
-    formData.append('companyId', ''+this._globals.companyInfo.companyId);
-    formData.append('courseId', ''+courseId);
+    let questions: Array<any> = [];
+    formData.append('companyId', '' + this._globals.companyInfo.companyId);
+    formData.append('courseId', '' + courseId);
     return this._http.post(this._getQuestionByUrl, formData).pipe(
       switchMap(result => from(result['data'])),
       mergeMap(data => this.getByQuestionById(data['questionId'])),
       map(result => result['data'][0]),
       tap(data => {
         //console.log(data);
-        let answers : Array<any> = []
+        let answers: Array<any> = []
         data['QuestionOption'].forEach(q => {
           answers.push({
-            'id' : q['QuestionOptionId'],
-            'index' : q['QuestionOptionIndex'],
-            'text' : q['QuestionOptionName'],
-            'imagePath' : q['optionImg'] == '' ? '' : this._globals.adminURL + '/' + q['optionImg'],
-            'isCorrect' : data['CorrectAnswerOptionNumber'].split('@').find(o => o == q['QuestionOptionIndex']) != undefined,
+            'id': q['QuestionOptionId'],
+            'index': q['QuestionOptionIndex'],
+            'text': q['QuestionOptionName'],
+            'imagePath': q['optionImg'] == '' ? '' : this._globals.adminURL + '/' + q['optionImg'],
+            'isCorrect': data['CorrectAnswerOptionNumber'].split('@').find(o => o == q['QuestionOptionIndex']) != undefined,
           });
         });
 
         questions.push({
-          'id' : data['questionId'],
-          'text' : data['Question'],
-          'chapterId' : data['chapterId'],
-          'courseId' : data['CourseId'],
-          'imagePath' : data['QuestionImg'] == '' ? '' : this._globals.adminURL + '/' + data['QuestionImg'],
-          'explanation' : data['Explanation'],
-          'index' : data['Q_index'],
-          'answers' : answers
+          'id': data['questionId'],
+          'text': data['Question'],
+          'chapterId': data['chapterId'],
+          'courseId': data['CourseId'],
+          'imagePath': data['QuestionImg'] == '' ? '' : this._globals.adminURL + '/' + data['QuestionImg'],
+          'explanation': data['Explanation'],
+          'index': data['Q_index'],
+          'answers': answers
         });
       }),
       toArray(),
-      switchMap( _ => of(questions)),
+      switchMap(_ => of(questions)),
     ).pipe(catchError(this.handleError))
   }
 
 
-  addChapterQuestion(courseId : number, chapterId : number, question : any): Observable<any> {
+  addChapterQuestion(courseId: number, chapterId: number, question: any): Observable<any> {
     return this._http.post(this._addQustionUrl, this._unparseQuestion(question, courseId, chapterId))
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
 
-  editChapterQuestion(courseId : number, chapterId : number, question : any): Observable<any> {
-    let data : FormData = this._unparseQuestion(question, courseId, chapterId);
+  editChapterQuestion(courseId: number, chapterId: number, question: any): Observable<any> {
+    let data: FormData = this._unparseQuestion(question, courseId, chapterId);
     data.append('deleteOptions', JSON.stringify(question.deleteOptions));
     return this._http.post(this._editQuestionUrl, data)
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
 
-  addCourseQuestion(courseId : number, question : any): Observable<any> {
+  addCourseQuestion(courseId: number, question: any): Observable<any> {
     return this._http.post(this._addQustionUrl, this._unparseQuestion(question, courseId, 0))
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
 
-  editCourseQuestion(courseId : number, question : any): Observable<any> {
-    let data : FormData = this._unparseQuestion(question, courseId, 0);
+  editCourseQuestion(courseId: number, question: any): Observable<any> {
+    let data: FormData = this._unparseQuestion(question, courseId, 0);
     data.append('deleteOptions', JSON.stringify(question.deleteOptions));
     return this._http.post(this._editQuestionUrl, data)
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
 
-  private _unparseQuestion(question : any, courseId : number, chapterId : number) : FormData {
+  private _unparseQuestion(question: any, courseId: number, chapterId: number): FormData {
     let formData: FormData = new FormData();
-    let correctAnswers : Array<number> = []
-    formData.append('CourceId', ''+courseId);
-    formData.append('ChapterId', ''+chapterId);
-    formData.append('qustionText', ''+question['text']);
-    formData.append('qustionImg', ''+question['imagePath'].replace(this._globals.adminURL + '/', ''));
-    formData.append('questionId', ''+question['id']);
-    formData.append('Q_index', ''+question['index']);
-    formData.append('Explanation', ''+question['explanation']);
+    let correctAnswers: Array<number> = []
+    formData.append('CourceId', '' + courseId);
+    formData.append('ChapterId', '' + chapterId);
+    formData.append('qustionText', '' + question['text']);
+    formData.append('qustionImg', '' + question['imagePath'].replace(this._globals.adminURL + '/', ''));
+    formData.append('questionId', '' + question['id']);
+    formData.append('Q_index', '' + question['index']);
+    formData.append('Explanation', '' + question['explanation']);
     formData.append('companyId', this._globals.companyInfo.companyId + "");
     formData.append('createdBy', this._globals.companyInfo.companyId + "");
     formData.append('IsTraning', '0');
-    let answers : Array<any> = [];
-    question['answers'].forEach( a => {
+    let answers: Array<any> = [];
+    question['answers'].forEach(a => {
       answers.push({
-        'ans' : a['text'],
-        'CurAns' : a['isCorrect'],
-        'QuestionOptionID' : a['id'] ? ''+a['id'] : null,
-        'QuestionOptionIndex' : ''+a['index'],
-        'optionImg' : ''+a['imagePath'].replace(this._globals.adminURL + '/', '')
+        'ans': a['text'],
+        'CurAns': a['isCorrect'],
+        'QuestionOptionID': a['id'] ? '' + a['id'] : null,
+        'QuestionOptionIndex': '' + a['index'],
+        'optionImg': '' + a['imagePath'].replace(this._globals.adminURL + '/', '')
       })
 
-      if(a['isCorrect']) { correctAnswers.push(a['index']); }
+      if (a['isCorrect']) { correctAnswers.push(a['index']); }
     })
     formData.append('answers', JSON.stringify(answers));
     return formData;
