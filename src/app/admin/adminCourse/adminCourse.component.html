@@ -89,7 +89,8 @@
                 *ngIf="_globals.userInfo.isAdmin || _globals.canCreateCourses">
                 <!-- <button (click)="addCourse()"
                     class="form-control open-button">{{'course.CreateNew' | translate}}</button> -->
-                <button mat-stroked-button (click)="addCourse()">{{'course.CreateNew' | translate}}</button>
+                <button mat-stroked-button (click)="addCourse()" style="margin: auto;">{{'course.CreateNew' |
+                    translate}}</button>
             </div>
         </div>
         <!-- <div class="content" [@visibilityChanged]="(!bCategoryView && groupList.data.length > 0) ? 'shown' : 'hidden'">
