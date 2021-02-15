@@ -1,4 +1,4 @@
-import { Component, ViewChild, Input, Output, EventEmitter, ElementRef, Renderer2 } from '@angular/core';
+import { Component, ViewChild, Input, Output, EventEmitter, ElementRef, Renderer2, SimpleChanges } from '@angular/core';
 import { UploadOutput, UploadInput, UploadFile, humanizeBytes, UploaderOptions } from 'ngx-uploader';
 import { HttpClientModule, HttpClient, HttpRequest, HttpResponse, HttpEventType } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
@@ -57,6 +57,17 @@ export class BaPictureUploader {
     this.humanizeBytes = humanizeBytes;
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.picture && changes.picture.currentValue != '' && changes.picture.firstChange) {
+      console.log(changes.picture);
+      let nonDisplayable = this.checkAndGetNonDisplayablePath(changes.picture.currentValue);
+      if (nonDisplayable != undefined) {
+        this.picture = nonDisplayable;
+      }
+    }
+
+  }
+
   beforeUpload(fi: File[]): void {
     if (fi.length) {
       this.uploadFile = fi[0];
@@ -92,9 +103,17 @@ export class BaPictureUploader {
     return false;
   }
 
-  _changePicture(file: File): void {
+  _changePicture(file: File, uploadedFileName: string = undefined): void {
     const reader = new FileReader();
     reader.addEventListener('load', (event: Event) => {
+      if (uploadedFileName != undefined) {
+        // this.picture = this._globals.WebURL + '/API/img/Course/' + file;
+        let nonDisplayable = this.checkAndGetNonDisplayablePath(uploadedFileName);
+        if (nonDisplayable != undefined) {
+          this.picture = nonDisplayable;
+          return;
+        }
+      }
       this.picture = (<any>event.target).result;
     }, false);
     reader.readAsDataURL(file);
@@ -103,7 +122,7 @@ export class BaPictureUploader {
 
 
   _onUploadCompleted(data): void {
-    if (data.success) { this._changePicture(this.uploadFile); }
+    if (data.success) { this._changePicture(this.uploadFile, data.data); }
     else { this.snackbar.open(this.translate.instant('alert.uploadImgFail'), '', { duration: 3000 }); }
     this.uploadFile = undefined;
     this.uploadInProgress = false;
@@ -122,6 +141,27 @@ export class BaPictureUploader {
       this._onUploadCompleted(output.file.response);
     } else if (output.type === 'rejected' && typeof output.file !== 'undefined') {
       this.uploadInput.emit(this.FileuploadInput);
+    }
+  }
+
+  checkAndGetNonDisplayablePath(filePath) {
+    let fileEnding = filePath.split('.').pop().toLowerCase();
+    if (fileEnding.match(/(jpg|jpeg|png|gif)$/i)) {
+      return undefined;
+    } else if (fileEnding.match(/(csv)$/i)) {
+      return '/assets/img/theme/csv.png';
+    } else if (fileEnding.match(/(7z|rar|z|zip)$/i)) {
+      return '/assets/img/theme/zip.png';
+    } else if (fileEnding.match(/(doc|docx)$/i)) {
+      return '/assets/img/theme/word.png';
+    } else if (fileEnding.match(/(xls|xlsx|xlsm)$/i)) {
+      return '/assets/img/theme/excel.png';
+    } else if (fileEnding.match(/(ppt|pptx|pptm)$/i)) {
+      return '/assets/img/theme/powerpoint.png';
+    } else if (fileEnding.match(/(pdf)$/i)) {
+      return '/assets/img/theme/pdf.png';
+    } else {
+      return '/assets/img/theme/file.png';
     }
   }
 }
