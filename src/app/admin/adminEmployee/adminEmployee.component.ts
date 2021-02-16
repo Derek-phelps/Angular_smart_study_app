@@ -96,7 +96,7 @@ export class AdminEmployeeComponent implements OnInit, AfterViewInit {
     }
   }
   ngOnInit() {
-    this.spinner.show();
+    // this.spinner.show();
     this.loadEmp();
   }
   ngAfterViewInit() {
@@ -153,7 +153,7 @@ export class AdminEmployeeComponent implements OnInit, AfterViewInit {
         this.setEmpList(this._globals.empFilter);
         this.setPaginationInfo();
         this.bLoading = false;
-        this.spinner.hide();
+        // this.spinner.hide();
       }
     });
   }

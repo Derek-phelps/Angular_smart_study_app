@@ -1,16 +1,16 @@
 <ng-template #container></ng-template>
-<div class="Classaddempy top-icons" (click)="addCompany()">
+<div *ngIf="!bLoading" class="Classaddempy top-icons" (click)="addCompany()">
     <i class="fa fa-user-plus iconSize" matTooltip="{{'employees.Add' | translate}}"></i>
 </div>
-<div class="Classaddempy top-icons" style="right: 90px;" (click)="uploadEmp()">
+<div *ngIf="!bLoading" class="Classaddempy top-icons" style="right: 90px;" (click)="uploadEmp()">
     <i class="fa fa-cloud-upload iconSize" matTooltip="{{'employees.UploadEmp' | translate}}"></i>
     <input type="file" accept=".xlsx" #fileUpload style="display: none;" (change)="handleFileInput($event.target.files)"
         name="myFile">
 </div>
-<div class="Classaddempy top-icons" style="right: 132px;" (click)="downloadTemplate()">
+<div *ngIf="!bLoading" class="Classaddempy top-icons" style="right: 132px;" (click)="downloadTemplate()">
     <i class="fa fa-cloud-download iconSize" matTooltip="{{'employees.DownloadTemplate' | translate}}"></i>
 </div>
-<div class="Classaddempy top-icons" style="right: 190px;" (click)="syncUsers()" *ngIf="_globals.bConnectAd">
+<div class="Classaddempy top-icons" style="right: 190px;" (click)="syncUsers()" *ngIf="!bLoading &&_globals.bConnectAd">
     <i class="fa fa-exchange iconSize" matTooltip="{{'employees.SyncUsers' | translate}}"></i>
 </div>
 
