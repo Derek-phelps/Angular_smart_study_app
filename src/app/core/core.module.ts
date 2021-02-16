@@ -19,6 +19,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxUploaderModule } from 'ngx-uploader';
 import { LayoutModule } from '../theme/layout.module';
+import { MaxLengthPipe } from './pipes/max-length.pipe';
 
 
 
@@ -44,7 +45,8 @@ import { LayoutModule } from '../theme/layout.module';
   ],
   declarations : [
     QuestionComponent,
-    QuestionContainerComponent
+    QuestionContainerComponent,
+    MaxLengthPipe
   ],
   exports : [
     QuestionContainerComponent,
@@ -63,7 +65,8 @@ import { LayoutModule } from '../theme/layout.module';
     NgxMaterialTimepickerModule, 
     MatNativeDateModule, 
     MatDatepickerModule, 
-    LayoutModule
+    LayoutModule,
+    MaxLengthPipe
   ],
   providers : [
     QuestionService,

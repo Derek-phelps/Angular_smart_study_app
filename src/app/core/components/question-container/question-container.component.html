@@ -10,7 +10,7 @@
                     (opened)="setOpenedPanel(i)" (closed)="checkPanelClosed(i)">
                     <mat-expansion-panel-header cdkDrag>
                         <mat-panel-title>
-                            {{ questionControls.get('text').value }}
+                            {{ questionControls.get('text').value | maxlength:50  }}
                         </mat-panel-title>
                         <mat-panel-description>
                             <i class="fa fa-trash ml-auto iconbutton" 

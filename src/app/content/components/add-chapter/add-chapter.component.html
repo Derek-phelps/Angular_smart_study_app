@@ -15,7 +15,7 @@
                             <mat-expansion-panel [expanded]="openedSubChapter === i" (opened)="setOpenedPanel(i)"
                                 (closed)="checkPanelClosed(i)">
                                 <mat-expansion-panel-header cdkDrag>
-                                    {{ chapterControls.get('title').value }}
+                                    {{ chapterControls.get('title').value | maxlength:50 }}
                                 </mat-expansion-panel-header>
                                 <mat-form-field style="width: 100%;">
                                     <input matInput type="text" formControlName="title" maxlength="100"
