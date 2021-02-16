@@ -27,7 +27,7 @@
                                         <!-- This has to stay empty to allow quill full control over the toolbar -->
                                     </p-header>
                                 </p-editor>
-                                <div class="d-flex">
+                                <div class="d-flex flex-wrap">
                                     <div class="">
                                         <mat-error
                                             *ngIf="chapterControls.get('text').touched && !chapterControls.get('text').valid"
@@ -43,8 +43,8 @@
                                                     [picture]="chapterControls.get('filePath').value" [acceptType]="''">
                                                 </ba-picture-uploader>
                                             </div>
-                                            <div *ngIf="chapterControls.get('filePath').value!=''">
-                                                <mat-checkbox formControlName="isDownloadable" class="mx-2 my-auto"
+                                            <div *ngIf="chapterControls.get('filePath').value!=''" class="mt-2">
+                                                <mat-checkbox formControlName="isDownloadable" class="mx-2"
                                                     matTooltip="{{ 'chapter.AllowDownloadDesc' | translate }}">
                                                     {{ 'chapter.AllowDownload' | translate}}
                                                 </mat-checkbox>
