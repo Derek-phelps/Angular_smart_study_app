@@ -85,12 +85,14 @@ export class QuestionComponent implements OnInit {
     if (event.success && event.UserImg) { this.parentForm.get('imagePath').setValue('API/img/Question/' + event.UserImg); }
     else { this.parentForm.get('imagePath').setValue(''); }
     this.preventSave = false;
+    this.parentForm.markAsDirty();
   }
 
   answerFileUploaded(event, i : number) {
     if (event.success && event.UserImg) { this.answers.controls[i].get('imagePath').setValue('API/img/Question/' + event.UserImg); }
     else { this.answers.controls[i].get('imagePath').setValue(''); }
     this.preventSave = false;
+    this.parentForm.markAsDirty();
   }
 
   get uploaderOptions() : UploadInput {
