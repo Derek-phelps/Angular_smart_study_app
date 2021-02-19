@@ -7,7 +7,7 @@ import { Globals } from './common/auth-guard.service';
 
 export function createTranslateLoader(http: HttpClient) {
   // Iterate cache buster here to avoid cached translation files
-  return new TranslateHttpLoader(http, './assets/i18n/translations/', '.json?cacheBuster=20');
+  return new TranslateHttpLoader(http, './assets/i18n/translations/', '.json?cacheBuster=21');
 }
 
 const translationOptions = {
