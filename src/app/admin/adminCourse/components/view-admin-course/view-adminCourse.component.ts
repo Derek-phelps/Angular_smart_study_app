@@ -127,6 +127,7 @@ export class ViewAdminCourseComponent implements OnInit {
     });
 
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if(!result) { return; }
       this.service.delete(this._courseId).pipe(take(1)).subscribe(data => {
         if (data.success) {
           if (this.userType == "1") { this.router.navigate(['superadmin/course'], { skipLocationChange: false }); }
