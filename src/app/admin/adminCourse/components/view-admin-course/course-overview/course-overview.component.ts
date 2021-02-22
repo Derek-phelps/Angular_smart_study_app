@@ -1,5 +1,5 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -86,7 +86,8 @@ export class CourseOverviewComponent implements OnInit {
     private spinner: NgxSpinnerService,
     private router: Router,
     private dialog: MatDialog,
-    private service: AdminCourseService
+    private service: AdminCourseService,
+    private changeDetector : ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -96,6 +97,7 @@ export class CourseOverviewComponent implements OnInit {
     if (changes.courseData) {
       this._setupTables(this.courseData);
       this._setupChart(this.courseData);
+      this.changeDetector.detectChanges();
     }
   }
 

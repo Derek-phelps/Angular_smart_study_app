@@ -1,5 +1,5 @@
 import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -36,12 +36,14 @@ export class CourseChaptersComponent implements OnInit {
     private router: Router,
     private service: AdminCourseService,
     private dialog: MatDialog,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private changeDetector : ChangeDetectorRef
   ) { }
 
   ngOnChanges(changes : SimpleChanges) : void {
     if(changes.courseData) {
       this._loadChapters();
+      this.changeDetector.detectChanges();
     }
   }
 
