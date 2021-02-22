@@ -14,7 +14,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { $ } from 'protractor';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
-const VERSION_NUMBER = '3.11.0'; // Define VERSION_NUMBER
+const VERSION_NUMBER = '3.12.0'; // Define VERSION_NUMBER
 
 const SECONDS_UNITL_AUTO_LOGOUT = 3550; // in s
 const CHECK_INTERVAL = 10000; // in ms
