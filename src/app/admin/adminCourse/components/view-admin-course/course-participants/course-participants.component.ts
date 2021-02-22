@@ -1,5 +1,5 @@
 import { state, style, trigger } from '@angular/animations';
-import { Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -44,6 +44,7 @@ export class CourseParticipantsComponent implements OnInit {
     private dialog: MatDialog,
     private service: AdminCourseService,
     private snackbar: MatSnackBar,
+    private changeDetector : ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
@@ -54,6 +55,7 @@ export class CourseParticipantsComponent implements OnInit {
     if(changes.courseData) {
       this._setupTable(this.courseData);
       this._setupData(this.courseData);
+      this.changeDetector.detectChanges();
     }
   }
 

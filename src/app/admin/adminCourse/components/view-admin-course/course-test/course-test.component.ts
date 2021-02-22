@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -36,7 +36,8 @@ export class CourseTestComponent implements OnInit {
     private questionService : QuestionService,
     private adminService: AdminCourseService,
     private dialog: MatDialog,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private changeDetector : ChangeDetectorRef
   ) { 
     if (this.translate.currentLang != this.globals.userInfo.userLang) {
       this.translate.use(this.globals.userInfo.userLang);
