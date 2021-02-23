@@ -58,7 +58,7 @@ export class AdminEmployeeComponent implements OnInit, AfterViewInit {
     method: 'POST',
     data: {}
   };
-  @ViewChild('fileUpload', { static: true }) public _fileUpload: ElementRef;
+  @ViewChild('fileUpload', { static: false }) public _fileUpload: ElementRef;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   constructor(private renderer: Renderer2, private translate: TranslateService, private spinner: NgxSpinnerService, public _globals: Globals,
