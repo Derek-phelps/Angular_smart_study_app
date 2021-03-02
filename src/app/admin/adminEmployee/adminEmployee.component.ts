@@ -282,7 +282,11 @@ export class AdminEmployeeComponent implements OnInit, AfterViewInit {
         if (data.success) {
           this.showUploadDialog(data);
         } else {
-          this.translate.get('employees.ErrorFile').subscribe(value => { alert(value); });
+          if (data.error && data.error == 2) {
+            this.translate.get('alert.RegEmpFailNumEmpExcExcel').subscribe(value => { alert(value); });
+          } else {
+            this.translate.get('employees.ErrorFile').subscribe(value => { alert(value); });
+          }
         }
         this.spinner.hide();
       }, err => {
@@ -307,14 +311,16 @@ export class AdminEmployeeComponent implements OnInit, AfterViewInit {
             this.loadEmp();
           } else {
             this.translate.get('employees.ErrorInsert').subscribe(value => { alert(value); });
-            this.loadEmp()
+            this.loadEmp();
           }
+          this.spinner.hide();
         }, err => {
           // TODO: Handle error
           console.error(err);
           this.translate.get('employees.ErrorInsert').subscribe(value => { alert(value); });
-          this.loadEmp()
-        })
+          this.loadEmp();
+          this.spinner.hide();
+        });
       }
     });
   }

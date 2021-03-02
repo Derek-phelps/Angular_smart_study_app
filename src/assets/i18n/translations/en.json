@@ -720,6 +720,7 @@
     "RegEmpFail": "Registering new employee failed! (Please check required fields and try again...)",
     "RegEmpFailDupRec": "Registering new employee failed! (Email address or username already in use)",
     "RegEmpFailNumEmpExc": "Registering new employee failed! (TOO MANY REGISTRATIONS - Please upgrade your plan)",
+    "RegEmpFailNumEmpExcExcel": "Employee import failed! (TOO MANY REGISTRATIONS - Please upgrade your plan)",
     "EditEmpFail": "Editing employee failed! (Please check required fields and try again...)",
     "AddTrainerFail": "Adding new trainer failed! (Please check required fields and try again...)",
     "EditTrainerFail": "Editing trainer failed! (Please check required fields and try again...)",

@@ -132,7 +132,9 @@ export class EditAdminCertificaterComponent implements OnInit {
           courseplease: data.data.coursePlease,
           heldBy: data.data.heldBy ? data.data.heldBy : ''
         });
-        this.fixedDate.setValue(moment(data.data.fixedDate));
+        if (data.data.fixedDate) {
+          this.fixedDate.setValue(moment(data.data.fixedDate));
+        }
         this.Picture = "";
         this.BgPicture = "";
         this.BannerPicture = "";

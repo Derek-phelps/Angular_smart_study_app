@@ -1,4 +1,4 @@
-<div class="pages-wrap" style="opacity: 0;overflow: hidden;" [@visibilityChanged]="fadeIn ? 'shown' : 'hidden'">
+<div class="pages-wrap" style="opacity: 0;overflow: hidden;" [@visibilityChanged]="fadeIn ? 'shown' : 'hidden'" #holder>
     <pages-top [pagInfo]=true [chapterId]="selectedItem.courseId"></pages-top>
     <div class="pages-body pages-body-reading">
         <sidebar class="sidebar-reading" [menuInfo]="PAGES_Sub_MENU" [style.height]="Divheight"></sidebar>
@@ -8,7 +8,13 @@
                 <div>
                     <h2 class="subchapter-title">{{selectedItem.subChapterTitle}}</h2>
                     <div class="row" style="padding-bottom: 20px;">
-                        <div class="editor-view-text view-element" [innerHTML]="selectedItem.chapterTxt"></div>
+                        <!-- <div class="editor-view-text view-element" [innerHTML]="selectedItem.chapterTxt"></div> -->
+                        <p-editor class="editor-view-element" [ngModel]="selectedItem.chapterTxt" [bounds]="holder"
+                            [readonly]="true">
+                            <p-header hidden>
+                                <!-- This has to stay empty to allow quill full control over the toolbar -->
+                            </p-header>
+                        </p-editor>
                     </div>
                     <ng-container *ngIf="fileType!=0 && selectedItem.FilePath && selectedItem.FilePath!=''">
                         <div *ngIf="fileType==1" class="view-element">

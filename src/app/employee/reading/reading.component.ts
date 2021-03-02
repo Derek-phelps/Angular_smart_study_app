@@ -219,7 +219,7 @@ export class Reading implements OnDestroy, OnInit {
           this.fileType = -1;
         }
 
-        console.log(this.fileType);
+        // console.log(this.fileType);
 
         if (this.fileType == 3) {
           if (this.selectedItem.FilePath.startsWith("API/")) {
