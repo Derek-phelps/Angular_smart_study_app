@@ -303,6 +303,14 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
   fileUploaded(event, i: number) {
     if (event.success && event.data) { this.subChapters.controls[i].get('filePath').setValue('API/img/Course/' + event.data); }
     else { this.subChapters.controls[i].get('filePath').setValue(''); }
+    let fileEnding = event.data ? event.data.split('.').pop().toLowerCase() : '';
+    if (event.data && event.data != '' && !fileEnding.match(/(jpg|jpeg|png|gif|pdf)$/i)) {
+      this.subChapters.controls[i].get('isDownloadable').setValue(true);
+      this.subChapters.controls[i].get('isDownloadable').disable();
+    } else {
+      this.subChapters.controls[i].get('isDownloadable').setValue(false);
+      this.subChapters.controls[i].get('isDownloadable').enable();
+    }
     this.preventSave = false;
   }
 
