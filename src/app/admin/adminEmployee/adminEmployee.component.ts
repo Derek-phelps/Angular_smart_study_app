@@ -307,14 +307,16 @@ export class AdminEmployeeComponent implements OnInit, AfterViewInit {
             this.loadEmp();
           } else {
             this.translate.get('employees.ErrorInsert').subscribe(value => { alert(value); });
-            this.loadEmp()
+            this.loadEmp();
           }
+          this.spinner.hide();
         }, err => {
           // TODO: Handle error
           console.error(err);
           this.translate.get('employees.ErrorInsert').subscribe(value => { alert(value); });
-          this.loadEmp()
-        })
+          this.loadEmp();
+          this.spinner.hide();
+        });
       }
     });
   }
