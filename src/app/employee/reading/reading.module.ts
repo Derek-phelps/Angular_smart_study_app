@@ -18,6 +18,8 @@ import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
 
 import { SafePipe } from './reading.component';
 
+import { EditorModule } from 'primeng/editor';
+
 // import {VgCoreModule} from 'videogular2/compiled/core';
 // import {VgControlsModule} from 'videogular2/compiled/controls';
 // import {VgOverlayPlayModule} from 'videogular2/compiled/overlay-play';
@@ -35,7 +37,8 @@ import { SafePipe } from './reading.component';
     VgControlsModule,
     VgOverlayPlayModule,
     VgBufferingModule,
-    AppMaterialModule
+    AppMaterialModule,
+    EditorModule
   ],
   declarations: [
     Reading,

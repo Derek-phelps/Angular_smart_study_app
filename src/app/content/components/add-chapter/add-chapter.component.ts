@@ -310,6 +310,10 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
     return {
       toolbar: [
         [{ header: [1, 2, 3] }],
+        [{ 'font': [] }],
+        [{ 'color': [] }, { 'background': [] }],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+        [{ 'align': [] }],
         ['bold', 'italic', 'underline'],
         ['image', 'code-block'],
         ['video', 'link']
