@@ -720,6 +720,7 @@
     "RegEmpFail": "Fehler beim Registrieren des Mitarbeiters! (Bitte überprüfen Sie die verpflichtenden Felder und versuchen Sie es erneut...)",
     "RegEmpFailDupRec": "Fehler beim Registrieren des Mitarbeiters! (E-Mail oder Benutzername werden bereits verwendet)",
     "RegEmpFailNumEmpExc": "Fehler beim Registrieren des Mitarbeiters! (ZU VIELE REGISTRIERUNGEN - Bitte upgraden Sie Ihr Paket)",
+    "RegEmpFailNumEmpExcExcel": "Mitarbeiter-Import fehlgeschlagen! (ZU VIELE REGISTRIERUNGEN - Bitte upgraden Sie Ihr Paket)",
     "EditEmpFail": "Fehler beim Editieren des Mitarbeiters! (Bitte überprüfen Sie die verpflichtenden Felder und versuchen Sie es erneut...)",
     "AddTrainerFail": "Fehler beim Hinzufügen des Trainers! (Bitte überprüfen Sie die verpflichtenden Felder und versuchen Sie es erneut...)",
     "EditTrainerFail": "Fehler beim Editieren des Trainers! (Bitte überprüfen Sie die verpflichtenden Felder und versuchen Sie es erneut...)",
