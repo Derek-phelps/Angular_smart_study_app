@@ -110,8 +110,8 @@ export class EditAdminCertificaterComponent implements OnInit {
       CertificateBg: [''],
       CertificateLogo: [''],
       courseplease: ['', Validators.required],
-      bossTitleName: ['', Validators.required],
-      bossPosition: ['', Validators.required],
+      bossTitleName: [''],
+      bossPosition: [''],
       heldBy: ['']
     });
 

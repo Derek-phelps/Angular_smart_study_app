@@ -41,11 +41,11 @@
             </mat-form-field>
             <mat-form-field style="width: 100%;">
                 <input matInput type="text" formControlName="bossTitleName"
-                    placeholder="{{'certificate.TitleName' | translate}} *">
+                    placeholder="{{'certificate.TitleName' | translate}}">
             </mat-form-field>
             <mat-form-field style="width: 100%;">
                 <input matInput type="text" formControlName="bossPosition"
-                    placeholder="{{'certificate.Position' | translate}} *">
+                    placeholder="{{'certificate.Position' | translate}}">
             </mat-form-field>
             <button mat-stroked-button [disabled]="!EmpForm.valid || DisableButton > 0" style="float: right;"
                 (click)="saveEmpData()">{{'confirm' | translate}}</button>

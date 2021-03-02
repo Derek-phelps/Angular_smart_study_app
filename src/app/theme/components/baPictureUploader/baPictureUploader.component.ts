@@ -59,7 +59,7 @@ export class BaPictureUploader {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.picture && changes.picture.currentValue != '' && changes.picture.firstChange) {
-      console.log(changes.picture);
+      // console.log(changes.picture);
       let nonDisplayable = this.checkAndGetNonDisplayablePath(changes.picture.currentValue);
       if (nonDisplayable != undefined) {
         this.picture = nonDisplayable;

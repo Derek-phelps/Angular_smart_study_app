@@ -19,29 +19,29 @@ import { AdminCourseService } from '../../../adminCourse.service';
 })
 export class CourseChaptersComponent implements OnInit {
 
-  @Input() courseData : any;
-  
-  private _dataSourceChapter : MatTableDataSource<any> = null;
+  @Input() courseData: any;
+
+  private _dataSourceChapter: MatTableDataSource<any> = null;
   private _displayedColumnsChapter: string[] = [];
-  private _chapterData : Array<any> = [];
-  private _showSaveOrderingButton : boolean = false;
+  private _chapterData: Array<any> = [];
+  private _showSaveOrderingButton: boolean = false;
 
   @ViewChild('ContentPaginator', { read: MatPaginator, static: true }) paginatorChapter: MatPaginator;
 
-  private _chapterData$ : Observable<any> = null;
+  private _chapterData$: Observable<any> = null;
 
   constructor(
-    private globals : Globals,
+    private globals: Globals,
     private translate: TranslateService,
     private router: Router,
     private service: AdminCourseService,
     private dialog: MatDialog,
     private snackbar: MatSnackBar,
-    private changeDetector : ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef
   ) { }
 
-  ngOnChanges(changes : SimpleChanges) : void {
-    if(changes.courseData) {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.courseData) {
       this._loadChapters();
       this.changeDetector.detectChanges();
     }
@@ -50,9 +50,9 @@ export class CourseChaptersComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  private _loadChapters() : void {
+  private _loadChapters(): void {
     this._chapterData$ = this.service.getChapterByCourseId(this.courseInfo.courseId).pipe(
-      tap((res : any) => {
+      tap((res: any) => {
         if (res.success) {
           this._chapterData = res['data']
           this._dataSourceChapter = new MatTableDataSource(res.data);
@@ -61,14 +61,14 @@ export class CourseChaptersComponent implements OnInit {
           this._showSaveOrderingButton = false;
           this.filterChapterByCourse();
         }
-    }));
+      }));
   }
 
   addChapter() {
     var path = "";
-    if ( this.globals.getUserType() == "1") { path = 'superadmin/content/add'; } 
+    if (this.globals.getUserType() == "1") { path = 'superadmin/content/add'; }
     else if (this.globals.getUserType() == "2") { path = 'admin/content/add'; }
-    else if (this.globals.getUserType() == "3") { path = 'trainer/content/add'; } 
+    else if (this.globals.getUserType() == "3") { path = 'trainer/content/add'; }
     else { path = 'employee/content/add'; }
     this.router.navigate([path, this.courseInfo.courseId], { skipLocationChange: false });
   }
@@ -76,20 +76,20 @@ export class CourseChaptersComponent implements OnInit {
   editChapter(row) {
     var path = "";
     if (this.globals.getUserType() == "1") { path = 'superadmin/content/edit'; }
-    else if (this.globals.getUserType() == "2") { path = 'admin/content/edit'; } 
+    else if (this.globals.getUserType() == "2") { path = 'admin/content/edit'; }
     else if (this.globals.getUserType() == "3") { path = 'trainer/content/edit'; }
     else { path = 'employee/content/edit'; }
     this.router.navigate([path, row.chapterId], { skipLocationChange: false });
   }
 
   deleteChapter(row) {
-    let confirmDesc : string = this.translate.instant('dialog.DeleteContentSure');
+    let confirmDesc: string = this.translate.instant('dialog.DeleteContentSure');
     const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
       width: '400px',
       data: { companyId: row.chapterId, Action: false, Mes: confirmDesc },
       autoFocus: false
     });
-    
+
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
       if (result) {
         this.service.deleteChapter(row.chapterId).pipe(take(1)).subscribe(res => {
@@ -100,7 +100,7 @@ export class CourseChaptersComponent implements OnInit {
       }
     });
   }
-  
+
   filterChapterByCourse() {
     this._dataSourceChapter.filterPredicate = function (data, filter: string): boolean {
       return (data.courseId == filter);
@@ -108,7 +108,7 @@ export class CourseChaptersComponent implements OnInit {
     this._dataSourceChapter.filter = this.courseData.courseId;
   }
 
-  reorder(event : CdkDragDrop<any[]>) : void {
+  reorder(event: CdkDragDrop<any[]>): void {
     console.log(event);
     let draggesChapter: any = this.chapterData[event.previousIndex];
     this.chapterData.splice(event.previousIndex, 1);
@@ -126,13 +126,13 @@ export class CourseChaptersComponent implements OnInit {
     ).subscribe(
       result => {
         this._loadChapters();
-        this.snackbar.open(this.translate.instant('chapter.ChapterSaved'), '', { duration: 3000 });
+        this.snackbar.open(this.translate.instant('chapter.ChaptersSaved'), '', { duration: 3000 });
       })
   }
 
-  private _fixIndices() : void {
-    let newIndex : number = 0;
-    this.chapterData.forEach( ch => ch['Ch_index'] = newIndex++);
+  private _fixIndices(): void {
+    let newIndex: number = 0;
+    this.chapterData.forEach(ch => ch['Ch_index'] = newIndex++);
     this._dataSourceChapter = new MatTableDataSource(this.chapterData);
   }
 
@@ -141,7 +141,7 @@ export class CourseChaptersComponent implements OnInit {
   get courseInfo() { return this.courseData.courseInfo; }
   get dataSourceChapter() { return this._dataSourceChapter; }
   get displayedColumnsChapter() { return this._displayedColumnsChapter; }
-  get showSaveOrderingButton() : boolean { return this._showSaveOrderingButton; }
+  get showSaveOrderingButton(): boolean { return this._showSaveOrderingButton; }
 
-  
+
 }

@@ -129,6 +129,19 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
         tap(result => {
           result.subChapters.forEach(_ => this.addSubChapter(false));
           this._addChapterForm.patchValue(result);
+
+          this.subChapters.controls.forEach(subChapter => {
+            if (subChapter.value.filePath && subChapter.value.filePath != '') {
+              let fileEnding = subChapter.value.filePath.split('.').pop().toLowerCase();
+              if (!fileEnding.match(/(jpg|jpeg|png|gif|pdf)$/i)) {
+                subChapter.get('isDownloadable').setValue(true);
+                subChapter.get('isDownloadable').disable();
+              } else {
+                subChapter.get('isDownloadable').enable();
+              }
+            }
+          });
+
           //this._addChapterForm.markAsPristine();
           // result.subChapters.forEach(subChap => {
           //   if(subChap.id == null) { subChap.index = this._nextSubChapterId; }
@@ -147,7 +160,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
     }
 
     this._saveSubscription = timer(this._saveInterval, this._saveInterval).pipe(
-      tap(_ => localStorage.setItem('currentCourse', JSON.stringify(this._addChapterForm.value)))
+      tap(_ => localStorage.setItem('currentCourse', JSON.stringify(this._addChapterForm.getRawValue())))
     ).subscribe(
       _ => this.snackbar.open(this.translate.instant('chapter.Saved'), '', { duration: 1000 })
     );
@@ -223,7 +236,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
     let operation: Observable<any> = null;
     if (this.route.snapshot.url[0].path == 'add') {
 
-      operation = this.service.addFixed(this._addChapterForm.value).pipe(
+      operation = this.service.addFixed(this._addChapterForm.getRawValue()).pipe(
         tap(response => this.chapterId.setValue(response['insert_id'])),
         switchMap(result => from(this.questions.value)),
         tap(question => console.log(question)),
@@ -232,7 +245,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
       );
     }
     else {
-      operation = this.service.editFixed(this._addChapterForm.value).pipe(
+      operation = this.service.editFixed(this._addChapterForm.getRawValue()).pipe(
         switchMap(result => from(this._deleteChaptersOnSave)),
         mergeMap(id => this.service.deleteSubchapter(id)),
         toArray(),
@@ -303,6 +316,14 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
   fileUploaded(event, i: number) {
     if (event.success && event.data) { this.subChapters.controls[i].get('filePath').setValue('API/img/Course/' + event.data); }
     else { this.subChapters.controls[i].get('filePath').setValue(''); }
+    let fileEnding = event.data ? event.data.split('.').pop().toLowerCase() : '';
+    if (event.data && event.data != '' && !fileEnding.match(/(jpg|jpeg|png|gif|pdf)$/i)) {
+      this.subChapters.controls[i].get('isDownloadable').setValue(true);
+      this.subChapters.controls[i].get('isDownloadable').disable();
+    } else {
+      this.subChapters.controls[i].get('isDownloadable').setValue(false);
+      this.subChapters.controls[i].get('isDownloadable').enable();
+    }
     this.preventSave = false;
   }
 
