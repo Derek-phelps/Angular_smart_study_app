@@ -9,6 +9,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { DomSanitizer } from '@angular/platform-browser';
 import { saveAs } from 'file-saver';
+import { FILE_TYPE_UTILS, FileType } from '../../common/utils';
 
 @Pipe({ name: 'safe' })
 export class SafePipe implements PipeTransform {
@@ -31,6 +32,8 @@ export class SafePipe implements PipeTransform {
   ]
 })
 export class Reading implements OnDestroy, OnInit {
+  FileType = FileType;
+
   public PAGES_Sub_MENU: Array<any>;
   selectedItem: any = {
     ChapterId: "",
@@ -59,13 +62,8 @@ export class Reading implements OnDestroy, OnInit {
   strMokEx = "";
   public sidebarToggle = true;
   fadeIn = false;
-  // 0 => no file
-  // 1 => video
-  // 2 => audio
-  // 3 => pdf
-  // 4 => image
-  // -1 => unknown
-  fileType = 0;
+
+  fileType: FileType = FileType.NoFile;
   fileEnding = "";
 
   constructor(public _globalService: GlobalService, public _globals: Globals, public router: Router, private route: ActivatedRoute,
@@ -136,7 +134,7 @@ export class Reading implements OnDestroy, OnInit {
     obj.backSubChapId = 0;
     obj.isExam = false;
     var searching = true;
-    this.fileType = 0;
+    this.fileType = FileType.NoFile;
     this.fileEnding = "";
     obj.selectedItem = {
       ChapterId: "",
@@ -199,29 +197,12 @@ export class Reading implements OnDestroy, OnInit {
           }
         });
 
-        // 0 => no file
-        // 1 => video
-        // 2 => audio
-        // 3 => pdf
-        // 4 => image
-        // -1 => unknown
-        this.fileEnding = this.selectedItem.FilePath.split('.').pop().toLowerCase();
-        if (this.fileEnding.match(/(jpg|jpeg|png|gif)$/i)) {
-          this.fileType = 4;
-        } else if (this.fileEnding.match(/(pdf)$/i)) {
-          this.fileType = 3;
-        } else if (this.fileEnding.match(/(mp4|mov|avi|webm)$/i)) {
-          this.fileType = 1;
-        } else if (this.fileEnding.match(/(mp3|m4a|wav)$/i)) {
-          this.fileType = 2;
-        } else if (this.fileEnding.length > 0) {
-          console.log("unknown file type");
-          this.fileType = -1;
-        }
+        this.fileEnding = FILE_TYPE_UTILS.getFileEnding(this.selectedItem.FilePath);
+        this.fileType = FILE_TYPE_UTILS.getFileType(this.selectedItem.FilePath);
 
         // console.log(this.fileType);
 
-        if (this.fileType == 3) {
+        if (this.fileType == FileType.PDF) {
           if (this.selectedItem.FilePath.startsWith("API/")) {
             this.pdfSrc = this._globals.WebURL + "/API/index.php/Serve/loadData?path=" + this.selectedItem.FilePath.substring(4);
           } else {
