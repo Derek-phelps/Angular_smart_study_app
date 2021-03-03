@@ -7,7 +7,8 @@
             <div>
                 <div>
                     <h2 class="subchapter-title">{{selectedItem.subChapterTitle}}</h2>
-                    <div class="row" style="padding-bottom: 20px;">
+                    <div *ngIf="selectedItem.chapterTxt && selectedItem.chapterTxt != ''" class="row"
+                        style="padding-bottom: 20px;">
                         <!-- <div class="editor-view-text view-element" [innerHTML]="selectedItem.chapterTxt"></div> -->
                         <p-editor class="editor-view-element" [ngModel]="selectedItem.chapterTxt" [bounds]="holder"
                             [readonly]="true">
@@ -16,8 +17,9 @@
                             </p-header>
                         </p-editor>
                     </div>
-                    <ng-container *ngIf="fileType!=0 && selectedItem.FilePath && selectedItem.FilePath!=''">
-                        <div *ngIf="fileType==1" class="view-element">
+                    <ng-container
+                        *ngIf="fileType!=FileType.NoFile && selectedItem.FilePath && selectedItem.FilePath!=''">
+                        <div *ngIf="fileType==FileType.Video" class="view-element">
                             <vg-player>
                                 <vg-controls>
                                     <vg-play-pause></vg-play-pause>
@@ -42,14 +44,14 @@
                                 </video>
                             </vg-player>
                         </div>
-                        <audio *ngIf="fileType==2" autoplay controls (click)="toggleAudioVideo(audioPlayer)"
-                            #audioPlayer style="width: 100%;min-width: 300px;">
+                        <audio *ngIf="fileType==FileType.Audio" autoplay controls
+                            (click)="toggleAudioVideo(audioPlayer)" #audioPlayer style="width: 100%;min-width: 300px;">
                             <source src="{{_globals.WebURL}}/{{selectedItem.FilePath}}" />
                         </audio>
-                        <div *ngIf="fileType==3" class="displatTxtCls subchapter-text">
+                        <div *ngIf="fileType==FileType.PDF" class="displatTxtCls subchapter-text">
                             <iframe *ngIf="pdfSrc" [src]="pdfSrc | safe" style="width: 100%;height: 90vh;"></iframe>
                         </div>
-                        <div *ngIf="fileType==4" class="view-element">
+                        <div *ngIf="fileType==FileType.Image" class="view-element">
                             <img class="image" src="{{_globals.WebURL}}/{{selectedItem.FilePath}}" />
                         </div>
                         <div *ngIf="selectedItem.isDownloadable" class="displatTxtCls subchapter-text"

@@ -18,6 +18,7 @@ import { QuestionService } from 'src/app/core/services/question.service';
 import { ConfirmationBoxComponent } from 'src/app/theme/components/confirmation-box/confirmation-box.component';
 import { ContentService } from '../../content.service';
 import { ComponentCanDeactivate, PendingChangesGuardGuard } from '../../pending-changes-guard.guard';
+import { FILE_TYPE_UTILS } from '../../../common/utils';
 
 @Component({
   selector: 'app-add-chapter',
@@ -131,14 +132,8 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
           this._addChapterForm.patchValue(result);
 
           this.subChapters.controls.forEach(subChapter => {
-            if (subChapter.value.filePath && subChapter.value.filePath != '') {
-              let fileEnding = subChapter.value.filePath.split('.').pop().toLowerCase();
-              if (!fileEnding.match(/(jpg|jpeg|png|gif|pdf)$/i)) {
-                subChapter.get('isDownloadable').setValue(true);
-                subChapter.get('isDownloadable').disable();
-              } else {
-                subChapter.get('isDownloadable').enable();
-              }
+            if (!FILE_TYPE_UTILS.isFileViewable(subChapter.value.filePath)) {
+              if (subChapter.value.isDownloadable) { subChapter.get('isDownloadable').disable(); }
             }
           });
 
@@ -316,14 +311,15 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
   fileUploaded(event, i: number) {
     if (event.success && event.data) { this.subChapters.controls[i].get('filePath').setValue('API/img/Course/' + event.data); }
     else { this.subChapters.controls[i].get('filePath').setValue(''); }
-    let fileEnding = event.data ? event.data.split('.').pop().toLowerCase() : '';
-    if (event.data && event.data != '' && !fileEnding.match(/(jpg|jpeg|png|gif|pdf)$/i)) {
-      this.subChapters.controls[i].get('isDownloadable').setValue(true);
-      this.subChapters.controls[i].get('isDownloadable').disable();
-    } else {
+
+    if (FILE_TYPE_UTILS.isFileViewable(event.data)) {
       this.subChapters.controls[i].get('isDownloadable').setValue(false);
       this.subChapters.controls[i].get('isDownloadable').enable();
+    } else {
+      this.subChapters.controls[i].get('isDownloadable').setValue(true);
+      this.subChapters.controls[i].get('isDownloadable').disable();
     }
+
     this.preventSave = false;
   }
 

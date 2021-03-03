@@ -4,6 +4,7 @@ import { HttpClientModule, HttpClient, HttpRequest, HttpResponse, HttpEventType 
 import { TranslateService } from '@ngx-translate/core';
 import { Globals } from '../../../common/auth-guard.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FILE_TYPE_UTILS } from '../../../common/utils';
 
 @Component({
   selector: 'ba-picture-uploader',
@@ -60,7 +61,7 @@ export class BaPictureUploader {
   ngOnChanges(changes: SimpleChanges) {
     if (changes.picture && changes.picture.currentValue != '' && changes.picture.firstChange) {
       // console.log(changes.picture);
-      let nonDisplayable = this.checkAndGetNonDisplayablePath(changes.picture.currentValue);
+      let nonDisplayable = FILE_TYPE_UTILS.checkAndGetNonDisplayablePath(changes.picture.currentValue);
       if (nonDisplayable != undefined) {
         this.picture = nonDisplayable;
       }
@@ -108,7 +109,7 @@ export class BaPictureUploader {
     reader.addEventListener('load', (event: Event) => {
       if (uploadedFileName != undefined) {
         // this.picture = this._globals.WebURL + '/API/img/Course/' + file;
-        let nonDisplayable = this.checkAndGetNonDisplayablePath(uploadedFileName);
+        let nonDisplayable = FILE_TYPE_UTILS.checkAndGetNonDisplayablePath(uploadedFileName);
         if (nonDisplayable != undefined) {
           this.picture = nonDisplayable;
           return;
@@ -143,40 +144,4 @@ export class BaPictureUploader {
       this.uploadInput.emit(this.FileuploadInput);
     }
   }
-
-  checkAndGetNonDisplayablePath(filePath) {
-    let fileEnding = filePath.split('.').pop().toLowerCase();
-    if (fileEnding.match(/(jpg|jpeg|png|gif)$/i)) {
-      return undefined;
-    } else if (fileEnding.match(/(csv)$/i)) {
-      return '/assets/img/theme/csv.png';
-    } else if (fileEnding.match(/(7z|rar|z|zip)$/i)) {
-      return '/assets/img/theme/zip.png';
-    } else if (fileEnding.match(/(doc|docx)$/i)) {
-      return '/assets/img/theme/word.png';
-    } else if (fileEnding.match(/(xls|xlsx|xlsm)$/i)) {
-      return '/assets/img/theme/excel.png';
-    } else if (fileEnding.match(/(ppt|pptx|pptm)$/i)) {
-      return '/assets/img/theme/powerpoint.png';
-    } else if (fileEnding.match(/(pdf)$/i)) {
-      return '/assets/img/theme/pdf.png';
-    } else {
-      return '/assets/img/theme/file.png';
-    }
-  }
 }
-
-
-// if (fileEnding.match(/(jpg|jpeg|png|gif)$/i)) {
-//   return this.picture;
-// } else if (fileEnding.match(/(csv)$/i)) {
-//   return 'assets/img/theme/csv.png';
-// } else if (fileEnding.match(/(7z|rar|z|zip)$/i)) {
-//   return 'assets/img/theme/zip.png';
-// } else if (fileEnding.match(/(doc|docx)$/i)) {
-//   return 'assets/img/theme/word.png';
-// } else if (fileEnding.match(/(xls|xlsx|xlsm)$/i)) {
-//   return 'assets/img/theme/excel.png';
-// } else {
-//   return 'assets/img/theme/file.png';
-// }
