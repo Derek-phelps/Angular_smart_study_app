@@ -193,6 +193,7 @@
     "Female": "Weiblich",
     "Title": "Titel",
     "Email": "E-Mail",
+    "EmailConf": "E-Mail wiederholen",
     "Address": "Adresse",
     "registration": "Registration",
     "OpenCourses": "Offene Kurse",
@@ -856,5 +857,14 @@
     "IncludeSubDeps": "Kurszuweisung für Subabteilungen übernehmen",
     "ParentAss": "Diese Kurszuweisung wurde in der übergeordneten Abteilung \"{{parent}}\" definiert."
   },
-  "GlobalRights": "Globale Benutzerrechte"
+  "GlobalRights": "Globale Benutzerrechte",
+  "register": {
+    "CreateAcc": "Account erstellen",
+    "StartNow": "Starten Sie jetzt mit Ihrem kostenlosen und unverbindlichen Smart-Study Demo-Account",
+    "MailMatchErr": "E-Mail Adressen stimmen nicht überein.",
+    "Cond1": "Ich akzeptiere die <a href='{{link}}' target='_blank'>Allgemeinen Geschäftsbedingungen</a> der Smart-Study GmbH.",
+    "Cond2": "Ich erkläre mich mit der Verarbeitung meiner Daten gemäß der Datenschutzbestimmung und den AGB einverstanden.",
+    "Cond3": "Ich erkläre mich damit einverstanden, von der Smart-Study GmbH zu Marketingzwecken kontaktiert zu werden.",
+    "RegNow": "JETZT registrieren"
+  }
 }

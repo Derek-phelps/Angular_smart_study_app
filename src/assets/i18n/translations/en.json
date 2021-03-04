@@ -193,6 +193,7 @@
     "Female": "Female",
     "Title": "Title",
     "Email": "Email",
+    "EmailConf": "E-Mail wiederholen",
     "Address": "Address",
     "registration": "Registration",
     "OpenCourses": "Open Courses",
@@ -856,5 +857,14 @@
     "IncludeSubDeps": "Apply this course assignment also for sub-departments",
     "ParentAss": "This assignment was defined at the higher level department \"{{parent}}\"."
   },
-  "GlobalRights": "Global user permissions"
+  "GlobalRights": "Global user permissions",
+  "register": {
+    "CreateAcc": "Create Account",
+    "StartNow": "Get started with your free and nonbinding Smart-Study demo account",
+    "MailMatchErr": "Email addresses do not match.",
+    "Cond1": "I accept the <a href='{{link}}' target='_blank'>general terms and conditions</a> of Smart-Study GmbH.",
+    "Cond2": "I agree to the processing of my data in accordance with the data protection regulations and the terms and conditions.",
+    "Cond3": "I agree to be contacted by Smart-Study GmbH for marketing purposes.",
+    "RegNow": "Register NOW"
+  }
 }
