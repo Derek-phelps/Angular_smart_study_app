@@ -867,6 +867,7 @@
     "Cond2": "I agree to the processing of my data in accordance with the data protection regulations and the terms and conditions.",
     "Cond3": "I agree to be contacted by Smart-Study GmbH for marketing purposes.",
     "RegNow": "Register NOW",
-    "DefaultError": "An unknown error occurred. Please retry."
+    "DefaultError": "An unknown error occurred. Please retry.",
+    "ThankYouInfo": "<p>Thank you for your registration!</p><p>Your demo system is being prepared. You will get your access credentials via mail as soon as we are done.</p><p>Your individual demo system is available for you for one month and is deleted automatically afterwards.</p><p><b>Enjoy trying out Smart-Study!</b></p>"
   }
 }

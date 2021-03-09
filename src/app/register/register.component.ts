@@ -18,6 +18,7 @@ export class RegisterComponent implements OnInit {
   matcher = new MailErrorStateMatcher();
 
   private _disableButton: boolean = false;
+  private _viewThankYou: boolean = false;
 
   constructor(
     private _formBuilder: FormBuilder,
@@ -57,12 +58,10 @@ export class RegisterComponent implements OnInit {
 
   registerUser(): void {
     if (this.registerForm.valid) {
-      // console.log(this.registerForm.value);
       this._disableButton = true;
       this._loginService.registerNewAccount(this.registerForm.value).pipe(take(1)).subscribe(result => {
-        // console.warn(result);
         if (result && result.success) {
-          // worked
+          this._viewThankYou = true;
         } else if (result && result.code) {
           switch (result.code) {
             case 2:
@@ -81,7 +80,6 @@ export class RegisterComponent implements OnInit {
         this._disableButton = false;
       });
     } else {
-      // console.error("invalid form");
       this.registerForm.markAllAsTouched();
     }
   }
@@ -95,7 +93,7 @@ export class RegisterComponent implements OnInit {
 
   get registerForm(): FormGroup { return this._registerForm; };
   get disableButton(): boolean { return this._disableButton; };
-  // get mailAlreadyInUse(): boolean { return this._mailAlreadyInUse; }
+  get viewThankYou(): boolean { return this._viewThankYou; };
 }
 
 export class MailErrorStateMatcher implements ErrorStateMatcher {
