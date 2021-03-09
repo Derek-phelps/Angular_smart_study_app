@@ -25,19 +25,19 @@ export const FILE_TYPE_UTILS = {
         if (fileEnding.match(/(jpg|jpeg|png|gif)$/i)) {
             return undefined;
         } else if (fileEnding.match(/(csv)$/i)) {
-            return '/assets/img/theme/csv.png';
+            return 'assets/img/theme/csv.png';
         } else if (fileEnding.match(/(7z|rar|z|zip)$/i)) {
-            return '/assets/img/theme/zip.png';
+            return 'assets/img/theme/zip.png';
         } else if (fileEnding.match(/(doc|docx)$/i)) {
-            return '/assets/img/theme/word.png';
+            return 'assets/img/theme/word.png';
         } else if (fileEnding.match(/(xls|xlsx|xlsm)$/i)) {
-            return '/assets/img/theme/excel.png';
+            return 'assets/img/theme/excel.png';
         } else if (fileEnding.match(/(ppt|pptx|pptm)$/i)) {
-            return '/assets/img/theme/powerpoint.png';
+            return 'assets/img/theme/powerpoint.png';
         } else if (fileEnding.match(/(pdf)$/i)) {
-            return '/assets/img/theme/pdf.png';
+            return 'assets/img/theme/pdf.png';
         } else {
-            return '/assets/img/theme/file.png';
+            return 'assets/img/theme/file.png';
         }
     },
 

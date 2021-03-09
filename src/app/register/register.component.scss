@@ -1,3 +1,5 @@
+@import "../theme/theme/conf";
+
 .register-box-outter {
     position: absolute;
     top: 0;
@@ -26,6 +28,22 @@
 
             .register-checkbox {
                 margin: 10px;
+            }
+
+            .checkbox-invalid {
+                color: #f44336;
+            }
+
+            .register-button:hover {
+                background-color: rgba(#f44336, 0.35);
+            }
+            
+            .register-valid {
+                background-color: rgba($success, 0.35);
+            }
+
+            .register-valid:hover {
+                background-color: rgba($success, 0.5);
             }
         }
     }

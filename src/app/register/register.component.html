@@ -23,6 +23,9 @@
                     <mat-form-field style="width: 100%;">
                         <input matInput type="text" formControlName="mail"
                             placeholder="{{'employees.Email' | translate}} *">
+                        <mat-error *ngIf="registerForm.controls['mail'].errors?.notUnique">
+                            {{'register.MailAlreadyUsed' | translate}}
+                        </mat-error>
                     </mat-form-field>
                     <mat-form-field style="width: 100%;">
                         <input matInput type="text" formControlName="confMail" [errorStateMatcher]="matcher"
@@ -35,17 +38,25 @@
                         <input matInput type="text" formControlName="phone"
                             placeholder="{{'employees.Phone' | translate}} *">
                     </mat-form-field>
-                    <mat-checkbox class="row register-checkbox" formControlName="cond1">
-                        <div [innerHTML]="('register.Cond1' | translate: {link: 'Https://smart-study.at'}) + ' *'">
+                    <mat-checkbox class="row register-checkbox"
+                        [ngClass]="{'checkbox-invalid': registerForm.controls['cond1'].touched && registerForm.controls['cond1'].invalid}"
+                        formControlName="cond1">
+                        <div [innerHTML]="('register.Cond1' | translate: {link: 'https://smart-study.at'}) + ' *'">
                         </div>
                     </mat-checkbox>
-                    <mat-checkbox class="row register-checkbox" formControlName="cond2">{{'register.Cond2' | translate}}
+                    <mat-checkbox class="row register-checkbox"
+                        [ngClass]="{'checkbox-invalid': registerForm.controls['cond2'].touched && registerForm.controls['cond2'].invalid}"
+                        formControlName="cond2">{{'register.Cond2' | translate}}
                         *</mat-checkbox>
-                    <mat-checkbox class="row register-checkbox" formControlName="cond3">{{'register.Cond3' | translate}}
+                    <mat-checkbox class="row register-checkbox"
+                        [ngClass]="{'checkbox-invalid': registerForm.controls['cond3'].touched && registerForm.controls['cond3'].invalid}"
+                        formControlName="cond3">{{'register.Cond3' | translate}}
                         *</mat-checkbox>
                     <div class="form-group" style="margin-top: 20px;">
-                        <button mat-stroked-button type="submit" (click)="registerUser()"
-                            style="width: 100%;">{{'register.RegNow' | translate}}</button>
+                        <button [disabled]="disableButton" mat-stroked-button type="submit" (click)="registerUser()"
+                            style="width: 100%;" class="register-button"
+                            [ngClass]="{'register-valid': registerForm.valid}">{{'register.RegNow' |
+                            translate}}</button>
                     </div>
                 </form>
             </article>

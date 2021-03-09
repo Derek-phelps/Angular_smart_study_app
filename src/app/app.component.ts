@@ -24,25 +24,19 @@ import { TranslateService } from '@ngx-translate/core';
 export class AppComponent implements OnInit {
   @HostListener("window:beforeunload", ["$event"])
   clearLocalStorage(event) {
-    localStorage.clear();
-    //this.globals.removedUser();
+    if (!this.globals.bIsRegister) {
+      localStorage.clear();
+    }
   }
 
   title = 'Smart-Study';
   errorMessage: string;
-
-  //bIsOffline = false;
 
   private swipeCoord?: [number, number];
   private swipeTime?: number;
 
   constructor(public _service: LoginService, public globals: Globals, private router: Router, private _globalService: GlobalService,
     routingState: RoutingState, private connectionService: ConnectionService, private translate: TranslateService) {
-
-    // var obj = this;
-    // setTimeout(() => {
-
-    // }, 500);
 
     this.connectionService.monitor().subscribe(isConnected => {
       this.globals.bIsAppOffline = !isConnected;
@@ -52,7 +46,6 @@ export class AppComponent implements OnInit {
     var obj = this;
     obj._service.getConfig().subscribe(cmp => {
       obj.globals.setServerInfo(cmp);
-      //console.log(cmp);
       if (cmp.companyId != "0") {
         if (localStorage.getItem('companyInfo') && localStorage.getItem('defaultLang')) {
           obj.globals.setCompany(JSON.parse(localStorage.getItem('companyInfo')));
@@ -67,7 +60,12 @@ export class AppComponent implements OnInit {
           }
         }, error => { obj.errorMessage = <any>error; obj.globals.incrementAndCheckOfflineError(); });
       }
-    }, error => { obj.errorMessage = <any>error; obj.globals.incrementAndCheckOfflineError(); });
+    }, () => {
+      if (this.router.url.startsWith('/register')) {
+        this.globals.setServerInfo();
+        this.globals.bIsRegister = true;
+      }
+    });
   }
 
   swipe(e: TouchEvent, when: string): void {
@@ -99,4 +97,6 @@ export class AppComponent implements OnInit {
       }
     }
   }
+
+  get isRegister(): boolean { return this.globals.bIsRegister; };
 }

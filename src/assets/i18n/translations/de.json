@@ -862,9 +862,11 @@
     "CreateAcc": "Account erstellen",
     "StartNow": "Starten Sie jetzt mit Ihrem kostenlosen und unverbindlichen Smart-Study Demo-Account",
     "MailMatchErr": "E-Mail Adressen stimmen nicht überein.",
+    "MailAlreadyUsed": "Für die angegebene E-Mail Adresse existiert bereits ein Account.",
     "Cond1": "Ich akzeptiere die <a href='{{link}}' target='_blank'>Allgemeinen Geschäftsbedingungen</a> der Smart-Study GmbH.",
     "Cond2": "Ich erkläre mich mit der Verarbeitung meiner Daten gemäß der Datenschutzbestimmung und den AGB einverstanden.",
     "Cond3": "Ich erkläre mich damit einverstanden, von der Smart-Study GmbH zu Marketingzwecken kontaktiert zu werden.",
-    "RegNow": "JETZT registrieren"
+    "RegNow": "JETZT registrieren",
+    "DefaultError": "Es ist ein unbekannter Fehler aufgetreten. Bitte versuchen Sie es erneut."
   }
 }

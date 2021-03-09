@@ -1,5 +1,5 @@
 <main (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end')">
-  <router-outlet *ngIf="globals.companyInfo.isSet"></router-outlet>
+  <router-outlet *ngIf="globals.companyInfo.isSet || isRegister"></router-outlet>
   <!-- <div *ngIf="bIsOffline" class="offline-div">
     
   </div> -->
