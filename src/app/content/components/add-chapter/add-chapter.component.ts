@@ -46,7 +46,7 @@ export class AddChapterComponent implements OnInit, OnDestroy, PendingChangesGua
   private _deleteQuestionsOnSave: number[] = [];
 
   private _preventSave: boolean = false;
-  private _defaultImage = '/assets/img/theme/upload.png';
+  private _defaultImage = 'assets/img/theme/upload.png';
 
   private _saveInterval: number = 30000;
   private _saveSubscription: Subscription = null;

@@ -3,6 +3,7 @@ import { Router, CanActivate, ActivatedRouteSnapshot } from '@angular/router';
 
 @Injectable()
 export class Globals {
+    public bIsRegister: boolean = false;
     public userInfo = {
         departmentId: 0,
         EmailID: '',
@@ -84,12 +85,19 @@ export class Globals {
         this.sortCourse2 = "EndTime";
         this.sortCourse3 = "EndTime";
     }
-    setServerInfo(server) {
-        this.WebURL = server.WebURL;
-        this.APIURL = this.WebURL + "/API/index.php/";
-        //this.IMAGEURL = this.WebURL + "/API/img/";
-        this.JsonURL = this.WebURL + "/API/";
-        this.adminURL = server.adminURL;
+    setServerInfo(server = undefined) {
+        if (server != undefined) {
+            this.WebURL = server.WebURL;
+            this.APIURL = this.WebURL + "/API/index.php/";
+            //this.IMAGEURL = this.WebURL + "/API/img/";
+            this.JsonURL = this.WebURL + "/API/";
+            this.adminURL = server.adminURL;
+        } else {
+            this.WebURL = ".";
+            this.APIURL = this.WebURL + "/API/index.php/";
+            this.JsonURL = this.WebURL + "/API/";
+            this.adminURL = "";
+        }
     }
     getAPIWeb() {
         return this.APIURL;
@@ -193,7 +201,9 @@ export class AuthGuardService implements CanActivate {
             if (route.url[0].path == 'trainer') {
                 bValid = false;
             } else {
-                if (this._globals.userInfo.UserType == '' || !this._globals.bIsLoggedIn) { // user type not set or not logged in
+                if (route.url[0].path == 'register' && !this._globals.bIsRegister) {
+                    // bValid = false;
+                } else if (this._globals.userInfo.UserType == '' || !this._globals.bIsLoggedIn) { // user type not set or not logged in
                     bValid = false;
                 } else if (route.url[0].path == 'admin' && Number(this._globals.userInfo.UserType) > 2) { // admin route, but not admin
                     bValid = false;

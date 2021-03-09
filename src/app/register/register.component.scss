@@ -1,0 +1,65 @@
+@import "../theme/theme/conf";
+
+.register-box-outter {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-image: url("../../assets/img/Background_img_login.jpg");
+    background-size: cover;
+    background-position: center;
+
+    .register-card {
+        background-color: rgba(245, 245, 245, 0.8);
+        max-height: 100vh;
+        overflow: scroll;
+
+        .logo-container {
+            text-align: center;
+            .logo-img {
+                width: 100%;
+                max-width: 200px;
+            }
+        }
+
+        .register-form {
+            margin-top: 20px;
+
+            .register-checkbox {
+                margin: 10px;
+            }
+
+            .checkbox-invalid {
+                color: #f44336;
+            }
+
+            .register-button:hover {
+                background-color: rgba(#f44336, 0.35);
+            }
+            
+            .register-valid {
+                background-color: rgba($success, 0.35);
+            }
+
+            .register-valid:hover {
+                background-color: rgba($success, 0.5);
+            }
+        }
+
+        .thank-you-box {
+            text-align: center;
+            margin-top: 40px;
+            font-size: larger;
+            line-height: 1.5;
+        }
+    }
+}
+
+::ng-deep.mat-checkbox-layout{
+    white-space: normal !important;
+}
+    
+::ng-deep.mat-checkbox-inner-container{
+    margin-bottom: 4px;
+}

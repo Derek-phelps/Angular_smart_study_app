@@ -121,6 +121,13 @@ export class LoginService {
             .pipe(map((response: Response) => response))
             .pipe(catchError(this.handleError))
     }
+    registerNewAccount(user): any {
+        let formData: FormData = new FormData();
+        formData.append('newUser', JSON.stringify(user));
+        return this._http.post(this._globals.APIURL + 'AccountRegistration', formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
+    }
     // getSessionVars(url):any{
     //     let formData:FormData = new FormData();
     //     formData.append('wuascht', '');

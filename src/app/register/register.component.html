@@ -1,0 +1,68 @@
+<div class="d-flex align-items-center justify-content-center register-box-outter">
+    <div class="container">
+        <div class="card register-card ">
+            <article class="card-body mx-auto" style="max-width: 600px;">
+                <div class="row justify-content-center">
+                    <div [ngClass]="{'col-sm-4': !viewThankYou}" class="logo-container">
+                        <img class="logo-img" src="assets/img/logoakt.png" />
+                    </div>
+                    <div *ngIf="!viewThankYou" class="col-sm-8">
+                        <h4 class="card-title mt-3 text-center">{{'register.CreateAcc' | translate}}</h4>
+                        <p class="text-center">{{'register.StartNow' | translate}}</p>
+                    </div>
+                </div>
+                <form *ngIf="!viewThankYou" class="register-form" [formGroup]="registerForm">
+                    <mat-form-field style="width: 100%;">
+                        <input matInput type="text" formControlName="firstName"
+                            placeholder="{{'employees.Name' | translate}} *">
+                    </mat-form-field>
+                    <mat-form-field style="width: 100%;">
+                        <input matInput type="text" formControlName="lastName"
+                            placeholder="{{'employees.Surname' | translate}} *">
+                    </mat-form-field>
+                    <mat-form-field style="width: 100%;">
+                        <input matInput type="text" formControlName="mail"
+                            placeholder="{{'employees.Email' | translate}} *">
+                        <mat-error *ngIf="registerForm.controls['mail'].errors?.notUnique">
+                            {{'register.MailAlreadyUsed' | translate}}
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field style="width: 100%;">
+                        <input matInput type="text" formControlName="confMail" [errorStateMatcher]="matcher"
+                            placeholder="{{'employees.EmailConf' | translate}} *">
+                        <mat-error *ngIf="registerForm.hasError('notSame')">
+                            {{'register.MailMatchErr' | translate}}
+                        </mat-error>
+                    </mat-form-field>
+                    <mat-form-field style="width: 100%;">
+                        <input matInput type="text" formControlName="phone"
+                            placeholder="{{'employees.Phone' | translate}} *">
+                    </mat-form-field>
+                    <mat-checkbox class="row register-checkbox"
+                        [ngClass]="{'checkbox-invalid': registerForm.controls['cond1'].touched && registerForm.controls['cond1'].invalid}"
+                        formControlName="cond1">
+                        <div [innerHTML]="('register.Cond1' | translate: {link: 'https://smart-study.at'}) + ' *'">
+                        </div>
+                    </mat-checkbox>
+                    <mat-checkbox class="row register-checkbox"
+                        [ngClass]="{'checkbox-invalid': registerForm.controls['cond2'].touched && registerForm.controls['cond2'].invalid}"
+                        formControlName="cond2">{{'register.Cond2' | translate}}
+                        *</mat-checkbox>
+                    <mat-checkbox class="row register-checkbox"
+                        [ngClass]="{'checkbox-invalid': registerForm.controls['cond3'].touched && registerForm.controls['cond3'].invalid}"
+                        formControlName="cond3">{{'register.Cond3' | translate}}
+                        *</mat-checkbox>
+                    <div class="form-group" style="margin-top: 20px;">
+                        <button [disabled]="disableButton" mat-stroked-button type="submit" (click)="registerUser()"
+                            style="width: 100%;" class="register-button"
+                            [ngClass]="{'register-valid': registerForm.valid}">{{'register.RegNow' |
+                            translate}}</button>
+                    </div>
+                </form>
+                <div class="row justify-content-center thank-you-box" *ngIf="viewThankYou"
+                    [innerHTML]="'register.ThankYouInfo' | translate">
+                </div>
+            </article>
+        </div>
+    </div>
+</div>

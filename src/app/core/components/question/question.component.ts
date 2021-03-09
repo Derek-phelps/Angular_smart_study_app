@@ -13,19 +13,19 @@ import { ConfirmationBoxComponent } from 'src/app/theme/components/confirmation-
   styleUrls: ['./question.component.scss']
 })
 export class QuestionComponent implements OnInit {
-  
+
   private _parentFormGroup: FormGroup = null;
   private _nextAnswerIndex = 0;
-  private _preventSave : boolean = false;
-  private _defaultImage = '/assets/img/theme/add-image.png';
+  private _preventSave: boolean = false;
+  private _defaultImage = 'assets/img/theme/add-image.png';
 
   constructor(
-    private formBuilder : FormBuilder,
-    private controlContainer : ControlContainer,
+    private formBuilder: FormBuilder,
+    private controlContainer: ControlContainer,
     private translate: TranslateService,
     private globals: Globals,
     public dialog: MatDialog,
-  ) { 
+  ) {
     if (this.translate.currentLang != this.globals.userInfo.userLang) {
       this.translate.use(this.globals.userInfo.userLang);
     }
@@ -36,19 +36,19 @@ export class QuestionComponent implements OnInit {
     this._parentFormGroup = this.controlContainer.control as FormGroup;
   }
 
-  addAnswer() : void {
+  addAnswer(): void {
     this.answers.push(this.formBuilder.group({
-      text : new FormControl('', [Validators.required]),
-      imagePath : new FormControl('', []),
-      isCorrect : new FormControl(false, []),
-      id : new FormControl(null, []),
-      index : new FormControl(this._nextAnswerIndex++, []),
+      text: new FormControl('', [Validators.required]),
+      imagePath: new FormControl('', []),
+      isCorrect: new FormControl(false, []),
+      id: new FormControl(null, []),
+      index: new FormControl(this._nextAnswerIndex++, []),
     }));
 
     this._fixIndices();
   }
 
-  deleteAnswer(pos : number) {
+  deleteAnswer(pos: number) {
     let description: string = this.translate.instant('question.DeleteAnswerDesc');
     const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
       width: '400px',
@@ -58,8 +58,8 @@ export class QuestionComponent implements OnInit {
 
     dialogRef.afterClosed().pipe(
       take(1),
-      tap( result => {
-        if(result) {
+      tap(result => {
+        if (result) {
           //let questionId : number = this.answers.at(pos).get('id').value;
           //if( questionId != null) { this.questionDeleted.emit(questionId); }
           this.deleteOptions.value.push(this.answers.at(pos).get('id').value)
@@ -72,13 +72,13 @@ export class QuestionComponent implements OnInit {
     );
   }
 
-  private _fixIndices() : void {
-    let newIndex : number = 0;
-    for(let answer of this.answers.controls) {     
+  private _fixIndices(): void {
+    let newIndex: number = 0;
+    for (let answer of this.answers.controls) {
       answer.get('index').setValue(newIndex);
       newIndex++;
     }
-    this._nextAnswerIndex = newIndex; 
+    this._nextAnswerIndex = newIndex;
   }
 
   questionFileUploaded(event) {
@@ -88,15 +88,15 @@ export class QuestionComponent implements OnInit {
     this.parentForm.markAsDirty();
   }
 
-  answerFileUploaded(event, i : number) {
+  answerFileUploaded(event, i: number) {
     if (event.success && event.UserImg) { this.answers.controls[i].get('imagePath').setValue('API/img/Question/' + event.UserImg); }
     else { this.answers.controls[i].get('imagePath').setValue(''); }
     this.preventSave = false;
     this.parentForm.markAsDirty();
   }
 
-  get uploaderOptions() : UploadInput {
-    return  {
+  get uploaderOptions(): UploadInput {
+    return {
       type: 'uploadAll',
       url: this.globals.APIURL + 'Company/userImgUpload?folderName=Question',
       method: 'POST',
@@ -105,10 +105,10 @@ export class QuestionComponent implements OnInit {
   }
 
 
-  get parentForm() : FormGroup { return this._parentFormGroup; }
-  get answers() : FormArray { return this.parentForm.get('answers') as FormArray; }
-  get deleteOptions() : FormGroup { return this.parentForm.get('deleteOptions') as FormGroup }
-  get defaultImage() : string { return this._defaultImage; }
-  get preventSave() : boolean { return this._preventSave; }
-  set preventSave(v : boolean) { this._preventSave = v; }
+  get parentForm(): FormGroup { return this._parentFormGroup; }
+  get answers(): FormArray { return this.parentForm.get('answers') as FormArray; }
+  get deleteOptions(): FormGroup { return this.parentForm.get('deleteOptions') as FormGroup }
+  get defaultImage(): string { return this._defaultImage; }
+  get preventSave(): boolean { return this._preventSave; }
+  set preventSave(v: boolean) { this._preventSave = v; }
 }

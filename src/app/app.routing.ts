@@ -1,6 +1,8 @@
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
 import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+import { AuthGuardService as AuthGuard } from './common/auth-guard.service';
 
 export const routes: Routes = [
   // { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -13,6 +15,16 @@ export const routes: Routes = [
   {
     path: 'login/:id',
     component: LoginComponent
+  },
+  {
+    path: 'register',
+    component: RegisterComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'register/:lang',
+    component: RegisterComponent,
+    canActivate: [AuthGuard],
   },
   { path: '**', redirectTo: '' }
 ];
