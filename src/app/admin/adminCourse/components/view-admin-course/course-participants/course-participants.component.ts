@@ -22,8 +22,8 @@ import { VACUtils } from '../view-admin-course-utils';
 })
 export class CourseParticipantsComponent implements OnInit {
 
-  @Input() courseData : any;
-  @Output() updateData : EventEmitter<void> = new EventEmitter<void>();
+  @Input() courseData: any;
+  @Output() updateData: EventEmitter<void> = new EventEmitter<void>();
 
   private _userStatusTable = new MatTableDataSource();
 
@@ -35,38 +35,39 @@ export class CourseParticipantsComponent implements OnInit {
     this._userStatusTable.sort = sort;
   }
 
-  private _courseUsersOverdue : number = -1;
-  private _courseUsersOpen : number = -1;
-  
+  private _courseUsersOverdue: number = -1;
+  private _courseUsersOpen: number = -1;
+
   constructor(
-    private globals : Globals,
+    private globals: Globals,
     private translate: TranslateService,
     private dialog: MatDialog,
     private service: AdminCourseService,
     private snackbar: MatSnackBar,
-    private changeDetector : ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
-    
+
   }
 
-  ngOnChanges(changes : SimpleChanges) {
-    if(changes.courseData) {
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes.courseData) {
       this._setupTable(this.courseData);
       this._setupData(this.courseData);
       this.changeDetector.detectChanges();
     }
   }
 
-  private _setupTable(data : any) : void {
+  private _setupTable(data: any): void {
     this._userStatusTable.data = data.userStatus;
+    let obj = this;
     this._userStatusTable.filterPredicate = function (data: any, filter: string): boolean {
-      return this.filterFunction(
-        data.FIRSTNAME + ' ' + data.LASTNAME + ' ' + data.FULLNAME, filter) || 
-        this.filterFunction(data.EmailID, filter);
+      return obj.filterFunction(
+        data.FIRSTNAME + ' ' + data.LASTNAME + ' ' + data.FULLNAME, filter) ||
+        obj.filterFunction(data.EmailID, filter);
     }
-    
+
     this._userStatusTable.sortingDataAccessor = (item: any, property) => {
       switch (property) {
         case 'email': { return item.EmailID; }
@@ -76,44 +77,57 @@ export class CourseParticipantsComponent implements OnInit {
     };
   }
 
-  private _setupData(data : any) : void {
+  private _setupData(data: any): void {
     this._courseUsersOverdue = VACUtils.calcCourseUsersOverdue(data.userStatus);
     this._courseUsersOpen = VACUtils.calcCourseUsersOpen(data.userStatus);
   }
 
-  applyMemberFilter(event: Event) : void {
+  filterFunction(name: string, filter: string) {
+    var bMatch = true;
+    var trimLowerFilter = filter.trim().toLowerCase().replace(/\s+/g, ' ');
+    var splitFilter = trimLowerFilter.split(" ");
+    splitFilter.forEach(filterPred => {
+      if (!name.toLowerCase().includes(filterPred)) {
+        bMatch = false;
+      }
+    });
+
+    return bMatch;
+  }
+
+  applyMemberFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.userStatusTable.filter = filterValue;
 
     if (this.userStatusTable.paginator) { this.userStatusTable.paginator.firstPage(); }
   }
 
-  passUser(employee : any) {
+  passUser(employee: any) {
     const dialogRef = this.dialog.open(DialogForwardUserDialog, {
       data: { name: employee.FULLNAME, course: this.courseInfo.courseName, hasCertificate: this.courseInfo.hasCertificate }
     });
 
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
       if (result == 1 || result == 2) {
-        let pass : string = (result == 1 ? '1' : '0');
+        let pass: string = (result == 1 ? '1' : '0');
         this.service.passUserCourse(employee.empId, this.courseInfo.courseId, pass).pipe(take(1)).subscribe(data => {
           if (data.success) {
             this.snackbar.open(this.translate.instant('course.PassEmpSuccess'), '', { duration: 3000 });
             this.updateData.next();
-          } 
-        }, 
-        err => {
-          console.error(err); // TODO: Handle error
-        })
+          }
+        },
+          err => {
+            console.error(err); // TODO: Handle error
+          })
       }
     });
   }
 
   get userInfo() { return this.globals.userInfo; };
   get userStatusTable() { return this._userStatusTable; };
-  get userDisplayedColumns() : string[] { return ['status', 'LASTNAME', 'FIRSTNAME', 'email', 'editDelete']; }
+  get userDisplayedColumns(): string[] { return ['status', 'LASTNAME', 'FIRSTNAME', 'email', 'editDelete']; }
 
-  get courseUsersOverdue() : number { return this._courseUsersOverdue; }
-  get courseUsersOpen() : number { return this._courseUsersOpen; }
-  get courseInfo() : any { return this.courseData.courseInfo; }
+  get courseUsersOverdue(): number { return this._courseUsersOverdue; }
+  get courseUsersOpen(): number { return this._courseUsersOpen; }
+  get courseInfo(): any { return this.courseData.courseInfo; }
 }
