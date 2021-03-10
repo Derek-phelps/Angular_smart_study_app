@@ -48,7 +48,6 @@ export class CourseParticipantsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -83,9 +82,9 @@ export class CourseParticipantsComponent implements OnInit {
   }
 
   filterFunction(name: string, filter: string) {
-    var bMatch = true;
-    var trimLowerFilter = filter.trim().toLowerCase().replace(/\s+/g, ' ');
-    var splitFilter = trimLowerFilter.split(" ");
+    let bMatch = true;
+    let trimLowerFilter = filter.trim().toLowerCase().replace(/\s+/g, ' ');
+    let splitFilter = trimLowerFilter.split(" ");
     splitFilter.forEach(filterPred => {
       if (!name.toLowerCase().includes(filterPred)) {
         bMatch = false;

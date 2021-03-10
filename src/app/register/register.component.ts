@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs/operators';
 
 import { LoginService } from '../login/login.service';
+import { Globals } from '../common/auth-guard.service';
 
 @Component({
   selector: 'app-register',
@@ -24,7 +25,14 @@ export class RegisterComponent implements OnInit {
     private _formBuilder: FormBuilder,
     private translate: TranslateService,
     private route: ActivatedRoute,
-    private _loginService: LoginService) {
+    private _loginService: LoginService,
+    private router: Router,
+    private _globals: Globals) {
+
+    if (!this._globals.bIsRegister) {
+      this._globals.removedUser();
+      this.router.navigate([''], { skipLocationChange: false });
+    }
 
     this._registerForm = this._formBuilder.group({
       firstName: new FormControl('', Validators.required),
