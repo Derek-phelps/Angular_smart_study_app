@@ -201,18 +201,18 @@ export class AuthGuardService implements CanActivate {
             if (route.url[0].path == 'trainer') {
                 bValid = false;
             } else {
-                if (route.url[0].path == 'register' && !this._globals.bIsRegister) {
-                    // bValid = false;
-                } else if (this._globals.userInfo.UserType == '' || !this._globals.bIsLoggedIn) { // user type not set or not logged in
-                    bValid = false;
-                } else if (route.url[0].path == 'admin' && Number(this._globals.userInfo.UserType) > 2) { // admin route, but not admin
-                    bValid = false;
-                } else if (route.url[0].path == 'employee' && Number(this._globals.userInfo.UserType) < 3) { // employee route, but not employee
-                    bValid = false;
-                } else if ((route.url[0].path == 'course' || route.url[0].path == 'content' || route.url[0].path == 'test' || route.url[0].path == 'certificater') &&
-                    !(Number(this._globals.userInfo.UserType) > 2) &&
-                    !this._globals.hasCourses && !this._globals.canCreateCourses) { // course, content, test or certificater route, but neither admin nor has courses nor can create courses
-                    bValid = false;
+                if (route.url[0].path != 'register') {
+                    if (this._globals.userInfo.UserType == '' || !this._globals.bIsLoggedIn) { // user type not set or not logged in
+                        bValid = false;
+                    } else if (route.url[0].path == 'admin' && Number(this._globals.userInfo.UserType) > 2) { // admin route, but not admin
+                        bValid = false;
+                    } else if (route.url[0].path == 'employee' && Number(this._globals.userInfo.UserType) < 3) { // employee route, but not employee
+                        bValid = false;
+                    } else if ((route.url[0].path == 'course' || route.url[0].path == 'content' || route.url[0].path == 'test' || route.url[0].path == 'certificater') &&
+                        !(Number(this._globals.userInfo.UserType) > 2) &&
+                        !this._globals.hasCourses && !this._globals.canCreateCourses) { // course, content, test or certificater route, but neither admin nor has courses nor can create courses
+                        bValid = false;
+                    }
                 }
             }
 
