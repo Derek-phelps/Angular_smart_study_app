@@ -9,11 +9,13 @@
     background-image: url("../../assets/img/Background_img_login.jpg");
     background-size: cover;
     background-position: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
 
     .register-card {
         background-color: rgba(245, 245, 245, 0.8);
-        max-height: 100vh;
-        overflow: scroll;
+        max-height: 100%;
+        overflow-x: scroll;
 
         .logo-container {
             text-align: center;
