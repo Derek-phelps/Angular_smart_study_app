@@ -178,6 +178,8 @@
     "SendWelcome": "Willkommens-Mail mit Passwort an neu angelegte Mitarbeiter senden.",
     "Edit": "Mitarbeiter bearbeiten",
     "Delete": "Mitarbeiter löschen",
+    "Deactivate": "Mitarbeiter-Account deaktivieren",
+    "Activate": "Mitarbeiter-Account wieder aktivieren",
     "NoSelfDel": "Sie können Ihren eigenen Account nicht löschen.",
     "TotalName": "Name",
     "Name": "Vorname",
@@ -765,6 +767,8 @@
   "dialog": {
     "BackToDash": "Möchten Sie die gasamte Seite neu laden damit alle Übersetzungen sofort übernommen werden?",
     "DeleteEmpSure": "Sind Sie sicher, dass Sie diesen Mitarbeiter löschen möchten?",
+    "DeactivateEmpSure": "Sind Sie sicher, dass Sie diesen Mitarbeiter-Account deaktivieren möchten?",
+    "ReactivateEmpSure": "Sind Sie sicher, dass Sie diesen Mitarbeiter-Account erneut aktivieren möchten?",
     "DeleteEmpFromCourseSure": "Sind Sie sicher, dass Sie diesen Mitarbeiter von diesem Kurs entfernen möchten?",
     "DeleteTrainerSure": "Sind Sie sicher, dass Sie diesen Trainer löschen möchten?",
     "DeleteSubChapterSure": "Sind Sie sicher, dass Sie dieses Unterkapitel löschen möchten?",

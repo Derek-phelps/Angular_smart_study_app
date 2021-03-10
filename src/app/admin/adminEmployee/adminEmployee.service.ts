@@ -240,6 +240,16 @@ export class AdminEmployeeService {
             .pipe(map((response: Response) => response))
             .pipe(catchError(this.handleError))
     }
+    setActivation(empId, activate): any {
+        let formData: FormData = new FormData();
+        formData.append('empId', empId);
+        if (activate) {
+            formData.append('activate', 'true');
+        }
+        return this._http.post(this._globals.APIURL + 'Employees/setActivationEmployee', formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
+    }
     getProgress(employeeId, courseId): any {
 
         let formData: FormData = new FormData();

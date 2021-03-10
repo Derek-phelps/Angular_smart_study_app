@@ -178,6 +178,8 @@
     "SendWelcome": "Send welcome mail with password to newly added employees.",
     "Edit": "Edit employee",
     "Delete": "Delete employee",
+    "Deactivate": "Deactivate employee account",
+    "Activate": "Reactivate employee account",
     "NoSelfDel": "You cannot delete your own account.",
     "TotalName": "Name",
     "Name": "Name",
@@ -765,6 +767,8 @@
   "dialog": {
     "BackToDash": "Do you want to reload the whole page to finish all translations now?",
     "DeleteEmpSure": "Are you sure that you want to delete this employee?",
+    "DeactivateEmpSure": "Are you sure that you want to deactivate this employee account?",
+    "ReactivateEmpSure": "Are you sure that you want to reactivate this employee account?",
     "DeleteEmpFromCourseSure": "Are you sure that you want to delete this employee from the course?",
     "DeleteTrainerSure": "Are you sure that you want to delete this trainer?",
     "DeleteSubChapterSure": "Are you sure that you want to delete this subchapter?",

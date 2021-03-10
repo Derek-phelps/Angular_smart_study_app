@@ -3,8 +3,13 @@
         <i *ngIf="empInfo && !empInfo.self && !(empInfo.ADUser == '1')"
             class="fa fa-trash iconSize edit-delete-delete-icon" style="cursor: pointer;" (click)="deleteEmployee()"
             matTooltip="{{'employees.Delete' | translate}}"></i>
-        <i *ngIf="empInfo && !empInfo.self && !(empInfo.ADUser == '1')" class="fa fa-key iconSize edit-delete-edit-icon"
-            style="cursor: pointer;" (click)="createAndSendNewPassword()"
+        <i *ngIf="empInfo && !empInfo.self && !(empInfo.ADUser == '1')" class="fa iconSize"
+            [ngClass]="{'fa-user-times edit-delete-delete-icon': empInfo.inactive==0, 'fa-user-plus edit-delete-edit-icon': empInfo.inactive!=0}"
+            style="cursor: pointer;" (click)="toggleEmpActivation()"
+            [matTooltip]="(empInfo.inactive == 0 ? 'employees.Deactivate' : 'employees.Activate') | translate"></i>
+        <i *ngIf="empInfo && !empInfo.self && !(empInfo.ADUser == '1') && empInfo.inactive==0"
+            class="fa fa-key iconSize edit-delete-edit-icon" style="cursor: pointer;"
+            (click)="createAndSendNewPassword()"
             [matTooltip]="'employees.CreateNewPw' | translate: {name: empInfo.FULLNAME, mail: empInfo.EmailID}"></i>
         <i *ngIf="empInfo" class="fa fa-edit iconSize edit-delete-edit-icon" style="cursor: pointer;"
             (click)="openEditView()" matTooltip="{{'employees.Edit' | translate}}"></i>
@@ -12,7 +17,7 @@
     <div class="loader" [@visibilityChanged]="!bEmpDataLoaded ? 'shown' : 'hidden'" *ngIf="!bEmpDataLoaded"></div>
     <div class="content" [@visibilityChanged]="bEmpDataLoaded ? 'shown' : 'hidden'">
         <!-- Warning and error labels -->
-        <div class="warning-error-label error-label" *ngIf="numberOverdue>0">
+        <div class="warning-error-label error-label" *ngIf="numberOverdue>0 && empInfo.inactive==0">
             <div>
                 <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>
                 <ng-container *ngIf="numberOverdue==1">
@@ -23,7 +28,7 @@
                 </ng-container>
             </div>
         </div>
-        <div class="warning-error-label warning-label" *ngIf="numberCurrent>0">
+        <div class="warning-error-label warning-label" *ngIf="numberCurrent>0 && empInfo.inactive==0">
             <div>
                 <i class="fa fa-clock-o" aria-hidden="true"></i>
                 <ng-container *ngIf="numberCurrent==1">
@@ -48,7 +53,8 @@
                         <table class="info-table" *ngIf="empInfo">
                             <tr *ngIf="empInfo && (!empInfo.activeDate || empInfo.inactive != '0')">
                                 <td colspan="2" style="color: red;text-align: center;">
-                                    <b>{{'employees.InactiveEmp' | translate}}</b></td>
+                                    <b>{{'employees.InactiveEmp' | translate}}</b>
+                                </td>
                             </tr>
                             <tr>
                                 <td><b>{{'employees.TotalName' | translate}}:</b></td>
@@ -165,7 +171,8 @@
                                             [expandedHeight]="'48px'">
                                             <mat-panel-title>
                                                 <ng-container *ngIf="!depGroupOpenStates[i]">
-                                                    {{(i == 0 ? 'employees.ShowDepartments' : 'employees.ShowGroups') | translate}}...
+                                                    {{(i == 0 ? 'employees.ShowDepartments' : 'employees.ShowGroups') |
+                                                    translate}}...
                                                 </ng-container>
                                             </mat-panel-title>
                                         </mat-expansion-panel-header>
@@ -243,7 +250,8 @@
                                         (closed)="depGroupAddOpenState[i] = false">
                                         <mat-expansion-panel-header>
                                             <mat-panel-title>
-                                                {{(i == 0 ? 'employees.AddToDep' : 'employees.AddToGroup') | translate}}{{depGroupAddOpenState[i] ? ':' : '...'}}
+                                                {{(i == 0 ? 'employees.AddToDep' : 'employees.AddToGroup') |
+                                                translate}}{{depGroupAddOpenState[i] ? ':' : '...'}}
                                             </mat-panel-title>
                                         </mat-expansion-panel-header>
                                         <ng-container
@@ -296,13 +304,14 @@
         </div>
         <div class="row tile-row" style="padding-bottom: 15px;">
             <button mat-stroked-button *ngIf="empInfo" class="open-certificate-button"
-                (click)="openCertificateDialog()">{{'employees.ShowCerti' | translate:{name: empInfo.FULLNAME} }}</button>
+                (click)="openCertificateDialog()">{{'employees.ShowCerti' | translate:{name: empInfo.FULLNAME}
+                }}</button>
         </div>
         <!-- <div class="row tile-row">
             <app-certificate-list></app-certificate-list>
         </div> -->
         <!-- <app-certificate-list></app-certificate-list> -->
-        <div class="row tile-row">
+        <div class="row tile-row" *ngIf="empInfo && empInfo.inactive==0">
             <div class="col-12 col-tile-outer">
                 <div class="col-tile">
                     <div class="col-header" *ngIf="empInfo"
@@ -340,7 +349,8 @@
                                     <td mat-cell *matCellDef="let course" (click)="viewCourse(course)"
                                         [style.cursor]="_globals.userInfo.UserType > 2 ? 'initial' : 'pointer'"
                                         matTooltip="{{'group.OpenCourse' | translate}}" style="padding-left: 10px;">
-                                        <b>{{course.courseName}}</b></td>
+                                        <b>{{course.courseName}}</b>
+                                    </td>
                                 </ng-container>
                                 <ng-container matColumnDef="lastFinished">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header>
@@ -375,7 +385,8 @@
                                     <td mat-cell *matCellDef="let course">
                                         <ng-container *ngIf="course.isSeries=='1'">
                                             {{course.repeatSpan}}
-                                            {{(course.repeatUnit=='year' ? 'assignment.Years' : 'assignment.Months') | translate}}
+                                            {{(course.repeatUnit=='year' ? 'assignment.Years' : 'assignment.Months') |
+                                            translate}}
                                         </ng-container>
                                         <ng-container *ngIf="course.isSeries=='0'">-</ng-container>
                                     </td>

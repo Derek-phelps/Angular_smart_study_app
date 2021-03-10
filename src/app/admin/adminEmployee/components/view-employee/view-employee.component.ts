@@ -22,6 +22,8 @@ import { DialogForwardUserDialog } from '../../../../forward-user/dialog-forward
 
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
+import { take } from 'rxjs/operators';
+
 export interface DialogData {
   empId: number;
   name: string;
@@ -506,20 +508,18 @@ export class ViewEmployeeComponent implements OnInit, AfterViewInit {
   }
 
   deleteEmployee() {
-    this.translate.get('dialog.DeleteEmpSure').subscribe(value => {
-      //alert(value);
+    this.translate.get('dialog.DeleteEmpSure').pipe(take(1)).subscribe(value => {
       const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
         width: '400px',
         data: { companyId: this.empId, Action: false, Mes: value },
         autoFocus: false
       });
-      dialogRef.afterClosed().subscribe(result => {
+      dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
         if (result) {
-          //alert("TODO");
           this.spinner.show();
-          this.service.delete(this.empId).subscribe((res) => {
+          this.service.delete(this.empId).pipe(take(1)).subscribe((res) => {
             if (res.success) {
-              var userType = this._globals.getUserType();
+              let userType = this._globals.getUserType();
               this.snackbar.open(this.translate.instant('employees.RemoveSuccess'), '', { duration: 3000 });
               if (userType == "1") {
                 this.router.navigate(['./superadmin/employees'], { skipLocationChange: false });
@@ -537,17 +537,32 @@ export class ViewEmployeeComponent implements OnInit, AfterViewInit {
       });
     });
   }
+  toggleEmpActivation() {
+    var bActivate = this.empInfo.inactive != 0;
+    let message = bActivate ? this.translate.instant('dialog.ReactivateEmpSure') : this.translate.instant('dialog.DeactivateEmpSure');
+    const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
+      width: '400px',
+      data: { companyId: this.empId, Action: false, Mes: message },
+      autoFocus: false
+    });
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if (result) {
+        this.service.setActivation(this.empId, bActivate).pipe(take(1)).subscribe(res => {
+          if (res.success) {
+            this.bEmpDataLoaded = false;
+            this.loadEmployee();
+          }
+        });
+      }
+    });
+  }
   passUser(course) {
-    //console.log(course);
     const dialogRef = this.dialog.open(DialogForwardUserDialog, {
       data: { name: this.empInfo.FULLNAME, course: course.courseName, hasCertificate: course.certificaterId }
     });
 
     var obj = this;
     dialogRef.afterClosed().subscribe(result => {
-      //console.log('The dialog was closed');
-      //this.animal = result;
-      //console.log(result);
       if (result && (result == 1 || result == 2)) {
         var justPass = (result == 1 ? '1' : '0');
         obj.service.passUserCourse(obj.empInfo.empId, course.courseId, justPass).subscribe(data => {
