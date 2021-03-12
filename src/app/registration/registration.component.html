@@ -1,8 +1,8 @@
 <div class="Classlogin_box">
-    <img *ngIf="_globals.companyInfo.isSet && _globals.companyInfo.companyId!=0 && _globals.companyInfo.BackgroundImage != ''"
-        src="{{_globals.WebURL}}/{{_globals.companyInfo.BackgroundImage}}"
-        style="position: absolute;width: 100%;height: 100%;" />
-    <img class="logo-img" *ngIf="_globals.companyInfo.companyId!=0"
+    <img *ngIf="_globals.companyInfo.isSet" src="{{_globals.WebURL}}/{{_globals.companyInfo.BackgroundImage}}"
+        onerror="this.src='assets/img/Background_img_login.jpg'" style="position: absolute;width: 100%;height: 100%;" />
+    <img class="logo-img"
+        *ngIf="_globals.companyInfo.isSet && _globals.companyInfo.companyId!=0 &&  _globals.companyInfo.companyLogo!=''"
         src="{{_globals.WebURL}}/{{_globals.companyInfo.companyLogo}}" style="position: absolute;" />
     <img class="smart-study-img" *ngIf="_globals.companyInfo.companyId!=0" src="assets/img/logoakt.png"
         style="position: absolute;" />

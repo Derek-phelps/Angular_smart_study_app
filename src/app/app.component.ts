@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
   }
 
   title = 'Smart-Study';
-  errorMessage: string;
+  // errorMessage: string;
 
   private swipeCoord?: [number, number];
   private swipeTime?: number;
@@ -58,7 +58,7 @@ export class AppComponent implements OnInit {
           } else {
             obj.globals.incrementAndCheckOfflineError();
           }
-        }, error => { obj.errorMessage = <any>error; obj.globals.incrementAndCheckOfflineError(); });
+        }, () => { obj.globals.incrementAndCheckOfflineError(); });
       }
     }, () => {
       if (this.router.url.startsWith('/register')) {
@@ -99,4 +99,5 @@ export class AppComponent implements OnInit {
   }
 
   get isRegister(): boolean { return this.globals.bIsRegister; };
+  get errorMessage(): string { return this.translate.instant("offline"); }
 }

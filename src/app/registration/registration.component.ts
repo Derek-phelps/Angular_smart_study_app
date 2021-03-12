@@ -29,10 +29,6 @@ export class RegistrationComponent implements OnInit {
     data: {}
   };
   constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, public router: Router, private _loginService: RegistrationService, private translate: TranslateService, public _globals: Globals) {
-    if (localStorage.getItem('defaultLang')) {
-      this.translate.use(localStorage.getItem('defaultLang'))
-    }
-
     this.EmpForm = this.formBuilder.group({
       userName: [''],
       FIRSTNAME: ['', Validators.required],
@@ -64,6 +60,9 @@ export class RegistrationComponent implements OnInit {
     });
   }
   ngOnInit() {
+    if (localStorage.getItem('defaultLang')) {
+      this.translate.use(localStorage.getItem('defaultLang'))
+    }
   }
   loadDepartmentData() {
     this._loginService.getDepartment().subscribe((data) => {
