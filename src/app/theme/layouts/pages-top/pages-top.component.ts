@@ -13,7 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
   styleUrls: ['./pages-top.component.scss'],
 })
 export class PagesTopComponent {
-  avatarImgSrc: string = 'assets/img/logo.png';
+  avatarImgSrc: string = 'assets/img/logoakt.png';
   userName: string = '';
   //userPost: string = '';
   @Input() pagInfo: boolean = false;

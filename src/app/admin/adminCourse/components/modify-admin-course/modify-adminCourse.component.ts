@@ -160,7 +160,7 @@ export class ModifyAdminCourseComponent implements OnInit, AfterViewInit {
   loadUserList() {
     this.bUserListLoaded = false;
     this.service.getUserList(this._globals.companyInfo.companyId).subscribe(data => {
-      if (data.success) {
+      if (data?.success) {
         this.permissionList.data = data.data;
         if (!this._globals.userInfo.isAdmin) {
           this.permissionList.data.forEach(user => {

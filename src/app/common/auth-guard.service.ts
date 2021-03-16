@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, isDevMode } from '@angular/core';
 import { Router, CanActivate, ActivatedRouteSnapshot } from '@angular/router';
 
 @Injectable()
@@ -93,7 +93,11 @@ export class Globals {
             this.JsonURL = this.WebURL + "/API/";
             this.adminURL = server.adminURL;
         } else {
-            this.WebURL = ".";
+            if (isDevMode()) {
+                this.WebURL = "http://localhost:8080";
+            } else {
+                this.WebURL = ".";
+            }
             this.APIURL = this.WebURL + "/API/index.php/";
             this.JsonURL = this.WebURL + "/API/";
             this.adminURL = "";
@@ -121,16 +125,32 @@ export class Globals {
         this.userInfo.EmpName = userData.EmpName;
         this.userInfo.userLang = userData.userLang;
     }
-    setCompany(compData) {
-        this.companyInfo.BackgroundImage = compData.BackgroundImage;
-        this.companyInfo.baner = compData.baner;
-        this.companyInfo.companyId = compData.companyId;
-        this.companyInfo.companyLogo = compData.companyLogo;
-        this.companyInfo.companyName = compData.companyName;
-        this.companyInfo.companyRegNo = compData.companyRegNo;
-        this.companyInfo.bannerColor = compData.bannerColor;
-        this.companyInfo.webUrl = compData.webUrl;
-        this.companyInfo.isSet = true;
+    setCompany(compData = undefined) {
+        if (compData != undefined) {
+            this.companyInfo.BackgroundImage = compData.BackgroundImage;
+            this.companyInfo.baner = compData.baner;
+            this.companyInfo.companyId = compData.companyId;
+            this.companyInfo.companyLogo = compData.companyLogo;
+            this.companyInfo.companyName = compData.companyName;
+            this.companyInfo.companyRegNo = compData.companyRegNo;
+            this.companyInfo.bannerColor = compData.bannerColor;
+            this.companyInfo.webUrl = compData.webUrl;
+            this.companyInfo.isSet = true;
+        } else {
+            this.companyInfo.BackgroundImage = '';
+            this.companyInfo.baner = '';
+            this.companyInfo.companyId = 0;
+            this.companyInfo.companyLogo = '';
+            this.companyInfo.companyName = 'Smart-Study';
+            this.companyInfo.companyRegNo = '';
+            //this.companyInfo.bannerColor = compData.bannerColor;
+            if (isDevMode()) {
+                this.companyInfo.webUrl = 'http://localhost:8080';
+            } else {
+                this.companyInfo.webUrl = '.';
+            }
+            this.companyInfo.isSet = true;
+        }
     }
     setDepartment(departmentData) {
         this.companyInfo.DLogo = departmentData.DLogo == '' ? null : departmentData.DLogo;
@@ -196,8 +216,6 @@ export class AuthGuardService implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot): boolean {
         if (route.url.length > 0) {
             var bValid = true;
-
-            // http://localhost:4200/#/employee/content/add/13
             if (route.url[0].path == 'trainer') {
                 bValid = false;
             } else {
@@ -207,6 +225,8 @@ export class AuthGuardService implements CanActivate {
                     } else if (route.url[0].path == 'admin' && Number(this._globals.userInfo.UserType) > 2) { // admin route, but not admin
                         bValid = false;
                     } else if (route.url[0].path == 'employee' && Number(this._globals.userInfo.UserType) < 3) { // employee route, but not employee
+                        bValid = false;
+                    } else if (route.url[0].path == 'superadmin' && Number(this._globals.userInfo.UserType) > 1) {
                         bValid = false;
                     } else if ((route.url[0].path == 'course' || route.url[0].path == 'content' || route.url[0].path == 'test' || route.url[0].path == 'certificater') &&
                         !(Number(this._globals.userInfo.UserType) > 2) &&
@@ -221,16 +241,6 @@ export class AuthGuardService implements CanActivate {
                 this.router.navigate([''], { skipLocationChange: false });
                 return false;
             }
-
-            // if (this._globals.userInfo.UserType == '' || !this._globals.bIsLoggedIn || // user type not set or not logged in
-            //     (route.url[0].path == 'admin' && Number(this._globals.userInfo.UserType) > 2) || // admin route, but not admin
-            //     // (route.url[0].path == 'trainer' && Number(this._globals.userInfo.UserType) != 3) || // trainer route, but not trainer
-            //     (route.url[0].path == 'employee' && Number(this._globals.userInfo.UserType) < 3)) { // employee route, but not employee
-            //     //console.log(route.url);
-            //     this._globals.removedUser();
-            //     this.router.navigate([''], { skipLocationChange: false });
-            //     return false;
-            // }
         }
         return true;
     }

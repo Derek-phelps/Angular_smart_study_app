@@ -20,31 +20,31 @@
             <mat-checkbox formControlName="hasFinalExam" class="coloBlack">{{'course.CourseHasFinalExam' | translate}}
             </mat-checkbox>
         </div>
-        
+
         <input type="file" #fileUpload style="display: none;" (change)="handleFileInput($event.target.files)"
             name="myFile">
-        <mat-form-field style="width: 100%;" *ngIf="!EmpForm.value.isScormCourse && EmpForm.value.hasFinalExam" >
+        <mat-form-field style="width: 100%;" *ngIf="!EmpForm.value.isScormCourse && EmpForm.value.hasFinalExam">
             <input matInput type="number" formControlName="minResult" placeholder="{{'course.MinRes' | translate}}*"
                 min="0" max="100">
-                <p matSuffix>%</p>
-                <mat-hint *ngIf="EmpForm.get('minResult').value < 10" class="warning">
-                    {{'course.MinResTooLowWarning' | translate}}
-                </mat-hint>
-                <mat-hint *ngIf="EmpForm.get('minResult').value > 90" class="warning">
-                    {{'course.MinResTooHighWarning' | translate}}
-                </mat-hint>
+            <p matSuffix>%</p>
+            <mat-hint *ngIf="EmpForm.get('minResult').value < 10" class="warning">
+                {{'course.MinResTooLowWarning' | translate}}
+            </mat-hint>
+            <mat-hint *ngIf="EmpForm.get('minResult').value > 90" class="warning">
+                {{'course.MinResTooHighWarning' | translate}}
+            </mat-hint>
         </mat-form-field>
 
         <mat-form-field style="width: 100%;" *ngIf="!EmpForm.value.isScormCourse && EmpForm.value.hasFinalExam">
             <input matInput type="number" formControlName="duration" placeholder="{{'course.Duration' | translate}}"
                 min="1" numbersOnly>
-                <p matSuffix>m</p>
-                <mat-hint *ngIf="EmpForm.get('duration').value < 3" class="warning">
-                    {{'course.DurationTooLowWarning' | translate}}
-                </mat-hint>
-                <mat-hint *ngIf="EmpForm.get('duration').value > 90" class="warning">
-                    {{'course.DurationTooHighWarning' | translate}}
-                </mat-hint>
+            <p matSuffix>m</p>
+            <mat-hint *ngIf="EmpForm.get('duration').value < 3" class="warning">
+                {{'course.DurationTooLowWarning' | translate}}
+            </mat-hint>
+            <mat-hint *ngIf="EmpForm.get('duration').value > 90" class="warning">
+                {{'course.DurationTooHighWarning' | translate}}
+            </mat-hint>
         </mat-form-field>
         <!-- <div class="form-group" *ngIf="!EmpForm.value.isScormCourse && !EmpForm.value.isOffline">
             <input type="number" class="form-control" formControlName="duration"
@@ -77,9 +77,10 @@
             </mat-card-content>
         </mat-card>
 
-        <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12" *ngIf="_globals.userInfo.isAdmin">
-            <label for="addUserTable"
-                style="color: black; font-size: 16px;">{{'group.DefinePermissions' | translate}}</label>
+        <div class="form-group col-xlg-12 col-lg-12 col-md-12 col-sm-12 col-12"
+            *ngIf="_globals.userInfo.isAdmin && _globals.userInfo.UserType != '1'">
+            <label for="addUserTable" style="color: black; font-size: 16px;">{{'group.DefinePermissions' |
+                translate}}</label>
             <mat-form-field class="user-filter">
                 <mat-label>{{'group.Search' | translate}}</mat-label>
                 <input matInput (keyup)="applyFilterPermissions($event)" placeholder="">

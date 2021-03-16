@@ -1,70 +1,13 @@
 export let MENU_super_ITEM = [
     {
-        path: 'dashboard',
-        title: 'menu.Dashboard',
-        icon: 'dashboard'
+        path: 'registrations',
+        title: 'menu.Registrations',
+        icon: 'users'
     },
     {
-
-        title: 'menu.Company',
-        icon: 'industry',
-        toggle: 'off',
-        children: [
-            {
-                path: 'company',
-                title: 'menu.Company'
-            },
-            {
-                path: 'employees',
-                title: 'menu.Employees'
-            },
-            {
-                path: 'department',
-                title: 'menu.Departments'
-            }
-        ]
-    },
-    {
+        path: 'course',
         title: 'menu.Course',
-        icon: 'book',
-        toggle: 'off',
-        children: [
-            {
-                path: 'course',
-                title: 'menu.Course'
-            }, {
-                path: 'content',
-                title: 'menu.Content'
-            },
-            {
-                path: 'test',
-                title: 'menu.Test'
-            },
-            {
-                path: 'certificater',
-                title: 'menu.Certificater',
-                icon: 'graduation-cap'
-            }
-        ]
-    },
-    {
-        path: 'trainers',
-        title: 'menu.Trainer',
-        icon: 'truck'
-    },
-    {
-        path: 'location',
-        title: 'menu.Locations',
-        icon: 'bullseye'
-    },
-    {
-        path: 'message',
-        title: 'menu.Messages',
-        icon: 'dashboard'
-    }, {
-        path: 'feedback',
-        title: 'menu.Feedback',
-        icon: 'feedBack'
+        icon: 'book'
     },
 ];
 export let MENU_admin_ITEM = [
@@ -73,18 +16,6 @@ export let MENU_admin_ITEM = [
         title: 'course.MyCourses',
         icon: 'book',
     },
-    // {
-    //     path: 'mydepartments',
-    //     title: 'menu.MyDepartments',
-    //     icon: 'building',
-    //     disabled: true
-    // },
-    // {
-    //     path: 'mygroups',
-    //     title: 'menu.MyGroups',
-    //     icon: 'users',
-    //     disabled: true
-    // },
     {
         path: 'mycertificates',
         title: 'menu.MyCertificates',
@@ -116,86 +47,11 @@ export let MENU_admin_ITEM = [
         title: 'menu.Groups',
         icon: 'users'
     },
-    // {
-    //     title: 'menu.CompanyAdmin',
-    //     icon: 'industry',
-    //     toggle: 'off',
-    //     children: [
-    //         {
-    //             path: 'company',
-    //             title: 'menu.Company'
-    //         },
-    //         {
-    //             path: 'employees',
-    //             title: 'menu.Employees'
-    //         },
-    //         {
-    //             path: 'department',
-    //             title: 'menu.Departments'
-    //         },
-    //         {
-    //             path: 'groups',
-    //             title: 'menu.Groups'
-    //         }
-    //         // {
-    //         //     path: 'trainer',
-    //         //     title: 'menu.Trainer'
-    //         // }
-    //     ]
-    // },
-    // {
-    //     title: 'menu.Course',
-    //     icon: 'book',
-    //     toggle:'off',
-    //     children: [
-    //         {
-    //             path: 'course',
-    //             title: 'menu.Course'
-    //         },
-    //         // {
-    //         //     path: 'content',
-    //         //     title: 'menu.Content'
-    //         // },
-    //         // {
-    //         //     path: 'test',
-    //         //     title: 'menu.Test'
-    //         // },
-    //         // {
-    //         //     path: 'trainer',
-    //         //     title: 'menu.Trainer'
-    //         // },
-    //         {
-    //             path: 'certificater',
-    //             title: 'menu.Certificater'
-    //             //icon: 'graduation-cap'
-    //         }
-    //     ]
-    // },
     {
         path: 'course',
         title: 'menu.Course',
         icon: 'book'
     },
-    // {
-    //     path: 'message',
-    //     title: 'menu.Messages',
-    //     icon: 'envelope-open'
-    // },
-    // {
-    //     path: 'position',
-    //     title: 'menu.Positions',
-    //     icon: 'table'
-    // },
-    // {
-    //     path: 'location',
-    //     title: 'menu.Locations',
-    //     icon: 'bullseye'
-    // },
-    // {
-    //     path: 'feedback',
-    //     title: 'menu.Feedback',
-    //     icon: 'quote-right'
-    // },
 ];
 export let MENU_admin_ITEM_fagus = [
     {
@@ -220,10 +76,6 @@ export let MENU_admin_ITEM_fagus = [
                 path: 'department',
                 title: 'menu.Departments'
             },
-            // {
-            //     path: 'trainer',
-            //     title: 'menu.Trainer'
-            // }
         ]
     },
     {
@@ -235,18 +87,6 @@ export let MENU_admin_ITEM_fagus = [
                 path: 'course',
                 title: 'menu.Course'
             },
-            // {
-            //     path: 'content',
-            //     title: 'menu.Content'
-            // },
-            // {
-            //     path: 'test',
-            //     title: 'menu.Test'
-            // },
-            // {
-            //     path: 'trainer',
-            //     title: 'menu.Trainer'
-            // },
             {
                 path: 'certificater',
                 title: 'menu.Certificater'
@@ -308,16 +148,6 @@ export let MENU_trainer_employee_ITEM = [
     }
 ];
 export let MENU_employee_ITEM = [
-    // {
-    //     path: 'dashboard',
-    //     title: 'menu.Dashboard',
-    //     icon: 'dashboard'
-    // },
-    // {
-    //     path: 'course',
-    //     title: 'menu.Course',
-    //     icon: 'book'
-    // },
     {
         path: 'mycourses',
         title: 'course.MyCourses',
@@ -347,14 +177,4 @@ export let MENU_employee_ITEM = [
         icon: 'book',
         checkCourses: true
     },
-    // {
-    //     path: 'message',
-    //     title: 'menu.Messages',
-    //     icon: 'diamond'
-    // },
-    // {
-    //     path: 'feedback',
-    //     title: 'menu.Feedback',
-    //     icon: 'user'
-    // }
 ];

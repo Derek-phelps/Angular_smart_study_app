@@ -64,6 +64,9 @@ export class AppComponent implements OnInit {
       if (this.router.url.startsWith('/register')) {
         this.globals.setServerInfo();
         this.globals.bIsRegister = true;
+      } else if (this.router.url.startsWith('/')) {
+        this.globals.setServerInfo();
+        this.globals.setCompany();
       }
     });
   }
