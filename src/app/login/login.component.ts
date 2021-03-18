@@ -1,4 +1,5 @@
 import { Component, ViewChild, OnInit, ElementRef, AfterViewInit } from '@angular/core';
+import { take } from 'rxjs/operators';
 
 import { FormGroup, AbstractControl, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,7 +15,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { $ } from 'protractor';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
-const VERSION_NUMBER = '3.12.0'; // Define VERSION_NUMBER
+const VERSION_NUMBER = '3.13.0'; // Define VERSION_NUMBER
 
 const SECONDS_UNITL_AUTO_LOGOUT = 3550; // in s
 const CHECK_INTERVAL = 10000; // in ms
@@ -137,53 +138,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       //this._loginService.endSession(url).subscribe(val => {
       if (!obj.globals.bInitialDbCommunicationError) {
         this._loginService.getCompanyLang(url, data.companyId, VERSION_NUMBER).subscribe(cmpLang => {
-          //console.log(localStorage.getItem());
-          if (!cmpLang || !cmpLang.VERSION_NUMBER || cmpLang.VERSION_NUMBER != VERSION_NUMBER) {
-            if (!cmpLang || !cmpLang.VERSION_NUMBER) {
-              this.logVersionErrorAndReload('Undefined', VERSION_NUMBER);
-            }
-            var ApiVersion = cmpLang.VERSION_NUMBER ? cmpLang.VERSION_NUMBER.split(".") : [];
-            var AppVersion = VERSION_NUMBER.split(".");
-
-            if (ApiVersion.length == 3 && AppVersion.length == 3) {
-              if (JSON.stringify(ApiVersion) != JSON.stringify(AppVersion)) {
-                if (ApiVersion[0] == AppVersion[0] && ApiVersion[1] == AppVersion[1]) {
-                  const snack = this.snackbar.open(this.translate.instant('login.UpdateAvailable'),
-                    this.translate.instant('login.Update'), { duration: 10000 });
-
-                  snack
-                    .onAction()
-                    .subscribe(() => {
-                      window.location.reload();
-                    });
-                } else {
-                  this.logVersionErrorAndReload(cmpLang.VERSION_NUMBER, VERSION_NUMBER);
-                }
-              }
-            } else {
-              this.logVersionErrorAndReload(cmpLang.VERSION_NUMBER, VERSION_NUMBER);
-            }
-          }
-          if (cmpLang.success) {
-            obj.globals.companyInfo.defaultLang = cmpLang.defaultLang;
-            obj.translate.use(cmpLang.defaultLang);
-            localStorage.setItem('defaultLang', cmpLang.defaultLang);
-
-            this.globals.bConnectAd = (cmpLang.connectAD == '1');
-
-            if (this.globals.bConnectAd && !this.bAutoLogout && !this.bLogout) {
-              this.bAutoLogin = true;
-
-              this._loginService.netScalerLogin(url).subscribe(response => {
-                if (response.success == true) {
-                  // this._loginService.getUserLoggedIn(url).subscribe(user => {
-                  //   console.log(user);
-                  // });
-                  this.onSubmit({});
-                }
-              });
-            }
-          }
+          this.checkVersionSetCompInfo(cmpLang, url);
         }, () => {
           //window.location.reload();
           obj.globals.incrementAndCheckOfflineError();
@@ -191,7 +146,13 @@ export class LoginComponent implements OnInit, AfterViewInit {
       }
       //});
     }, () => {
-      obj.globals.incrementAndCheckOfflineError();
+      if (this.globals.companyInfo.companyId != 0) {
+        this.globals.incrementAndCheckOfflineError();
+      } else {
+        this._loginService.getCompanyLang(this.globals.APIURL, 0, VERSION_NUMBER).pipe(take(1)).subscribe(cmpLang => {
+          this.checkVersionSetCompInfo(cmpLang, this.globals.APIURL);
+        });
+      }
     });
   }
 
@@ -399,7 +360,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.setLogoutListener();
 
     if (userType == 1) {
-      this.router.navigate(['./superadmin/mycourses'], { skipLocationChange: false });
+      this.router.navigate(['./superadmin/registrations'], { skipLocationChange: false });
     } else if (userType == 2) {
       this.router.navigate(['./admin/dashboard'], { skipLocationChange: false });
       // } else if (userType == 3) {
@@ -509,5 +470,55 @@ export class LoginComponent implements OnInit, AfterViewInit {
         }
       });
     }, 300);
+  }
+
+  checkVersionSetCompInfo(cmpLang, url) {
+    //console.log(localStorage.getItem());
+    if (!cmpLang || !cmpLang.VERSION_NUMBER || cmpLang.VERSION_NUMBER != VERSION_NUMBER) {
+      if (!cmpLang || !cmpLang.VERSION_NUMBER) {
+        this.logVersionErrorAndReload('Undefined', VERSION_NUMBER);
+      }
+      var ApiVersion = cmpLang.VERSION_NUMBER ? cmpLang.VERSION_NUMBER.split(".") : [];
+      var AppVersion = VERSION_NUMBER.split(".");
+
+      if (ApiVersion.length == 3 && AppVersion.length == 3) {
+        if (JSON.stringify(ApiVersion) != JSON.stringify(AppVersion)) {
+          if (ApiVersion[0] == AppVersion[0] && ApiVersion[1] == AppVersion[1]) {
+            const snack = this.snackbar.open(this.translate.instant('login.UpdateAvailable'),
+              this.translate.instant('login.Update'), { duration: 10000 });
+
+            snack
+              .onAction()
+              .subscribe(() => {
+                window.location.reload();
+              });
+          } else {
+            this.logVersionErrorAndReload(cmpLang.VERSION_NUMBER, VERSION_NUMBER);
+          }
+        }
+      } else {
+        this.logVersionErrorAndReload(cmpLang.VERSION_NUMBER, VERSION_NUMBER);
+      }
+    }
+    if (cmpLang.success) {
+      this.globals.companyInfo.defaultLang = cmpLang.defaultLang;
+      this.translate.use(cmpLang.defaultLang);
+      localStorage.setItem('defaultLang', cmpLang.defaultLang);
+
+      this.globals.bConnectAd = (cmpLang.connectAD == '1');
+
+      if (this.globals.bConnectAd && !this.bAutoLogout && !this.bLogout) {
+        this.bAutoLogin = true;
+
+        this._loginService.netScalerLogin(url).subscribe(response => {
+          if (response.success == true) {
+            // this._loginService.getUserLoggedIn(url).subscribe(user => {
+            //   console.log(user);
+            // });
+            this.onSubmit({});
+          }
+        });
+      }
+    }
   }
 }

@@ -669,7 +669,8 @@
     "Settings": "Einstellungen",
     "MyDepartments": "Meine Abteilungen",
     "MyGroups": "Meine Gruppen",
-    "MyCertificates": "Meine Zertifikate"
+    "MyCertificates": "Meine Zertifikate",
+    "Registrations": "Registrierungen"
   },
   "alert": {
     "uploadImgFail": "FEHLER: Die Bilddatei konnte nicht erfolgreich hochgeladen werden (nicht erlaubte Dateiendung oder beschädigte Datei).",
@@ -873,5 +874,12 @@
     "RegNow": "JETZT registrieren",
     "DefaultError": "Es ist ein unbekannter Fehler aufgetreten. Bitte versuchen Sie es erneut.",
     "ThankYouInfo": "<p>Vielen Dank für Ihre Registrierung!</p><p>Ihr Demo-System wird gerade erstellt. Sie erhalten in Kürze eine E-Mail mit Ihren Zugangsdaten.</p><p>Ihr individuelles Demo-System steht Ihnen einen Monat lang zur Verfügung und wird danach automatisch gelöscht.</p><p><b>Viel Spaß beim Ausprobieren von Smart-Study!</b></p>"
+  },
+  "registrations": {
+    "Registrations": "Registrierungen",
+    "SumReg": "Derzeit sind {{sum}} Demo-Accounts registriert.",
+    "RegSince": "Registriert seit",
+    "LicenseUntil": "Lizenz bis",
+    "Unlimited": "Unbefristet"
   }
 }

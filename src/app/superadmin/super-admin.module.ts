@@ -24,15 +24,21 @@ import { SuperadminComponent } from './superadmin.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 import { SuperadminService } from './superadmin.service';
+import { RegistrationsComponent } from './registrations/registrations.component';
+
+import { TableModule } from 'primeng/table';
+import { TagModule } from "primeng/tag";
 
 
 @NgModule({
   imports: [
     CommonModule, LayoutModule, SharedModule, AppTranslationModule, routing, FeedbackModule, MessageModule,
     MatListModule, MatDialogModule, MatCardModule, MatFormFieldModule, MatInputModule, ProfileModule,
-    FormsModule, ReactiveFormsModule, MatSortModule, MatTableModule, MatPaginatorModule
+    FormsModule, ReactiveFormsModule, MatSortModule, MatTableModule, MatPaginatorModule,
+    TableModule,
+    TagModule
   ],
-  declarations: [SuperadminComponent, DashboardComponent,
+  declarations: [SuperadminComponent, DashboardComponent, RegistrationsComponent,
   ],
   providers: [
     SuperadminService

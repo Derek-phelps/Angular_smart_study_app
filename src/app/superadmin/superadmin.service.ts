@@ -1,8 +1,8 @@
 
-import {throwError as observableThrowError,  Observable } from 'rxjs';
+import { throwError as observableThrowError, Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
-import {  HttpClient,HttpHeaders } from "@angular/common/http";
-import { map,catchError } from 'rxjs/operators';
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { map, catchError } from 'rxjs/operators';
 import { Globals } from '../common/auth-guard.service';
 
 @Injectable()
@@ -16,8 +16,8 @@ export class SuperadminService {
 
     private _getCourseByCompId = 'Course/getMapCourse';
     private _deleteMapUrl = 'Course/deleteMapUrl';
-    
-    private _getAllDepartment ="Department";
+
+    private _getAllDepartment = "Department";
     private _getAllCourseUrl = 'Course';
     private _addCourseUrl = 'Course/saveCompany';
     private _editCourseUrl = 'Course/editCompany';
@@ -27,7 +27,7 @@ export class SuperadminService {
     private _addChapterUrl = 'Chapter/saveCompany';
     private _editChapterUrl = 'Chapter/editCompany';
     private _deleteChapterUrl = 'Chapter/deleteCompany';
-    
+
 
     private _getAllQuestionUrl = 'Question/getAllQuestion';
     private _addQuestionUrl = 'Question/saveCompany';
@@ -42,42 +42,49 @@ export class SuperadminService {
     private _getSuperAdminUrl = 'Users/getSuperAdminDashnoard';
 
     private _checkUserEmailUrl = 'Users/validEmail';
-    constructor(private _http: HttpClient,public _globals: Globals) { 
-           
+    constructor(private _http: HttpClient, public _globals: Globals) {
+
     }
-    getAllDepartment(companyId):any{
-        let formData:FormData = new FormData();
+
+    getAllRegistrations(): any {
+        return this._http.get(this._globals.APIURL + 'Users/getAllRegistrations')
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
+    }
+
+    getAllDepartment(companyId): any {
+        let formData: FormData = new FormData();
         formData.append('companyId', companyId);
-        return this._http.post(this._globals.APIURL+this._getAllDepartment,formData)
-        .pipe(map((response: Response) => response))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._getAllDepartment, formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
     }
 
-    deletMapCourseByComp(courseMapId): any{
-        let formData:FormData = new FormData();
-        
+    deletMapCourseByComp(courseMapId): any {
+        let formData: FormData = new FormData();
+
         formData.append('courseMapId', courseMapId);
- 
-        return this._http.post(this._globals.APIURL+this._deleteMapUrl,formData)
-        .pipe(map((response: Response) => response))
-        .pipe(catchError(this.handleError))
-    }
-    getSuperAdminDashnoard(): any{
-        let formData:FormData = new FormData();
 
-        return this._http.post(this._globals.APIURL+this._getSuperAdminUrl,formData)
-        .pipe(map((response: Response) => response))
-        .pipe(catchError(this.handleError));
+        return this._http.post(this._globals.APIURL + this._deleteMapUrl, formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
     }
-    getAllCompany(): any  {
-        let formData:FormData = new FormData();
-        return this._http.post(this._globals.APIURL+this._getAllCompanyUrl,formData)
-        .pipe(map((response: Response) => response))
-        .pipe(catchError(this.handleError))
+    getSuperAdminDashnoard(): any {
+        let formData: FormData = new FormData();
+
+        return this._http.post(this._globals.APIURL + this._getSuperAdminUrl, formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError));
     }
-    addCompany(form:any): any  {
-        let formData:FormData = new FormData();
-        
+    getAllCompany(): any {
+        let formData: FormData = new FormData();
+        return this._http.post(this._globals.APIURL + this._getAllCompanyUrl, formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
+    }
+    addCompany(form: any): any {
+        let formData: FormData = new FormData();
+
         formData.append('companyName', form.companyName);
         formData.append('companyLogo', form.companyLogo);
         formData.append('companyRegNo', form.companyRegNo);
@@ -88,15 +95,15 @@ export class SuperadminService {
         formData.append('BackgroundImage', form.BackgroundImage);
         formData.append('adminEmail', form.adminEmail);
         formData.append('adminPassword', form.adminPassword);
-        formData.append('CourseList', JSON.stringify(form.CourseList) );
+        formData.append('CourseList', JSON.stringify(form.CourseList));
 
-    return this._http.post(this._globals.APIURL+this._addCompanyUrl,formData)
-        .pipe(map((response: Response) => response))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._addCompanyUrl, formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
     }
-    editCompany(form:any): any  {
-        let formData:FormData = new FormData();
-        
+    editCompany(form: any): any {
+        let formData: FormData = new FormData();
+
         formData.append('companyName', form.companyName);
         formData.append('companyLogo', form.companyLogo);
         formData.append('companyRegNo', form.companyRegNo);
@@ -107,175 +114,175 @@ export class SuperadminService {
         formData.append('BackgroundImage', form.BackgroundImage);
         formData.append('companyId', form.companyId);
         formData.append('adminEmail', form.adminEmail);
-        formData.append('CourseList', JSON.stringify(form.CourseList) );
-        
-    return this._http.post(this._globals.APIURL+this._editCompanyUrl,formData)
-        .pipe(map((response: Response) => response))
-        .pipe(catchError(this.handleError))
+        formData.append('CourseList', JSON.stringify(form.CourseList));
+
+        return this._http.post(this._globals.APIURL + this._editCompanyUrl, formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
     }
-    deleteCompany(companyId): any  {
-        let formData:FormData = new FormData();
+    deleteCompany(companyId): any {
+        let formData: FormData = new FormData();
         formData.append('companyId', companyId);
-    return this._http.post(this._globals.APIURL+this._deleteCompanyUrl,formData)
-        .pipe(map((response: Response) => response.json()))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._deleteCompanyUrl, formData)
+            .pipe(map((response: Response) => response.json()))
+            .pipe(catchError(this.handleError))
     }
-    getCompanyById(companyId):any{
-        let formData:FormData = new FormData();
+    getCompanyById(companyId): any {
+        let formData: FormData = new FormData();
         formData.append('companyId', companyId);
-    return this._http.post(this._globals.APIURL+this._getCompanyByIdUrl,formData)
-        .pipe(map((response: Response) => response))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._getCompanyByIdUrl, formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
     }
-    getCompanyWithCompanyById(companyId):any{
-        let formData:FormData = new FormData();
+    getCompanyWithCompanyById(companyId): any {
+        let formData: FormData = new FormData();
         formData.append('companyId', companyId);
-    return this._http.post(this._globals.APIURL+this._getAllCompanyUrl,formData)
-        .pipe(map((response: Response) => response))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._getAllCompanyUrl, formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
     }
-    emailExist(email):any{
-        let formData:FormData = new FormData();
+    emailExist(email): any {
+        let formData: FormData = new FormData();
         formData.append('email', email);
-    return this._http.post(this._globals.APIURL+this._checkUserEmailUrl,formData)
-        .pipe(map((response: Response) => response))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._checkUserEmailUrl, formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
     }
-    saveMapCourseByComp(form):any{
-        let formData:FormData = new FormData();
-        
-        formData.append('companyId', form.companyId);   
-        formData.append('CourseList', JSON.stringify(form.CourseList) );
-        
-    return this._http.post(this._globals.APIURL+this._MapCourseUrl,formData)
-        .pipe(map((response: Response) => response))
-        .pipe(catchError(this.handleError))
+    saveMapCourseByComp(form): any {
+        let formData: FormData = new FormData();
+
+        formData.append('companyId', form.companyId);
+        formData.append('CourseList', JSON.stringify(form.CourseList));
+
+        return this._http.post(this._globals.APIURL + this._MapCourseUrl, formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
     }
-    getCourseByCompId(companyId):any{
-        let formData:FormData = new FormData();
+    getCourseByCompId(companyId): any {
+        let formData: FormData = new FormData();
         formData.append('companyId', companyId);
-        return this._http.post(this._globals.APIURL+this._getCourseByCompId,formData)
-        .pipe(map((response: Response) => response))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._getCourseByCompId, formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
     }
-    getAllCourse(): any  {
+    getAllCourse(): any {
 
-        let formData:FormData = new FormData();
+        let formData: FormData = new FormData();
 
-        return this._http.post(this._globals.APIURL+this._getAllCourseUrl,formData)
-        .pipe(map((response: Response) => response))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._getAllCourseUrl, formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
     }
-    addCourse(form:any,img): any  {
-        let formData:FormData = new FormData();
+    addCourse(form: any, img): any {
+        let formData: FormData = new FormData();
         formData.append('username', form.email);
-    return this._http.post(this._globals.APIURL+this._addCourseUrl,formData)
-        .pipe(map((response: Response) => response.json()))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._addCourseUrl, formData)
+            .pipe(map((response: Response) => response.json()))
+            .pipe(catchError(this.handleError))
     }
-    editCourse(form:any): any  {
-        let formData:FormData = new FormData();
+    editCourse(form: any): any {
+        let formData: FormData = new FormData();
         formData.append('username', form.email);
-    return this._http.post(this._globals.APIURL+this._editCourseUrl,formData)
-        .pipe(map((response: Response) => response.json()))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._editCourseUrl, formData)
+            .pipe(map((response: Response) => response.json()))
+            .pipe(catchError(this.handleError))
     }
-    deleteCourse(courseId): any  {
-        let formData:FormData = new FormData();
+    deleteCourse(courseId): any {
+        let formData: FormData = new FormData();
         formData.append('CourseId', courseId);
-    return this._http.post(this._globals.APIURL+this._deleteCourseUrl,formData)
-        .pipe(map((response: Response) => response.json()))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._deleteCourseUrl, formData)
+            .pipe(map((response: Response) => response.json()))
+            .pipe(catchError(this.handleError))
     }
 
-    getAllChapter(): any  {
+    getAllChapter(): any {
 
-        let formData:FormData = new FormData();
+        let formData: FormData = new FormData();
 
-        return this._http.post(this._globals.APIURL+this._getAllChapterUrl,formData)
-        .pipe(map((response: Response) => response))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._getAllChapterUrl, formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
     }
-    addChapter(form:any,img): any  {
-        let formData:FormData = new FormData();
+    addChapter(form: any, img): any {
+        let formData: FormData = new FormData();
         formData.append('username', form.email);
-    return this._http.post(this._globals.APIURL+this._addChapterUrl,formData)
-        .pipe(map((response: Response) => response.json()))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._addChapterUrl, formData)
+            .pipe(map((response: Response) => response.json()))
+            .pipe(catchError(this.handleError))
     }
-    editChapter(form:any): any  {
-        let formData:FormData = new FormData();
+    editChapter(form: any): any {
+        let formData: FormData = new FormData();
         formData.append('username', form.email);
-    return this._http.post(this._globals.APIURL+this._editChapterUrl,formData)
-        .pipe(map((response: Response) => response.json()))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._editChapterUrl, formData)
+            .pipe(map((response: Response) => response.json()))
+            .pipe(catchError(this.handleError))
     }
-    deleteChapter(companyId): any  {
-        let formData:FormData = new FormData();
+    deleteChapter(companyId): any {
+        let formData: FormData = new FormData();
         formData.append('companyId', companyId);
-    return this._http.post(this._globals.APIURL+this._deleteChapterUrl,formData)
-        .pipe(map((response: Response) => response.json()))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._deleteChapterUrl, formData)
+            .pipe(map((response: Response) => response.json()))
+            .pipe(catchError(this.handleError))
     }
 
-    getAllQuestion(): any  {
+    getAllQuestion(): any {
 
-        let formData:FormData = new FormData();
+        let formData: FormData = new FormData();
 
-        return this._http.post(this._globals.APIURL+this._getAllQuestionUrl,formData)
-        .pipe(map((response: Response) => response))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._getAllQuestionUrl, formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
     }
-    addQuestion(form:any,img): any  {
-        let formData:FormData = new FormData();
+    addQuestion(form: any, img): any {
+        let formData: FormData = new FormData();
         formData.append('username', form.email);
-    return this._http.post(this._globals.APIURL+this._addQuestionUrl,formData)
-        .pipe(map((response: Response) => response.json()))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._addQuestionUrl, formData)
+            .pipe(map((response: Response) => response.json()))
+            .pipe(catchError(this.handleError))
     }
-    editQuestion(form:any): any  {
-        let formData:FormData = new FormData();
+    editQuestion(form: any): any {
+        let formData: FormData = new FormData();
         formData.append('username', form.email);
-    return this._http.post(this._globals.APIURL+this._editQuestionUrl,formData)
-        .pipe(map((response: Response) => response.json()))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._editQuestionUrl, formData)
+            .pipe(map((response: Response) => response.json()))
+            .pipe(catchError(this.handleError))
     }
-    deleteQuestion(companyId): any  {
-        let formData:FormData = new FormData();
+    deleteQuestion(companyId): any {
+        let formData: FormData = new FormData();
         formData.append('companyId', companyId);
-    return this._http.post(this._globals.APIURL+this._deleteQuestionUrl,formData)
-        .pipe(map((response: Response) => response.json()))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._deleteQuestionUrl, formData)
+            .pipe(map((response: Response) => response.json()))
+            .pipe(catchError(this.handleError))
     }
 
-    getAllCertificate(): any  {
+    getAllCertificate(): any {
 
-        let formData:FormData = new FormData();
+        let formData: FormData = new FormData();
 
-        return this._http.post(this._globals.APIURL+this._getAllCertificateUrl,formData)
-        .pipe(map((response: Response) => response))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._getAllCertificateUrl, formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
     }
-    addCertificate(form:any,img): any  {
-        let formData:FormData = new FormData();
+    addCertificate(form: any, img): any {
+        let formData: FormData = new FormData();
         formData.append('username', form.email);
-    return this._http.post(this._globals.APIURL+this._addCertificateUrl,formData)
-        .pipe(map((response: Response) => response.json()))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._addCertificateUrl, formData)
+            .pipe(map((response: Response) => response.json()))
+            .pipe(catchError(this.handleError))
     }
-    editCertificate(form:any): any  {
-        let formData:FormData = new FormData();
+    editCertificate(form: any): any {
+        let formData: FormData = new FormData();
         formData.append('username', form.email);
-    return this._http.post(this._globals.APIURL+this._editCertificateUrl,formData)
-        .pipe(map((response: Response) => response.json()))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._editCertificateUrl, formData)
+            .pipe(map((response: Response) => response.json()))
+            .pipe(catchError(this.handleError))
     }
-    deleteCertificate(companyId): any  {
-        let formData:FormData = new FormData();
+    deleteCertificate(companyId): any {
+        let formData: FormData = new FormData();
         formData.append('companyId', companyId);
-    return this._http.post(this._globals.APIURL+this._deleteCertificateUrl,formData)
-        .pipe(map((response: Response) => response.json()))
-        .pipe(catchError(this.handleError))
+        return this._http.post(this._globals.APIURL + this._deleteCertificateUrl, formData)
+            .pipe(map((response: Response) => response.json()))
+            .pipe(catchError(this.handleError))
     }
 
     private handleError(error: Response) {
@@ -284,4 +291,4 @@ export class SuperadminService {
         console.error(error);
         return observableThrowError(error || 'Server error');
     }
-} 
+}
