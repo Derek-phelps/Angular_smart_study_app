@@ -360,7 +360,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
     this.setLogoutListener();
 
     if (userType == 1) {
-      this.router.navigate(['./superadmin/course'], { skipLocationChange: false });
+      this.router.navigate(['./superadmin/registrations'], { skipLocationChange: false });
     } else if (userType == 2) {
       this.router.navigate(['./admin/dashboard'], { skipLocationChange: false });
       // } else if (userType == 3) {
