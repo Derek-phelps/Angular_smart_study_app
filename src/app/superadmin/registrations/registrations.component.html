@@ -1,0 +1,45 @@
+<p-table [value]="registeredUsers" selectionMode="single">
+    <ng-template pTemplate="caption">
+        <div class="p-d-flex p-ai-center p-jc-between">
+            {{'registrations.Registrations' | translate}}
+            <!-- <p-button icon="pi pi-refresh"></p-button> -->
+        </div>
+
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th>{{'employees.Surname' | translate}}</th>
+            <th>{{'employees.Name' | translate}}</th>
+            <th>{{'employees.Email' | translate}}</th>
+            <th>{{'registrations.RegSince' | translate}}</th>
+            <th>{{'registrations.LicenseUntil' | translate}}</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-user>
+        <tr>
+            <td>{{user.LASTNAME}}</td>
+            <td>{{user.FIRSTNAME}}</td>
+            <td>{{user.EmailID}}</td>
+            <td>{{formatDate(user.dateTimeCreated) | date:'dd.MM.yyyy\n(HH:mm:ss)'}}</td>
+            <td>
+                <p-tag
+                    [value]="user.licenseUntil ? (formatDate(user.licenseUntil) | date:'dd.MM.yyyy') : ('registrations.Unlimited' | translate)"
+                    [icon]="getIcon(user.licenseUntil)" [severity]="getSeverity(user.licenseUntil)"></p-tag>
+            </td>
+            <!-- <td>{{user.licenseUntil ? (formatDate(user.licenseUntil) | date:'dd.MM.yyyy') : ('registrations.Unlimited' |
+                translate)}}</td> -->
+            <!-- <td>{{product.category}}</td> -->
+            <!-- <td>
+                <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
+            </td>
+            <td><span
+                    [class]="'product-badge status-' + product.inventoryStatus.toLowerCase()">{{product.inventoryStatus}}</span>
+            </td> -->
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+        <div class="p-d-flex p-ai-center p-jc-between">
+            {{'registrations.SumReg' | translate:{sum: registeredUsers ? registeredUsers.length : 0} }}
+        </div>
+    </ng-template>
+</p-table>
