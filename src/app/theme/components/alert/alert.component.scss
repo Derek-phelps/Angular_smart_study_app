@@ -1,0 +1,46 @@
+
+.bulb-img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin-top: -10px;
+    margin-left: -10px;
+    width: 30px;
+    max-height: calc(100% - 60px);
+    opacity: 0.9;
+    object-fit: contain;
+}
+
+.close-icon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin-top: -10px;
+    margin-right: -10px;
+    color: rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.close-icon:hover {
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.dialog-wrapper {
+    position: relative;
+    //z-index: 9999;
+    //padding-top: 25px;
+}
+
+.my-dialog-header {
+    text-align: center;
+    margin-bottom: 25px;
+    margin-left: 30px;
+    margin-right: 30px;
+    h3 {
+        font-size: large;
+    }
+}
+
+.hover-zoom:hover {
+    transform: scale(1.1);
+}

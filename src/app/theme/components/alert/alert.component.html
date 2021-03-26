@@ -1,7 +1,14 @@
-<h1 mat-dialog-title style="text-align: center;">{{'login.forgot_password' | translate}}</h1>
-<div mat-dialog-content>
-  <p>{{data.Mes}}</p>
-</div>
-<div mat-dialog-actions>
-    <button mat-button (click)="openDialog()"  style="width: 45%;">{{'close' | translate}}</button>
+<div class="dialog-wrapper">
+  <div mat-dialog-title class="my-dialog-header">
+    <h3 *ngIf="!data.Head">{{'error' | translate}}</h3>
+    <h3 *ngIf="data.Head">{{data.Head}}</h3>
+  </div>
+  <div mat-dialog-content style="text-align: center;">
+    <p [innerHTML]="data.Mes"></p>
+  </div>
+  <div mat-dialog-actions align="center">
+    <button mat-button mat-dialog-close>{{'close' | translate}}</button>
+  </div>
+  <img class="bulb-img" src="assets/img/bulb_small.png" />
+  <i class="fa fa-times fa-lg close-icon" style="cursor: pointer;" [mat-dialog-close]="false"></i>
 </div>

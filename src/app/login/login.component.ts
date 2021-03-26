@@ -232,27 +232,17 @@ export class LoginComponent implements OnInit, AfterViewInit {
   }
   public forgetPassword() {
     if (this.email.value != "") {
-      this._loginService.forgetPassword(this.form.value)
-        .subscribe(user => {
-          if (user.success) {
-            this.translate.get('alert.MailPWSent').subscribe(value => { alert(value); });
-          } else {
-            this.translate.get('alert.CheckMail').subscribe(value => { alert(value); });
-          }
-        }, error => this.errorMessage = <any>error);
+      this.spinner.show();
+      this._loginService.forgetPassword(this.form.value).subscribe(user => {
+        if (user.success) {
+          this.showAlertDialog(this.translate.instant('alert.MailPWSent'), this.translate.instant('alert.MailPWSentH'))
+        } else {
+          this.showAlertDialog(this.translate.instant('alert.CheckMail'))
+        }
+        this.spinner.hide();
+      }, error => this.errorMessage = <any>error);
     } else {
-      this.translate.get('alert.EnterMail').subscribe(value => {
-        //alert(value);
-        const dialogRef = this.dialog.open(AlertComponent, {
-          width: '400px',
-          data: { companyId: "", Action: false, Mes: value }
-        });
-        dialogRef.afterClosed().subscribe(result => {
-          if (result) {
-            // TODO: Do something here???
-          }
-        });
-      });
+      this.showAlertDialog(this.translate.instant('alert.EnterMail'), this.translate.instant('login.forgot_password'));
     }
   }
   public registration() {
@@ -266,16 +256,17 @@ export class LoginComponent implements OnInit, AfterViewInit {
         dialogRef.afterClosed().subscribe(result => {
           //console.log(result);
           if (result) {
+            this.spinner.show();
             this._loginService.checkDepartmentByCom(this.globals.companyInfo.companyId, result)
               .subscribe(user => {
                 if (user.success) {
                   this.globals.currentRegId = user.data.departmentId;
                   this.router.navigate(['./registration', user.data.departmentId], { skipLocationChange: false });
                 } else {
-                  this.translate.get('alert.InvalidPW').subscribe(value => { alert(value); });
+                  this.showAlertDialog(this.translate.instant('alert.InvalidPW'));
                 }
+                this.spinner.hide();
               }, error => this.errorMessage = <any>error);
-
           }
         });
       });
@@ -299,6 +290,11 @@ export class LoginComponent implements OnInit, AfterViewInit {
             this.globals.canCreateCourses = user.menuInfo.canCreateCourses;
             if (this.globals.companyInfo.companyId == user.data.companyId) {
               //localStorage.setItem('currentUser', JSON.stringify(user.data));
+
+              if (Number(user.data.UserType) < 3 && user.licenseWarning) {
+                this.snackbar.open(this.translate.instant((user.licenseExp > 1 ? 'registrations.LicenseExpiredP' : 'registrations.LicenseExpiredS'), { days: user.licenseExp }), this.translate.instant('close'), { duration: undefined, panelClass: 'warning-snackbar' });
+              }
+
               this.globals.setDepartment(user.data);
               this.globals.setUserInfo(user.data);
               if (user.data.userLang != '') {
@@ -307,35 +303,31 @@ export class LoginComponent implements OnInit, AfterViewInit {
               if (window.innerWidth <= 800) {
                 this.globals.sidebarToggle = false;
               }
-              // TODO: Uncomment following line (code to update pw if needed)
-              //this._NavigateToDashboard(user.data.UserType);
+
               if (Number(user.data.pwChangeNeeded) != NaN && Number(user.data.pwChangeNeeded) == 0) {
                 this._NavigateToDashboard(user.data.UserType);
               } else if (Number(user.data.pwChangeNeeded) != NaN) {
                 this.userType = user.data.UserType;
                 this.bUpdateLater = Number(user.data.pwChangeNeeded) < 3 ? true : false;
                 this.bShowPwUpdateBox = true;
-                // setTimeout(() => {
-                //   this.newPwConfViewChild.nativeElement.removeAttribute('readonly');
-                //   this.newPwViewChild.nativeElement.removeAttribute('readonly');
-                // }, 200);
                 this.spinner.hide();
               }
               this.globals.bIsLoggedIn = true;
             } else {
-              // this.translate.get('alert.UnAuthComp').subscribe(value => { alert(value); });
-              this.translate.get('alert.UnAuth').subscribe(value => { alert(value); });
+              this.showAlertDialog(this.translate.instant('alert.UnAuth'));
               this.form.controls['password'].setValue("");
               this.spinner.hide();
             }
           } else {
             if (user.activationNeeded) {
-              this.translate.get('alert.NotActivated').subscribe(value => { alert(value); });
+              this.showAlertDialog(this.translate.instant('alert.NotActivated'));
             } else if (user.autoLoginFailed) {
               // automatic login failed...
               this.spinner.hide();
+            } else if (user.licenseExpired) {
+              this.showAlertDialog(this.translate.instant('registrations.LicenseExpired'), this.translate.instant('registrations.LicExp'));
             } else {
-              this.translate.get('alert.UnAuth').subscribe(value => { alert(value); });
+              this.showAlertDialog(this.translate.instant('alert.UnAuth'));
               this.form.controls['password'].setValue("");
             }
             if (!this.bAutoLogin) {
@@ -344,17 +336,12 @@ export class LoginComponent implements OnInit, AfterViewInit {
           }
           this.bAutoLogin = false;
         }, error => this.errorMessage = <any>error);
-    } else {
-      //alert(this.form);
     }
   }
   private _NavigateToDashboard(userType) {
-
-
     this.check();
     this.initListener();
     this.initInterval();
-    //localStorage.setItem(STORE_KEY, Date.now().toString());
     this.globals.lastAction = Date.now();
     localStorage.removeItem('logged_in');
     this.setLogoutListener();
@@ -373,7 +360,6 @@ export class LoginComponent implements OnInit, AfterViewInit {
     if (bUpdate) {
       this._loginService.updatePw(this.newPwForm.value, this.form.value.password).subscribe(data => {
         if (data.success) {
-          //this.translate.get('alert.UpdatePWSuccess').subscribe(value => { alert(value); });
           this.snackbar.open(this.translate.instant('alert.UpdatePWSuccess'), '', { duration: 3000 });
           this._NavigateToDashboard(this.userType);
         } else {
@@ -391,19 +377,14 @@ export class LoginComponent implements OnInit, AfterViewInit {
     }
   }
   getCurrentError() {
-    var currentError = "";
     if (this.form.value.password != this.newPwForm.value.oldPw) {
-      this.translate.get('alert.EnterCurrentPW').subscribe(value => { currentError = value; });
-      return currentError;
+      return this.translate.instant('alert.EnterCurrentPW');
     } else if (this.newPwForm.value.newPw.length < 4) {
-      this.translate.get('alert.EnterValidPw').subscribe(value => { currentError = value; });
-      return currentError;
+      return this.translate.instant('alert.EnterValidPw');
     } else if (this.newPwForm.value.newPw != this.newPwForm.value.newPwConf) {
-      this.translate.get('alert.NewConfMismatch').subscribe(value => { currentError = value; });
-      return currentError;
+      return this.translate.instant('alert.NewConfMismatch');
     } else if (this.form.value.password == this.newPwForm.value.newPw) {
-      this.translate.get('alert.NewPwMustBeDiff').subscribe(value => { currentError = value; });
-      return currentError;
+      return this.translate.instant('alert.NewPwMustBeDiff');
     } else {
       return "ERROR";
     }
@@ -520,5 +501,15 @@ export class LoginComponent implements OnInit, AfterViewInit {
         });
       }
     }
+  }
+
+  showAlertDialog(message: string, head: string = undefined) {
+    setTimeout(() => {
+      this.dialog.open(AlertComponent, {
+        width: '400px',
+        data: { Head: head, Mes: message },
+        autoFocus: false
+      });
+    });
   }
 }
