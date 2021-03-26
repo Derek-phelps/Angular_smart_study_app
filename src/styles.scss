@@ -909,3 +909,11 @@ body { margin: 0;
   .mat-radio-label {
     white-space: normal !important;
   }
+
+.warning-snackbar {
+    color: $warning;
+    white-space: pre-wrap;
+    button {
+        color: rgba(255, 255, 255, .8);
+    }
+}
