@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LoginService } from '../../../login/login.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatDialog } from '@angular/material/dialog';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'pages-top',
@@ -23,7 +24,7 @@ export class PagesTopComponent {
   sidebarToggle: boolean = true;
   tip = { ring: false, email: false };
 
-  constructor(private spinner: NgxSpinnerService, private _globalService: GlobalService, private _loginService: LoginService,
+  constructor(private _config: PrimeNGConfig, private spinner: NgxSpinnerService, private _globalService: GlobalService, private _loginService: LoginService,
     private translate: TranslateService, public _globals: Globals, public router: Router, public dialog: MatDialog) {
     this.userName = _globals.userInfo.EmpName;
     //this.userPost = '';
@@ -46,6 +47,8 @@ export class PagesTopComponent {
         obj._globalService.dataBusChanged('sidebarToggle', true);
       }
     };
+
+    this.translate.get('primeng').subscribe(res => this._config.setTranslation(res));
   }
   public _sidebarToggle() {
     this._globalService.dataBusChanged('sidebarToggle', !this.sidebarToggle);
@@ -98,6 +101,7 @@ export class PagesTopComponent {
       this.spinner.show();
       //this._globals.userInfo.userLang = lang;
       this.translate.use(lang);
+      this.translate.get('primeng').subscribe(res => this._config.setTranslation(res));
       // console.log("Lang: " + lang);
       // console.log("New current language: " + this.translate.currentLang);
       this._loginService.updateUserLang(lang).subscribe((data) => {

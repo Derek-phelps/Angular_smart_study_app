@@ -1,4 +1,11 @@
-td {
-    word-break: break-all;
+td, th {
     white-space: pre-wrap;
+}
+
+
+.reg-table-container {
+    margin-left: auto;
+    margin-right: auto;
+    // min-width: 700px;
+    max-width: 1000px;
 }

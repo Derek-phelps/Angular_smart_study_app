@@ -51,6 +51,23 @@ export class SuperadminService {
             .pipe(map((response: Response) => response))
             .pipe(catchError(this.handleError))
     }
+    deleteRegistration(userId): any {
+        let formData: FormData = new FormData();
+        formData.append('userId', userId);
+        return this._http.post(this._globals.APIURL + 'Users/deleteRegistration', formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
+    }
+    updateLicense(userId, licenseUntil): any {
+        let formData: FormData = new FormData();
+        formData.append('userId', userId);
+        if (licenseUntil) {
+            formData.append('licenseUntil', licenseUntil);
+        }
+        return this._http.post(this._globals.APIURL + 'Users/updateLicense', formData)
+            .pipe(map((response: Response) => response))
+            .pipe(catchError(this.handleError))
+    }
 
     getAllDepartment(companyId): any {
         let formData: FormData = new FormData();

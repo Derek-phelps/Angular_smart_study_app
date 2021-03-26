@@ -28,7 +28,10 @@ import { RegistrationsComponent } from './registrations/registrations.component'
 
 import { TableModule } from 'primeng/table';
 import { TagModule } from "primeng/tag";
-
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { CalendarModule } from 'primeng/calendar';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   imports: [
@@ -36,7 +39,11 @@ import { TagModule } from "primeng/tag";
     MatListModule, MatDialogModule, MatCardModule, MatFormFieldModule, MatInputModule, ProfileModule,
     FormsModule, ReactiveFormsModule, MatSortModule, MatTableModule, MatPaginatorModule,
     TableModule,
-    TagModule
+    TagModule,
+    ButtonModule,
+    DialogModule,
+    CalendarModule,
+    TooltipModule
   ],
   declarations: [SuperadminComponent, DashboardComponent, RegistrationsComponent,
   ],

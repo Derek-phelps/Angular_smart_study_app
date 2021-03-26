@@ -1,45 +1,74 @@
-<p-table [value]="registeredUsers" selectionMode="single">
-    <ng-template pTemplate="caption">
-        <div class="p-d-flex p-ai-center p-jc-between">
-            {{'registrations.Registrations' | translate}}
-            <!-- <p-button icon="pi pi-refresh"></p-button> -->
-        </div>
+<div class="reg-table-container">
+    <p-table [loading]="tableLoading" [value]="registeredUsers" sortMode="single" [autoLayout]="true"
+        sortField="dateTimeCreated" [sortOrder]="1" styleClass="p-datatable-striped">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                {{'registrations.Registrations' | translate}}
+                <p-button icon="pi pi-refresh" (click)="loadTable()"></p-button>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="LASTNAME">{{'employees.Surname' | translate}} <p-sortIcon field="LASTNAME">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="FIRSTNAME">{{'employees.Name' | translate}} <p-sortIcon field="FIRSTNAME">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="EmailID">{{'employees.Email' | translate}} <p-sortIcon field="EmailID">
+                    </p-sortIcon>
+                </th>
+                <th pSortableColumn="dateTimeCreated">{{'registrations.RegSince' | translate}} <p-sortIcon
+                        field="dateTimeCreated"></p-sortIcon>
+                </th>
+                <th pSortableColumn="licenseUntil">{{'registrations.LicenseUntil' | translate}} <p-sortIcon
+                        field="licenseUntil"></p-sortIcon>
+                </th>
+                <th></th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user>
+            <tr>
+                <td>{{user.LASTNAME}}</td>
+                <td>{{user.FIRSTNAME}}</td>
+                <td>{{user.EmailID}}</td>
+                <td>{{formatDate(user.dateTimeCreated) | date:'dd.MM.yyyy\n(HH:mm:ss)'}}</td>
+                <td>
+                    <button pButton pRipple type="button" [icon]="getIcon(user.licenseUntil)"
+                        [label]="user.licenseUntil ? (formatDate(user.licenseUntil) | date:'dd.MM.yyyy') : ('registrations.Unlimited' | translate)"
+                        [ngClass]="getButtonClass(user.licenseUntil)" (click)="editLicense(user)"
+                        [pTooltip]="'registrations.ChangeLicense' | translate" tooltipPosition="bottom"></button>
+                </td>
+                <td>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-danger"
+                        (click)="deleteProduct(product)" disabled></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                {{'registrations.SumReg' | translate:{sum: registeredUsers ? registeredUsers.length : 0} }}
+            </div>
+        </ng-template>
+    </p-table>
+</div>
 
-    </ng-template>
-    <ng-template pTemplate="header">
-        <tr>
-            <th>{{'employees.Surname' | translate}}</th>
-            <th>{{'employees.Name' | translate}}</th>
-            <th>{{'employees.Email' | translate}}</th>
-            <th>{{'registrations.RegSince' | translate}}</th>
-            <th>{{'registrations.LicenseUntil' | translate}}</th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-user>
-        <tr>
-            <td>{{user.LASTNAME}}</td>
-            <td>{{user.FIRSTNAME}}</td>
-            <td>{{user.EmailID}}</td>
-            <td>{{formatDate(user.dateTimeCreated) | date:'dd.MM.yyyy\n(HH:mm:ss)'}}</td>
-            <td>
-                <p-tag
-                    [value]="user.licenseUntil ? (formatDate(user.licenseUntil) | date:'dd.MM.yyyy') : ('registrations.Unlimited' | translate)"
-                    [icon]="getIcon(user.licenseUntil)" [severity]="getSeverity(user.licenseUntil)"></p-tag>
-            </td>
-            <!-- <td>{{user.licenseUntil ? (formatDate(user.licenseUntil) | date:'dd.MM.yyyy') : ('registrations.Unlimited' |
-                translate)}}</td> -->
-            <!-- <td>{{product.category}}</td> -->
-            <!-- <td>
-                <p-rating [ngModel]="product.rating" [readonly]="true" [cancel]="false"></p-rating>
-            </td>
-            <td><span
-                    [class]="'product-badge status-' + product.inventoryStatus.toLowerCase()">{{product.inventoryStatus}}</span>
-            </td> -->
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="summary">
-        <div class="p-d-flex p-ai-center p-jc-between">
-            {{'registrations.SumReg' | translate:{sum: registeredUsers ? registeredUsers.length : 0} }}
+<p-dialog [(visible)]="licenseDialog" [contentStyle]="{'overflow': 'visible'}" [style]="{width: '450px'}"
+    [header]="'registrations.ChangeLicense' | translate" [modal]="true" styleClass="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="p-field">
+            <label>{{'registrations.LicenseUntil' | translate}}</label>
+            <p-calendar [(ngModel)]="selectedLicense" dateFormat="dd.mm.yy">
+            </p-calendar>
+            <!-- <input type="text" pInputText id="name" [(ngModel)]="selectedLicense" required autofocus />
+            <small class="p-invalid" *ngIf="submitted && !product.name">Name is required.</small> -->
         </div>
     </ng-template>
-</p-table>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple [label]="'cancel' | translate" icon="pi pi-times" class="p-button-text"
+            (click)="hideDialog()"></button>
+        <button pButton pRipple [label]="'save' | translate" icon="pi pi-check" class="p-button-text"
+            (click)="saveLicense()"></button>
+    </ng-template>
+</p-dialog>
