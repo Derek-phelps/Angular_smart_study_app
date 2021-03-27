@@ -44,13 +44,13 @@
                         <th>
                         </th>
                     <th>
-                        <p-columnFilter type="text" field="lastName"></p-columnFilter>
+                        <p-columnFilter type="text" matchMode="contains" field="lastName"></p-columnFilter>
                     </th>
                     <th>
-                        <p-columnFilter type="text" field="firstName"></p-columnFilter>
+                        <p-columnFilter type="text" matchMode="contains" field="firstName"></p-columnFilter>
                     </th>
                     <th>
-                        <p-columnFilter type="text" field="email"></p-columnFilter>
+                        <p-columnFilter type="text" matchMode="contains" field="email"></p-columnFilter>
                         <!-- <p-columnFilter field="representative" matchMode="in" [showMenu]="false">
                             <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                                 <p-multiSelect [ngModel]="value" [options]="representatives" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name">
