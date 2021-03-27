@@ -32,8 +32,8 @@ interface TableData {
   id : number,
   lastName : string,
   firstName : string,
-  groups : Group[],
   email : string,
+  groups : Group[],
   courseStatus : number,
   globalStatus : number,
   departments : Department[],
@@ -48,7 +48,16 @@ interface TableData {
 })
 export class CourseParticipantsComponent implements OnInit {
 
-  @Input() courseData: any;
+  private _tableData : TableData[] = [];
+  private _courseData : any = {};
+
+  @Input() 
+  set courseData(data : any) {
+    this._courseData = data;
+    this._setupTable(data);
+      this.changeDetector.detectChanges();
+  }
+
   @Output() updateData: EventEmitter<void> = new EventEmitter<void>();
 
   private _userStatusTable = new MatTableDataSource();
@@ -76,16 +85,7 @@ export class CourseParticipantsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes.courseData) {
-      this._setupTable(this.courseData);
-      this._setupData(this.courseData);
-      this.changeDetector.detectChanges();
-    }
-  }
-
   private _setupTable(data: any): void {
-    console.log(data.userStatus);
     this._userStatusTable.data = data.userStatus;
     let obj = this;
     this._userStatusTable.filterPredicate = function (data: any, filter: string): boolean {
@@ -101,9 +101,34 @@ export class CourseParticipantsComponent implements OnInit {
         default: { return item[property]; }
       }
     };
-  }
 
-  private _setupData(data: any): void {
+
+    this._tableData = [];
+    console.log(data.userStatus)
+    data.userStatus.forEach(entry => {
+
+      let groups : Group[] = [];
+      let departments : Department[] = [];
+      let finishInfo : CourseFinishInfo[] = [];
+      entry.groups.forEach(group => { groups.push({ id : group.groupId, name : group.name }); });
+      entry.departments.forEach(dep => { departments.push({ id : dep.departmentId, name : dep.departmentName }); });
+      //entry.courseFinished.array.forEach(fin => { finishInfo.push({ date :  }); }); parse Date
+
+      this._tableData.push( {
+        id : entry.empId,
+        firstName : entry.FIRSTNAME,
+        lastName : entry.LASTNAME,
+        email : entry.EmailID,
+        groups : groups,
+        departments : departments,
+        finishInfo : finishInfo,
+        courseStatus : entry.courseStatus,
+        globalStatus : entry.globalStatus
+      });
+
+      
+    });
+
     this._courseUsersOverdue = VACUtils.calcCourseUsersOverdue(data.userStatus);
     this._courseUsersOpen = VACUtils.calcCourseUsersOpen(data.userStatus);
   }
@@ -155,5 +180,6 @@ export class CourseParticipantsComponent implements OnInit {
 
   get courseUsersOverdue(): number { return this._courseUsersOverdue; }
   get courseUsersOpen(): number { return this._courseUsersOpen; }
-  get courseInfo(): any { return this.courseData.courseInfo; }
+  get courseInfo() : any { return this._courseData.courseInfo; }
+  get tableData() : TableData[] { return this._tableData; } 
 }
