@@ -8,6 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
+import { FilterMatchMode } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
