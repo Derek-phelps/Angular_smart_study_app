@@ -25,7 +25,69 @@
     <!-- New Table -->
     <div class="row">
         <div class="col">
-
+            <p-table [value]="tableData" styleClass="" dataKey="id">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="dropdownColumn"></th>
+                        <th pSortableColumn="firstName">{{'employees.Name' | translate}}<p-sortIcon field="firstName"></p-sortIcon></th>
+                        <th pSortableColumn="lastName">{{'employees.Surname' | translate}}<p-sortIcon field="lastName"></p-sortIcon></th>
+                        <th pSortableColumn="email">{{'employees.Email' | translate}}<p-sortIcon field="email"></p-sortIcon></th>
+                        <!-- <th class="d-none d-md-table-cell" pSortableColumn="role" i18n="Role|Common@@Role">Role <p-sortIcon field="role"></p-sortIcon></th> -->
+                        <!-- <th class="d-none d-md-table-cell" i18n="Invite|Common@@Invite" *ngIf="virtualOnly">Invite</th>
+                        <th class="d-none d-md-table-cell" i18n="ExpirationDate|Common@@ExpirationDate" *ngIf="virtualOnly">Expiration Date</th>
+                        <th class="actionColumn d-none d-md-table-cell" i18n="Action|Common@@Action">Action</th> -->
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-participant let-expanded="expanded">
+                    <tr>
+                        <td class="dropdownColumn">
+                            <i *ngIf="!expanded" class="fa fa-chevron-right" [pRowToggler]="participant"></i>
+                            <i *ngIf="expanded" class="fa fa-chevron-down" [pRowToggler]="participant"></i>
+                      
+                        </td>
+                        <td>
+                            <div *ngIf="userInfo.isAdmin" class="clickable"
+                                routerLink="../../../../employees/{{participant.id}}"
+                                [skipLocationChange]="false"
+                                [matTooltip]="'openVar' | translate: {var: participant.fullName}">
+                                    {{ participant.lastName }}
+                            </div>
+                            <div *ngIf="!userInfo.isAdmin">
+                                {{ participant.lastName }}
+                            </div>
+                        </td>
+                        <td>
+                            <div *ngIf="userInfo.isAdmin" class="clickable"
+                                routerLink="../../../../employees/{{participant.id}}"
+                                [skipLocationChange]="false"
+                                [matTooltip]="'openVar' | translate: {var: participant.fullName}">
+                                    {{ participant.firstName }}
+                            </div>
+                            <div *ngIf="!userInfo.isAdmin">
+                                {{ participant.firstName }}
+                            </div>
+                        </td>
+                        <td>
+                            {{ participant.email }}
+                        </td>
+                        <!-- <td class="d-none d-md-table-cell">
+                        
+                        </td> -->
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="rowexpansion" let-participant>
+                    <tr>
+                        <td colspan="3">
+                            <div class="d-flex">
+                                <div class="flex-grow-1">
+                          
+                                </div>
+                        
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+              </p-table>
         </div>
     </div>
     <!-- Display employee info -->
