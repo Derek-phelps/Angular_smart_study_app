@@ -25,7 +25,10 @@
     <!-- New Table -->
     <div class="row">
         <div class="col">
-            <p-table [value]="tableData" dataKey="id">
+            <p-table [value]="tableData" dataKey="id"
+                [paginator]="true" [rows]="10" 
+                [rowsPerPageOptions]="[10,25,50]" [showCurrentPageReport]="true"
+                currentPageReportTemplate="{{ 'employees.TablePageInfo' | translate }}">
                 <ng-template pTemplate="header">
                     <tr>
                         <th class="dropdownColumn"></th>
@@ -41,8 +44,8 @@
                 <ng-template pTemplate="body" let-participant let-expanded="expanded">
                     <tr>
                         <td class="dropdownColumn">
-                            <i *ngIf="!expanded" class="fa fa-chevron-right" [pRowToggler]="participant"></i>
-                            <i *ngIf="expanded" class="fa fa-chevron-down" [pRowToggler]="participant"></i>
+                            <i *ngIf="!expanded" class="fa fa-chevron-right clickable" [pRowToggler]="participant"></i>
+                            <i *ngIf="expanded" class="fa fa-chevron-down clickable" [pRowToggler]="participant"></i>
                       
                         </td>
                         <td>

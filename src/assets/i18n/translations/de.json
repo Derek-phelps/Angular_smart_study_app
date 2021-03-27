@@ -101,6 +101,7 @@
     "OpenCourse": "Kursübersicht öffnen"
   },
   "employees": {
+    "TablePageInfo" : "Zeige {first} bis {last} von {totalRecords} Mitarbeitern",
     "ShowCerti": "Alle Zertifikate von {{name}} anzeigen",
     "CertiFrom": "Zertifikate von <b>{{name}}</b>",
     "St": "St",
