@@ -25,7 +25,7 @@
     <!-- New Table -->
     <div class="row">
         <div class="col">
-            <p-table [value]="tableData" styleClass="" dataKey="id">
+            <p-table [value]="tableData" dataKey="id">
                 <ng-template pTemplate="header">
                     <tr>
                         <th class="dropdownColumn"></th>
@@ -60,7 +60,7 @@
                             <div *ngIf="userInfo.isAdmin" class="clickable"
                                 routerLink="../../../../employees/{{participant.id}}"
                                 [skipLocationChange]="false"
-                                [matTooltip]="'openVar' | translate: {var: participant.fullName}">
+                                [matTooltip]="'openVar' | translate: { var: participant.fullName }">
                                     {{ participant.firstName }}
                             </div>
                             <div *ngIf="!userInfo.isAdmin">
@@ -68,7 +68,8 @@
                             </div>
                         </td>
                         <td>
-                            {{ participant.email }}
+                            <a [href]="'mailto:' + participant.email" target="_blank" class="text-14"
+                             [matTooltip]="'sendMailTo' | translate: { recipient: participant.fullName }">{{ participant.email }}</a>
                         </td>
                         <!-- <td class="d-none d-md-table-cell">
                         
@@ -77,7 +78,7 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-participant>
                     <tr>
-                        <td colspan="3">
+                        <td colspan="4">
                             <div class="d-flex">
                                 <div class="flex-grow-1">
                           

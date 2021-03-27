@@ -106,7 +106,7 @@ export class CourseParticipantsComponent implements OnInit {
 
 
     this._tableData = [];
-    console.log(data.userStatus)
+    
     data.userStatus.forEach(entry => {
 
       let groups : Group[] = [];
@@ -129,8 +129,6 @@ export class CourseParticipantsComponent implements OnInit {
         globalStatus : entry.globalStatus
       });
     });
-
-    console.log(this._tableData);
 
     this._courseUsersOverdue = VACUtils.calcCourseUsersOverdue(data.userStatus);
     this._courseUsersOpen = VACUtils.calcCourseUsersOpen(data.userStatus);
