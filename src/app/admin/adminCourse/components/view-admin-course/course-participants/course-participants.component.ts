@@ -7,6 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import moment from 'moment';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
@@ -112,7 +113,7 @@ export class CourseParticipantsComponent implements OnInit {
       let finishInfo : CourseFinishInfo[] = [];
       entry.groups.forEach(group => { groups.push({ id : group.groupId, name : group.name }); });
       entry.departments.forEach(dep => { departments.push({ id : dep.departmentId, name : dep.departmentName }); });
-      //entry.courseFinished.array.forEach(fin => { finishInfo.push({ date :  }); }); parse Date
+      entry.courseFinished.forEach(fin => { finishInfo.push({ date : moment(fin.dateFinished, "YYYY-MM-DD hh:mm:ss").toDate()  }); });
 
       this._tableData.push( {
         id : entry.empId,
@@ -125,9 +126,9 @@ export class CourseParticipantsComponent implements OnInit {
         courseStatus : entry.courseStatus,
         globalStatus : entry.globalStatus
       });
-
-      
     });
+
+    console.log(this._tableData);
 
     this._courseUsersOverdue = VACUtils.calcCourseUsersOverdue(data.userStatus);
     this._courseUsersOpen = VACUtils.calcCourseUsersOpen(data.userStatus);
