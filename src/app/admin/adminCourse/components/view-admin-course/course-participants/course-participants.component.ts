@@ -14,6 +14,32 @@ import { DialogForwardUserDialog } from 'src/app/forward-user/dialog-forward-use
 import { AdminCourseService } from '../../../adminCourse.service';
 import { VACUtils } from '../view-admin-course-utils';
 
+interface CourseFinishInfo {
+ date : Date
+}
+
+interface Department {
+  id : number,
+  name : string
+}
+
+interface Group {
+  id : number,
+  name : string
+}
+
+interface TableData {
+  id : number,
+  lastName : string,
+  firstName : string,
+  groups : Group[],
+  email : string,
+  courseStatus : number,
+  globalStatus : number,
+  departments : Department[],
+  finishInfo : CourseFinishInfo[],
+}
+
 @Component({
   selector: 'course-participants',
   templateUrl: './course-participants.component.html',
@@ -59,6 +85,7 @@ export class CourseParticipantsComponent implements OnInit {
   }
 
   private _setupTable(data: any): void {
+    console.log(data.userStatus);
     this._userStatusTable.data = data.userStatus;
     let obj = this;
     this._userStatusTable.filterPredicate = function (data: any, filter: string): boolean {
