@@ -54,6 +54,11 @@ export class CourseParticipantsComponent implements OnInit {
 
   private _tableData : TableData[] = [];
   private _courseData : any = {};
+  private _statuses : any[] = [
+    { label : 'done', value : 1 },
+    { label : 'current', value : 0 },
+    { label : 'overdue', value : -1 },
+  ];
 
   @Input() 
   set courseData(data : any) {
@@ -188,4 +193,5 @@ export class CourseParticipantsComponent implements OnInit {
   get courseUsersOpen(): number { return this._courseUsersOpen; }
   get courseInfo() : any { return this._courseData.courseInfo; }
   get tableData() : TableData[] { return this._tableData; } 
+  get statuses() : any[] { return this._statuses; }
 }

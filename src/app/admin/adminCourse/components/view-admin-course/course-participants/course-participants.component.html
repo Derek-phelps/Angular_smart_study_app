@@ -31,8 +31,8 @@
                 currentPageReportTemplate="{{ 'employees.TablePageInfo' | translate }}">
                 <ng-template pTemplate="header">
                     <tr>
-                        <th class="width-3"></th>
-                        <th class="width-3"></th>
+                        <!-- <th class="width-3"></th> -->
+                        <th pSortableColumn="courseStatus" class="width-6" colspan="2">{{'course.Status' | translate}}<p-sortIcon field="courseStatus"></p-sortIcon></th>
                         <th pSortableColumn="lastName">{{'employees.Surname' | translate}}<p-sortIcon field="lastName"></p-sortIcon></th>
                         <th pSortableColumn="firstName">{{'employees.Name' | translate}}<p-sortIcon field="firstName"></p-sortIcon></th>
                         <th pSortableColumn="email">{{'employees.Email' | translate}}<p-sortIcon field="email"></p-sortIcon></th>
@@ -42,11 +42,18 @@
                         <th class="actionColumn d-none d-md-table-cell" i18n="Action|Common@@Action">Action</th> -->
                     </tr>
                     <tr>
-                        <th>
-                            <!--no filter for dropdown col-->
-                        </th>
-                        <th>
-                            <!--no filter for status col-->
+                        
+                        <th colspan="2">
+                            <p-columnFilter field="courseStatus" matchMode="equals" [showMenu]="false">
+                                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                    <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" 
+                                        placeholder="Any" [showClear]="true">
+                                        <ng-template let-option pTemplate="item">
+                                            <span>{{ option.label }}</span>
+                                        </ng-template>
+                                    </p-dropdown>
+                                </ng-template>
+                            </p-columnFilter>
                         </th>
                         <th>
                             <p-columnFilter type="text" matchMode="contains" field="lastName"></p-columnFilter>

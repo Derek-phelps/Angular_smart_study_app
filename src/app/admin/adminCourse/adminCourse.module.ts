@@ -40,6 +40,7 @@ import { CourseTestComponent } from './components/view-admin-course/course-test/
 import { ContentModule } from 'src/app/content/content.module';
 import { CoreModule } from 'src/app/core/core.module';
 import { TableModule } from 'primeng/table';
+import { DropdownModule } from 'primeng/dropdown';
 
 @NgModule({
   imports: [
@@ -51,7 +52,9 @@ import { TableModule } from 'primeng/table';
     QRCodeModule, SharedAppModule, /*SatDatepickerModule, SatNativeDateModule,*/ AppMaterialModule,
     ChartsModule, CourseAssignmentModule,
     DragDropModule,
-    ContentModule,TableModule
+    ContentModule,
+    TableModule,
+    DropdownModule
   ],
   entryComponents: [BottomSheetModifyCourse, SubChapterOverviewDialog],
   declarations: [
