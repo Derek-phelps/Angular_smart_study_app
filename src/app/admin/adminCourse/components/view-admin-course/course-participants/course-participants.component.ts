@@ -1,5 +1,5 @@
 import { state, style, trigger } from '@angular/animations';
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -8,13 +8,14 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
-import { FilterMatchMode } from 'primeng/api';
+import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
 import { DialogForwardUserDialog } from 'src/app/forward-user/dialog-forward-user-dialog';
 import { AdminCourseService } from '../../../adminCourse.service';
 import { VACUtils } from '../view-admin-course-utils';
+import { Translation } from 'primeng/api/translation';
 
 interface CourseFinishInfo {
  date : Date
@@ -47,7 +48,7 @@ interface TableData {
   selector: 'course-participants',
   templateUrl: './course-participants.component.html',
   styleUrls: ['./course-participants.component.scss'],
-  animations: VACUtils.componentAnimations
+  animations: VACUtils.componentAnimations,
 })
 export class CourseParticipantsComponent implements OnInit {
 
@@ -77,13 +78,16 @@ export class CourseParticipantsComponent implements OnInit {
   private _courseUsersOpen: number = -1;
 
   constructor(
-    private globals: Globals,
-    private translate: TranslateService,
+    private _globals: Globals,
+    private _translate: TranslateService,
     private dialog: MatDialog,
     private service: AdminCourseService,
     private snackbar: MatSnackBar,
-    private changeDetector: ChangeDetectorRef
-  ) { }
+    private changeDetector: ChangeDetectorRef,
+    private config: PrimeNGConfig
+  ) {
+    this._translate.get('primeng').pipe(take(1)).subscribe(res => this.config.setTranslation(res));
+   }
 
   ngOnInit(): void {
   }
@@ -165,7 +169,7 @@ export class CourseParticipantsComponent implements OnInit {
         let pass: string = (result == 1 ? '1' : '0');
         this.service.passUserCourse(employee.empId, this.courseInfo.courseId, pass).pipe(take(1)).subscribe(data => {
           if (data.success) {
-            this.snackbar.open(this.translate.instant('course.PassEmpSuccess'), '', { duration: 3000 });
+            this.snackbar.open(this._translate.instant('course.PassEmpSuccess'), '', { duration: 3000 });
             this.updateData.next();
           }
         },
@@ -176,7 +180,7 @@ export class CourseParticipantsComponent implements OnInit {
     });
   }
 
-  get userInfo() { return this.globals.userInfo; };
+  get userInfo() { return this._globals.userInfo; };
   get userStatusTable() { return this._userStatusTable; };
   get userDisplayedColumns(): string[] { return ['status', 'LASTNAME', 'FIRSTNAME', 'email', 'editDelete']; }
 
