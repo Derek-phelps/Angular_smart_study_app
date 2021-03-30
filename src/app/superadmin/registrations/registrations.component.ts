@@ -10,6 +10,9 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { SuperadminService } from '../superadmin.service';
 // import { Globals } from 'src/app/common/auth-guard.service';
 
+import { ConfirmationBoxComponent } from '../../theme/components/confirmation-box/confirmation-box.component';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
 @Component({
   selector: 'app-registrations',
   templateUrl: './registrations.component.html',
@@ -30,6 +33,7 @@ export class RegistrationsComponent implements OnInit {
     private _datePipe: DatePipe,
     private _snackbar: MatSnackBar,
     private _translate: TranslateService,
+    public dialog: MatDialog
     // private _globals: Globals
   ) {
     this._spinner.hide();
@@ -82,6 +86,32 @@ export class RegistrationsComponent implements OnInit {
     this._editLicense = user.licenseUntil != null ? new Date(user.licenseUntil + ' UTC') : null;
     this._editUserId = Number(user.UserId);
     this._licenseDialog = true;
+  }
+
+  deleteFullRegistration(user): void {
+    const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
+      width: '400px',
+      data: { companyId: 0, Action: false, Mes: this._translate.instant('dialog.DeleteRegSure', { name: user.FULLNAME }) },
+      autoFocus: false
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result) {
+        // this._spinner.show();
+        this._tableLoading = true;
+        this._service.deleteRegistration(user.UserId).pipe(take(1)).subscribe(data => {
+          if (data?.success) {
+            this._snackbar.open(this._translate.instant('registrations.DeleteRegSuccess'), '', { duration: 3000 });
+          } else {
+            this._snackbar.open(this._translate.instant('registrations.DeleteRegFail'), '', { duration: 3000 });
+          }
+          this.loadTable();
+        }, () => {
+          this._snackbar.open(this._translate.instant('registrations.DeleteRegFail'), '', { duration: 3000 });
+          this.loadTable();
+        });
+      }
+    });
   }
 
   hideDialog(): void {

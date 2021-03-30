@@ -796,7 +796,8 @@
     "DeleteGroup": "Delete user group?",
     "DelGroupSure": "Are you sure that you want to delete the group <b>{{name}}</b> including all member and course assignments?",
     "DelGroupSuccess": "Successfully deleted employee group...",
-    "UpdateScormSure": "<b>CAUTION:</b> If you upload a new SCORM file for this course, all employee progression status will be deleted and all employees have to begin the course all over again in case they did not complete it by now.<br>Are you sure that you want to proceed?"
+    "UpdateScormSure": "<b>CAUTION:</b> If you upload a new SCORM file for this course, all employee progression status will be deleted and all employees have to begin the course all over again in case they did not complete it by now.<br>Are you sure that you want to proceed?",
+    "DeleteRegSure": "Are you sure that you want to delete the whole registration of <b>{{name}}</b> (including all data)?"
   },
   "scorm": {
     "UploadScormCourse": "Upload SCORM course...",
@@ -889,7 +890,9 @@
     "LicenseExpiredS": "You license expired!\nYou can use Smart-Study for one more day. If you don't renew your license, you won't be able to use the application after expiration of the time.",
     "LicenseExpiredP": "You license expired!\nYou can use Smart-Study for {{days}} more days. If you don't renew your license, you won't be able to use the application after expiration of the time.",
     "LicExp": "License expired!",
-    "LicenseExpired": "We are sorry ... but you license for your product from Smart-Study expired. Please contact our <a href='mailto:support@smart-study.at?subject=License%20expired'>support team</a> to reactivate your license."
+    "LicenseExpired": "We are sorry ... but you license for your product from Smart-Study expired. Please contact our <a href='mailto:support@smart-study.at?subject=License%20expired'>support team</a> to reactivate your license.",
+    "DeleteRegSuccess": "Successfully deleted registration...",
+    "DeleteRegFail": "Failure during deletion of the registration! Please retry..."
   },
   "primeng": {
     "startsWith": "Starts with",

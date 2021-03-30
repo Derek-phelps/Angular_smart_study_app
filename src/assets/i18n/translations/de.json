@@ -796,7 +796,8 @@
     "DeleteGroup": "Gesamte Benutzergruppe löschen?",
     "DelGroupSure": "Sind Sie sicher, dass Sie die Gruppe <b>{{name}}</b> inklusive aller Mitglieder- und Kurszuweisungen löschen möchten?",
     "DelGroupSuccess": "Mitarbeitergruppe erfolgreich gelöscht...",
-    "UpdateScormSure": "<b>ACHTUNG:</b> Wenn Sie eine neue SCORM-Datei für diesen Kurs hochladen, wird der Fortschrittsstatus aller Mitarbeiter gelöscht und alle Mitarbeiter müssen ihn neu beginnen, falls sie ihn gegenwärtig noch nicht abgeschlossen haben.<br>Sind Sie sicher, dass Sie dies möchten?"
+    "UpdateScormSure": "<b>ACHTUNG:</b> Wenn Sie eine neue SCORM-Datei für diesen Kurs hochladen, wird der Fortschrittsstatus aller Mitarbeiter gelöscht und alle Mitarbeiter müssen ihn neu beginnen, falls sie ihn gegenwärtig noch nicht abgeschlossen haben.<br>Sind Sie sicher, dass Sie dies möchten?",
+    "DeleteRegSure": "Sind Sie sicher, dass sie die gesamte Registrierung von <b>{{name}}</b> (inklusive aller Daten!) löschen möchten?"
   },
   "scorm": {
     "UploadScormCourse": "SCORM-Kurs hochladen...",
@@ -889,7 +890,9 @@
     "LicenseExpiredS": "Ihre Lizenz ist abgelaufen!\nSie können Smart-Study noch einen Tag verwenden. Sollten Sie die Lizenz nicht verlängern, können Sie die Applikation nach Ablauf der Frist nicht mehr verwenden.",
     "LicenseExpiredP": "Ihre Lizenz ist abgelaufen!\nSie können Smart-Study noch {{days}} Tage verwenden. Sollten Sie die Lizenz nicht verlängern, können Sie die Applikation nach Ablauf der Frist nicht mehr verwenden.",
     "LicExp": "Lizenz abgelaufen!",
-    "LicenseExpired": "Tut uns leid ... die Lizenz für Ihr Produkt von Smart-Study ist leider abgelaufen. Bitte kontaktieren Sie unser <a href='mailto:support@smart-study.at?subject=Lizenz%20abgelaufen'>Support-Team</a> um Ihre Lizenz wieder zu aktivieren."
+    "LicenseExpired": "Tut uns leid ... die Lizenz für Ihr Produkt von Smart-Study ist leider abgelaufen. Bitte kontaktieren Sie unser <a href='mailto:support@smart-study.at?subject=Lizenz%20abgelaufen'>Support-Team</a> um Ihre Lizenz wieder zu aktivieren.",
+    "DeleteRegSuccess": "Registrierung erfolgreich gelöscht...",
+    "DeleteRegFail": "Löschen der Registrierung fehlgeschlagen! Bitte versuchen Sie es erneut..."
   },
   "primeng": {
     "startsWith": "Startet mit",
