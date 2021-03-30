@@ -651,6 +651,9 @@
     "LocationName": "Location name",
     "Private": "Private"
   },
+  "questions": {
+    "TabTitle": "Questions"
+  },
   "menu": {
     "Dashboard": "Dashboard",
     "Company": "Company",

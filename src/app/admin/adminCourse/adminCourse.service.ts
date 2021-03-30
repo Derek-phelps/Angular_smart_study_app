@@ -1,9 +1,16 @@
 
-import { throwError as observableThrowError, Observable } from 'rxjs';
+import { throwError as observableThrowError, Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpEventType } from "@angular/common/http";
-import { map, catchError } from 'rxjs/operators';
+import { HttpClient, HttpEventType } from "@angular/common/http";
+import { map, catchError, mergeMap } from 'rxjs/operators';
 import { Globals } from '../../common/auth-guard.service';
+
+export interface Question {
+  questionId: string;
+  questionText: string;
+  questionType: string;
+  questionSettings;
+}
 
 @Injectable()
 export class AdminCourseService {
@@ -12,6 +19,7 @@ export class AdminCourseService {
   private _getByUserUrl = 'Course/getCourseByUserId';
   private _getByTrainerUrl = 'Course/getCourseByTrainerId';
   public _getByIdUrl = 'Course/getCourseById';
+  public _getCourseQuestionsUrl = 'Course/getCourseQuestions';
   public _addUrl = 'Course/addCourse';
   public _editUrl = 'Course/editCourse';
   public _deleteUrl = 'Course/deleteCourse';
@@ -77,6 +85,36 @@ export class AdminCourseService {
   getAllCourseByUser(): any {
     return this._http.get(this.globals.APIURL + this._getByUserUrl)
       .pipe(map((response: Response) => response))
+      .pipe(catchError(this.handleError))
+  }
+  getCourseQuestions(courseId: string) {
+    console.log('TODO getCourseQuestions', courseId);
+    // return this._http.get(this.globals.APIURL + this._getCourseQuestionsUrl)
+    //   .pipe(mergeMap((response: Response) => response.json()))
+    //   .pipe(catchError(this.handleError))
+    
+    // TODO: remove dummy data
+    const COURSE_QUESTIONS_DUMMY_DATA = {
+      questions: [
+        {
+          questionId: '0',
+          questionText: 'How was it? please enter text',
+          questionType: 'text',
+          questionSettings: undefined,
+        },
+        {
+          questionId: '1',
+          questionText: 'How was it? please choose from 1 to 5',
+          questionType: 'scale',
+          questionSettings: { min: 1, max: 5, textFirst: 'Awful', textLast: 'Excellent'},
+        },
+      ] as Question[],
+    };
+    return of(COURSE_QUESTIONS_DUMMY_DATA.questions);
+  }
+  setCourseQuestions(courseId: string, questions: Question[]) {
+    return this._http.post(this.globals.APIURL + this._getCourseQuestionsUrl, {questions})
+      .pipe(mergeMap((response: Response) => response.json()))
       .pipe(catchError(this.handleError))
   }
   passUserCourse(empId, courseId, justPass): any {
