@@ -93,11 +93,7 @@ export class Globals {
             this.JsonURL = this.WebURL + "/API/";
             this.adminURL = server.adminURL;
         } else {
-            if (isDevMode()) {
-                this.WebURL = "http://localhost:8080";
-            } else {
-                this.WebURL = ".";
-            }
+            this.WebURL = ".";
             this.APIURL = this.WebURL + "/API/index.php/";
             this.JsonURL = this.WebURL + "/API/";
             this.adminURL = "";
@@ -144,11 +140,7 @@ export class Globals {
             this.companyInfo.companyName = 'Smart-Study';
             this.companyInfo.companyRegNo = '';
             //this.companyInfo.bannerColor = compData.bannerColor;
-            if (isDevMode()) {
-                this.companyInfo.webUrl = 'http://localhost:8080';
-            } else {
-                this.companyInfo.webUrl = '.';
-            }
+            this.companyInfo.webUrl = '.';
             this.companyInfo.isSet = true;
         }
     }
