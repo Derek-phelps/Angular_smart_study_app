@@ -28,6 +28,8 @@
   "error": "Error",
   "cancel": "Cancel",
   "checkAll": "Select all",
+  "new": "New",
+  "delete": "Delete",
   "copiedMailToClipboard": "Copied mail address to clipboard...",
   "copiedPhoneToClipboard": "Copied phone number to clipboard...",
   "backToCourseOverview": "Course overview",
@@ -652,7 +654,20 @@
     "Private": "Private"
   },
   "questions": {
-    "TabTitle": "Questions"
+    "TabTitle": "Questions",
+    "ManageQuestions": "Manage Questions",
+    "Search": "Search...",
+    "QuestionDetails": "Question Details",
+    "QuestionText": "Question Text",
+    "QuestionType": "Question Type",
+    "ValidationRequired": "Question text is required",
+    "ValidationTooShort": "Question text is too short",
+    "Text": "Text",
+    "Scale": "Scale",
+    "Min": "Min",
+    "Max": "Max",
+    "Label for First value": "Label for First value",
+    "Label for Last value": "Label for Last value"
   },
   "menu": {
     "Dashboard": "Dashboard",

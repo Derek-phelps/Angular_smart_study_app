@@ -58,6 +58,7 @@ import { CourseTestComponent } from './components/view-admin-course/course-test/
 import { ContentModule } from 'src/app/content/content.module';
 import { CoreModule } from 'src/app/core/core.module';
 import { CourseQuestionsComponent } from './components/view-admin-course/course-questions/course-questions.component';
+import { QuestionEditorComponent } from './components/view-admin-course/course-questions/question-editor/question-editor.component';
 
 @NgModule({
   imports: [
@@ -90,6 +91,7 @@ import { CourseQuestionsComponent } from './components/view-admin-course/course-
     CourseTestComponent,
     CourseCertificateComponent,
     CourseQuestionsComponent,
+    QuestionEditorComponent,
   ],
   providers: [
     AdminCourseService

@@ -2,7 +2,7 @@
 import { throwError as observableThrowError, Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpEventType } from "@angular/common/http";
-import { map, catchError, mergeMap } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { Globals } from '../../common/auth-guard.service';
 
 export interface Question {
@@ -88,7 +88,7 @@ export class AdminCourseService {
       .pipe(catchError(this.handleError))
   }
   getCourseQuestions(courseId: string) {
-    console.log('TODO getCourseQuestions', courseId);
+    console.log('TODO: getCourseQuestions', {courseId});
     // return this._http.get(this.globals.APIURL + this._getCourseQuestionsUrl)
     //   .pipe(mergeMap((response: Response) => response.json()))
     //   .pipe(catchError(this.handleError))
@@ -114,7 +114,7 @@ export class AdminCourseService {
   }
   setCourseQuestions(courseId: string, questions: Question[]) {
     return this._http.post(this.globals.APIURL + this._getCourseQuestionsUrl, {questions})
-      .pipe(mergeMap((response: Response) => response.json()))
+      .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
   passUserCourse(empId, courseId, justPass): any {

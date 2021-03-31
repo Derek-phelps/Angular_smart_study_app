@@ -10,7 +10,7 @@ import { AdminCourseService, Question } from "../../../adminCourse.service";
 export class CourseQuestionsComponent {
 
   @Input() courseData: any;
-  @Output() updateData = new EventEmitter<void>();
+  @Output() updateData = new EventEmitter();
 
   questionDialog: boolean;
 
@@ -78,7 +78,8 @@ export class CourseQuestionsComponent {
     this.submitted = false;
   }
 
-  saveQuestion() {
+  saveQuestion(question: Question) {
+    this.unsavedQuestion = question;
     this.submitted = true;
 
     if (!this.unsavedQuestion.questionText) {
