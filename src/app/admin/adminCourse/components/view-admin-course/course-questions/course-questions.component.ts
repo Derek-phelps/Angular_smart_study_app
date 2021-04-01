@@ -24,8 +24,8 @@ export class CourseQuestionsComponent {
   submitted: boolean;
 
   constructor(
-    private questionService: AdminCourseService, 
-    private messageService: MessageService, 
+    private questionService: AdminCourseService,
+    private messageService: MessageService,
     private confirmationService: ConfirmationService,
   ) { }
 
@@ -65,7 +65,7 @@ export class CourseQuestionsComponent {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.questions = this.questions.filter(val => val.questionId !== question.questionId);
+        this.questions = this.questions.filter(val => val.feedbackId !== question.feedbackId);
         delete this.unsavedQuestion;
         delete this.unsavedQuestionIndex;
         this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Question Deleted', life: 3000 });
@@ -85,8 +85,8 @@ export class CourseQuestionsComponent {
     if (!this.unsavedQuestion.questionText) {
       return;
     }
-    
-    if (this.unsavedQuestion.questionId) {
+
+    if (this.unsavedQuestion.feedbackId) {
       // TODO: Call back-end
 
       this.questions[this.unsavedQuestionIndex] = this.unsavedQuestion;
@@ -97,7 +97,6 @@ export class CourseQuestionsComponent {
     }
     else {
       // TODO: Call back-end
-      this.unsavedQuestion.questionId = this.createId();
 
       this.questions.push(this.unsavedQuestion);
 

@@ -6,7 +6,7 @@ import { map, catchError } from 'rxjs/operators';
 import { Globals } from '../../common/auth-guard.service';
 
 export interface Question {
-  questionId: string;
+  feedbackId: string;
   questionText: string;
   questionType: string;
   questionSettings;
@@ -19,13 +19,14 @@ export class AdminCourseService {
   private _getByUserUrl = 'Course/getCourseByUserId';
   private _getByTrainerUrl = 'Course/getCourseByTrainerId';
   public _getByIdUrl = 'Course/getCourseById';
-  public _getCourseQuestionsUrl = 'Course/getCourseQuestions';
+  public _getCourseFeedbackListUrl = 'Course/getCourseFeedbackList';
+  public _setCourseFeedbackListUrl = 'Course/setCourseFeedbackList';
   public _addUrl = 'Course/addCourse';
   public _editUrl = 'Course/editCourse';
   public _deleteUrl = 'Course/deleteCourse';
   private _deleteChapterUrl = 'Chapter/deleteChapter';
   private _editChapterUrl = 'Chapter/editChapter';
-  private _deleteQustionUrl = 'Question/deleteQuestion'  
+  private _deleteQustionUrl = 'Question/deleteQuestion'
   public _setClosedStateUrl = 'Course/setClosedState';
   private _getDepartmentUrl = 'Department';
   //private _getPositionsUrl = 'Position';
@@ -88,32 +89,12 @@ export class AdminCourseService {
       .pipe(catchError(this.handleError))
   }
   getCourseQuestions(courseId: string) {
-    console.log('TODO: getCourseQuestions', {courseId});
-    // return this._http.get(this.globals.APIURL + this._getCourseQuestionsUrl)
-    //   .pipe(mergeMap((response: Response) => response.json()))
-    //   .pipe(catchError(this.handleError))
-    
-    // TODO: remove dummy data
-    const COURSE_QUESTIONS_DUMMY_DATA = {
-      questions: [
-        {
-          questionId: '0',
-          questionText: 'How was it? please enter text',
-          questionType: 'text',
-          questionSettings: undefined,
-        },
-        {
-          questionId: '1',
-          questionText: 'How was it? please choose from 1 to 5',
-          questionType: 'scale',
-          questionSettings: { min: 1, max: 5, textFirst: 'Awful', textLast: 'Excellent'},
-        },
-      ] as Question[],
-    };
-    return of(COURSE_QUESTIONS_DUMMY_DATA.questions);
+    return this._http.post(this.globals.APIURL + this._getCourseFeedbackListUrl, { courseId })
+      .pipe(map((response: Question[]) => response))
+      .pipe(catchError(this.handleError))
   }
   setCourseQuestions(courseId: string, questions: Question[]) {
-    return this._http.post(this.globals.APIURL + this._getCourseQuestionsUrl, {questions})
+    return this._http.post(this.globals.APIURL + this._setCourseFeedbackListUrl, { courseId, questions })
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
@@ -283,11 +264,11 @@ export class AdminCourseService {
       .pipe(catchError(this.handleError))
   }
 
-  editCourseIgnoreOrder(courseId : number, ignoreOrder : boolean): any {
+  editCourseIgnoreOrder(courseId: number, ignoreOrder: boolean): any {
     let formData: FormData = new FormData();
-    formData.append('courseId', ''+courseId);
+    formData.append('courseId', '' + courseId);
     formData.append('ignore_ordering', ignoreOrder ? '1' : '0');
-    
+
     return this._http.post(this.globals.APIURL + 'Course/ignoreOrdering', formData)
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
@@ -562,14 +543,14 @@ export class AdminCourseService {
     }
   }
 
-  editChapterOrder(chapter : any): Observable<any>  {
+  editChapterOrder(chapter: any): Observable<any> {
     // yes, this really IS necessary.
-    chapter['course'] = chapter['courseId']; 
-    chapter['ChapterName'] = chapter['chapterName']; 
+    chapter['course'] = chapter['courseId'];
+    chapter['ChapterName'] = chapter['chapterName'];
 
-    return this._http.post(this.globals.APIURL+ this._editChapterUrl, chapter)
-    .pipe(map((response: Response) => response))
-    .pipe(catchError(this.handleError));
+    return this._http.post(this.globals.APIURL + this._editChapterUrl, chapter)
+      .pipe(map((response: Response) => response))
+      .pipe(catchError(this.handleError));
   }
 
   private handleError(error: Response) {
@@ -578,4 +559,4 @@ export class AdminCourseService {
     console.error(error);
     return observableThrowError(error || 'Server error');
   }
-} 
+}
