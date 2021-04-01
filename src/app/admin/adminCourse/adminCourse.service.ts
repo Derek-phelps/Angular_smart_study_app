@@ -6,7 +6,7 @@ import { map, catchError } from 'rxjs/operators';
 import { Globals } from '../../common/auth-guard.service';
 
 export interface Question {
-  questionId: string;
+  feedbackId: string;
   questionText: string;
   questionType: string;
   questionSettings;
@@ -97,13 +97,13 @@ export class AdminCourseService {
     const COURSE_QUESTIONS_DUMMY_DATA = {
       questions: [
         {
-          questionId: '0',
+          feedbackId: '0',
           questionText: 'How was it? please enter text',
           questionType: 'text',
           questionSettings: undefined,
         },
         {
-          questionId: '1',
+          feedbackId: '1',
           questionText: 'How was it? please choose from 1 to 5',
           questionType: 'scale',
           questionSettings: { min: 1, max: 5, textFirst: 'Awful', textLast: 'Excellent'},

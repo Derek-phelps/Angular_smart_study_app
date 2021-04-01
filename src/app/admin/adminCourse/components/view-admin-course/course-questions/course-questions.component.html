@@ -9,7 +9,7 @@
     </p-toolbar>
 
     <p-table #dt [value]="questions" [rows]="10" [paginator]="true" [globalFilterFields]="['questionText']"
-        [(selection)]="selectedQuestions" [rowHover]="true" dataKey="questionId" [showCurrentPageReport]="true">
+        [(selection)]="selectedQuestions" [rowHover]="true" dataKey="feedbackId" [showCurrentPageReport]="true">
         <ng-template pTemplate="caption">
             <div class="p-d-flex p-ai-center p-jc-between">
                 <h5 class="p-m-0">{{ 'questions.ManageQuestions' | translate }}</h5>
