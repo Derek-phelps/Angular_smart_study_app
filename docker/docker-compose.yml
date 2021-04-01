@@ -13,7 +13,7 @@ services:
       - ./app/cron/log:/var/log/cron
       - ./app/db_backups/:/var/backups/database/
     ports:
-      - 8080:80
+      - 8001:80
       - 443:443
   db:
     build:

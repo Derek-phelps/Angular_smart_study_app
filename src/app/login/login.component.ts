@@ -15,7 +15,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { $ } from 'protractor';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
-const VERSION_NUMBER = '3.14.0'; // Define VERSION_NUMBER
+const VERSION_NUMBER = '3.15.0'; // Define VERSION_NUMBER
 
 const SECONDS_UNITL_AUTO_LOGOUT = 3550; // in s
 const CHECK_INTERVAL = 10000; // in ms
@@ -350,6 +350,7 @@ export class LoginComponent implements OnInit, AfterViewInit {
       this.router.navigate(['./superadmin/registrations'], { skipLocationChange: false });
     } else if (userType == 2) {
       this.router.navigate(['./admin/dashboard'], { skipLocationChange: false });
+      //this.router.navigate(['./admin/course/view/48/5'], { skipLocationChange: false });
       // } else if (userType == 3) {
       //   this.router.navigate(['./trainer/dashboard'], { skipLocationChange: false });
     } else {

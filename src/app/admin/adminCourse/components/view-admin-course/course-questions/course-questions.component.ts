@@ -25,8 +25,8 @@ export class CourseQuestionsComponent {
   isReordering = true;
 
   constructor(
-    private questionService: AdminCourseService, 
-    private messageService: MessageService, 
+    private questionService: AdminCourseService,
+    private messageService: MessageService,
     private confirmationService: ConfirmationService,
   ) { }
 
@@ -86,7 +86,7 @@ export class CourseQuestionsComponent {
     if (!this.unsavedQuestion.questionText) {
       return;
     }
-    
+
     if (this.unsavedQuestion.feedbackId) {
       // TODO: Call back-end
 
@@ -98,7 +98,6 @@ export class CourseQuestionsComponent {
     }
     else {
       // TODO: Call back-end
-      this.unsavedQuestion.feedbackId = this.createId();
 
       this.questions.push(this.unsavedQuestion);
 

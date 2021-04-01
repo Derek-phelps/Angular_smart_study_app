@@ -3,8 +3,11 @@
 <div class="card">
     <p-toolbar styleClass="p-mb-4">
         <ng-template pTemplate="left">
-            <button pButton pRipple label="{{ 'new' | translate }}" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="newQuestion()"></button>
-            <button pButton pRipple label="{{ 'delete' | translate }}" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedQuestions()" [disabled]="!selectedQuestions || !selectedQuestions.length"></button>
+            <button pButton pRipple label="{{ 'new' | translate }}" icon="pi pi-plus" class="p-button-success p-mr-2"
+                (click)="newQuestion()"></button>
+            <button pButton pRipple label="{{ 'delete' | translate }}" icon="pi pi-trash" class="p-button-danger"
+                (click)="deleteSelectedQuestions()"
+                [disabled]="!selectedQuestions || !selectedQuestions.length"></button>
         </ng-template>
         <ng-template pTemplate="right">
             <button *ngIf="!isReordering" pButton pRipple label="{{ 'questions.Reorder' | translate }}" icon="pi pi-sort-alt" class="p-button-info" (click)="isReordering = true"></button>
@@ -20,7 +23,8 @@
                 <h5 class="p-m-0">{{ 'questions.ManageQuestions' | translate }}</h5>
                 <span class="p-input-icon-left">
                     <i class="pi pi-search"></i>
-                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')" [placeholder]="'questions.Search' | translate" />
+                    <input pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                        [placeholder]="'questions.Search' | translate" />
                 </span>
             </div>
         </ng-template>
@@ -43,22 +47,22 @@
                 <td>{{question.questionText}}</td>
                 <td>{{question.questionType}}</td>
                 <td>
-                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editQuestion(question, rowIndex)"></button>
-                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteQuestion(question)"></button>
+                    <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2"
+                        (click)="editQuestion(question, rowIndex)"></button>
+                    <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+                        (click)="deleteQuestion(question)"></button>
                 </td>
             </tr>
         </ng-template>
     </p-table>
 </div>
 
-<p-dialog [(visible)]="questionDialog" [style]="{width: '450px'}" [header]="'questions.QuestionDetails' | translate" [modal]="true" styleClass="p-fluid">
+<p-dialog [(visible)]="questionDialog" [style]="{width: '450px'}" [header]="'questions.QuestionDetails' | translate"
+    [modal]="true" styleClass="p-fluid">
     <ng-template pTemplate="content">
 
-        <question-editor *ngIf="questionDialog" 
-            [question]="unsavedQuestion" 
-            (save)="saveQuestion($event)"
-            (cancel)="hideDialog()"
-        ></question-editor>
+        <question-editor *ngIf="questionDialog" [question]="unsavedQuestion" (save)="saveQuestion($event)"
+            (cancel)="hideDialog()"></question-editor>
 
     </ng-template>
 </p-dialog>
