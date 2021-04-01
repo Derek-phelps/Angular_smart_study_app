@@ -22,6 +22,7 @@ export class CourseQuestionsComponent {
   selectedQuestions: Question[];
 
   submitted: boolean;
+  isReordering = true;
 
   constructor(
     private questionService: AdminCourseService, 
@@ -110,6 +111,12 @@ export class CourseQuestionsComponent {
     this.questionDialog = false;
     delete this.unsavedQuestion;
     delete this.unsavedQuestionIndex;
+  }
+
+  onRowReordered() {
+    this.questionService.setCourseQuestions(this.courseData.courseInfo.courseId, this.questions).subscribe(() => {
+      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Changed', life: 3000 });
+    });
   }
 
   createId(): string {

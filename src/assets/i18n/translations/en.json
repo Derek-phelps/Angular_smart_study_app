@@ -657,6 +657,8 @@
     "TabTitle": "Questions",
     "ManageQuestions": "Manage Questions",
     "Search": "Search...",
+    "Select": "Select",
+    "Reorder": "Reorder",
     "QuestionDetails": "Question Details",
     "QuestionText": "Question Text",
     "QuestionType": "Question Type",

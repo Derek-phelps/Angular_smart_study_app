@@ -6,10 +6,15 @@
             <button pButton pRipple label="{{ 'new' | translate }}" icon="pi pi-plus" class="p-button-success p-mr-2" (click)="newQuestion()"></button>
             <button pButton pRipple label="{{ 'delete' | translate }}" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedQuestions()" [disabled]="!selectedQuestions || !selectedQuestions.length"></button>
         </ng-template>
+        <ng-template pTemplate="right">
+            <button *ngIf="!isReordering" pButton pRipple label="{{ 'questions.Reorder' | translate }}" icon="pi pi-sort-alt" class="p-button-info" (click)="isReordering = true"></button>
+            <button *ngIf="isReordering" pButton pRipple label="{{ 'questions.Select' | translate }}" icon="pi pi-check-square" class="p-button-info" (click)="isReordering = false"></button>
+        </ng-template>
     </p-toolbar>
 
     <p-table #dt [value]="questions" [rows]="10" [paginator]="true" [globalFilterFields]="['questionText']"
-        [(selection)]="selectedQuestions" [rowHover]="true" dataKey="feedbackId" [showCurrentPageReport]="true">
+        [(selection)]="selectedQuestions" [rowHover]="true" dataKey="feedbackId" [showCurrentPageReport]="true"
+        (onRowReorder)="onRowReordered($event)">
         <ng-template pTemplate="caption">
             <div class="p-d-flex p-ai-center p-jc-between">
                 <h5 class="p-m-0">{{ 'questions.ManageQuestions' | translate }}</h5>
@@ -22,26 +27,21 @@
         <ng-template pTemplate="header">
             <tr>
                 <th style="width: 3rem">
-                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                    <p-tableHeaderCheckbox *ngIf="!isReordering"></p-tableHeaderCheckbox>
                 </th>
-                <th pSortableColumn="name">Text <p-sortIcon field="name"></p-sortIcon></th>
-                <!-- <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
-                <th pSortableColumn="category">Category <p-sortIcon field="category"></p-sortIcon></th>
-                <th pSortableColumn="rating">Reviews <p-sortIcon field="rating"></p-sortIcon></th>
-                <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus"></p-sortIcon></th> -->
-                <th></th>
+                <th>{{ 'questions.QuestionText' | translate }}</th>
+                <th style="width: 10rem">{{ 'questions.QuestionType' | translate }}</th>
+                <th style="width: 10rem"></th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-question let-rowIndex="rowIndex">
-            <tr>
+            <tr [pReorderableRow]="rowIndex">
                 <td>
-                    <p-tableCheckbox [value]="question"></p-tableCheckbox>
+                    <p-tableCheckbox *ngIf="!isReordering" [value]="question"></p-tableCheckbox>
+                    <span *ngIf="isReordering" class="pi pi-bars" pReorderableRowHandle></span>
                 </td>
                 <td>{{question.questionText}}</td>
-                <!-- <td>{{question.price | currency:'USD'}}</td>
-                <td>{{question.category}}</td>
-                <td><p-rating [ngModel]="question.rating" [readonly]="true" [cancel]="false"></p-rating></td>
-                <td><span [class]="'question-badge status-' + question.inventoryStatus.toLowerCase()">{{question.inventoryStatus}}</span></td> -->
+                <td>{{question.questionType}}</td>
                 <td>
                     <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success p-mr-2" (click)="editQuestion(question, rowIndex)"></button>
                     <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteQuestion(question)"></button>
