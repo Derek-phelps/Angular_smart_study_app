@@ -16,9 +16,9 @@ import { Question } from "src/app/admin/adminCourse/adminCourse.service";
 
       form = this.fb.group({
         questionText: [null, Validators.compose([Validators.required, Validators.minLength(3)])],
-        questionType: [null],
-        min: [null],
-        max: [null],
+        questionType: [null, Validators.required],
+        min: [null, Validators.required],
+        max: [null, Validators.required],
         textFirst: [null],
         textLast: [null],
       });
