@@ -7,7 +7,7 @@
                 (click)="newQuestion()"></button>
             <button pButton pRipple label="{{ 'delete' | translate }}" icon="pi pi-trash" class="p-button-danger"
                 (click)="deleteSelectedQuestions()"
-                [disabled]="!selectedQuestions || !selectedQuestions.length"></button>
+                [disabled]="!selectedQuestions?.length"></button>
         </ng-template>
         <ng-template pTemplate="right">
             <button *ngIf="!isReordering" pButton pRipple label="{{ 'questions.Reorder' | translate }}" icon="pi pi-sort-alt" class="p-button-info" (click)="isReordering = true"></button>
@@ -68,5 +68,3 @@
 
     </ng-template>
 </p-dialog>
-
-<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

@@ -34,10 +34,19 @@ import { Question } from "src/app/admin/adminCourse/adminCourse.service";
             textFirst: this.question.questionSettings?.textFirst,
             textLast: this.question.questionSettings?.textLast,
         });
+        this.onQuestionTypeChange(this.question.questionType);
       }
 
       onQuestionTypeChange(type: string) {
-          this.question.questionType = type;
+        this.question.questionType = type;
+
+        if (type === 'scale') {
+            this.form.controls['min'].enable();
+            this.form.controls['max'].enable();
+        } else {
+            this.form.controls['min'].disable();
+            this.form.controls['max'].disable();
+        }
       }
     
       onSave() {

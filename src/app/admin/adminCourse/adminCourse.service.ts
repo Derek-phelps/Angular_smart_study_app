@@ -89,14 +89,12 @@ export class AdminCourseService {
       .pipe(catchError(this.handleError))
   }
   getCourseQuestions(courseId: string) {
-    return this._http.post(this.globals.APIURL + this._getCourseFeedbackListUrl, { courseId })
-      .pipe(map((response: Question[]) => response))
-      .pipe(catchError(this.handleError))
+    return this._http.post<Question[]>(this.globals.APIURL + this._getCourseFeedbackListUrl, { courseId })
+      .pipe(catchError(this.handleError));
   }
   setCourseQuestions(courseId: string, questions: Question[]) {
-    return this._http.post(this.globals.APIURL + this._setCourseFeedbackListUrl, { courseId, questions })
-      .pipe(map((response: Response) => response))
-      .pipe(catchError(this.handleError))
+    return this._http.post<Question[]>(this.globals.APIURL + this._setCourseFeedbackListUrl, { courseId, questions })
+      .pipe(catchError(this.handleError));
   }
   passUserCourse(empId, courseId, justPass): any {
     let formData: FormData = new FormData();

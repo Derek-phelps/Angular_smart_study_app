@@ -1,5 +1,8 @@
 import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { ConfirmationService, MessageService } from "primeng/api";
+import { MatDialog } from "@angular/material/dialog";
+import { MessageService } from "primeng/api";
+import { filter, take } from "rxjs/operators";
+import { ConfirmationBoxComponent } from "src/app/theme/components/confirmation-box/confirmation-box.component";
 import { AdminCourseService, Question } from "../../../adminCourse.service";
 
 @Component({
@@ -27,7 +30,7 @@ export class CourseQuestionsComponent {
   constructor(
     private questionService: AdminCourseService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService,
+    private dialog: MatDialog,
   ) { }
 
   ngOnInit() {
@@ -35,22 +38,27 @@ export class CourseQuestionsComponent {
   }
 
   newQuestion() {
-    this.unsavedQuestion = {} as any;
-    delete this.unsavedQuestionIndex;
+    this.unsavedQuestion = { questionType: 'text' } as any;
     this.submitted = false;
     this.questionDialog = true;
+    delete this.unsavedQuestionIndex;
+    delete this.selectedQuestions;
   }
 
-  deleteSelectedQuestions() {
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to delete the selected questions?',
-      header: 'Confirm',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.questions = this.questions.filter(val => !this.selectedQuestions.includes(val));
-        this.selectedQuestions = null;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Questions Deleted', life: 3000 });
-      }
+  async deleteSelectedQuestions() {
+    const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
+      width: '400px',
+      data: { Mes: 'Are you sure you want to delete the selected questions?' },
+      autoFocus: false,
+    });
+
+    dialogRef.afterClosed().pipe(take(1)).pipe(filter(x => x)).subscribe(async () => {
+      this.questions = this.questions.filter(val => !this.selectedQuestions.includes(val));
+      
+      this.questions = await this.saveQuestions(this.courseData.courseInfo.courseId, this.questions);
+
+      delete this.selectedQuestions;
+      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Questions Deleted', life: 3000 });
     });
   }
 
@@ -58,19 +66,26 @@ export class CourseQuestionsComponent {
     this.unsavedQuestion = { ...question };
     this.unsavedQuestionIndex = index;
     this.questionDialog = true;
+    delete this.selectedQuestions;
   }
 
-  deleteQuestion(question: Question) {
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to delete ' + question.questionText + '?',
-      header: 'Confirm',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.questions = this.questions.filter(val => val.feedbackId !== question.feedbackId);
-        delete this.unsavedQuestion;
-        delete this.unsavedQuestionIndex;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Question Deleted', life: 3000 });
-      }
+  async deleteQuestion(question: Question) {
+    const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
+      width: '400px',
+      data: { Mes: `Are you sure you want to delete ${question.questionText}?` },
+      autoFocus: false,
+    });
+
+    dialogRef.afterClosed().pipe(take(1)).pipe(filter(x => x)).subscribe(async () => {
+      this.questions = this.questions.filter(val => val.feedbackId !== question.feedbackId);
+      
+      this.questions = await this.saveQuestions(this.courseData.courseInfo.courseId, this.questions);
+
+      delete this.unsavedQuestion;
+      delete this.unsavedQuestionIndex;
+      delete this.selectedQuestions;
+      
+      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Question Deleted', life: 3000 });
     });
   }
 
@@ -79,7 +94,7 @@ export class CourseQuestionsComponent {
     this.submitted = false;
   }
 
-  saveQuestion(question: Question) {
+  async saveQuestion(question: Question) {
     this.unsavedQuestion = question;
     this.submitted = true;
 
@@ -88,28 +103,24 @@ export class CourseQuestionsComponent {
     }
 
     if (this.unsavedQuestion.feedbackId) {
-      // TODO: Call back-end
-
+      
       this.questions[this.unsavedQuestionIndex] = this.unsavedQuestion;
 
-      this.questionService.setCourseQuestions(this.courseData.courseInfo.courseId, this.questions).subscribe(() => {
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Question Updated', life: 3000 });
-      });
+      this.questions = await this.saveQuestions(this.courseData.courseInfo.courseId, this.questions);
+      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Question Updated', life: 3000 });
     }
     else {
-      // TODO: Call back-end
-
       this.questions.push(this.unsavedQuestion);
 
-      this.questionService.setCourseQuestions(this.courseData.courseInfo.courseId, this.questions).subscribe(() => {
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Question Created', life: 3000 });
-      });
+      this.questions = await this.saveQuestions(this.courseData.courseInfo.courseId, this.questions);
+      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Question Created', life: 3000 });
     }
 
     this.questions = [...this.questions];
     this.questionDialog = false;
     delete this.unsavedQuestion;
     delete this.unsavedQuestionIndex;
+    delete this.selectedQuestions;
   }
 
   onRowReordered() {
@@ -118,13 +129,8 @@ export class CourseQuestionsComponent {
     });
   }
 
-  createId(): string {
-    let id = '';
-    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (var i = 0; i < 5; i++) {
-      id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
+  async saveQuestions(courseId: string, questions: Question[]) {
+    return await this.questionService.setCourseQuestions(courseId, questions).toPromise();
   }
 
 }
