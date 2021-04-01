@@ -651,6 +651,24 @@
     "LocationName": "Standortbezeichnung",
     "Private": "Privat"
   },
+  "questions": {
+    "TabTitle": "",
+    "ManageQuestions": "",
+    "Search": "",
+    "Select": "",
+    "Reorder": "",
+    "QuestionDetails": "",
+    "QuestionText": "",
+    "QuestionType": "",
+    "ValidationRequired": "",
+    "ValidationTooShort": "",
+    "Text": "",
+    "Scale": "",
+    "Min": "",
+    "Max": "",
+    "Label for First value": "",
+    "Label for Last value": ""
+  },
   "menu": {
     "Dashboard": "Übersicht",
     "Company": "Firma",
