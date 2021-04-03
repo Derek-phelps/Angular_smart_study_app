@@ -2,8 +2,9 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MessageService } from "primeng/api";
 import { filter, take } from "rxjs/operators";
+import { CourseFeedbackQuestion } from "src/app/core/models/course-feedback-question";
 import { ConfirmationBoxComponent } from "src/app/theme/components/confirmation-box/confirmation-box.component";
-import { AdminCourseService, Question } from "../../../adminCourse.service";
+import { AdminCourseService } from "../../../adminCourse.service";
 
 @Component({
   selector: 'course-questions',
@@ -17,12 +18,12 @@ export class CourseQuestionsComponent {
 
   questionDialog: boolean;
 
-  questions: Question[];
+  questions: CourseFeedbackQuestion[];
 
-  unsavedQuestion: Question;
+  unsavedQuestion: CourseFeedbackQuestion;
   unsavedQuestionIndex: number;
 
-  selectedQuestions: Question[];
+  selectedQuestions: CourseFeedbackQuestion[];
 
   submitted: boolean;
   isReordering = true;
@@ -34,7 +35,7 @@ export class CourseQuestionsComponent {
   ) { }
 
   ngOnInit() {
-    this.questionService.getCourseQuestions(this.courseData.courseInfo.courseId).subscribe(data => this.questions = data);
+    this.questionService.getCourseFeedbackQuestions(this.courseData.courseInfo.courseId).subscribe(data => this.questions = data);
   }
 
   newQuestion() {
@@ -62,14 +63,14 @@ export class CourseQuestionsComponent {
     });
   }
 
-  editQuestion(question: Question, index: number) {
+  editQuestion(question: CourseFeedbackQuestion, index: number) {
     this.unsavedQuestion = { ...question };
     this.unsavedQuestionIndex = index;
     this.questionDialog = true;
     delete this.selectedQuestions;
   }
 
-  async deleteQuestion(question: Question) {
+  async deleteQuestion(question: CourseFeedbackQuestion) {
     const dialogRef = this.dialog.open(ConfirmationBoxComponent, {
       width: '400px',
       data: { Mes: `Are you sure you want to delete ${question.questionText}?` },
@@ -94,7 +95,7 @@ export class CourseQuestionsComponent {
     this.submitted = false;
   }
 
-  async saveQuestion(question: Question) {
+  async saveQuestion(question: CourseFeedbackQuestion) {
     this.unsavedQuestion = question;
     this.submitted = true;
 
@@ -124,13 +125,13 @@ export class CourseQuestionsComponent {
   }
 
   onRowReordered() {
-    this.questionService.setCourseQuestions(this.courseData.courseInfo.courseId, this.questions).subscribe(() => {
+    this.questionService.setCourseFeedbackQuestions(this.courseData.courseInfo.courseId, this.questions).subscribe(() => {
       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Order Changed', life: 3000 });
     });
   }
 
-  async saveQuestions(courseId: string, questions: Question[]) {
-    return await this.questionService.setCourseQuestions(courseId, questions).toPromise();
+  async saveQuestions(courseId: string, questions: CourseFeedbackQuestion[]) {
+    return await this.questionService.setCourseFeedbackQuestions(courseId, questions).toPromise();
   }
 
 }

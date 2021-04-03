@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
-
-import { Question } from "src/app/admin/adminCourse/adminCourse.service";
+import { CourseFeedbackQuestion } from "src/app/core/models/course-feedback-question";
 
 @Component({
     selector: 'question-editor',
@@ -10,8 +9,8 @@ import { Question } from "src/app/admin/adminCourse/adminCourse.service";
   })
   export class QuestionEditorComponent implements OnInit {
 
-      @Input() question: Question;
-      @Output() save = new EventEmitter<Question>();
+      @Input() question: CourseFeedbackQuestion;
+      @Output() save = new EventEmitter<CourseFeedbackQuestion>();
       @Output() cancel = new EventEmitter();
 
       form = this.fb.group({

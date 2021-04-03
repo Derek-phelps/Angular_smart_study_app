@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { map, catchError } from 'rxjs/operators';
 import { Globals } from '../../common/auth-guard.service';
+import { CourseFeedbackQuestion, CourseFeedbackResponse } from 'src/app/core/models/course-feedback-question';
 
 @Injectable()
 export class ChapterService {
@@ -19,6 +20,7 @@ export class ChapterService {
     //private _getSuspendedScormSubChapterStatusUrl = "Chapter/getSuspendedScormSubChapterStatus";
     private _getNewsFeedUrl = 'Newswall';
     private _addNewswallUrl = 'Newswall/addNewswall';
+    private _getCourseFeedbackListUrl = 'Course/getCourseFeedbackList';
     private _accessControl = 'Course/accessControl';
     constructor(private _http: HttpClient, public globals: Globals) {
 
@@ -118,6 +120,14 @@ export class ChapterService {
         return this._http.post(this.globals.APIURL + this._suspendScormUrl, formData)
             .pipe(map((response: Response) => response))
             .pipe(catchError(this.handleError))
+    }
+    getCourseFeedbackQuestions(courseId: string) {
+        return this._http.post<CourseFeedbackQuestion[]>(this.globals.APIURL + this._getCourseFeedbackListUrl, { courseId })
+            .pipe(catchError(this.handleError)).toPromise();
+    }
+    setCourseFeedbackResponses(courseId: string, responses: CourseFeedbackResponse[]) {
+        return this._http.post<void>(this.globals.APIURL + this._getCourseFeedbackListUrl, { courseId, responses })
+            .pipe(catchError(this.handleError)).toPromise();
     }
     // getSuspendedScormSubChapterStatus(form: any, empCourseId): any {
     //     let formData: FormData = new FormData();

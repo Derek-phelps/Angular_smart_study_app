@@ -8,6 +8,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { download } from '../../download/download.component';
+import { CourseFeedbackQuestion, CourseFeedbackResponse } from 'src/app/core/models/course-feedback-question';
+import { array2map, map2array } from 'src/app/common/map_utils';
 
 //import { $ } from 'protractor';
 
@@ -25,6 +27,8 @@ import { download } from '../../download/download.component';
 })
 export class Chapter implements OnInit, AfterViewInit {
   @ViewChild('container', { read: ViewContainerRef, static: true }) viewContainerRef: ViewContainerRef;
+
+  Array = Array;
 
   state = false;
 
@@ -56,6 +60,9 @@ export class Chapter implements OnInit, AfterViewInit {
   trainer = null;
 
   playFireworks = false;
+  isFeedbackFormVisible = false;
+  feedbackQuestions: CourseFeedbackQuestion[];
+  feedbackResponses = {} as any;
 
   // SCORM values:
   // ===========================================
@@ -371,6 +378,41 @@ export class Chapter implements OnInit, AfterViewInit {
     var strWindowSettings = 'menubar=no,toolbar=no,status=no,channelmode=yes,top=0,left=0';
     strWindowSettings += ',width=' + width + ',height=' + height;
     this._globals.currentCertificateDownloadWindow = window.open(url, "Smart-Study", strWindowSettings);
+  }
+  async onFeedbackFormOpened() {
+    this.isFeedbackFormVisible = true;
+    this.feedbackQuestions = await this.service.getCourseFeedbackQuestions(this.courseInfo.CourseId);
+  }
+  onFeedbackFormClosed() {
+    delete this.feedbackQuestions;
+    this.isFeedbackFormVisible = false;
+  }
+  validateFeedbackResponses() {
+    if (!this.feedbackQuestions?.length) {
+      return true;
+    }
+
+    for (const question of this.feedbackQuestions) {
+      if (question.mandatory === '1' && !this.feedbackResponses[question.feedbackId]) {
+        return true;
+      }
+    }
+    return false;
+  }
+  submitFeedbackResponses() {
+    const questionsById = array2map(this.feedbackQuestions, x => x.feedbackId, x => x);
+    
+    const responses = 
+      map2array(this.feedbackResponses, 
+        (key, value) => ({
+          feedbackId: key,
+          questionText: questionsById[key].questionText,
+          questionType: questionsById[key].questionType,
+          response: value,
+        } as CourseFeedbackResponse))
+      .filter(x => x.response);
+
+    this.service.setCourseFeedbackResponses(this.courseInfo.CourseId, responses);
   }
   ngOnDestroy() {
     if (this._globals.currentCertificateDownloadWindow) {

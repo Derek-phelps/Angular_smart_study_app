@@ -352,6 +352,8 @@
     "Proceed": "Fortfahren",
     "MockTest": "Übungstest",
     "FinalExam": "Abschlussprüfung",
+    "LeaveFeedback": "",
+    "SendFeedback": "",
     "CourseHasFinalExam": "Kurs hat eine Abschlussprüfung",
     "AchievementRecord": "Erfolgsaufzeichnung",
     "Exam": "Prüfung",

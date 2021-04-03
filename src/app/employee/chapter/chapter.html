@@ -106,6 +106,65 @@
                         <i class="fa fa-newspaper-o"></i> {{'course.FinalExam' | translate}}
                         <i *ngIf="courseInfo.finalResult &gt; 0" class="fa fa-check-circle"></i>
                     </button>
+                    <mat-accordion *ngIf="courseInfo.showFeedbackForm" class="feedback-form">
+                        <mat-expansion-panel [hideToggle]="true" (opened)="onFeedbackFormOpened()" (closed)="onFeedbackFormClosed()">
+                        
+                            <mat-expansion-panel-header class="p-0">
+                                <mat-panel-title class="btn-lg btn-auth m-0" [class.btn-primary]="!isFeedbackFormVisible">
+                                    <div class="m-auto"><i class="fa fa-comments-o"></i> {{'course.LeaveFeedback' | translate}}</div>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+
+                            <div *ngIf="!feedbackQuestions" class="text-center"><i class="fa fa-3x fa-spin fa-spinner"></i></div>
+
+                            <ng-container *ngIf="feedbackQuestions">
+
+                                <ng-container *ngFor="let question of feedbackQuestions" [ngSwitch]="question.questionType">
+                            
+                                    <ng-container *ngSwitchCase="'text'">
+                                        <mat-form-field class="w-100 mb-4" appearance="fill">
+                                            <mat-label>{{ question.questionText }} <strong *ngIf="question.mandatory === '1'"
+                                                    class="text-danger">*</strong>
+                                            </mat-label>
+                                            <textarea matInput placeholder="Please provide your response"
+                                                [(ngModel)]="feedbackResponses[question.feedbackId]"></textarea>
+                                        </mat-form-field>
+                                    </ng-container>
+                            
+                                    <ng-container *ngSwitchCase="'scale'">
+                                        <mat-card class="mb-4">
+                                            <mat-card-content>
+                                                <label class="d-block mb-2">{{ question.questionText }} <strong *ngIf="question.mandatory === '1'"
+                                                        class="text-danger">*</strong></label>
+                                                <mat-radio-group class="d-flex align-items-end"
+                                                    [(ngModel)]="feedbackResponses[question.feedbackId]">
+                                                    <div *ngIf="question.questionSettings.textFirst" class="mb-2 mr-3">
+                                                        {{ question.questionSettings.textFirst }}
+                                                    </div>
+                                                    <div *ngFor="let i of Array(question.questionSettings.max - question.questionSettings.min + 1).fill(1); let index = index;"
+                                                        class="d-flex flex-column align-items-center m-auto">
+                                                        <div class="mb-2">{{ index }}</div>
+                                                        <mat-radio-button class="ml-2" [value]="index"></mat-radio-button>
+                                                    </div>
+                                                    <div *ngIf="question.questionSettings.textLast" class="mb-2 ml-3">
+                                                        {{ question.questionSettings.textLast }}</div>
+                                                </mat-radio-group>
+                                            </mat-card-content>
+                                        </mat-card>
+                                    </ng-container>
+                            
+                                </ng-container>
+                            
+                                <div class="text-center">
+                                    <button mat-button color="primary" [disabled]="validateFeedbackResponses()" (click)="submitFeedbackResponses()"><i
+                                            class="fa fa-send"></i> {{'course.SendFeedback' | translate}}</button>
+                                </div>
+                                
+                            </ng-container>
+                        
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                      
                 </div>
             </div>
 

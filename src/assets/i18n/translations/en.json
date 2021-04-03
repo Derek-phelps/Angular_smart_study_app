@@ -354,6 +354,8 @@
     "Proceed": "Proceed",
     "MockTest": "Training exam",
     "FinalExam": "Final exam",
+    "LeaveFeedback": "Leave Feedback",
+    "SendFeedback": "Send Feedback",
     "CourseHasFinalExam": "Course has a final exam",
     "AchievementRecord": "Achievement record",
     "Exam": "Exam",

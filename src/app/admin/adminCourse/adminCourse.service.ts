@@ -4,14 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpEventType } from "@angular/common/http";
 import { map, catchError } from 'rxjs/operators';
 import { Globals } from '../../common/auth-guard.service';
-
-export interface Question {
-  feedbackId: string;
-  questionText: string;
-  questionType: string;
-  questionSettings;
-  mandatory: '0' | '1';
-}
+import { CourseFeedbackQuestion } from 'src/app/core/models/course-feedback-question';
 
 @Injectable()
 export class AdminCourseService {
@@ -20,8 +13,8 @@ export class AdminCourseService {
   private _getByUserUrl = 'Course/getCourseByUserId';
   private _getByTrainerUrl = 'Course/getCourseByTrainerId';
   public _getByIdUrl = 'Course/getCourseById';
-  public _getCourseFeedbackListUrl = 'Course/getCourseFeedbackList';
-  public _setCourseFeedbackListUrl = 'Course/setCourseFeedbackList';
+  private _getCourseFeedbackListUrl = 'Course/getCourseFeedbackList';
+  private _setCourseFeedbackListUrl = 'Course/setCourseFeedbackList';
   public _addUrl = 'Course/addCourse';
   public _editUrl = 'Course/editCourse';
   public _deleteUrl = 'Course/deleteCourse';
@@ -89,12 +82,12 @@ export class AdminCourseService {
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
-  getCourseQuestions(courseId: string) {
-    return this._http.post<Question[]>(this.globals.APIURL + this._getCourseFeedbackListUrl, { courseId })
+  getCourseFeedbackQuestions(courseId: string) {
+    return this._http.post<CourseFeedbackQuestion[]>(this.globals.APIURL + this._getCourseFeedbackListUrl, { courseId })
       .pipe(catchError(this.handleError));
   }
-  setCourseQuestions(courseId: string, questions: Question[]) {
-    return this._http.post<Question[]>(this.globals.APIURL + this._setCourseFeedbackListUrl, { courseId, questions })
+  setCourseFeedbackQuestions(courseId: string, questions: CourseFeedbackQuestion[]) {
+    return this._http.post<CourseFeedbackQuestion[]>(this.globals.APIURL + this._setCourseFeedbackListUrl, { courseId, questions })
       .pipe(catchError(this.handleError));
   }
   passUserCourse(empId, courseId, justPass): any {
