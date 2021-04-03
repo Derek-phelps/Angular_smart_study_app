@@ -1,5 +1,5 @@
 import { state, style, trigger } from '@angular/animations';
-import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -10,12 +10,13 @@ import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { take, tap } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
 import { DialogForwardUserDialog } from 'src/app/forward-user/dialog-forward-user-dialog';
 import { AdminCourseService } from '../../../adminCourse.service';
 import { VACUtils } from '../view-admin-course-utils';
 import { Translation } from 'primeng/api/translation';
+import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
 
 interface CourseFinishInfo {
  date : Date
@@ -44,20 +45,29 @@ interface TableData {
   finishInfo : CourseFinishInfo[],
 }
 
+enum EViewMode {
+  Compact,
+  Full
+}
+
 @Component({
   selector: 'course-participants',
   templateUrl: './course-participants.component.html',
   styleUrls: ['./course-participants.component.scss'],
   animations: VACUtils.componentAnimations,
 })
-export class CourseParticipantsComponent implements OnInit {
+export class CourseParticipantsComponent implements OnInit, AfterViewInit {
+  
+  public EViewMode = EViewMode;
 
+  private _breakpoint$ : Observable<BreakpointState> = new Observable;
+  private _viewMode : EViewMode = EViewMode.Full;
   private _tableData : TableData[] = [];
   private _courseData : any = {};
   private _statuses : any[] = [
-    { label : 'done', value : 1 },
-    { label : 'current', value : 0 },
-    { label : 'overdue', value : -1 },
+    { label : this._translate.instant('course.Done'), value : 1 },
+    { label : this._translate.instant('course.Open'), value : 0 },
+    { label : this._translate.instant('course.Overdue'), value : -1 },
   ];
 
   @Input() 
@@ -89,12 +99,22 @@ export class CourseParticipantsComponent implements OnInit {
     private service: AdminCourseService,
     private snackbar: MatSnackBar,
     private changeDetector: ChangeDetectorRef,
-    private config: PrimeNGConfig
+    private config: PrimeNGConfig,
+    private _breakPointObserver : BreakpointObserver
   ) {
     this._translate.get('primeng').pipe(take(1)).subscribe(res => this.config.setTranslation(res));
    }
 
   ngOnInit(): void {
+  }
+
+  ngAfterViewInit() : void {
+    this._breakpoint$ = this._breakPointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).pipe(
+      tap(change => {
+        if(change.matches) { this._viewMode = EViewMode.Compact; }
+        else { this._viewMode = EViewMode.Full; }
+      })
+    )
   }
 
   private _setupTable(data: any): void {
@@ -185,6 +205,8 @@ export class CourseParticipantsComponent implements OnInit {
     });
   }
 
+  get viewMode() : EViewMode { return this._viewMode; }
+  get breakpoint$() : Observable<BreakpointState> { return this._breakpoint$; }
   get userInfo() { return this._globals.userInfo; };
   get userStatusTable() { return this._userStatusTable; };
   get userDisplayedColumns(): string[] { return ['status', 'LASTNAME', 'FIRSTNAME', 'email', 'editDelete']; }
@@ -194,4 +216,6 @@ export class CourseParticipantsComponent implements OnInit {
   get courseInfo() : any { return this._courseData.courseInfo; }
   get tableData() : TableData[] { return this._tableData; } 
   get statuses() : any[] { return this._statuses; }
+
+
 }

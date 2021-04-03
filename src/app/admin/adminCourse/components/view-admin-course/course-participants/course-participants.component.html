@@ -1,3 +1,4 @@
+<div *ngIf="breakpoint$ | async;"></div>
 
 <div class="course-overview-wrapper">
     <div class="warning-error-label error-label" *ngIf="courseUsersOverdue > 0">
@@ -31,20 +32,21 @@
                 currentPageReportTemplate="{{ 'employees.TablePageInfo' | translate }}">
                 <ng-template pTemplate="header">
                     <tr>
-                        <!-- <th class="width-3"></th> -->
                         <th pSortableColumn="courseStatus" class="width-6" colspan="2">{{'course.Status' | translate}}<p-sortIcon field="courseStatus"></p-sortIcon></th>
                         <th pSortableColumn="lastName">{{'employees.Surname' | translate}}<p-sortIcon field="lastName"></p-sortIcon></th>
                         <th pSortableColumn="firstName">{{'employees.Name' | translate}}<p-sortIcon field="firstName"></p-sortIcon></th>
-                        <th pSortableColumn="email">{{'employees.Email' | translate}}<p-sortIcon field="email"></p-sortIcon></th>
-                        <!-- <th class="d-none d-md-table-cell" pSortableColumn="role" i18n="Role|Common@@Role">Role <p-sortIcon field="role"></p-sortIcon></th> -->
-                        <!-- <th class="d-none d-md-table-cell" i18n="Invite|Common@@Invite" *ngIf="virtualOnly">Invite</th>
-                        <th class="d-none d-md-table-cell" i18n="ExpirationDate|Common@@ExpirationDate" *ngIf="virtualOnly">Expiration Date</th>
-                        <th class="actionColumn d-none d-md-table-cell" i18n="Action|Common@@Action">Action</th> -->
+                        <th pSortableColumn="email" class="d-none d-lg-table-cell">{{'employees.Email' | translate}}<p-sortIcon field="email"></p-sortIcon></th>
                     </tr>
                     <tr>
                         
                         <th colspan="2">
-                            <p-columnFilter field="courseStatus" matchMode="equals" [showMenu]="false">
+                            <!-- 
+                                ShowApply/ShowClearButton are currently not working in ng-prime, see:
+                                https://github.com/primefaces/primeng/issues/9654
+                            -->
+                            <p-columnFilter field="courseStatus" matchMode="equals" display="menu" 
+                                [showOperator]="false" [showAddButton]="false" [showMatchModes]="false"
+                                [showClearButton]="false" [showApplyButton]="false">
                                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                                     <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)" 
                                         placeholder="Any" [showClear]="true">
@@ -56,25 +58,24 @@
                             </p-columnFilter>
                         </th>
                         <th>
-                            <p-columnFilter type="text" matchMode="contains" field="lastName"></p-columnFilter>
+                            {{ viewMode }}
+                            <span *ngIf="viewMode == EViewMode.Full">
+                                <p-columnFilter type="text" display="row" matchMode="contains" field="lastName"></p-columnFilter>
+                            </span>
+                            
+                            <span *ngIf="viewMode == EViewMode.Compact">
+                                <p-columnFilter type="text" display="menu" matchMode="contains" field="lastName">
+                                    <!-- <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                                        <input type="text" [ngModel]="value" (onChange)="filter($event.value)">
+                                    </ng-template> -->
+                                </p-columnFilter>
+                            </span>
                         </th>
                         <th>
                             <p-columnFilter type="text" matchMode="contains" field="firstName"></p-columnFilter>
                         </th>
-                        <th>
+                        <th class="d-none d-lg-table-cell">
                             <p-columnFilter type="text" matchMode="contains" field="email"></p-columnFilter>
-                            <!-- <p-columnFilter field="representative" matchMode="in" [showMenu]="false">
-                                <ng-template pTemplate="filter" let-value let-filter="filterCallback">
-                                    <p-multiSelect [ngModel]="value" [options]="representatives" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name">
-                                        <ng-template let-option pTemplate="item">
-                                            <div class="p-multiselect-representative-option">
-                                                <img [alt]="option.label" src="assets/showcase/images/demo/avatar/{{option.image}}" width="32" style="vertical-align: middle" />
-                                                <span class="p-ml-1">{{option.name}}</span>
-                                            </div>
-                                        </ng-template>
-                                    </p-multiSelect>
-                                </ng-template>
-                            </p-columnFilter> -->
                         </th>
                     </tr>
                 </ng-template>
@@ -123,7 +124,7 @@
                                 {{ participant.firstName }}
                             </div>
                         </td>
-                        <td>
+                        <td class="d-none d-lg-table-cell">
                             <a [href]="'mailto:' + participant.email" target="_blank" class="text-14"
                              [matTooltip]="'sendMailTo' | translate: { recipient: participant.fullName }">{{ participant.email }}</a>
                         </td>
