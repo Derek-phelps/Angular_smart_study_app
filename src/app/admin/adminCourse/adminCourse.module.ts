@@ -6,6 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatDialogModule } from '@angular/material/dialog';
 import { LayoutModule } from '../../theme/layout.module';
 
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -66,7 +67,7 @@ import { QuestionEditorComponent } from './components/view-admin-course/course-q
     CourseRoutingModule, MatListModule, MatDialogModule, LayoutModule,
     FormsModule, ReactiveFormsModule, AppTranslationModule,
     MatCheckboxModule,
-    MatSortModule, MatTableModule, MatPaginatorModule,
+    MatSlideToggleModule, MatSortModule, MatTableModule, MatPaginatorModule,
     QRCodeModule, SharedAppModule, /*SatDatepickerModule, SatNativeDateModule,*/ AppMaterialModule,
     ChartsModule, CourseAssignmentModule,
     DragDropModule,

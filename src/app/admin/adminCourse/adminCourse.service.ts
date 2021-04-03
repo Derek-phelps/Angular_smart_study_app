@@ -10,6 +10,7 @@ export interface Question {
   questionText: string;
   questionType: string;
   questionSettings;
+  mandatory: '0' | '1';
 }
 
 @Injectable()

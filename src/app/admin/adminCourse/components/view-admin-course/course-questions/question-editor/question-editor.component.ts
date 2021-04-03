@@ -17,6 +17,7 @@ import { Question } from "src/app/admin/adminCourse/adminCourse.service";
       form = this.fb.group({
         questionText: [null, Validators.compose([Validators.required, Validators.minLength(3)])],
         questionType: [null, Validators.required],
+        mandatory: [false],
         min: [null, Validators.required],
         max: [null, Validators.required],
         textFirst: [null],
@@ -29,6 +30,7 @@ import { Question } from "src/app/admin/adminCourse/adminCourse.service";
         this.form.patchValue({ 
             questionText: this.question.questionText,
             questionType: this.question.questionType,
+            mandatory: this.question.mandatory === '1',
             min: this.question.questionSettings?.min,
             max: this.question.questionSettings?.max,
             textFirst: this.question.questionSettings?.textFirst,
@@ -54,6 +56,7 @@ import { Question } from "src/app/admin/adminCourse/adminCourse.service";
         
         this.question.questionText = value.questionText;
         this.question.questionType = value.questionType;
+        this.question.mandatory = value.mandatory ? '1' : '0';
         
         if (value.questionType === 'text') {
             delete this.question.questionSettings; // no settings

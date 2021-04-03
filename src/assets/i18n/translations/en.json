@@ -662,6 +662,7 @@
     "QuestionDetails": "Question Details",
     "QuestionText": "Question Text",
     "QuestionType": "Question Type",
+    "Mandatory": "Mandatory",
     "ValidationRequired": "Question text is required",
     "ValidationTooShort": "Question text is too short",
     "Text": "Text",

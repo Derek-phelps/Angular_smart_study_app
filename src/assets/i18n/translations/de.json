@@ -660,6 +660,7 @@
     "QuestionDetails": "",
     "QuestionText": "",
     "QuestionType": "",
+    "Mandatory": "",
     "ValidationRequired": "",
     "ValidationTooShort": "",
     "Text": "",
