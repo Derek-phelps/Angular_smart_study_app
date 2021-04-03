@@ -1,5 +1,10 @@
 @import '../style.scss';
 
+
 .text-14 {
+    font-size: 14px;
+}
+
+:host ::ng-deep .p-component {
     font-size: 14px;
 }
