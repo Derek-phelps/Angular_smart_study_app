@@ -1,5 +1,3 @@
-<div *ngIf="breakpoint$ | async;"></div>
-
 <div class="course-overview-wrapper">
     <div class="warning-error-label error-label" *ngIf="courseUsersOverdue > 0">
         <div>
@@ -72,6 +70,9 @@
                                 [showClearButton]="false" [showApplyButton]="false">
                             </p-columnFilter>
                         </th>
+                        <th class="width-3">
+                            <!-- empty for passing users -->
+                        </th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-participant let-expanded="expanded">
@@ -123,17 +124,21 @@
                             <a [href]="'mailto:' + participant.email" target="_blank"
                              [matTooltip]="'sendMailTo' | translate: { recipient: participant.fullName }">{{ participant.email }}</a>
                         </td>
-                        <!-- <td class="d-none d-md-table-cell">
-                        
-                        </td> -->
+                        <td>
+                            <i *ngIf="participant.courseStatus != 1 && (userInfo.isAdmin || courseInfo.permission==2)"
+                                class="fa fa-angle-double-right iconSize float-right forward-user-icon"
+                                (click)="passUser(participant)"
+                                [matTooltip]="'course.PassEmp' | translate: {course: courseInfo.courseName, name: participant.fullName}">
+                            </i>
+                        </td>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-participant>
                     <tr>
-                        <td class="d-none d-lg-table-cell" colspan="5">
+                        <td class="d-none d-lg-table-cell" colspan="6">
                             <ng-container *ngTemplateOutlet="dropdownContent"></ng-container>
                         </td>
-                        <td class="d-lg-none" colspan="4">
+                        <td class="d-lg-none" colspan="5">
                             <ng-container *ngTemplateOutlet="dropdownContent"></ng-container>
                         </td>
                     </tr>
@@ -149,114 +154,4 @@
             </div>
         </div>
     </ng-template>
-    <!-- Display employee info -->
-    <div class="row tile-row" style="margin-top: 20px;">
-        <div class="col-12 col-tile-outer">
-            <div class="col-tile">
-                <!-- <div class="col-header">{{'course.Data' | translate}}</div> -->
-                <mat-form-field class="user-filter">
-                    <mat-label>{{'group.Search' | translate}}</mat-label>
-                    <input matInput (keyup)="applyMemberFilter($event)" placeholder="">
-                </mat-form-field>
-                <div class="col-text">
-                    <div style="width: 100%;overflow: auto;">
-                        <table mat-table [dataSource]="userStatusTable" class="mat-elevation-z8"
-                            #userSort="matSort" matSort matSortActive="LASTNAME"
-                            matSortDirection="asc">
-                            <ng-container matColumnDef="status">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                    style="padding-left: 5px;">
-                                    <div matTooltip="{{'employees.Status' | translate}}">
-                                        {{'employees.St' | translate}}</div>
-                                </th>
-                                <td mat-cell *matCellDef="let emp" class="cell-status-wrapper"
-                                    [style.width]="userInfo.UserType > 2 ? '25px' : '51px'">
-                                    <div class="status-div"
-                                        [style.width]="userInfo.UserType > 2 ? '25px' : '51px'">
-                                        <div class="status-div-inner-left"
-                                            [ngClass]="{'status-done': emp.courseStatus==1, 'status-current': emp.courseStatus==0, 'status-overdue': emp.courseStatus==-1}">
-                                            <i class="fa fa-book fa-lg center-icon"
-                                                aria-hidden="true"
-                                                matTooltip="{{'group.CourseState' | translate}}"></i>
-                                        </div>
-                                        <div *ngIf="2 >= userInfo.UserType"
-                                            class="status-div-inner-right"
-                                            [ngClass]="{'status-done': emp.globalStatus==1, 'status-current': emp.globalStatus==0, 'status-overdue': emp.globalStatus==-1}">
-                                            <i class="fa fa-user fa-lg center-icon"
-                                                matTooltip="{{'group.GlobalState' | translate}}"
-                                                aria-hidden="true"></i>
-                                        </div>
-                                    </div>
-                                </td>
-                            </ng-container>
-                            <ng-container matColumnDef="LASTNAME">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header
-                                    style="padding-left: 10px;">
-                                    {{'employees.Surname' | translate}}
-                                </th>
-                                <td style="padding-left: 10px;" mat-cell *matCellDef="let emp">
-                                    <div *ngIf="userInfo.isAdmin" style="cursor: pointer;"
-                                        routerLink="../../../../employees/{{emp.empId}}"
-                                        [skipLocationChange]="false"
-                                        [matTooltip]="'openVar' | translate: {var: emp.FULLNAME}">
-                                        <b>{{emp.LASTNAME}}</b>
-                                    </div>
-                                    <div *ngIf="!userInfo.isAdmin">
-                                        <b>{{emp.LASTNAME}}</b>
-                                    </div>
-                                </td>
-                            </ng-container>
-                            <ng-container matColumnDef="FIRSTNAME">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    {{'employees.Name' | translate}}
-                                </th>
-                                <td mat-cell *matCellDef="let emp">
-                                    <div *ngIf="userInfo.isAdmin" style="cursor: pointer;"
-                                        routerLink="../../../../employees/{{emp.empId}}"
-                                        [skipLocationChange]="false"
-                                        [matTooltip]="'openVar' | translate: {var: emp.FULLNAME}">
-                                        <b>{{emp.FIRSTNAME}}</b>
-                                    </div>
-                                    <div *ngIf="!userInfo.isAdmin">
-                                        <b>{{emp.FIRSTNAME}}</b>
-                                    </div>
-                                </td>
-                            </ng-container>
-                            <ng-container matColumnDef="email">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>
-                                    {{'employees.Email' | translate}}</th>
-                                <td mat-cell *matCellDef="let emp">
-                                    <a *ngIf="emp && emp.EmailID && emp.EmailID != ''"
-                                        [href]="'mailto:' + emp.EmailID" target="_blank"
-                                        [matTooltip]="'sendMailTo' | translate: {recipient: emp.FULLNAME}">{{emp.EmailID}}</a>
-                                    <ng-container *ngIf="emp && emp.EmailID && emp.EmailID == ''">-
-                                    </ng-container>
-                                </td>
-                            </ng-container>
-                            <ng-container matColumnDef="editDelete">
-                                <th mat-header-cell *matHeaderCellDef></th>
-                                <td mat-cell *matCellDef="let emp" style="overflow: hidden;">
-                                    <!-- style="min-width: 90px;padding: 0px;"> -->
-                                    <i *ngIf="emp.courseStatus != 1 && (userInfo.isAdmin || courseInfo.permission==2)"
-                                        class="fa fa-angle-double-right iconSize float-right forward-user-icon"
-                                        (click)="passUser(emp)"
-                                        [matTooltip]="'course.PassEmp' | translate: {course: courseInfo.courseName, name: emp.FULLNAME}"></i>
-                                    <!-- <i class="fa fa-edit iconSize float-right edit-delete-edit-icon"
-                                style="cursor: pointer;" (click)="editEmp(emp)"
-                                matTooltip="{{'employees.Edit' | translate}}"></i> -->
-                                </td>
-                            </ng-container>
-                            <tr mat-header-row *matHeaderRowDef="userDisplayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: userDisplayedColumns;"
-                                class="group-row">
-                            </tr>
-                        </table>
-                    </div>
-                    <mat-paginator #userPaginator [pageSizeOptions]="[5, 10, 20, 50, 100]"
-                        [pageSize]="10" showFirstLastButtons>
-                    </mat-paginator>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>

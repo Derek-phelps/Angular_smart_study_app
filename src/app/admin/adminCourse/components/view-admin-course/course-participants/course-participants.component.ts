@@ -45,10 +45,10 @@ interface TableData {
   finishInfo : CourseFinishInfo[],
 }
 
-enum EViewMode {
-  Compact,
-  Full
-}
+// enum EViewMode {
+//   Compact,
+//   Full
+// }
 
 @Component({
   selector: 'course-participants',
@@ -58,11 +58,11 @@ enum EViewMode {
 })
 export class CourseParticipantsComponent implements OnInit, AfterViewInit {
   
-  public EViewMode = EViewMode;
+  //public EViewMode = EViewMode;
 
-  private _breakpoint$ : Observable<BreakpointState> = new Observable;
-  private _viewMode : EViewMode = EViewMode.Full;
-  private _filterMode : string = "row";
+  //private _breakpoint$ : Observable<BreakpointState> = new Observable;
+  // private _viewMode : EViewMode = EViewMode.Full;
+  // private _filterMode : string = "row";
   private _tableData : TableData[] = [];
   private _courseData : any = {};
   private _statuses : any[] = [
@@ -80,16 +80,6 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
 
   @Output() updateData: EventEmitter<void> = new EventEmitter<void>();
 
-  private _userStatusTable = new MatTableDataSource();
-
-  @ViewChild('userPaginator') set userPaginator(paginator: MatPaginator) {
-    this._userStatusTable.paginator = paginator;
-  }
-
-  @ViewChild('userSort') set userSort(sort: MatSort) {
-    this._userStatusTable.sort = sort;
-  }
-
   private _courseUsersOverdue: number = -1;
   private _courseUsersOpen: number = -1;
 
@@ -101,7 +91,7 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
     private snackbar: MatSnackBar,
     private changeDetector: ChangeDetectorRef,
     private config: PrimeNGConfig,
-    private _breakPointObserver : BreakpointObserver
+    //private _breakPointObserver : BreakpointObserver
   ) {
     this._translate.get('primeng').pipe(take(1)).subscribe(res => this.config.setTranslation(res));
    }
@@ -110,45 +100,27 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() : void {
-    this._breakpoint$ = this._breakPointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).pipe(
-      tap(change => {
-        if(change.matches) { 
-          this._viewMode = EViewMode.Compact;
-          this._filterMode = 'menu'; 
-          this.changeDetector.detectChanges();
-        }
-        else { 
-          this._viewMode = EViewMode.Full; 
-          this._filterMode = 'row'; 
-          this.changeDetector.detectChanges();
-        }
+    // this._breakpoint$ = this._breakPointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).pipe(
+    //   tap(change => {
+    //     if(change.matches) { 
+    //       this._viewMode = EViewMode.Compact;
+    //       this._filterMode = 'menu'; 
+    //       this.changeDetector.detectChanges();
+    //     }
+    //     else { 
+    //       this._viewMode = EViewMode.Full; 
+    //       this._filterMode = 'row'; 
+    //       this.changeDetector.detectChanges();
+    //     }
         
-      })
-    )
+    //   })
+    // )
   }
 
   private _setupTable(data: any): void {
-    this._userStatusTable.data = data.userStatus;
-    let obj = this;
-    this._userStatusTable.filterPredicate = function (data: any, filter: string): boolean {
-      return obj.filterFunction(
-        data.FIRSTNAME + ' ' + data.LASTNAME + ' ' + data.FULLNAME, filter) ||
-        obj.filterFunction(data.EmailID, filter);
-    }
-
-    this._userStatusTable.sortingDataAccessor = (item: any, property) => {
-      switch (property) {
-        case 'email': { return item.EmailID; }
-        case 'status': { return item.courseStatus; }
-        default: { return item[property]; }
-      }
-    };
-
-
     this._tableData = [];
     
     data.userStatus.forEach(entry => {
-
       let groups : Group[] = [];
       let departments : Department[] = [];
       let finishInfo : CourseFinishInfo[] = [];
@@ -174,35 +146,15 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
     this._courseUsersOpen = VACUtils.calcCourseUsersOpen(data.userStatus);
   }
 
-  filterFunction(name: string, filter: string) {
-    let bMatch = true;
-    let trimLowerFilter = filter.trim().toLowerCase().replace(/\s+/g, ' ');
-    let splitFilter = trimLowerFilter.split(" ");
-    splitFilter.forEach(filterPred => {
-      if (!name.toLowerCase().includes(filterPred)) {
-        bMatch = false;
-      }
-    });
-
-    return bMatch;
-  }
-
-  applyMemberFilter(event: Event): void {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.userStatusTable.filter = filterValue;
-
-    if (this.userStatusTable.paginator) { this.userStatusTable.paginator.firstPage(); }
-  }
-
-  passUser(employee: any) {
+  passUser(participant: TableData) {
     const dialogRef = this.dialog.open(DialogForwardUserDialog, {
-      data: { name: employee.FULLNAME, course: this.courseInfo.courseName, hasCertificate: this.courseInfo.hasCertificate }
+      data: { name: participant.fullName, course: this.courseInfo.courseName, hasCertificate: this.courseInfo.hasCertificate }
     });
 
     dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
       if (result == 1 || result == 2) {
         let pass: string = (result == 1 ? '1' : '0');
-        this.service.passUserCourse(employee.empId, this.courseInfo.courseId, pass).pipe(take(1)).subscribe(data => {
+        this.service.passUserCourse(participant.id, this.courseInfo.courseId, pass).pipe(take(1)).subscribe(data => {
           if (data.success) {
             this.snackbar.open(this._translate.instant('course.PassEmpSuccess'), '', { duration: 3000 });
             this.updateData.next();
@@ -215,13 +167,11 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  get filterMode() : string { return this._filterMode; }
+  // get filterMode() : string { return this._filterMode; }
 
-  get viewMode() : EViewMode { return this._viewMode; }
-  get breakpoint$() : Observable<BreakpointState> { return this._breakpoint$; }
+  // get viewMode() : EViewMode { return this._viewMode; }
+  //get breakpoint$() : Observable<BreakpointState> { return this._breakpoint$; }
   get userInfo() { return this._globals.userInfo; };
-  get userStatusTable() { return this._userStatusTable; };
-  get userDisplayedColumns(): string[] { return ['status', 'LASTNAME', 'FIRSTNAME', 'email', 'editDelete']; }
 
   get courseUsersOverdue(): number { return this._courseUsersOverdue; }
   get courseUsersOpen(): number { return this._courseUsersOpen; }
