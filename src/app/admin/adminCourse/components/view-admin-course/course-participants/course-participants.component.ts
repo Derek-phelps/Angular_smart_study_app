@@ -16,7 +16,9 @@ import { DialogForwardUserDialog } from 'src/app/forward-user/dialog-forward-use
 import { AdminCourseService } from '../../../adminCourse.service';
 import { VACUtils } from '../view-admin-course-utils';
 import { Translation } from 'primeng/api/translation';
-import { BreakpointObserver, Breakpoints, BreakpointState } from '@angular/cdk/layout';
+import 'jspdf';
+import 'jspdf-autotable';
+
 
 interface CourseFinishInfo {
  date : Date
@@ -117,6 +119,31 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
     // )
   }
 
+  public passUser(participant: TableData) {
+    const dialogRef = this.dialog.open(DialogForwardUserDialog, {
+      data: { name: participant.fullName, course: this.courseInfo.courseName, hasCertificate: this.courseInfo.hasCertificate }
+    });
+
+    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
+      if (result == 1 || result == 2) {
+        let pass: string = (result == 1 ? '1' : '0');
+        this.service.passUserCourse(participant.id, this.courseInfo.courseId, pass).pipe(take(1)).subscribe(data => {
+          if (data.success) {
+            this.snackbar.open(this._translate.instant('course.PassEmpSuccess'), '', { duration: 3000 });
+            this.updateData.next();
+          }
+        },
+          err => {
+            console.error(err); // TODO: Handle error
+          })
+      }
+    });
+  }
+
+  public exportPdf() {
+    
+  }
+
   private _setupTable(data: any): void {
     this._tableData = [];
     
@@ -146,31 +173,7 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
     this._courseUsersOpen = VACUtils.calcCourseUsersOpen(data.userStatus);
   }
 
-  passUser(participant: TableData) {
-    const dialogRef = this.dialog.open(DialogForwardUserDialog, {
-      data: { name: participant.fullName, course: this.courseInfo.courseName, hasCertificate: this.courseInfo.hasCertificate }
-    });
 
-    dialogRef.afterClosed().pipe(take(1)).subscribe(result => {
-      if (result == 1 || result == 2) {
-        let pass: string = (result == 1 ? '1' : '0');
-        this.service.passUserCourse(participant.id, this.courseInfo.courseId, pass).pipe(take(1)).subscribe(data => {
-          if (data.success) {
-            this.snackbar.open(this._translate.instant('course.PassEmpSuccess'), '', { duration: 3000 });
-            this.updateData.next();
-          }
-        },
-          err => {
-            console.error(err); // TODO: Handle error
-          })
-      }
-    });
-  }
-
-  // get filterMode() : string { return this._filterMode; }
-
-  // get viewMode() : EViewMode { return this._viewMode; }
-  //get breakpoint$() : Observable<BreakpointState> { return this._breakpoint$; }
   get userInfo() { return this._globals.userInfo; };
 
   get courseUsersOverdue(): number { return this._courseUsersOverdue; }

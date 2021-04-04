@@ -44,6 +44,7 @@
     "help": "^3.0.2",
     "html2canvas": "1.0.0-rc.7",
     "jspdf": "^2.1.1",
+    "jspdf-autotable": "^3.5.14",
     "mat-video": "^2.8.1",
     "moment": "^2.29.1",
     "ng-connection-service": "^1.0.4",
