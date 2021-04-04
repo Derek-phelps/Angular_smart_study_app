@@ -16,8 +16,9 @@ import { DialogForwardUserDialog } from 'src/app/forward-user/dialog-forward-use
 import { AdminCourseService } from '../../../adminCourse.service';
 import { VACUtils } from '../view-admin-course-utils';
 import { Translation } from 'primeng/api/translation';
-import 'jspdf';
+import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import { saveAs } from 'file-saver/src/FileSaver.js'
 
 
 interface CourseFinishInfo {
@@ -41,9 +42,9 @@ interface TableData {
   fullName : string,
   email : string,
   groups : Group[],
+  departments : Department[],
   courseStatus : number,
   globalStatus : number,
-  departments : Department[],
   finishInfo : CourseFinishInfo[],
 }
 
@@ -66,6 +67,9 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
   // private _viewMode : EViewMode = EViewMode.Full;
   // private _filterMode : string = "row";
   private _tableData : TableData[] = [];
+  private _filteredData : TableData[] = [];
+  private _filterCriteria : any = {};
+
   private _courseData : any = {};
   private _statuses : any[] = [
     { label : this._translate.instant('course.Done'), value : 1 },
@@ -140,8 +144,103 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  public exportPdf() {
+  public onFiltered($event) : void {
+    this._filterCriteria = $event.filters;
+    this._filteredData = $event.filteredValue;
+  }
+  
+  public exportPdf() : void {
+    const doc = new jsPDF();
+    let tableData = this._getFilteredTableData();
+    (doc as any).autoTable({
+        head: tableData.head,
+        body: tableData.data,
+        theme: 'plain',
+      });
     
+    tableData = this._getFilters();
+    
+    if(tableData.data.length > 0) {
+      (doc as any).autoTable({
+        head: tableData.head,
+        body: tableData.data,
+        theme: 'plain',
+      });
+    }
+    doc.save(this.courseInfo['courseName'] +'.pdf');
+  }
+
+  public exportCsv() : void {
+    let tableData = this._getFilteredTableData();
+    let filters = this._getFilters();
+    {
+      let csv = tableData.data;
+      csv.unshift(tableData.head.join(','));
+      let csvArray = csv.join('\r\n');
+      let blob = new Blob([csvArray], {type: 'text/csv' })
+      saveAs(blob, this.courseInfo['courseName'] +'.csv');
+    }
+    
+    if(filters.data.length > 0) {
+      let csv = filters.data;
+      csv.unshift(filters.head.join(','));
+      let csvArray = csv.join('\r\n');
+      let blob = new Blob([csvArray], {type: 'text/csv' })
+      saveAs(blob, this.courseInfo['courseName'] +'_filters.csv');
+    }
+  }
+
+  private _getFilteredTableData() : any {
+    let head = [[
+      this._translate.instant('employees.Surname'), 
+      this._translate.instant('employees.Name'), 
+      this._translate.instant('employees.Email'),
+      this._translate.instant('course.Status'), 
+    ]];
+
+    let data = [];
+    this._filteredData.forEach(d => data.push([
+      d.lastName, 
+      d.firstName, 
+      d.email,
+      this._statuses.find(s => s.value == d.courseStatus).label
+      ])
+    );
+
+    return { head, data };
+  }
+
+  private _getFilters() : any {
+    let head = [[
+      this._translate.instant('exports.fieldName'),
+      this._translate.instant('exports.filterValue'), 
+    ]];
+    
+    let data = [];
+      
+    Object.keys(this._filterCriteria).forEach(f => {
+      let filter : any = this._filterCriteria[f];
+      if(filter[0].value != null) {
+        let columnName : string = f;
+        let value : string = filter[0].value;
+        switch(f) {
+          case 'lastName': columnName = this._translate.instant('employees.Surname'); break;
+          case 'firstName': columnName = this._translate.instant('employees.Name'); break;
+          case 'email': columnName = this._translate.instant('employees.Email'); break;
+          case 'courseStatus': { 
+            columnName = this._translate.instant('course.Status'); 
+            value = this._statuses.find(s => s.value == value ).label
+          } break;
+        }
+
+        data.push([
+          columnName,
+          value
+        ]);
+      }
+    });
+
+    return { head, data };
   }
 
   private _setupTable(data: any): void {
@@ -168,7 +267,8 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
         globalStatus : entry.globalStatus
       });
     });
-
+    
+    this._filteredData = this._tableData;
     this._courseUsersOverdue = VACUtils.calcCourseUsersOverdue(data.userStatus);
     this._courseUsersOpen = VACUtils.calcCourseUsersOpen(data.userStatus);
   }

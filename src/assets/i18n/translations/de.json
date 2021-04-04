@@ -268,7 +268,13 @@
     "AssignedCourses": "Zugewiesene Kurse für diese Abteilung",
     "NoCourse": "Dieser Abteilung wurden noch keine Kurse zugeteilt."
   },
+  "exports" : {
+    "fieldName" : "Spaltenname",
+    "filterValue" : "Filter"
+  },
   "course": {
+    "ExportPdf" : "Aktuelle Tabelle als PDF speichern",
+    "ExportCsv" : "Aktuelle Tabelle als CSV speichern",
     "GlobalAssignment": "Alle Mitarbeiter (Globale Kurszuweisung)",
     "GlobalAssignments": "Globale Kurszuweisungen",
     "NoGlobalAss": "Für diesen Kurs wurden keine globalen Zuweisungen definiert.",

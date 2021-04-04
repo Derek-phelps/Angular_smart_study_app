@@ -31,7 +31,20 @@
             <p-table [value]="tableData" dataKey="id" class="mt-2"
                 [paginator]="true" [rows]="10" 
                 [rowsPerPageOptions]="[10,25,50]" [showCurrentPageReport]="true"
-                currentPageReportTemplate="{{ 'employees.TablePageInfo' | translate }}">
+                currentPageReportTemplate="{{ 'employees.TablePageInfo' | translate }}"
+                (onFilter)="onFiltered($event)">
+                <ng-template pTemplate="caption">
+                    <div class="ui-helper-clearfix" style="text-align: left">
+                        <i class="fa fa-file-pdf-o clickable"
+                            matTooltip="{{'course.ExportPdf' | translate }}"
+                            (click)="exportPdf()">
+                        </i>
+                        <i class="fa fa-file-code-o clickable ml-2"
+                            matTooltip="{{'course.ExportCsv' | translate }}"
+                            (click)="exportCsv()">
+                        </i>
+                    </div>
+                </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
                         <th pSortableColumn="courseStatus" class="width-7" colspan="2">

@@ -268,7 +268,13 @@
     "AssignedCourses": "Courses assigned to this department",
     "NoCourse": "No courses were assigned to this department yet."
   },
+  "exports" : {
+    "fieldName" : "Column name",
+    "filterValue" : "Filter"
+  },
   "course": {
+    "ExportPdf" : "Export current table as PDF",
+    "ExportCsv" : "Export current table as CSV",
     "GlobalAssignment": "All employees (global course assignment)",
     "GlobalAssignments": "Global course assignments",
     "NoGlobalAss": "No global assignments defined for this course.",
