@@ -62,6 +62,7 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
 
   private _breakpoint$ : Observable<BreakpointState> = new Observable;
   private _viewMode : EViewMode = EViewMode.Full;
+  private _filterMode : string = "row";
   private _tableData : TableData[] = [];
   private _courseData : any = {};
   private _statuses : any[] = [
@@ -111,8 +112,17 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() : void {
     this._breakpoint$ = this._breakPointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).pipe(
       tap(change => {
-        if(change.matches) { this._viewMode = EViewMode.Compact; }
-        else { this._viewMode = EViewMode.Full; }
+        if(change.matches) { 
+          this._viewMode = EViewMode.Compact;
+          this._filterMode = 'menu'; 
+          this.changeDetector.detectChanges();
+        }
+        else { 
+          this._viewMode = EViewMode.Full; 
+          this._filterMode = 'row'; 
+          this.changeDetector.detectChanges();
+        }
+        
       })
     )
   }
@@ -204,6 +214,8 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  get filterMode() : string { return this._filterMode; }
 
   get viewMode() : EViewMode { return this._viewMode; }
   get breakpoint$() : Observable<BreakpointState> { return this._breakpoint$; }
