@@ -19,6 +19,7 @@ import { Translation } from 'primeng/api/translation';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { saveAs } from 'file-saver/src/FileSaver.js'
+import * as xlsx from 'xlsx'
 
 
 interface CourseFinishInfo {
@@ -188,6 +189,35 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
       let blob = new Blob([csvArray], {type: 'text/csv' })
       saveAs(blob, this.courseInfo['courseName'] +'_filters.csv');
     }
+  }
+
+  public exportExcel() : void {
+    let tableData = this._getFilteredTableData();
+    let filters = this._getFilters();
+
+    let worksheet = xlsx.utils.json_to_sheet(tableData.data);
+    const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+    const excelData: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    let type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const data: Blob = new Blob([excelData], { type: type });
+    saveAs(data, this.courseInfo['courseName'] + '.xlsx');
+
+    // {
+    //   let csv = tableData.data;
+    //   csv.unshift(tableData.head.join(','));
+    //   let csvArray = csv.join('\r\n');
+    //   let blob = new Blob([csvArray], {type: 'text/csv' })
+    //   saveAs(blob, this.courseInfo['courseName'] +'.csv');
+    // }
+    
+    // if(filters.data.length > 0) {
+    //   let csv = filters.data;
+    //   csv.unshift(filters.head.join(','));
+    //   let csvArray = csv.join('\r\n');
+    //   let blob = new Blob([csvArray], {type: 'text/csv' })
+    //   saveAs(blob, this.courseInfo['courseName'] +'_filters.csv');
+    // }
   }
 
   private _getFilteredTableData() : any {

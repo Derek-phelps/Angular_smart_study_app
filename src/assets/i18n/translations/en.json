@@ -275,6 +275,7 @@
   "course": {
     "ExportPdf" : "Export current table as PDF",
     "ExportCsv" : "Export current table as CSV",
+    "ExportExcel" : "Export current table as Excel",
     "GlobalAssignment": "All employees (global course assignment)",
     "GlobalAssignments": "Global course assignments",
     "NoGlobalAss": "No global assignments defined for this course.",

@@ -275,6 +275,7 @@
   "course": {
     "ExportPdf" : "Aktuelle Tabelle als PDF speichern",
     "ExportCsv" : "Aktuelle Tabelle als CSV speichern",
+    "ExportExcel" : "Aktuelle Tabelle als Excel speichern",
     "GlobalAssignment": "Alle Mitarbeiter (Globale Kurszuweisung)",
     "GlobalAssignments": "Globale Kurszuweisungen",
     "NoGlobalAss": "Für diesen Kurs wurden keine globalen Zuweisungen definiert.",
