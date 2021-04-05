@@ -14,16 +14,17 @@
                 <mat-form-field appearance="fill" class="col-6">
                     <mat-label>{{ 'questions.QuestionType' | translate }}</mat-label>
                     <mat-select formControlName="questionType" (valueChange)="onQuestionTypeChange($event)">
-                    <mat-option value="text">{{ 'questions.Text' | translate }}</mat-option>
-                    <mat-option value="scale">{{ 'questions.Scale' | translate }}</mat-option>
+                        <mat-option value="text">{{ 'questions.Text' | translate }}</mat-option>
+                        <mat-option value="scale">{{ 'questions.Scale' | translate }}</mat-option>
                     </mat-select>
                 </mat-form-field>
                 <div class="col-6 text-center">
-                    <mat-slide-toggle formControlName="mandatory">{{ 'questions.Mandatory' | translate }}</mat-slide-toggle>
+                    <mat-slide-toggle formControlName="mandatory">{{ 'questions.Mandatory' | translate }}
+                    </mat-slide-toggle>
                 </div>
             </div>
         </div>
-        
+
         <div *ngIf="question?.questionType === 'text'" class="col">
             <!-- no additional settings -->
         </div>
@@ -55,10 +56,12 @@
             </div>
             <div>
                 <mat-form-field class="mr-3">
-                    <input matInput [placeholder]="'Label for First value' | translate" formControlName="textFirst">
+                    <input matInput [placeholder]="'questions.LabelforFirstvalue' | translate"
+                        formControlName="textFirst">
                 </mat-form-field>
                 <mat-form-field>
-                    <input matInput [placeholder]="'Label for Last value' | translate" formControlName="textLast">
+                    <input matInput [placeholder]="'questions.LabelforLastvalue' | translate"
+                        formControlName="textLast">
                 </mat-form-field>
             </div>
         </div>
@@ -66,7 +69,9 @@
     </div>
 
     <div class="d-flex flex-row-reverse">
-        <button type="submit" pButton pRipple label="{{ 'save' | translate }}" icon="pi pi-times" class="p-button-text w-auto" [disabled]="form.invalid"></button>
-        <button type="button" pButton pRipple label="{{ 'cancel' | translate }}" icon="pi pi-times" class="p-button-text w-auto" (click)="cancel.emit()"></button>
+        <button type="submit" pButton pRipple label="{{ 'save' | translate }}" icon="pi pi-times"
+            class="p-button-text w-auto" [disabled]="form.invalid"></button>
+        <button type="button" pButton pRipple label="{{ 'cancel' | translate }}" icon="pi pi-times"
+            class="p-button-text w-auto" (click)="cancel.emit()"></button>
     </div>
 </form>
