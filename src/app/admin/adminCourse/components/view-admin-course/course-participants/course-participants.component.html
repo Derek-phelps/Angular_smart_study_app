@@ -80,10 +80,10 @@
                                 [showClearButton]="false" [showApplyButton]="false">
                             </p-columnFilter>
                         </th>
-                        <th pSortableColumn="email" class="d-none d-lg-table-cell">
-                            {{'employees.Email' | translate}}<p-sortIcon field="email"></p-sortIcon>
-                            <p-columnFilter type="text" matchMode="contains" field="email" display="menu"
-                                [showOperator]="false" [showAddButton]="false" [showMatchModes]="false"
+                        <th pSortableColumn="finished" class="d-none d-lg-table-cell">
+                            {{'course.LastFinished' | translate}}<p-sortIcon field="finished"></p-sortIcon>
+                            <p-columnFilter type="date" matchMode="contains" field="finished" display="menu"
+                                [showOperator]="false" [showAddButton]="false"
                                 [showClearButton]="false" [showApplyButton]="false">
                             </p-columnFilter>
                         </th>
@@ -138,8 +138,7 @@
                             </div>
                         </td>
                         <td class="d-none d-lg-table-cell">
-                            <a [href]="'mailto:' + participant.email" target="_blank"
-                             [matTooltip]="'sendMailTo' | translate: { recipient: participant.fullName }">{{ participant.email }}</a>
+                            {{ participant.finished | date:'dd.MM.yyyy' }}
                         </td>
                         <td>
                             <i *ngIf="participant.courseStatus != 1 && (userInfo.isAdmin || courseInfo.permission==2)"
@@ -153,10 +152,12 @@
                 <ng-template pTemplate="rowexpansion" let-participant>
                     <tr>
                         <td class="d-none d-lg-table-cell" colspan="6">
-                            <ng-container *ngTemplateOutlet="dropdownContent"></ng-container>
+                            <ng-container *ngTemplateOutlet="dropdownContent; context : {participant:participant}">
+                            </ng-container>
                         </td>
                         <td class="d-lg-none" colspan="5">
-                            <ng-container *ngTemplateOutlet="dropdownContent"></ng-container>
+                            <ng-container *ngTemplateOutlet="dropdownContent; context : {participant:participant}">
+                            </ng-container>
                         </td>
                     </tr>
                 </ng-template>
@@ -164,10 +165,25 @@
         </div>
     </div>
 
-    <ng-template #dropdownContent>
+    <ng-template #dropdownContent let-participant="participant">
         <div class="d-flex">
             <div class="flex-grow-1">
-                Content
+                <small>{{ 'employees.Email' | translate }} 
+                    <a [href]="'mailto:' + participant.email" target="_blank"
+                        [matTooltip]="'sendMailTo' | translate: { recipient: participant.fullName }">{{ participant.email }}</a>
+                </small>
+                <br/>
+                <small *ngIf="participant.departments.length > 0">{{ 'menu.Departments' | translate }}: </small>
+                <span *ngFor="let dep of participant.departments; let last = last;">
+                    <small>{{ dep.name }}</small>
+                    <small *ngIf="!last">, </small>
+                </span>
+                <br/>
+                <small *ngIf="participant.groups.length > 0">{{ 'menu.Groups' | translate }}: </small>
+                <span *ngFor="let group of participant.groups; let last = last;">
+                    <small>{{ group.name }}</small>
+                    <small *ngIf="!last">, </small>
+                </span>
             </div>
         </div>
     </ng-template>

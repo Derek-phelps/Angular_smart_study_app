@@ -22,9 +22,9 @@ import { saveAs } from 'file-saver/src/FileSaver.js'
 import * as xlsx from 'xlsx'
 
 
-interface CourseFinishInfo {
- date : Date
-}
+// interface CourseFinishInfo {
+//  date : Date
+// }
 
 interface Department {
   id : number,
@@ -46,13 +46,9 @@ interface TableData {
   departments : Department[],
   courseStatus : number,
   globalStatus : number,
-  finishInfo : CourseFinishInfo[],
+  finishInfo : Date[],
+  finished : Date,
 }
-
-// enum EViewMode {
-//   Compact,
-//   Full
-// }
 
 @Component({
   selector: 'course-participants',
@@ -62,11 +58,6 @@ interface TableData {
 })
 export class CourseParticipantsComponent implements OnInit, AfterViewInit {
   
-  //public EViewMode = EViewMode;
-
-  //private _breakpoint$ : Observable<BreakpointState> = new Observable;
-  // private _viewMode : EViewMode = EViewMode.Full;
-  // private _filterMode : string = "row";
   private _tableData : TableData[] = [];
   private _filteredData : TableData[] = [];
   private _filterCriteria : any = {};
@@ -98,7 +89,6 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
     private snackbar: MatSnackBar,
     private changeDetector: ChangeDetectorRef,
     private config: PrimeNGConfig,
-    //private _breakPointObserver : BreakpointObserver
   ) {
     this._translate.get('primeng').pipe(take(1)).subscribe(res => this.config.setTranslation(res));
    }
@@ -107,21 +97,6 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() : void {
-    // this._breakpoint$ = this._breakPointObserver.observe([Breakpoints.XSmall, Breakpoints.Small]).pipe(
-    //   tap(change => {
-    //     if(change.matches) { 
-    //       this._viewMode = EViewMode.Compact;
-    //       this._filterMode = 'menu'; 
-    //       this.changeDetector.detectChanges();
-    //     }
-    //     else { 
-    //       this._viewMode = EViewMode.Full; 
-    //       this._filterMode = 'row'; 
-    //       this.changeDetector.detectChanges();
-    //     }
-        
-    //   })
-    // )
   }
 
   public passUser(participant: TableData) {
@@ -270,11 +245,12 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
     data.userStatus.forEach(entry => {
       let groups : Group[] = [];
       let departments : Department[] = [];
-      let finishInfo : CourseFinishInfo[] = [];
+      let finishInfo : Date[] = [];
+      let finished : Date = undefined;
       entry.groups.forEach(group => { groups.push({ id : group.groupId, name : group.name }); });
       entry.departments.forEach(dep => { departments.push({ id : dep.departmentId, name : dep.departmentName }); });
-      entry.courseFinished.forEach(fin => { finishInfo.push({ date : moment(fin.dateFinished, "YYYY-MM-DD hh:mm:ss").toDate()  }); });
-
+      entry.courseFinished.forEach(fin => { finishInfo.push( moment(fin.dateFinished, "YYYY-MM-DD hh:mm:ss").toDate()); });
+      if(finishInfo.length > 0) { finished = finishInfo[0]; }
       this._tableData.push( {
         id : entry.empId,
         firstName : entry.FIRSTNAME,
@@ -284,6 +260,7 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
         groups : groups,
         departments : departments,
         finishInfo : finishInfo,
+        finished : finished,
         courseStatus : entry.courseStatus,
         globalStatus : entry.globalStatus
       });
