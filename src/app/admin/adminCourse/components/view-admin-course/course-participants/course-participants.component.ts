@@ -173,6 +173,7 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
 
   public exportCsv() : void {
     let tableData = this._getFilteredTableData();
+    console.log(tableData.head[0])
     let filters = this._getFilters();
     {
       let csv = tableData.data;
@@ -194,30 +195,21 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
   public exportExcel() : void {
     let tableData = this._getFilteredTableData();
     let filters = this._getFilters();
-
-    let worksheet = xlsx.utils.json_to_sheet(tableData.data);
+    let worksheet = xlsx.utils.aoa_to_sheet(tableData.head);
+    xlsx.utils.sheet_add_aoa(worksheet, tableData.data, { origin : "A2" } );
     const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
+
+    if(filters.data.length > 0) {
+      let worksheet = xlsx.utils.aoa_to_sheet(filters.head);
+      xlsx.utils.sheet_add_aoa(worksheet, filters.data, { origin : "A2" } );
+      xlsx.utils.book_append_sheet(workbook, worksheet, 'filters');
+    }
+
     const excelData: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
 
     let type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     const data: Blob = new Blob([excelData], { type: type });
     saveAs(data, this.courseInfo['courseName'] + '.xlsx');
-
-    // {
-    //   let csv = tableData.data;
-    //   csv.unshift(tableData.head.join(','));
-    //   let csvArray = csv.join('\r\n');
-    //   let blob = new Blob([csvArray], {type: 'text/csv' })
-    //   saveAs(blob, this.courseInfo['courseName'] +'.csv');
-    // }
-    
-    // if(filters.data.length > 0) {
-    //   let csv = filters.data;
-    //   csv.unshift(filters.head.join(','));
-    //   let csvArray = csv.join('\r\n');
-    //   let blob = new Blob([csvArray], {type: 'text/csv' })
-    //   saveAs(blob, this.courseInfo['courseName'] +'_filters.csv');
-    // }
   }
 
   private _getFilteredTableData() : any {
