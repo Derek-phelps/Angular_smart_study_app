@@ -82,12 +82,13 @@ export class AdminCourseService {
       .pipe(map((response: Response) => response))
       .pipe(catchError(this.handleError))
   }
-  getCourseFeedbackQuestions(courseId: string) {
-    return this._http.post<CourseFeedbackQuestion[]>(this.globals.APIURL + this._getCourseFeedbackListUrl, { courseId })
+  getCourseFeedbackQuestions(courseId: string): any {
+    let adminReq = true;
+    return this._http.post(this.globals.APIURL + this._getCourseFeedbackListUrl, { courseId, adminReq })
       .pipe(catchError(this.handleError));
   }
-  setCourseFeedbackQuestions(courseId: string, questions: CourseFeedbackQuestion[]) {
-    return this._http.post<CourseFeedbackQuestion[]>(this.globals.APIURL + this._setCourseFeedbackListUrl, { courseId, questions })
+  setCourseFeedbackQuestions(courseId: string, questions: CourseFeedbackQuestion[]): any {
+    return this._http.post(this.globals.APIURL + this._setCourseFeedbackListUrl, { courseId, questions })
       .pipe(catchError(this.handleError));
   }
   passUserCourse(empId, courseId, justPass): any {

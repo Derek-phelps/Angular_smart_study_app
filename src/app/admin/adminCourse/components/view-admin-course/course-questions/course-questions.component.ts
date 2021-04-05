@@ -35,7 +35,9 @@ export class CourseQuestionsComponent {
   ) { }
 
   ngOnInit() {
-    this.questionService.getCourseFeedbackQuestions(this.courseData.courseInfo.courseId).subscribe(data => this.questions = data);
+    this.questionService.getCourseFeedbackQuestions(this.courseData.courseInfo.courseId).subscribe(data => {
+      this.questions = <CourseFeedbackQuestion[]>data.questionList;
+    });
   }
 
   newQuestion() {
@@ -55,8 +57,9 @@ export class CourseQuestionsComponent {
 
     dialogRef.afterClosed().pipe(take(1)).pipe(filter(x => x)).subscribe(async () => {
       this.questions = this.questions.filter(val => !this.selectedQuestions.includes(val));
-      
-      this.questions = await this.saveQuestions(this.courseData.courseInfo.courseId, this.questions);
+
+      let data = await this.saveQuestions(this.courseData.courseInfo.courseId, this.questions);
+      this.questions = <CourseFeedbackQuestion[]>data.questionList;
 
       delete this.selectedQuestions;
       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Questions Deleted', life: 3000 });
@@ -79,13 +82,14 @@ export class CourseQuestionsComponent {
 
     dialogRef.afterClosed().pipe(take(1)).pipe(filter(x => x)).subscribe(async () => {
       this.questions = this.questions.filter(val => val.feedbackId !== question.feedbackId);
-      
-      this.questions = await this.saveQuestions(this.courseData.courseInfo.courseId, this.questions);
+
+      let data = await this.saveQuestions(this.courseData.courseInfo.courseId, this.questions);
+      this.questions = <CourseFeedbackQuestion[]>data.questionList;
 
       delete this.unsavedQuestion;
       delete this.unsavedQuestionIndex;
       delete this.selectedQuestions;
-      
+
       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Question Deleted', life: 3000 });
     });
   }
@@ -104,16 +108,18 @@ export class CourseQuestionsComponent {
     }
 
     if (this.unsavedQuestion.feedbackId) {
-      
+
       this.questions[this.unsavedQuestionIndex] = this.unsavedQuestion;
 
-      this.questions = await this.saveQuestions(this.courseData.courseInfo.courseId, this.questions);
+      let data = await this.saveQuestions(this.courseData.courseInfo.courseId, this.questions);
+      this.questions = <CourseFeedbackQuestion[]>data.questionList;
       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Question Updated', life: 3000 });
     }
     else {
       this.questions.push(this.unsavedQuestion);
 
-      this.questions = await this.saveQuestions(this.courseData.courseInfo.courseId, this.questions);
+      let data = await this.saveQuestions(this.courseData.courseInfo.courseId, this.questions);
+      this.questions = <CourseFeedbackQuestion[]>data.questionList;
       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Question Created', life: 3000 });
     }
 
