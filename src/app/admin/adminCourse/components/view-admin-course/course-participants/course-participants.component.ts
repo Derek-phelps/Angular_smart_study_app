@@ -173,7 +173,6 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
 
   public exportCsv() : void {
     let tableData = this._getFilteredTableData();
-    console.log(tableData.head[0])
     let filters = this._getFilters();
     {
       let csv = tableData.data;
