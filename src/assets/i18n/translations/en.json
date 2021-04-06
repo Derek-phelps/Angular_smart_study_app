@@ -656,7 +656,9 @@
     "Private": "Private"
   },
   "questions": {
-    "TabTitle": "Questions",
+    "TabTitle": "Feedback",
+    "Questions": "Questions",
+    "Responses": "Responses",
     "ManageQuestions": "Manage Questions",
     "Search": "Search...",
     "Select": "Select",

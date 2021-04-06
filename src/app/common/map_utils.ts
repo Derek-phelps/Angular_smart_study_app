@@ -20,3 +20,31 @@ export function array2map<T, TValue>(
         return result;
     }, {} as ObjectMap<TValue>);
 }
+
+export function groupBy<T, TValue>(
+    input: T[],
+    keySelector: (item: T) => string,
+    valueSelector: (item: T) => TValue = item => item as any,
+): ObjectMap<TValue[]> {
+    return input.reduce((result, item) => {
+        result[keySelector(item)] = result[keySelector(item)] || [];
+        result[keySelector(item)].push(valueSelector(item));
+        return result;
+    }, {});
+}
+
+export function uniqueBy<T>(
+    input: T[],
+    selector: (t: T) => string
+) {
+    const existing = {} as any;
+
+    return input.filter(item => {
+        if (existing[selector(item)]) {
+            return false;
+        }
+
+        existing[selector(item)] = item;
+        return true;
+    })
+}

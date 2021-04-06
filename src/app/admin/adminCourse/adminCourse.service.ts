@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpEventType } from "@angular/common/http";
 import { map, catchError } from 'rxjs/operators';
 import { Globals } from '../../common/auth-guard.service';
-import { CourseFeedbackQuestion } from 'src/app/core/models/course-feedback-question';
+import { CourseFeedbackQuestion, CourseFeedbackResponse } from 'src/app/core/models/course-feedback-question';
 
 @Injectable()
 export class AdminCourseService {
@@ -85,6 +85,35 @@ export class AdminCourseService {
   getCourseFeedbackQuestions(courseId: string) {
     return this._http.post<CourseFeedbackQuestion[]>(this.globals.APIURL + this._getCourseFeedbackListUrl, { courseId })
       .pipe(catchError(this.handleError));
+  }
+  getCourseFeedbackResponses(courseId: string) {
+    // TODO: call API
+    return of([
+      {
+        feedbackId: "20",
+        questionText: "Question 1",
+        questionType: "text",
+        response: "Answer X",
+      },
+      {
+        feedbackId: "20",
+        questionText: "Question 1",
+        questionType: "text",
+        response: "Answer XX",
+      },
+      {
+        feedbackId: "22",
+        questionText: "Question 2",
+        questionType: "scale",
+        response: "0",
+      },
+      {
+        feedbackId: "22",
+        questionText: "Question 2",
+        questionType: "scale",
+        response: "1",
+      },
+    ] as CourseFeedbackResponse[]);
   }
   setCourseFeedbackQuestions(courseId: string, questions: CourseFeedbackQuestion[]) {
     return this._http.post<CourseFeedbackQuestion[]>(this.globals.APIURL + this._setCourseFeedbackListUrl, { courseId, questions })
