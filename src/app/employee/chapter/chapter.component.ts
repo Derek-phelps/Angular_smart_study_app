@@ -393,7 +393,7 @@ export class Chapter implements OnInit, AfterViewInit {
     }
 
     for (const question of this.feedbackQuestions) {
-      if (question.mandatory === '1' && !this.feedbackResponses[question.feedbackId]) {
+      if (question.mandatory === '1' && this.feedbackResponses[question.feedbackId] == null) {
         return true;
       }
     }
