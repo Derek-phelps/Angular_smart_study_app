@@ -21,6 +21,7 @@ export class ChapterService {
     private _getNewsFeedUrl = 'Newswall';
     private _addNewswallUrl = 'Newswall/addNewswall';
     private _getCourseFeedbackListUrl = 'Course/getCourseFeedbackList';
+    private _submitCourseFeedbackUrl = 'Course/submitCourseFeedback'
     private _accessControl = 'Course/accessControl';
     constructor(private _http: HttpClient, public globals: Globals) {
 
@@ -126,7 +127,7 @@ export class ChapterService {
             .pipe(catchError(this.handleError)).toPromise();
     }
     setCourseFeedbackResponses(courseId: string, responses: CourseFeedbackResponse[]) {
-        return this._http.post<void>(this.globals.APIURL + this._getCourseFeedbackListUrl, { courseId, responses })
+        return this._http.post<void>(this.globals.APIURL + this._submitCourseFeedbackUrl, { courseId, responses })
             .pipe(catchError(this.handleError)).toPromise();
     }
     // getSuspendedScormSubChapterStatus(form: any, empCourseId): any {

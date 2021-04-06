@@ -673,9 +673,9 @@
     "Scale": "Scale",
     "Min": "Min",
     "Max": "Max",
-    "To": "To",
-    "Label for First value": "Label for First value",
-    "Label for Last value": "Label for Last value"
+    "To": "to",
+    "LabelforFirstvalue": "Label for First value",
+    "LabelforLastvalue": "Label for Last value"
   },
   "menu": {
     "Dashboard": "Dashboard",
