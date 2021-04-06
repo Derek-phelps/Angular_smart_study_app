@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MessageService } from "primeng/api";
 import { filter, take } from "rxjs/operators";
-import { array2map, groupBy, ObjectMap, uniqueBy } from "src/app/common/map_utils";
+import { array2map, groupBy, map2array, ObjectMap, uniqueBy } from "src/app/common/map_utils";
 import { CourseFeedbackQuestion, CourseFeedbackResponse } from "src/app/core/models/course-feedback-question";
 import { ConfirmationBoxComponent } from "src/app/theme/components/confirmation-box/confirmation-box.component";
 import { AdminCourseService } from "../../../adminCourse.service";
@@ -20,7 +20,7 @@ export class CourseQuestionsComponent {
   questionDialog: boolean;
 
   questions: CourseFeedbackQuestion[];
-  responsesByFeedbackId: ObjectMap<CourseFeedbackResponse[]>;
+  responsesByFeedbackId = {} as ObjectMap<CourseFeedbackResponse[]>;
 
   unsavedQuestion: CourseFeedbackQuestion;
   unsavedQuestionIndex: number;
@@ -29,6 +29,21 @@ export class CourseQuestionsComponent {
 
   submitted: boolean;
   isReordering = true;
+
+  chartOptions = {
+    legend: {
+      display: false
+    },
+    scales: {
+      yAxes: [{
+        ticks: {
+          beginAtZero: true,
+          callback: function (value) { if (Number.isInteger(value)) { return value; } },
+          stepSize: 1
+        }
+      }]
+    },
+  };
 
   constructor(
     private questionService: AdminCourseService,
@@ -51,20 +66,43 @@ export class CourseQuestionsComponent {
     }
     return responsesByFeedbackId;
   }
+
   private _processResponsesForQuestion(question: CourseFeedbackQuestion, responses: CourseFeedbackResponse[]) {
     if (question.questionType === 'text') {
-      return uniqueBy(responses, x => x.response).map(x => x.response);
+      return uniqueBy(responses, x => x.response).map(x => x.response).sort();
     } else if (question.questionType === 'scale') {
-      return this._groupResponsesForQuestionScale(responses);
+      const {min, max} = question.questionSettings;
+      return this._groupResponsesForQuestionScale(min, max, responses);
     }
     return responses;
   }
-  private _groupResponsesForQuestionScale(responses: CourseFeedbackResponse[]) {
+  
+  private _groupResponsesForQuestionScale(min: string, max: string, responses: CourseFeedbackResponse[]) {
     const groups = groupBy(responses, x => x.response, x => x) as ObjectMap<any>;
     for (const key of Object.keys(groups)) {
       groups[key] = groups[key].length;
     }
-    return groups;
+    
+    const zeros = {} as any;
+    for (let i = parseInt(min); i < parseInt(max) + 1; i++) {
+      zeros[i] = 0;
+    }
+
+    return this._getChartData({...zeros, ...groups});
+  }
+
+  private _getChartData(summaryMap: Object) {
+    const labels = Object.keys(summaryMap);
+    const data = labels.map(x => summaryMap[x]);
+    return {
+      labels,
+      datasets: [{
+        data,
+        backgroundColor: "rgba(121, 200, 121, 0.8)",
+        borderColor: "rgba(140, 140, 140, 0.0)",
+        borderWidth: 0,
+      }],
+    }
   }
 
   newQuestion() {

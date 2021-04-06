@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ButtonModule } from 'primeng/button';
+import { ChartModule } from 'primeng/chart';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
@@ -11,7 +12,8 @@ import { OrderByPipe } from './order-by.pipe';
 
 @NgModule({
   imports: [
-    ConfirmDialogModule,
+    ButtonModule,
+    ChartModule,
     DialogModule,
     TableModule,
     ToastModule,
@@ -21,7 +23,8 @@ import { OrderByPipe } from './order-by.pipe';
     OrderByPipe
   ],
   exports: [
-    ConfirmDialogModule,
+    ButtonModule,
+    ChartModule,
     DialogModule,
     TableModule,
     ToastModule,

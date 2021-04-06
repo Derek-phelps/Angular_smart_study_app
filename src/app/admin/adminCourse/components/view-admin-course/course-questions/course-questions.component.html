@@ -75,11 +75,26 @@
     </mat-tab>
     <mat-tab label="{{ 'questions.Responses' | translate }}">
 
-        <div class="card">
-            <div *ngFor="let question of questions">
-                {{question.questionText}}
-                <pre>{{ responsesByFeedbackId[question.feedbackId]|json }}</pre>
-            </div>
+        <div class="card bg-dark">
+            <mat-card class="m-4" *ngFor="let question of questions">
+                <mat-card-content>
+                    <label class="d-block mb-2">{{ question.questionText }} <small *ngIf="question.mandatory === '1'"
+                            class="text-muted">{{ 'questions.Mandatory' | translate }}</small></label>
+                    <hr />
+                    <ng-containter [ngSwitch]="question.questionType">
+                        <ng-container *ngSwitchCase="'text'">
+
+                            <mat-list role="list">
+                                <mat-list-item *ngFor="let item of responsesByFeedbackId[question.feedbackId]" role="listitem">{{item}}</mat-list-item>
+                            </mat-list>
+
+                        </ng-container>
+                        <ng-container *ngSwitchCase="'scale'">
+                            <p-chart type="bar" [options]="chartOptions" [data]="responsesByFeedbackId[question.feedbackId]"></p-chart>
+                        </ng-container>
+                    </ng-containter>
+                </mat-card-content>
+            </mat-card>
         </div>
 
     </mat-tab>
