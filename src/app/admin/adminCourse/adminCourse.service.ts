@@ -87,35 +87,6 @@ export class AdminCourseService {
     return this._http.post(this.globals.APIURL + this._getCourseFeedbackListUrl, { courseId, adminReq })
       .pipe(catchError(this.handleError));
   }
-  getCourseFeedbackResponses(courseId: string) {
-    // TODO: call API
-    return of([
-      {
-        feedbackId: "20",
-        questionText: "Question 1",
-        questionType: "text",
-        response: "Answer X",
-      },
-      {
-        feedbackId: "20",
-        questionText: "Question 1",
-        questionType: "text",
-        response: "Answer XX",
-      },
-      {
-        feedbackId: "22",
-        questionText: "Question 2",
-        questionType: "scale",
-        response: "0",
-      },
-      {
-        feedbackId: "22",
-        questionText: "Question 2",
-        questionType: "scale",
-        response: "1",
-      },
-    ] as CourseFeedbackResponse[]);
-  }
   setCourseFeedbackQuestions(courseId: string, questions: CourseFeedbackQuestion[]): any {
     return this._http.post(this.globals.APIURL + this._setCourseFeedbackListUrl, { courseId, questions })
       .pipe(catchError(this.handleError));

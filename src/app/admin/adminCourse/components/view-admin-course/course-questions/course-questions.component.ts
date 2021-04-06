@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MessageService } from "primeng/api";
 import { filter, take } from "rxjs/operators";
-import { groupBy, ObjectMap, uniqueBy } from "src/app/common/map_utils";
+import { array2map, groupBy, ObjectMap, uniqueBy } from "src/app/common/map_utils";
 import { CourseFeedbackQuestion, CourseFeedbackResponse } from "src/app/core/models/course-feedback-question";
 import { ConfirmationBoxComponent } from "src/app/theme/components/confirmation-box/confirmation-box.component";
 import { AdminCourseService } from "../../../adminCourse.service";
@@ -39,23 +39,22 @@ export class CourseQuestionsComponent {
   ngOnInit() {
     this.questionService.getCourseFeedbackQuestions(this.courseData.courseInfo.courseId).subscribe(data => {
       this.questions = <CourseFeedbackQuestion[]>data.questionList;
-    });
-    this.questionService.getCourseFeedbackResponses(this.courseData.courseInfo.courseId).subscribe(data => {
-      this.responsesByFeedbackId = this._groupResponses(data);
+      this.responsesByFeedbackId = this._groupResponses(this.questions, <CourseFeedbackResponse[]>data.answerList);
     });
   }
 
-  private _groupResponses(responses: CourseFeedbackResponse[]) {
-    const groups = groupBy(responses, x => x.feedbackId, x => x) as ObjectMap<any>;
-    for (const key of Object.keys(groups)) {
-      groups[key] = this._processResponsesForQuestion(groups[key]);
+  private _groupResponses(questions: CourseFeedbackQuestion[], responses: CourseFeedbackResponse[]) {
+    const questionsByFeedbackId = array2map(questions, x => x.feedbackId, x => x);
+    const responsesByFeedbackId = groupBy(responses, x => x.feedbackId, x => x) as ObjectMap<any>;
+    for (const feedbackId of Object.keys(responsesByFeedbackId)) {
+      responsesByFeedbackId[feedbackId] = this._processResponsesForQuestion(questionsByFeedbackId[feedbackId], responsesByFeedbackId[feedbackId]);
     }
-    return groups;
+    return responsesByFeedbackId;
   }
-  private _processResponsesForQuestion(responses: CourseFeedbackResponse[]) {
-    if (responses[0].questionType === 'text') {
+  private _processResponsesForQuestion(question: CourseFeedbackQuestion, responses: CourseFeedbackResponse[]) {
+    if (question.questionType === 'text') {
       return uniqueBy(responses, x => x.response).map(x => x.response);
-    } else if (responses[0].questionType === 'scale') {
+    } else if (question.questionType === 'scale') {
       return this._groupResponsesForQuestionScale(responses);
     }
     return responses;
