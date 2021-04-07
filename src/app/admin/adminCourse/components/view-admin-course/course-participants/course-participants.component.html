@@ -67,19 +67,53 @@
                             </p-columnFilter>
                         </th>
                         <th pSortableColumn="lastName">
-                            {{'employees.Surname' | translate}}<p-sortIcon field="lastName"></p-sortIcon>
+                            {{'location.Name' | translate}}<p-sortIcon field="lastName"></p-sortIcon>
                             <p-columnFilter type="text" matchMode="contains" field="lastName" display="menu"
                                 [showOperator]="false" [showAddButton]="false" [showMatchModes]="false"
                                 [showClearButton]="false" [showApplyButton]="false">
                             </p-columnFilter>
                         </th>
-                        <th pSortableColumn="firstName">
+                        <th>
+                            {{'employees.Department' | translate}}
+                            <p-columnFilter type="text" matchMode="contains" field="departments" display="menu" [matchMode]="'arrayFilter'" 
+                                [showOperator]="false" [showAddButton]="false" [showMatchModes]="false"
+                                [showClearButton]="false" [showApplyButton]="false">
+                                <ng-template pTemplate="filter" let-name let-filter="filterCallback">
+                                    <p-multiSelect [ngModel]="value" [options]="availableDepartments" display="chip" [showHeader]="false"
+                                        (onChange)="filter($event.value)" optionLabel="name">
+                                        <ng-template let-option pTemplate="item">
+                                            <div class="p-multiselect-option">
+                                                <span class="p-ml-1">{{option.name}}</span>
+                                            </div>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </ng-template>
+                             </p-columnFilter>
+                        </th>
+                        <th>
+                            {{'course.Group' | translate}}
+                            <p-columnFilter type="text" matchMode="contains" field="groups" display="menu" [matchMode]="'arrayFilter'" 
+                                [showOperator]="false" [showAddButton]="false" [showMatchModes]="false"
+                                [showClearButton]="false" [showApplyButton]="false">
+                                <ng-template pTemplate="filter" let-name let-filter="filterCallback">
+                                    <p-multiSelect [ngModel]="value" [options]="availableGroups" display="chip" [showHeader]="false"
+                                        (onChange)="filter($event.value)" optionLabel="name">
+                                        <ng-template let-option pTemplate="item">
+                                            <div class="p-multiselect-option">
+                                                <span class="p-ml-1">{{option.name}}</span>
+                                            </div>
+                                        </ng-template>
+                                    </p-multiSelect>
+                                </ng-template>
+                             </p-columnFilter>
+                        </th>
+                        <!-- <th pSortableColumn="firstName">
                             {{'employees.Name' | translate}}<p-sortIcon field="firstName"></p-sortIcon>
                             <p-columnFilter type="text" matchMode="contains" field="firstName" display="menu"
                                 [showOperator]="false" [showAddButton]="false" [showMatchModes]="false"
                                 [showClearButton]="false" [showApplyButton]="false">
                             </p-columnFilter>
-                        </th>
+                        </th> -->
                         <th pSortableColumn="finished" class="d-none d-lg-table-cell">
                             {{'course.LastFinished' | translate}}<p-sortIcon field="finished"></p-sortIcon>
                             <p-columnFilter type="date" matchMode="contains" field="finished" display="menu"
@@ -120,13 +154,25 @@
                                 routerLink="../../../../employees/{{participant.id}}"
                                 [skipLocationChange]="false"
                                 [matTooltip]="'openVar' | translate: {var: participant.fullName}">
-                                    {{ participant.lastName }}
+                                    {{ participant.lastName }} {{ participant.firstName }}
                             </div>
                             <div *ngIf="!userInfo.isAdmin">
-                                {{ participant.lastName }}
+                                {{ participant.lastName }} {{ participant.firstName }}
                             </div>
                         </td>
                         <td>
+                            <span *ngFor="let dep of participant.departments; let last = last;">
+                                <small>{{ dep.name }}</small>
+                                <small *ngIf="!last">, </small>
+                            </span>
+                        </td>
+                        <td>
+                            <span *ngFor="let group of participant.groups; let last = last;">
+                                <small>{{ group.name }}</small>
+                                <small *ngIf="!last">, </small>
+                            </span>
+                        </td>
+                        <!-- <td>
                             <div *ngIf="userInfo.isAdmin" class="clickable"
                                 routerLink="../../../../employees/{{participant.id}}"
                                 [skipLocationChange]="false"
@@ -136,7 +182,7 @@
                             <div *ngIf="!userInfo.isAdmin">
                                 {{ participant.firstName }}
                             </div>
-                        </td>
+                        </td> -->
                         <td class="d-none d-lg-table-cell">
                             {{ participant.finished | date:'dd.MM.yyyy' }}
                         </td>
@@ -188,3 +234,5 @@
         </div>
     </ng-template>
 </div>
+
+<!-- <pre>{{ availableDepartments | json }} </pre> -->

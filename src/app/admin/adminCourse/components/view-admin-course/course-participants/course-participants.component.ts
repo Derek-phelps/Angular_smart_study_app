@@ -8,7 +8,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
-import { FilterMatchMode, PrimeNGConfig } from 'primeng/api';
+import { FilterMatchMode, FilterService, PrimeNGConfig } from 'primeng/api';
 import { Observable } from 'rxjs';
 import { take, tap } from 'rxjs/operators';
 import { Globals } from 'src/app/common/auth-guard.service';
@@ -44,6 +44,7 @@ interface TableData {
   email : string,
   groups : Group[],
   departments : Department[],
+  departmentsStr : string,
   courseStatus : number,
   globalStatus : number,
   finishInfo : Date[],
@@ -61,6 +62,8 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
   private _tableData : TableData[] = [];
   private _filteredData : TableData[] = [];
   private _filterCriteria : any = {};
+  private _availableDepartments : Department[] = [];
+  private _availableGroups : Group[] = [];
 
   private _courseData : any = {};
   private _statuses : any[] = [
@@ -89,11 +92,20 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
     private snackbar: MatSnackBar,
     private changeDetector: ChangeDetectorRef,
     private config: PrimeNGConfig,
+    private filterService: FilterService
   ) {
     this._translate.get('primeng').pipe(take(1)).subscribe(res => this.config.setTranslation(res));
    }
 
   ngOnInit(): void {
+    this.filterService.register(
+      'arrayFilter',
+      (value, filter): boolean => {
+        if(filter == null || filter == undefined || filter.length == 0) { return true; }
+        if(value == null || value == undefined || value.length == 0) { return false; }
+        return value.filter( element => { return filter.find(f => f.id == element.id) != undefined; }).length > 0;
+      }
+    );
   }
 
   ngAfterViewInit() : void {
@@ -241,6 +253,7 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
 
   private _setupTable(data: any): void {
     this._tableData = [];
+    this._availableDepartments = []; 
     
     data.userStatus.forEach(entry => {
       let groups : Group[] = [];
@@ -259,13 +272,21 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
         email : entry.EmailID,
         groups : groups,
         departments : departments,
+        departmentsStr : departments.join(', '),
         finishInfo : finishInfo,
         finished : finished,
         courseStatus : entry.courseStatus,
         globalStatus : entry.globalStatus
       });
+
+      this._availableDepartments.push(...departments);
+      this._availableGroups.push(...groups);
     });
     
+    // remove duplicates
+    this._availableDepartments = this._availableDepartments.filter( (d, index, a) => a.findIndex( d2 => d2.id == d.id ) === index);
+    this._availableGroups = this._availableGroups.filter( (d, index, a) => a.findIndex( d2 => d2.id == d.id ) === index);
+
     this._filteredData = this._tableData;
     this._courseUsersOverdue = VACUtils.calcCourseUsersOverdue(data.userStatus);
     this._courseUsersOpen = VACUtils.calcCourseUsersOpen(data.userStatus);
@@ -279,6 +300,8 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
   get courseInfo() : any { return this._courseData.courseInfo; }
   get tableData() : TableData[] { return this._tableData; } 
   get statuses() : any[] { return this._statuses; }
+  get availableDepartments() : Department[] { return this._availableDepartments; }
+  get availableGroups() : Department[] { return this._availableGroups; }
 
 
 }
