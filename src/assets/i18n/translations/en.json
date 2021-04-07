@@ -860,7 +860,7 @@
     "CatchUpD": "Department members assigned to this department after the first date",
     "CatchUpExp": "are assigned to this course instantly.",
     "NotCatchUpExp": "are assigned to this course on the next iteration.",
-    "LastFinished": "Last finished",
+    "LastFinished": "Finished at",
     "AssignedBy": "Assignment",
     "DirectAss": "Personal assignment",
     "GlobalAss": "Global assignment",

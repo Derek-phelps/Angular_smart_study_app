@@ -68,12 +68,12 @@
                         </th>
                         <th pSortableColumn="lastName">
                             {{'location.Name' | translate}}<p-sortIcon field="lastName"></p-sortIcon>
-                            <p-columnFilter type="text" matchMode="contains" field="lastName" display="menu"
+                            <p-columnFilter type="text" matchMode="contains" field="fullName" display="menu"
                                 [showOperator]="false" [showAddButton]="false" [showMatchModes]="false"
                                 [showClearButton]="false" [showApplyButton]="false">
                             </p-columnFilter>
                         </th>
-                        <th>
+                        <th class="d-none d-lg-table-cell">
                             {{'employees.Department' | translate}}
                             <p-columnFilter type="text" matchMode="contains" field="departments" display="menu" [matchMode]="'arrayFilter'" 
                                 [showOperator]="false" [showAddButton]="false" [showMatchModes]="false"
@@ -90,7 +90,7 @@
                                 </ng-template>
                              </p-columnFilter>
                         </th>
-                        <th>
+                        <th class="d-none d-lg-table-cell">
                             {{'course.Group' | translate}}
                             <p-columnFilter type="text" matchMode="contains" field="groups" display="menu" [matchMode]="'arrayFilter'" 
                                 [showOperator]="false" [showAddButton]="false" [showMatchModes]="false"
@@ -107,13 +107,6 @@
                                 </ng-template>
                              </p-columnFilter>
                         </th>
-                        <!-- <th pSortableColumn="firstName">
-                            {{'employees.Name' | translate}}<p-sortIcon field="firstName"></p-sortIcon>
-                            <p-columnFilter type="text" matchMode="contains" field="firstName" display="menu"
-                                [showOperator]="false" [showAddButton]="false" [showMatchModes]="false"
-                                [showClearButton]="false" [showApplyButton]="false">
-                            </p-columnFilter>
-                        </th> -->
                         <th pSortableColumn="finished" class="d-none d-lg-table-cell">
                             {{'course.LastFinished' | translate}}<p-sortIcon field="finished"></p-sortIcon>
                             <p-columnFilter type="date" matchMode="contains" field="finished" display="menu"
@@ -160,33 +153,28 @@
                                 {{ participant.lastName }} {{ participant.firstName }}
                             </div>
                         </td>
-                        <td>
+                        <td class="d-none d-lg-table-cell">
                             <span *ngFor="let dep of participant.departments; let last = last;">
-                                <small>{{ dep.name }}</small>
+                                <small>
+                                    <a routerLink="../../../../department/{{dep.id}}" [skipLocationChange]="false"
+                                        [matTooltip]="'openVar' | translate: {var: dep.name}">{{ dep.name }}</a>
+                                </small>
                                 <small *ngIf="!last">, </small>
                             </span>
                         </td>
-                        <td>
+                        <td class="d-none d-lg-table-cell">
                             <span *ngFor="let group of participant.groups; let last = last;">
-                                <small>{{ group.name }}</small>
+                                <small>
+                                    <a routerLink="../../../../groups/{{group.id}}" [skipLocationChange]="false" 
+                                        [matTooltip]="'openVar' | translate: {var: group.name}">{{ group.name }}</a>
+                                </small>
                                 <small *ngIf="!last">, </small>
                             </span>
                         </td>
-                        <!-- <td>
-                            <div *ngIf="userInfo.isAdmin" class="clickable"
-                                routerLink="../../../../employees/{{participant.id}}"
-                                [skipLocationChange]="false"
-                                [matTooltip]="'openVar' | translate: { var: participant.fullName }">
-                                    {{ participant.firstName }}
-                            </div>
-                            <div *ngIf="!userInfo.isAdmin">
-                                {{ participant.firstName }}
-                            </div>
-                        </td> -->
                         <td class="d-none d-lg-table-cell">
                             {{ participant.finished | date:'dd.MM.yyyy' }}
                         </td>
-                        <td>
+                        <td class="py-0">
                             <i *ngIf="participant.courseStatus != 1 && (userInfo.isAdmin || courseInfo.permission==2)"
                                 class="fa fa-angle-double-right iconSize float-right forward-user-icon"
                                 (click)="passUser(participant)"
@@ -197,11 +185,11 @@
                 </ng-template>
                 <ng-template pTemplate="rowexpansion" let-participant>
                     <tr>
-                        <td class="d-none d-lg-table-cell" colspan="6">
+                        <td class="d-none d-lg-table-cell" colspan="7">
                             <ng-container *ngTemplateOutlet="dropdownContent; context : {participant:participant}">
                             </ng-container>
                         </td>
-                        <td class="d-lg-none" colspan="5">
+                        <td class="d-lg-none" colspan="4">
                             <ng-container *ngTemplateOutlet="dropdownContent; context : {participant:participant}">
                             </ng-container>
                         </td>
@@ -219,17 +207,39 @@
                         [matTooltip]="'sendMailTo' | translate: { recipient: participant.fullName }">{{ participant.email }}</a>
                 </small>
                 <br/>
-                <small *ngIf="participant.departments.length > 0">{{ 'menu.Departments' | translate }}: </small>
-                <span *ngFor="let dep of participant.departments; let last = last;">
-                    <small>{{ dep.name }}</small>
-                    <small *ngIf="!last">, </small>
-                </span>
-                <br/>
-                <small *ngIf="participant.groups.length > 0">{{ 'menu.Groups' | translate }}: </small>
-                <span *ngFor="let group of participant.groups; let last = last;">
-                    <small>{{ group.name }}</small>
-                    <small *ngIf="!last">, </small>
-                </span>
+                <div class="d-lg-none">
+                    <small *ngIf="participant.departments.length > 0">{{ 'menu.Departments' | translate }}: </small>
+                    <span *ngFor="let dep of participant.departments; let last = last;">
+                        <small>
+                            <a routerLink="../../../../department/{{dep.id}}" [skipLocationChange]="false"
+                                [matTooltip]="'openVar' | translate: {var: dep.name}">{{ dep.name }}</a>
+                        </small>
+                        <small *ngIf="!last">, </small>
+                    </span>
+                    <br/>
+                    <small *ngIf="participant.groups.length > 0">{{ 'menu.Groups' | translate }}: </small>
+                    <span *ngFor="let group of participant.groups; let last = last;">
+                        <small>
+                            <a routerLink="../../../../groups/{{group.id}}" [skipLocationChange]="false" 
+                                [matTooltip]="'openVar' | translate: {var: group.name}">{{group.name}}</a>
+                        </small>
+
+                        <small>{{ group.name }}</small>
+                        <small *ngIf="!last">, </small>
+                    </span>
+                </div>
+                <div class="mt-2"></div>
+                <small *ngIf="participant.finishInfo.length == 1; else accord">{{'course.LastFinished' | translate}}: {{ participant.finishInfo[0] | date:'dd.MM.yyyy' }}} </small>
+                <ng-template #accord>
+                    <p-accordion>
+                        <p-accordionTab header="{{'course.LastFinished' | translate}}">
+                            <span *ngFor="let date of participant.finishInfo; let last = last;">
+                                <small>{{ date | date:'dd.MM.yyyy' }}</small>
+                                <br *ngIf="!last"/>
+                            </span>
+                        </p-accordionTab>
+                    </p-accordion>
+                </ng-template>
             </div>
         </div>
     </ng-template>

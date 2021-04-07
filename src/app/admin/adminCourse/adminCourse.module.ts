@@ -42,6 +42,7 @@ import { CoreModule } from 'src/app/core/core.module';
 import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { AccordionModule } from 'primeng/accordion';
 
 @NgModule({
   imports: [
@@ -56,7 +57,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
     ContentModule,
     TableModule,
     DropdownModule,
-    MultiSelectModule
+    MultiSelectModule,
+    AccordionModule
   ],
   entryComponents: [BottomSheetModifyCourse, SubChapterOverviewDialog],
   declarations: [

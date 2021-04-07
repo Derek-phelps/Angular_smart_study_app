@@ -7,3 +7,7 @@
 :host ::ng-deep .p-inputtext {
     font-size: 14px;
 }
+
+:host ::ng-deep .p-accordion-header-text {
+    font-size: 80% !important;
+}

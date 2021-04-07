@@ -308,7 +308,7 @@
     "SumEmp": "Anzahl Mitarbeiter",
     "ListView": "Liste anzeigen",
     "TileView": "Kacheln anzeigen",
-    "LastFinished": "Zuletzt abgeschlossen",
+    "LastFinished": "Abgeschlossen am",
     "FutureCourse": "Dieser Kurs hat noch nicht begonnen...",
     "AddAssFor": "<p>Neue Kurszuweisung von <b>{{name}}</b> erstellen für:</p>",
     "EditAssFor": "<p>Globale Kurszuweisung von <b>{{name}}</b> bearbeiten:</p>",
