@@ -35,7 +35,8 @@
                 (onFilter)="onFiltered($event)">
                 <ng-template pTemplate="caption">
                     <div class="ui-helper-clearfix" style="text-align: left">
-                        <i class="fa fa-file-pdf-o clickable"
+                        <button mat-button color="primary" (click)="export()">Export</button>
+                        <!-- <i class="fa fa-file-pdf-o clickable"
                             matTooltip="{{'course.ExportPdf' | translate }}"
                             (click)="exportPdf()">
                         </i>
@@ -46,7 +47,7 @@
                         <i class="fa fa-file-excel-o clickable ml-2"
                             matTooltip="{{'course.ExportExcel' | translate }}"
                             (click)="exportExcel()">
-                        </i>
+                        </i> -->
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -73,14 +74,15 @@
                                 [showClearButton]="false" [showApplyButton]="false">
                             </p-columnFilter>
                         </th>
+                        <!-- https://github.com/primefaces/primeng/issues/9859 Chips cannot be used with maxSelectedLabels-->
                         <th class="d-none d-lg-table-cell">
                             {{'employees.Department' | translate}}
                             <p-columnFilter type="text" matchMode="contains" field="departments" display="menu" [matchMode]="'arrayFilter'" 
                                 [showOperator]="false" [showAddButton]="false" [showMatchModes]="false"
                                 [showClearButton]="false" [showApplyButton]="false">
                                 <ng-template pTemplate="filter" let-name let-filter="filterCallback">
-                                    <p-multiSelect [ngModel]="value" [options]="availableDepartments" display="chip" [showHeader]="false"
-                                        (onChange)="filter($event.value)" optionLabel="name">
+                                    <p-multiSelect [ngModel]="value" [options]="availableDepartments" [showHeader]="false"
+                                        (onChange)="filter($event.value)" optionLabel="name" [maxSelectedLabels]="2">
                                         <ng-template let-option pTemplate="item">
                                             <div class="p-multiselect-option">
                                                 <span class="p-ml-1">{{option.name}}</span>
@@ -96,8 +98,8 @@
                                 [showOperator]="false" [showAddButton]="false" [showMatchModes]="false"
                                 [showClearButton]="false" [showApplyButton]="false">
                                 <ng-template pTemplate="filter" let-name let-filter="filterCallback">
-                                    <p-multiSelect [ngModel]="value" [options]="availableGroups" display="chip" [showHeader]="false"
-                                        (onChange)="filter($event.value)" optionLabel="name">
+                                    <p-multiSelect [ngModel]="value" [options]="availableGroups" [showHeader]="false"
+                                        (onChange)="filter($event.value)" optionLabel="name" [maxSelectedLabels]="2">
                                         <ng-template let-option pTemplate="item">
                                             <div class="p-multiselect-option">
                                                 <span class="p-ml-1">{{option.name}}</span>
@@ -155,20 +157,16 @@
                         </td>
                         <td class="d-none d-lg-table-cell">
                             <span *ngFor="let dep of participant.departments; let last = last;">
-                                <small>
-                                    <a routerLink="../../../../department/{{dep.id}}" [skipLocationChange]="false"
-                                        [matTooltip]="'openVar' | translate: {var: dep.name}">{{ dep.name }}</a>
-                                </small>
-                                <small *ngIf="!last">, </small>
+                                <a routerLink="../../../../department/{{dep.id}}" [skipLocationChange]="false"
+                                    [matTooltip]="'openVar' | translate: {var: dep.name}">{{ dep.name }}</a>
+                                <span *ngIf="!last">, </span>
                             </span>
                         </td>
                         <td class="d-none d-lg-table-cell">
                             <span *ngFor="let group of participant.groups; let last = last;">
-                                <small>
-                                    <a routerLink="../../../../groups/{{group.id}}" [skipLocationChange]="false" 
-                                        [matTooltip]="'openVar' | translate: {var: group.name}">{{ group.name }}</a>
-                                </small>
-                                <small *ngIf="!last">, </small>
+                                <a routerLink="../../../../groups/{{group.id}}" [skipLocationChange]="false" 
+                                    [matTooltip]="'openVar' | translate: {var: group.name}">{{ group.name }}</a>
+                                <span *ngIf="!last">, </span>
                             </span>
                         </td>
                         <td class="d-none d-lg-table-cell">
@@ -229,12 +227,12 @@
                     </span>
                 </div>
                 <div class="mt-2"></div>
-                <small *ngIf="participant.finishInfo.length == 1; else accord">{{'course.LastFinished' | translate}}: {{ participant.finishInfo[0] | date:'dd.MM.yyyy' }}} </small>
+                <small *ngIf="participant.finishInfo.length == 1; else accord">{{'course.LastFinished' | translate}}: {{ participant.finishInfo[0] | date:'dd.MM.yyyy' }} </small>
                 <ng-template #accord>
                     <p-accordion>
                         <p-accordionTab header="{{'course.LastFinished' | translate}}">
                             <span *ngFor="let date of participant.finishInfo; let last = last;">
-                                <small>{{ date | date:'dd.MM.yyyy' }}</small>
+                                <span>{{ date | date:'dd.MM.yyyy' }}</span>
                                 <br *ngIf="!last"/>
                             </span>
                         </p-accordionTab>

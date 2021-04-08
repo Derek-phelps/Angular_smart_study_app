@@ -43,6 +43,8 @@ import { TableModule } from 'primeng/table';
 import { DropdownModule } from 'primeng/dropdown';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { AccordionModule } from 'primeng/accordion';
+import { DynamicDialogModule } from 'primeng/dynamicdialog';
+import { ParticipantsExportDialogComponent } from './components/view-admin-course/course-participants/participants-export-dialog/participants-export-dialog.component';
 
 @NgModule({
   imports: [
@@ -58,9 +60,10 @@ import { AccordionModule } from 'primeng/accordion';
     TableModule,
     DropdownModule,
     MultiSelectModule,
-    AccordionModule
+    AccordionModule,
+    DynamicDialogModule
   ],
-  entryComponents: [BottomSheetModifyCourse, SubChapterOverviewDialog],
+  entryComponents: [BottomSheetModifyCourse, SubChapterOverviewDialog, ParticipantsExportDialogComponent],
   declarations: [
     AdminCourseComponent,
     ModifyAdminCourseComponent,

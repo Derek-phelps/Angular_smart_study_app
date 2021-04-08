@@ -20,6 +20,8 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import { saveAs } from 'file-saver/src/FileSaver.js'
 import * as xlsx from 'xlsx'
+import { DialogService } from 'primeng/dynamicdialog';
+import { ParticipantsExportDialogComponent } from './participants-export-dialog/participants-export-dialog.component';
 
 
 // interface CourseFinishInfo {
@@ -55,6 +57,7 @@ interface TableData {
   templateUrl: './course-participants.component.html',
   styleUrls: ['./course-participants.component.scss'],
   animations: VACUtils.componentAnimations,
+  providers : [DialogService]
 })
 export class CourseParticipantsComponent implements OnInit, AfterViewInit {
   
@@ -91,7 +94,8 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
     private snackbar: MatSnackBar,
     private changeDetector: ChangeDetectorRef,
     private config: PrimeNGConfig,
-    private filterService: FilterService
+    private filterService: FilterService,
+    public dialogService: DialogService
   ) {
     this._translate.get('primeng').pipe(take(1)).subscribe(res => this.config.setTranslation(res));
    }
@@ -134,6 +138,13 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
   public onFiltered($event) : void {
     this._filterCriteria = $event.filters;
     this._filteredData = $event.filteredValue;
+  }
+
+  public export() : void {
+    const ref = this.dialogService.open(ParticipantsExportDialogComponent, {
+      header: 'Export',
+      width: '70%'
+  });
   }
   
   public exportPdf() : void {
