@@ -104,6 +104,7 @@
     "OpenCourse": "Open course overview"
   },
   "employees": {
+    "TablePageInfo": "Showing {first} to {last} of {totalRecords} employees",
     "ShowCerti": "Show all certificates for {{name}}",
     "CertiFrom": "Certificates of <b>{{name}}</b>",
     "St": "St",
@@ -270,7 +271,28 @@
     "AssignedCourses": "Courses assigned to this department",
     "NoCourse": "No courses were assigned to this department yet."
   },
+  "exports": {
+    "Email": "Email",
+    "Departments": "Departments",
+    "Groups": "Groups",
+    "FinishedAt": "Date finished",
+    "FinishedAtAll": "All finish dates",
+    "OptionalFields": "Optional fields",
+    "FilteredData": "Filtered data",
+    "AllData": "All data",
+    "ExportFilter": "Export",
+    "Export": "Export",
+    "CSV": "CSV",
+    "PDF": "PDF",
+    "XLSX": "XLSX",
+    "FileFormat": "File format",
+    "FieldName": "Column name",
+    "FilterValue": "Filter"
+  },
   "course": {
+    "ExportPdf": "Export current table as PDF",
+    "ExportCsv": "Export current table as CSV",
+    "ExportExcel": "Export current table as Excel",
     "GlobalAssignment": "All employees (global course assignment)",
     "GlobalAssignments": "Global course assignments",
     "NoGlobalAss": "No global assignments defined for this course.",
@@ -881,7 +903,7 @@
     "CatchUpD": "Department members assigned to this department after the first date",
     "CatchUpExp": "are assigned to this course instantly.",
     "NotCatchUpExp": "are assigned to this course on the next iteration.",
-    "LastFinished": "Last finished",
+    "LastFinished": "Finished at",
     "AssignedBy": "Assignment",
     "DirectAss": "Personal assignment",
     "GlobalAss": "Global assignment",

@@ -6,25 +6,28 @@
         <div class="card">
             <p-toolbar styleClass="p-mb-4">
                 <ng-template pTemplate="left">
-                    <button pButton pRipple label="{{ 'new' | translate }}" icon="pi pi-plus" class="p-button-success p-mr-2"
-                        (click)="newQuestion()"></button>
-                    <button pButton pRipple label="{{ 'delete' | translate }}" icon="pi pi-trash" class="p-button-danger"
-                        (click)="deleteSelectedQuestions()"
+                    <button pButton pRipple label="{{ 'new' | translate }}" icon="pi pi-plus"
+                        class="p-button-success p-mr-2" (click)="newQuestion()"></button>
+                    <button pButton pRipple label="{{ 'delete' | translate }}" icon="pi pi-trash"
+                        class="p-button-danger" (click)="deleteSelectedQuestions()"
                         [disabled]="!selectedQuestions?.length"></button>
                 </ng-template>
                 <ng-template pTemplate="right">
-                    <button *ngIf="!isReordering" pButton pRipple label="{{ 'questions.Reorder' | translate }}" icon="pi pi-sort-alt" class="p-button-info" (click)="isReordering = true"></button>
-                    <button *ngIf="isReordering" pButton pRipple label="{{ 'questions.Select' | translate }}" icon="pi pi-check-square" class="p-button-info" (click)="isReordering = false"></button>
+                    <button *ngIf="!isReordering" pButton pRipple label="{{ 'questions.Reorder' | translate }}"
+                        icon="pi pi-sort-alt" class="p-button-info" (click)="isReordering = true"></button>
+                    <button *ngIf="isReordering" pButton pRipple label="{{ 'questions.Select' | translate }}"
+                        icon="pi pi-check-square" class="p-button-info" (click)="isReordering = false"></button>
                 </ng-template>
             </p-toolbar>
-        
+
             <p-table #dt [value]="questions" [rows]="10" [paginator]="true" [globalFilterFields]="['questionText']"
                 [(selection)]="selectedQuestions" [rowHover]="true" dataKey="feedbackId" [showCurrentPageReport]="true"
-                (onRowReorder)="onRowReordered($event)">
+                (onRowReorder)="onRowReordered()">
                 <ng-template pTemplate="caption">
                     <div class="p-d-flex p-ai-center p-jc-between">
                         <h5 class="p-m-0">{{ 'questions.ManageQuestions' | translate }}</h5>
-                        <input class="p-1" pInputText type="text" (input)="dt.filterGlobal($event.target.value, 'contains')"
+                        <input class="p-1" pInputText type="text"
+                            (input)="dt.filterGlobal($event.target.value, 'contains')"
                             [placeholder]="'questions.Search' | translate" />
                     </div>
                 </ng-template>
@@ -47,7 +50,8 @@
                         <td>{{question.questionText}}</td>
                         <td>
                             <ng-container [ngSwitch]="question.questionType">
-                                <ng-container *ngSwitchCase="'scale'">{{ question.questionSettings.min }} {{ 'questions.To' | translate }} {{ question.questionSettings.max }}</ng-container>
+                                <ng-container *ngSwitchCase="'scale'">{{ question.questionSettings.min }} {{
+                                    'questions.To' | translate }} {{ question.questionSettings.max }}</ng-container>
                                 <ng-container *ngSwitchCase="'text'">{{ 'questions.Text' | translate }}</ng-container>
                             </ng-container>
                         </td>
@@ -61,14 +65,14 @@
                 </ng-template>
             </p-table>
         </div>
-        
-        <p-dialog [(visible)]="questionDialog" [style]="{width: '450px'}" [header]="'questions.QuestionDetails' | translate"
-            [modal]="true" styleClass="p-fluid">
+
+        <p-dialog [(visible)]="questionDialog" [style]="{width: '450px'}"
+            [header]="'questions.QuestionDetails' | translate" [modal]="true" styleClass="p-fluid">
             <ng-template pTemplate="content">
-        
+
                 <question-editor *ngIf="questionDialog" [question]="unsavedQuestion" (save)="saveQuestion($event)"
                     (cancel)="hideDialog()"></question-editor>
-        
+
             </ng-template>
         </p-dialog>
 
@@ -85,12 +89,14 @@
                         <ng-container *ngSwitchCase="'text'">
 
                             <mat-list role="list">
-                                <mat-list-item *ngFor="let item of responsesByFeedbackId[question.feedbackId]" role="listitem">{{item}}</mat-list-item>
+                                <mat-list-item *ngFor="let item of responsesByFeedbackId[question.feedbackId]"
+                                    role="listitem">{{item}}</mat-list-item>
                             </mat-list>
 
                         </ng-container>
                         <ng-container *ngSwitchCase="'scale'">
-                            <p-chart type="bar" [options]="chartOptions" [data]="responsesByFeedbackId[question.feedbackId]"></p-chart>
+                            <p-chart type="bar" [options]="chartOptions"
+                                [data]="responsesByFeedbackId[question.feedbackId]"></p-chart>
                         </ng-container>
                     </ng-containter>
                 </mat-card-content>
@@ -99,6 +105,3 @@
 
     </mat-tab>
 </mat-tab-group>
-
-
-

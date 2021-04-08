@@ -1,0 +1,42 @@
+<div class="container">
+    <form [formGroup]="exportForm" (ngSubmit)="export()">
+        <div class="row">
+            <div class="col-2">
+                <label>{{ 'exports.FileFormat' | translate }}:</label>
+            </div>
+            <div class="col">
+                <mat-radio-group formControlName="format">
+                    <mat-radio-button [value]="ExportFormat.CSV" class="mr-2">{{ 'exports.CSV' | translate }}</mat-radio-button>
+                    <mat-radio-button [value]="ExportFormat.PDF" class="mr-2">{{ 'exports.PDF' | translate }}</mat-radio-button>
+                    <mat-radio-button [value]="ExportFormat.XLSX" class="mr-2">{{ 'exports.XLSX' | translate }}</mat-radio-button>
+                </mat-radio-group>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <label>{{ 'exports.ExportFilter' | translate }}:</label>
+            </div>
+            <div class="col">
+                <mat-radio-group formControlName="filtered">
+                    <mat-radio-button [value]="true" class="mr-2">{{ 'exports.FilteredData' | translate }}</mat-radio-button>
+                    <mat-radio-button [value]="false" class="mr-2">{{ 'exports.AllData' | translate }}</mat-radio-button>
+                </mat-radio-group>
+            </div>
+        </div>
+        <div class="d-flex flex-column">
+            <label>{{ 'exports.OptionalFields' | translate }}:</label>
+            <mat-checkbox formControlName="exportEmail">{{ 'exports.Email' | translate }}</mat-checkbox>
+            <mat-checkbox formControlName="exportDepartments">{{ 'exports.Departments' | translate }}</mat-checkbox>
+            <mat-checkbox formControlName="exportGroups">{{ 'exports.Groups' | translate }}</mat-checkbox>
+            <mat-checkbox formControlName="exportFinishedAt">{{ 'exports.FinishedAt' | translate }}</mat-checkbox>
+            <mat-checkbox formControlName="exportFinishedAtAll">{{ 'exports.FinishedAtAll' | translate }}</mat-checkbox>
+        </div>
+        <div class="row">
+            <div class="col-12 text-right mt-4">
+                <button mat-raised-button color="primary">{{ 'exports.Export' | translate }}</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- <pre>{{ exportForm.value | json }}</pre> -->

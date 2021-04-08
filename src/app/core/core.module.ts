@@ -46,7 +46,7 @@ import { MaxLengthPipe } from './pipes/max-length.pipe';
   declarations : [
     QuestionComponent,
     QuestionContainerComponent,
-    MaxLengthPipe
+    MaxLengthPipe,
   ],
   exports : [
     QuestionContainerComponent,
@@ -66,7 +66,7 @@ import { MaxLengthPipe } from './pipes/max-length.pipe';
     MatNativeDateModule, 
     MatDatepickerModule, 
     LayoutModule,
-    MaxLengthPipe
+    MaxLengthPipe,
   ],
   providers : [
     QuestionService,
