@@ -104,6 +104,7 @@
     "OpenCourse": "Kursübersicht öffnen"
   },
   "employees": {
+    "FilterAll": "Alle",
     "TablePageInfo": "Zeige {first} bis {last} von {totalRecords} Mitarbeitern",
     "ShowCerti": "Alle Zertifikate von {{name}} anzeigen",
     "CertiFrom": "Zertifikate von <b>{{name}}</b>",
@@ -958,6 +959,10 @@
     "isNot": "Ist nicht",
     "before": "Bevor",
     "after": "Nach",
+    "dateIs": "Datum gleich",
+    "dateIsNot": "Datum ungleich",
+    "dateBefore": "Datum ist vor",
+    "dateAfter": "Datum ist nach",
     "clear": "Löschen",
     "apply": "Anwenden",
     "matchAll": "Entspricht allen",

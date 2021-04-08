@@ -104,6 +104,7 @@
     "OpenCourse": "Open course overview"
   },
   "employees": {
+    "FilterAll": "All",
     "TablePageInfo": "Showing {first} to {last} of {totalRecords} employees",
     "ShowCerti": "Show all certificates for {{name}}",
     "CertiFrom": "Certificates of <b>{{name}}</b>",
@@ -958,6 +959,10 @@
     "isNot": "Is not",
     "before": "Before",
     "after": "After",
+    "dateIs": "Date is",
+    "dateIsNot": "Date is not",
+    "dateBefore": "Date is before",
+    "dateAfter": "Date is after",
     "clear": "Clear",
     "apply": "Apply",
     "matchAll": "Match All",

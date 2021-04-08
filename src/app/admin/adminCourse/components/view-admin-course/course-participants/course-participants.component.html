@@ -46,7 +46,7 @@
                                 [showClearButton]="false" [showApplyButton]="false">
                                 <ng-template pTemplate="filter" let-value let-filter="filterCallback">
                                     <p-dropdown [ngModel]="value" [options]="statuses" (onChange)="filter($event.value)"
-                                        placeholder="Any" [showClear]="true">
+                                        [placeholder]="'employees.FilterAll' | translate" [showClear]="true">
                                         <ng-template let-option pTemplate="item">
                                             <span>{{ option.label }}</span>
                                         </ng-template>
@@ -58,7 +58,8 @@
                             {{'location.Name' | translate}}<p-sortIcon field="lastName"></p-sortIcon>
                             <p-columnFilter type="text" matchMode="contains" field="fullName" display="menu"
                                 [showOperator]="false" [showAddButton]="false" [showMatchModes]="false"
-                                [showClearButton]="false" [showApplyButton]="false">
+                                [showClearButton]="false" [showApplyButton]="false"
+                                [placeholder]="'employees.FilterAll' | translate">
                             </p-columnFilter>
                         </th>
                         <!-- https://github.com/primefaces/primeng/issues/9859 Chips cannot be used with maxSelectedLabels-->
@@ -70,7 +71,7 @@
                                 <ng-template pTemplate="filter" let-name let-filter="filterCallback">
                                     <p-multiSelect [ngModel]="value" [options]="availableDepartments"
                                         [showHeader]="false" (onChange)="filter($event.value)" optionLabel="name"
-                                        [maxSelectedLabels]="2">
+                                        [maxSelectedLabels]="2" [placeholder]="'employees.FilterAll' | translate">
                                         <ng-template let-option pTemplate="item">
                                             <div class="p-multiselect-option">
                                                 <span class="p-ml-1">{{option.name}}</span>
@@ -87,10 +88,11 @@
                                 [showMatchModes]="false" [showClearButton]="false" [showApplyButton]="false">
                                 <ng-template pTemplate="filter" let-name let-filter="filterCallback">
                                     <p-multiSelect [ngModel]="value" [options]="availableGroups" [showHeader]="false"
-                                        (onChange)="filter($event.value)" optionLabel="name" [maxSelectedLabels]="2">
+                                        (onChange)="filter($event.value)" optionLabel="name" [maxSelectedLabels]="2"
+                                        [placeholder]="'employees.FilterAll' | translate">
                                         <ng-template let-option pTemplate="item">
                                             <div class="p-multiselect-option">
-                                                <span class="p-ml-1">Test</span>
+                                                <span class="p-ml-1">{{option.name}}</span>
                                             </div>
                                         </ng-template>
                                     </p-multiSelect>
