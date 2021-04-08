@@ -35,19 +35,7 @@
                 (onFilter)="onFiltered($event)">
                 <ng-template pTemplate="caption">
                     <div class="ui-helper-clearfix" style="text-align: left">
-                        <button mat-button color="primary" (click)="export()">Export</button>
-                        <!-- <i class="fa fa-file-pdf-o clickable"
-                            matTooltip="{{'course.ExportPdf' | translate }}"
-                            (click)="exportPdf()">
-                        </i>
-                        <i class="fa fa-file-code-o clickable ml-2"
-                            matTooltip="{{'course.ExportCsv' | translate }}"
-                            (click)="exportCsv()">
-                        </i>
-                        <i class="fa fa-file-excel-o clickable ml-2"
-                            matTooltip="{{'course.ExportExcel' | translate }}"
-                            (click)="exportExcel()">
-                        </i> -->
+                        <button mat-button color="primary" (click)="export()">{{ 'exports.Export' | translate }}</button>
                     </div>
                 </ng-template>
                 <ng-template pTemplate="header">
@@ -229,7 +217,7 @@
                 <div class="mt-2"></div>
                 <small *ngIf="participant.finishInfo.length == 1; else accord">{{'course.LastFinished' | translate}}: {{ participant.finishInfo[0] | date:'dd.MM.yyyy' }} </small>
                 <ng-template #accord>
-                    <p-accordion>
+                    <p-accordion *ngIf="participant.finishInfo.length > 1;">
                         <p-accordionTab header="{{'course.LastFinished' | translate}}">
                             <span *ngFor="let date of participant.finishInfo; let last = last;">
                                 <span>{{ date | date:'dd.MM.yyyy' }}</span>

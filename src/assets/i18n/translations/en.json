@@ -269,8 +269,22 @@
     "NoCourse": "No courses were assigned to this department yet."
   },
   "exports" : {
-    "fieldName" : "Column name",
-    "filterValue" : "Filter"
+    "Email" : "Email",
+    "Departments" : "Departments",
+    "Groups" : "Groups",
+    "FinishedAt" : "Date finished",
+    "FinishedAtAll" : "All finish dates",
+    "OptionalFields" : "Optional fields",
+    "FilteredData" : "Filtered data",
+    "AllData" : "All data",
+    "ExportFilter" : "Export",
+    "Export" : "Export",
+    "CSV" : "CSV",
+    "PDF" : "PDF",
+    "XLSX" : "XLSX",
+    "FileFormat" : "File format",
+    "FieldName" : "Column name",
+    "FilterValue" : "Filter"
   },
   "course": {
     "ExportPdf" : "Export current table as PDF",

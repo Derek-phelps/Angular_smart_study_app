@@ -1,11 +1,6 @@
-import { state, style, trigger } from '@angular/animations';
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import moment from 'moment';
 import { FilterMatchMode, FilterService, PrimeNGConfig } from 'primeng/api';
@@ -16,10 +11,6 @@ import { DialogForwardUserDialog } from 'src/app/forward-user/dialog-forward-use
 import { AdminCourseService } from '../../../adminCourse.service';
 import { VACUtils } from '../view-admin-course-utils';
 import { Translation } from 'primeng/api/translation';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
-import { saveAs } from 'file-saver/src/FileSaver.js'
-import * as xlsx from 'xlsx'
 import { DialogService } from 'primeng/dynamicdialog';
 import { ParticipantsExportDialogComponent } from './participants-export-dialog/participants-export-dialog.component';
 
@@ -28,17 +19,17 @@ import { ParticipantsExportDialogComponent } from './participants-export-dialog/
 //  date : Date
 // }
 
-interface Department {
+export interface Department {
   id : number,
   name : string
 }
 
-interface Group {
+export interface Group {
   id : number,
   name : string
 }
 
-interface TableData {
+export interface TableData {
   id : number,
   lastName : string,
   firstName : string,
@@ -143,123 +134,18 @@ export class CourseParticipantsComponent implements OnInit, AfterViewInit {
   public export() : void {
     const ref = this.dialogService.open(ParticipantsExportDialogComponent, {
       header: 'Export',
-      width: '70%'
+      width: '50%',
+      data : {
+        'filtered' : this._filteredData,
+        'original' : this._tableData,
+        'courseName' : this.courseInfo['courseName'],
+        'filterCriteria' : this._filterCriteria,
+        'statuses' : this._statuses,
+
+      }
   });
   }
   
-  public exportPdf() : void {
-    const doc = new jsPDF();
-    let tableData = this._getFilteredTableData();
-    (doc as any).autoTable({
-        head: tableData.head,
-        body: tableData.data,
-        theme: 'plain',
-      });
-    
-    tableData = this._getFilters();
-    
-    if(tableData.data.length > 0) {
-      (doc as any).autoTable({
-        head: tableData.head,
-        body: tableData.data,
-        theme: 'plain',
-      });
-    }
-    doc.save(this.courseInfo['courseName'] +'.pdf');
-  }
-
-  public exportCsv() : void {
-    let tableData = this._getFilteredTableData();
-    let filters = this._getFilters();
-    {
-      let csv = tableData.data;
-      csv.unshift(tableData.head.join(','));
-      let csvArray = csv.join('\r\n');
-      let blob = new Blob([csvArray], {type: 'text/csv' })
-      saveAs(blob, this.courseInfo['courseName'] +'.csv');
-    }
-    
-    if(filters.data.length > 0) {
-      let csv = filters.data;
-      csv.unshift(filters.head.join(','));
-      let csvArray = csv.join('\r\n');
-      let blob = new Blob([csvArray], {type: 'text/csv' })
-      saveAs(blob, this.courseInfo['courseName'] +'_filters.csv');
-    }
-  }
-
-  public exportExcel() : void {
-    let tableData = this._getFilteredTableData();
-    let filters = this._getFilters();
-    let worksheet = xlsx.utils.aoa_to_sheet(tableData.head);
-    xlsx.utils.sheet_add_aoa(worksheet, tableData.data, { origin : "A2" } );
-    const workbook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
-
-    if(filters.data.length > 0) {
-      let worksheet = xlsx.utils.aoa_to_sheet(filters.head);
-      xlsx.utils.sheet_add_aoa(worksheet, filters.data, { origin : "A2" } );
-      xlsx.utils.book_append_sheet(workbook, worksheet, 'filters');
-    }
-
-    const excelData: any = xlsx.write(workbook, { bookType: 'xlsx', type: 'array' });
-
-    let type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-    const data: Blob = new Blob([excelData], { type: type });
-    saveAs(data, this.courseInfo['courseName'] + '.xlsx');
-  }
-
-  private _getFilteredTableData() : any {
-    let head = [[
-      this._translate.instant('employees.Surname'), 
-      this._translate.instant('employees.Name'), 
-      this._translate.instant('employees.Email'),
-      this._translate.instant('course.Status'), 
-    ]];
-
-    let data = [];
-    this._filteredData.forEach(d => data.push([
-      d.lastName, 
-      d.firstName, 
-      d.email,
-      this._statuses.find(s => s.value == d.courseStatus).label
-      ])
-    );
-
-    return { head, data };
-  }
-
-  private _getFilters() : any {
-    let head = [[
-      this._translate.instant('exports.fieldName'),
-      this._translate.instant('exports.filterValue'), 
-    ]];
-    
-    let data = [];
-      
-    Object.keys(this._filterCriteria).forEach(f => {
-      let filter : any = this._filterCriteria[f];
-      if(filter[0].value != null) {
-        let columnName : string = f;
-        let value : string = filter[0].value;
-        switch(f) {
-          case 'lastName': columnName = this._translate.instant('employees.Surname'); break;
-          case 'firstName': columnName = this._translate.instant('employees.Name'); break;
-          case 'email': columnName = this._translate.instant('employees.Email'); break;
-          case 'courseStatus': { 
-            columnName = this._translate.instant('course.Status'); 
-            value = this._statuses.find(s => s.value == value ).label
-          } break;
-        }
-
-        data.push([
-          columnName,
-          value
-        ]);
-      }
-    });
-
-    return { head, data };
-  }
 
   private _setupTable(data: any): void {
     this._tableData = [];

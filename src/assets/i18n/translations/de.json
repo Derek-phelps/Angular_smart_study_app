@@ -269,8 +269,22 @@
     "NoCourse": "Dieser Abteilung wurden noch keine Kurse zugeteilt."
   },
   "exports" : {
-    "fieldName" : "Spaltenname",
-    "filterValue" : "Filter"
+    "Email" : "Email",
+    "Departments" : "Abteilungen",
+    "Groups" : "Gruppen",
+    "FinishedAt" : "Abschlussdatum",
+    "FinishedAtAll" : "Alle Abschlüsse",
+    "OptionalFields" : "Optionale spalten",
+    "FilteredData" : "Gefilterte Daten",
+    "AllData" : "Alle Daten",
+    "ExportFilter" : "Exportiere",
+    "Export" : "Exportieren",
+    "CSV" : "CSV",
+    "PDF" : "PDF",
+    "XLSX" : "XLSX",
+    "FileFormat" : "Dateiformat",
+    "FieldName" : "Spaltenname",
+    "FilterValue" : "Filter"
   },
   "course": {
     "ExportPdf" : "Aktuelle Tabelle als PDF speichern",

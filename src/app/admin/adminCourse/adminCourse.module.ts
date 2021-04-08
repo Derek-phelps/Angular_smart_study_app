@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { CourseRoutingModule } from './adminCourse.routing';
 
 
@@ -45,6 +45,8 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { AccordionModule } from 'primeng/accordion';
 import { DynamicDialogModule } from 'primeng/dynamicdialog';
 import { ParticipantsExportDialogComponent } from './components/view-admin-course/course-participants/participants-export-dialog/participants-export-dialog.component';
+import { MatRadioModule } from '@angular/material/radio';
+
 
 @NgModule({
   imports: [
@@ -61,7 +63,8 @@ import { ParticipantsExportDialogComponent } from './components/view-admin-cours
     DropdownModule,
     MultiSelectModule,
     AccordionModule,
-    DynamicDialogModule
+    DynamicDialogModule,
+    MatRadioModule
   ],
   entryComponents: [BottomSheetModifyCourse, SubChapterOverviewDialog, ParticipantsExportDialogComponent],
   declarations: [
@@ -80,10 +83,12 @@ import { ParticipantsExportDialogComponent } from './components/view-admin-cours
     CourseParticipantsComponent,
     CourseChaptersComponent,
     CourseTestComponent,
-    CourseCertificateComponent
+    CourseCertificateComponent,
+    ParticipantsExportDialogComponent
   ],
   providers: [
-    AdminCourseService
+    AdminCourseService,
+    DatePipe
   ],
 
 })
