@@ -1,12 +1,1 @@
-#     ,------ MINUTE
-#    / ,----- HOUR
-#   / / ,---- DAY OF MONTH
-#  / / / ,--- MONTH
-# / / / / ,-- DAY OF WEEK
-#/ / / / /
-
-#* * * * *  echo "`date`: hello, world neeeeeeeeeeeeew" >> /var/log/cron/cron.log
-
 0 3 * * *  /usr/local/bin/php /var/www/html/API/index.php cronjobs syncUsersAndSendMailReminder 1
-
-#*/5 * * * * => alle 5 Minuten

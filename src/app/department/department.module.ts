@@ -33,6 +33,7 @@ import { AppMaterialModule } from '../app-material/app-material.module';
 
 import { ChartsModule } from 'ng2-charts';
 import { GroupsModule } from '../groups/groups.module';
+import { SharedAppModule } from '../shared.module';
 // import { ViewGroupComponent } from '../groups/components/view-group/view-group.component';
 //import { GroupsModule } from '../groups/groups.module';
 //import { ViewGroupComponent } from '../groups/components/view-group/view-group.component';
@@ -40,7 +41,7 @@ import { GroupsModule } from '../groups/groups.module';
 @NgModule({
   imports: [
     OrgChartModule, CommonModule, DepartmentRoutingModule, AppTranslationModule, LayoutModule, FormsModule, ReactiveFormsModule,
-    AppMaterialModule, ChartsModule, GroupsModule
+    AppMaterialModule, ChartsModule, GroupsModule, SharedAppModule
   ],
   declarations: [DepartmentComponent, ModifyDepartmentComponent, ViewDepartmentComponent, DisableControlDirective],
   providers: [
